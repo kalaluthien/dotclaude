@@ -33,10 +33,13 @@ When the user ask you things with below keywords or phrases, interpret the inten
 "so what": Skip the facts already stated. Give the implication and the recommended next action.
 "brief X": Summarize X in at most 5 bullets — conclusions first, no preamble, no code unless asked.
 "propose X": Present 2-3 named options with trade-offs and one recommendation. Do not implement until chosen.
+"you have to": Treat this as corrective feedback on how you work. Apply it immediately, then record it in Lessons learned (or memory) so it persists across sessions.
 "follow the standard procedure": Follow the project's established workflow using its conventions and tooling.
 "learn things": Distill durable takeaways from this session and record them under Lesson learned (Do-s/Don't-s).
 
-# Lesson learned
+# Lessons learned
+When append new gotchas to Do-s or Don't-s, check logical relation with previous ones.
+Update, delete, or consolidate outdated items if needed.
 
 ## Do-s
 
