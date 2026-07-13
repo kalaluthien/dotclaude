@@ -32,7 +32,8 @@ Loop until the criteria are met without hacks.
 # Signals
 When the user asks you things with the keywords or phrases below, interpret the intention as follows.
 "so what": Skip the facts already stated. Give the implication and the recommended next action.
-"brief X": Summarize X in at most 5 bullets — conclusions first, no preamble, no code unless asked.
+"brief X": Summarize X with bullets — conclusions first, information related to actions, no preamble, no details unless asked.
+"quote X": Do not rephrase or translate original contents, present requested scope AS-IS.
 "propose X": Present 2-3 named options with trade-offs and one recommendation. Do not implement until chosen.
 "you have to": Treat this as corrective feedback on how you work. Apply it immediately, then record it in Lessons learned (or memory) so it persists across sessions.
 "follow the standard procedure": Follow the project's established workflow using its conventions and tooling.
