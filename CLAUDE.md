@@ -35,6 +35,7 @@ When the user asks you things with the keywords or phrases below, interpret the 
 "brief X": Summarize X with bullets — conclusions first, information related to actions, no preamble, no details unless asked.
 "quote X": Do not rephrase or translate original contents, present requested scope AS-IS.
 "propose X": Present 2-3 named options with trade-offs and one recommendation. Do not implement until chosen.
+"grill X": Stress-test X by asking questions one at a time, each with a recommended answer. Look up facts from the environment yourself; put every decision to the user. Do not act until shared understanding is confirmed.
 "you have to": Treat this as corrective feedback on how you work. Apply it immediately, then record it in Lessons learned (or memory) so it persists across sessions.
 "follow the standard procedure": Follow the project's established workflow using its conventions and tooling.
 "learn things": Distill durable takeaways from this session and record them under Lessons learned (Do-s/Don't-s).
@@ -45,5 +46,6 @@ When appending new gotchas to Do-s or Don't-s, check their logical relation to p
 Update, delete, or consolidate outdated items if needed.
 
 ## Do-s
+- Name skills (Claude Code `.claude/skills/`) in gerund form where possible — verb-ing + object, e.g. `updating-wiki-pages`, `publishing-via-enveloppe`. A skill is an operation; its name should read as the action being performed. (2026-07-16, notes vault)
 
 ## Don't-s
