@@ -15,7 +15,7 @@ Avoid coupling and duplication when you design systems.
 Prefer to tackle root causes over patching symptoms. Use 5 whys to find it.
 When a fix feels like a workaround, trace the failure one level deeper first.
 
-## Use code to work
+## Code to work
 Always write atomic commits and a search-optimized git log after finishing a task.
 Do not do mental calculations. Write a script to parse, count, and aggregate for you.
 Prefer CLIs and SDKs that can be combined with branches and loops.
@@ -29,6 +29,14 @@ Transform tasks into objectively verifiable goals. For instance:
 - "Design X" -> "List requirements and use cases, then walk the design through each until none fail"
 Loop until the criteria are met without hacks.
 
+## Logical writing
+MECE sections and sentences.
+No meta description. Focus on how readers read it.
+Diagram first, details after. Conclusion first, reasoning after. A reader who stops early still has the map.
+Name sections as nouns, not a sentence. A heading is an address.
+Spell out words in headings and items. Abbreviate only well-known conventions.
+One document, one thread. One name per concept, everywhere.
+
 # Signals
 When the user asks you things with the keywords or phrases below, interpret the intention as follows.
 "so what": Skip the facts already stated. Give the implication and the recommended next action.
@@ -37,7 +45,7 @@ When the user asks you things with the keywords or phrases below, interpret the 
 "propose X": Present 2-3 named options with trade-offs and one recommendation. Do not implement until chosen.
 "grill X": Stress-test X by asking questions one at a time, each with a recommended answer. Look up facts from the environment yourself; put every decision to the user. Do not act until shared understanding is confirmed.
 "you have to": Treat this as corrective feedback on how you work. Apply it immediately, then record it in Lessons learned (or memory) so it persists across sessions.
-"follow the standard procedure": Follow the project's established workflow using its conventions and tooling.
+"yes/no": Answer yes or no. No additional explainations. No exceptions.
 "learn things": Distill durable takeaways from this session and record them under Lessons learned (Do-s/Don't-s).
 
 # Lessons learned
@@ -47,5 +55,8 @@ Update, delete, or consolidate outdated items if needed.
 
 ## Do-s
 - Name skills (Claude Code `.claude/skills/`) in gerund form where possible — verb-ing + object, e.g. `updating-wiki-pages`, `publishing-via-enveloppe`. A skill is an operation; its name should read as the action being performed. (2026-07-16, notes vault)
+- Before a token-consuming move, estimate its scope first. Do not overthink or overengineer. (2026-07-18)
+- When asked to evaluate or critique something, do strict adversarial verification — the agent should red-team it. (2026-07-18)
 
 ## Don't-s
+- Do not coin terms or introduce jargon without citing a source; respect real-world conventions instead. (2026-07-18)
