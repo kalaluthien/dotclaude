@@ -70,41 +70,35 @@ General insights with a simple instruction, intention, and rationale.
 When appending a new gotcha, check its logical relation to previous ones.
 Update, delete, or consolidate outdated items if needed.
 
-<working-method>
+## working-method
 - Before a token-consuming move, estimate its scope and difficulty first. Do not overthink or over-engineer. (2026-07-18)
 - When asked to evaluate or critique something, do strict adversarial verification — the agent should red-team it. For design work, extend this to generation: develop 2-3 named options and set 2-3 critics with distinct lenses (e.g. architecture, consumer/programmability, product) on all of them. A synthesis that converges across independent lenses is the strongest accept signal; a single-lens verdict is an opinion. (2026-07-18, extended 2026-07-23)
 - When told to "decide all other details", decide — and hand the decisions back as a numbered veto table (decision + one-line reason each). The user reviews instead of re-deriving, and a veto costs them one line. Silent decisions buried in prose get re-litigated. (2026-07-23)
 - Assume you are one of several agents in the repository, not its only writer. Before editing, survey the concurrent work — other worktrees, other agent sessions, uncommitted changes, recent branches — and scope your edits so they do not collide with it. Prefer your own worktree and branch, keep commits atomic, and rebase onto what landed while you worked instead of overwriting it. An agent that assumes exclusive ownership silently reverts work it never read. (2026-07-21)
 - Do not `cd` into a git worktree inside a command chain that later merges or removes it: the merge runs inside the worktree (the branch merges into itself, "already up to date"), and the removal deletes the shell's own cwd, killing every later command. Operate on worktrees from the main checkout with `git -C <path>`. (2026-07-19)
-</working-method>
 
-<design>
+## design
 - Judge a module by the ratio of interface to implementation, not by line count: a deep module hides substantial behavior behind a small surface, and a split that multiplies files without shrinking what callers must know adds net complexity. (Ousterhout, *A Philosophy of Software Design*) (2026-07-22)
-- Classify logic as data, calculation (pure function), or action (effectful), and push business logic toward calculations the effectful shell calls — pure functions are the cheapest thing to test and compose. (Normand, *Grokking Simplicity*; the "functional core, imperative shell" pattern) (2026-07-22)
+- Classify logic as data, calculation (pure function), or action (side-effect), and push business logic toward calculations the effectful shell calls — pure functions are the cheapest thing to test and compose. (Normand, *Grokking Simplicity*; the "functional core, imperative shell" pattern) (2026-07-22)
 - Write spec and design documents as predicates on system properties, generating rules on system structure, or decision records with reasons — never as mirrors of what the artifact already says. A mirror is redundant on the day it is written and a lie after the artifact's next change. (2026-07-22)
 - When simplifying or trimming a design, check every cut against the user's stated top-tier requirements, and make the deliverable show the mapping (requirement as a predicate -> where the design satisfies it). A cut that serves a requirement but does not show it reads as the requirement being dropped, and costs a rework round. (2026-07-23)
-</design>
 
-<debugging>
+## debugging
 - Debug a driven action that does nothing (no effect, no error) by going deeper, not wider: read the tool/framework's own diagnostics first (idle/timeout/harness warnings usually name the cause), then log each decision point to bisect where the pipeline breaks. Re-trying different ways to trigger it is symptom-thrashing that can burn hours. (2026-07-19)
 - To find who owns an effect, ablate the suspect instead of reasoning about it: disable the code believed to cause the symptom and re-run. If the symptom survives, the owner is elsewhere — usually a framework acting on its own signal rather than your call site. One cheap run replaces a long chain of inference, and it is the sharp instrument for the deeper-not-wider rule above. (2026-07-19)
-</debugging>
 
-<verification>
+## verification
 - A regression test earns trust only by failing first. Before believing a new test covers the bug, revert the fix (`git stash`), watch the test fail, then restore. A test authored against an already-fixed tree can pass for reasons unrelated to the defect, and a green suite then certifies nothing. (2026-07-19)
 - When an automated check fails but the manual flow or a sibling test passes, suspect the harness before the product; isolate the delta between the passing and failing conditions, changing one variable at a time. In a suite already known to flake, the discriminator is whether the *same* assertion fails: a failure that moves between assertions across runs — and reproduces on the unchanged baseline under the same conditions — is environmental, not caused by the change under test. (2026-07-19)
 - A design verdict argued only against documents is unverified. Before shipping it, run one read-only pass that checks its feasibility claims against the actual code: is the claimed state observable, does the surface have the claimed capacity, does a latent defect contradict a premise. A document-grounded debate can be unanimous and still wrong about the code. (2026-07-23)
 - Do not read a changed failure mode — a new error, a later failing line — as progress; verify the new state against ground truth (logs, the actual effect) before believing the earlier cause is gone. (2026-07-19)
-</verification>
 
-<delivery>
+## delivery
 - A release tag names the commit that produced the artifact, not `HEAD`. Before adding "one more fix" to a release whose commit already exists, check which tree the tag will point at; a commit stacked on top sits outside it. When the fix must ship in that release and nothing is pushed yet, rewrite the unpushed history so the fix precedes the release commit, then rebuild the artifact from that tree and verify the tag target contains it. (2026-07-19)
-</delivery>
 
-<output-conventions>
+## output-conventions
 - Name skills (Claude Code `.claude/skills/`) in gerund form where possible — verb-ing + object, e.g. `updating-wiki-pages`, `publishing-via-enveloppe`. A skill is an operation; its name should read as the action being performed. (2026-07-16)
 - Korean output must avoid AI-slop markers: prose em dashes mid-sentence, translated AI-isms ("마법 없음", "결론적으로", "시사하는 바가 큽니다"), rhetorical hooks, redundant English 병기, hedging endings ("~라고 할 수 있습니다"), and comma overuse. Human Korean drops self-evident subjects and varies endings. Taxonomy: github.com/epoko77-ai/im-not-ai. (2026-07-19)
 - The writing rules (Language and Logical writing above, plus no uncited coinages and no ad-hoc abbreviations such as option letters) bind every deliverable — HTML artifacts, diagrams, mockup captions, generated documents — not only chat replies. Check the deliverable against the rules before publishing; fixing style after feedback costs a full revision round. (2026-07-23)
 - Represent flows as vertical numbered steps in full sentences, with branch exits as labeled sub-items under the step that branches. Horizontal node-and-arrow chains force sideways scrolling and glyph decoding. Pair each abstract rule with one concrete mockup or example — a rule the reader cannot see applied is a rule they will ask about. (2026-07-23)
 - Do not coin terms or introduce jargon without citing a source; respect real-world conventions instead. (2026-07-18)
-</output-conventions>
