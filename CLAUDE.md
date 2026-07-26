@@ -1,15 +1,15 @@
 # Preferences
-User's preferences for communication and engineering.
+Taste-level preferences that hold on any machine, in any repository.
+Writing and language rules live in the "Simplified Technical" output style
+(`~/.claude/output-styles/simplified-technical.md`), not here. Machine and
+tool facts live as `setup-*` topic memories (see `~/.claude/rules/memory-types.md`).
 
-:## Claude Code
-Use `PROJECT/.claude/CLAUDE.md` instead of `PROJECT/CLAUDE.md`.
-
-## Language
-MUST follow below rule for your output.
-1. User expects "ASD-STE100 Simplified Technical English" for every agent output.
-2. User might use Korean but expects English output except for requested explicitly.
-3. Lead with the next action when it is derived. End with one concrete next action.
-4. Start with the answer when it is required. End when the answer is done.
+## Claude Code
+1. Use `PROJECT/.claude/CLAUDE.md` instead of `PROJECT/CLAUDE.md`.
+2. Name skills in gerund form — verb-ing + object, e.g. `updating-wiki-pages`,
+   `delegating`. A skill is an operation; its name reads as the action.
+3. Subagents run on Opus, never Fable: medium effort for search, coding, and
+   script runs; high effort for planning and other knowledge work.
 
 ## Signals
 When the user asks you things with the keywords or phrases below, interpret the intention as follows.
@@ -22,10 +22,11 @@ When the user asks you things with the keywords or phrases below, interpret the 
 "clean X": Close every open item on X — pending update, undecided decision, and repository leftover (uncommitted change, unsynced remote, unpublished output). Report anything that cannot close.
 "learn things": Distill durable takeaways from this session or project auto-memory and record them under Lessons learned (Do-s/Don't-s). Route each one by *what would make it wrong* — where it goes:
 - **General rule**, true regardless of repo, machine, or tool -> this file. Instruction and rationale only; no repo names, no war stories.
-- **Machine or environment fact** (installed tools, aliases, shell parsing, toolchain paths) -> `~/workspace/.claude/CLAUDE.md`.
+- **Writing or language rule** -> the Simplified Technical output style.
+- **Machine or environment fact** (installed tools, aliases, shell parsing, toolchain paths) -> a `setup-*` topic memory per `~/.claude/rules/memory-types.md`.
 - **Repo-specific working gotcha** — how to build, test, or debug *this* codebase -> that repo's `.claude/CLAUDE.md`, in a worktree and committed like any other change.
-- **Product, architecture, or verification truth about a repo** -> that repo's own source of truth (for `camera/`, `spec/`), never its `CLAUDE.md`.
-The rule goes to the general file and the evidence stays with the subject: a lesson that names a repo in this file is in the wrong place, and one that would hold in any repo is in the wrong place in a project file. Say where each takeaway was filed.
+- **Product, architecture, or verification truth about a repo** -> that repo's own source of truth (its `docs/` or spec), never its CLAUDE.md.
+The rule goes to the general file and the evidence stays with the subject. Say where each takeaway was filed.
 
 # Principles
 MUST follow the "golden" principles below regardless of the task.
@@ -59,12 +60,6 @@ For instance:
 - "Survey the topic" -> "List the questions the survey must answer, then answer each with evidence"
 - "Design X" -> "List requirements and use cases, then walk the design through each until none fail"
 
-## Logical writing
-1. MECE sections and sentences. Evaluate structure first then fill out contents.
-2. Diagram first, details after. Conclusion first, reasoning after. A reader who stops early still has the map.
-3. No meta description. Focus on how readers read it. They don't care about history you already fixed.
-4. Name sections as nouns, not a sentence. A heading is an address.
-
 # Lessons learned
 General insights with a simple instruction, intention, and rationale.
 When appending a new gotcha, check its logical relation to previous ones.
@@ -74,8 +69,6 @@ Update, delete, or consolidate outdated items if needed.
 - Before a token-consuming move, estimate its scope and difficulty first. Do not overthink or over-engineer. (2026-07-18)
 - When asked to evaluate or critique something, do strict adversarial verification — the agent should red-team it. For design work, extend this to generation: develop 2-3 named options and set 2-3 critics with distinct lenses (e.g. architecture, consumer/programmability, product) on all of them. A synthesis that converges across independent lenses is the strongest accept signal; a single-lens verdict is an opinion. (2026-07-18, extended 2026-07-23)
 - When told to "decide all other details", decide — and hand the decisions back as a numbered veto table (decision + one-line reason each). The user reviews instead of re-deriving, and a veto costs them one line. Silent decisions buried in prose get re-litigated. (2026-07-23)
-- Assume you are one of several agents in the repository, not its only writer. Before editing, survey the concurrent work — other worktrees, other agent sessions, uncommitted changes, recent branches — and scope your edits so they do not collide with it. Prefer your own worktree and branch, keep commits atomic, and rebase onto what landed while you worked instead of overwriting it. An agent that assumes exclusive ownership silently reverts work it never read. (2026-07-21)
-- Do not `cd` into a git worktree inside a command chain that later merges or removes it: the merge runs inside the worktree (the branch merges into itself, "already up to date"), and the removal deletes the shell's own cwd, killing every later command. Operate on worktrees from the main checkout with `git -C <path>`. (2026-07-19)
 
 ## design
 - Judge a module by the ratio of interface to implementation, not by line count: a deep module hides substantial behavior behind a small surface, and a split that multiplies files without shrinking what callers must know adds net complexity. (Ousterhout, *A Philosophy of Software Design*) (2026-07-22)
@@ -92,13 +85,3 @@ Update, delete, or consolidate outdated items if needed.
 - When an automated check fails but the manual flow or a sibling test passes, suspect the harness before the product; isolate the delta between the passing and failing conditions, changing one variable at a time. In a suite already known to flake, the discriminator is whether the *same* assertion fails: a failure that moves between assertions across runs — and reproduces on the unchanged baseline under the same conditions — is environmental, not caused by the change under test. (2026-07-19)
 - A design verdict argued only against documents is unverified. Before shipping it, run one read-only pass that checks its feasibility claims against the actual code: is the claimed state observable, does the surface have the claimed capacity, does a latent defect contradict a premise. A document-grounded debate can be unanimous and still wrong about the code. (2026-07-23)
 - Do not read a changed failure mode — a new error, a later failing line — as progress; verify the new state against ground truth (logs, the actual effect) before believing the earlier cause is gone. (2026-07-19)
-
-## delivery
-- A release tag names the commit that produced the artifact, not `HEAD`. Before adding "one more fix" to a release whose commit already exists, check which tree the tag will point at; a commit stacked on top sits outside it. When the fix must ship in that release and nothing is pushed yet, rewrite the unpushed history so the fix precedes the release commit, then rebuild the artifact from that tree and verify the tag target contains it. (2026-07-19)
-
-## output-conventions
-- Name skills (Claude Code `.claude/skills/`) in gerund form where possible — verb-ing + object, e.g. `updating-wiki-pages`, `publishing-via-enveloppe`. A skill is an operation; its name should read as the action being performed. (2026-07-16)
-- Korean output must avoid AI-slop markers: prose em dashes mid-sentence, translated AI-isms ("마법 없음", "결론적으로", "시사하는 바가 큽니다"), rhetorical hooks, redundant English 병기, hedging endings ("~라고 할 수 있습니다"), and comma overuse. Human Korean drops self-evident subjects and varies endings. Taxonomy: github.com/epoko77-ai/im-not-ai. (2026-07-19)
-- The writing rules (Language and Logical writing above, plus no uncited coinages and no ad-hoc abbreviations such as option letters) bind every deliverable — HTML artifacts, diagrams, mockup captions, generated documents — not only chat replies. Check the deliverable against the rules before publishing; fixing style after feedback costs a full revision round. (2026-07-23)
-- Represent flows as vertical numbered steps in full sentences, with branch exits as labeled sub-items under the step that branches. Horizontal node-and-arrow chains force sideways scrolling and glyph decoding. Pair each abstract rule with one concrete mockup or example — a rule the reader cannot see applied is a rule they will ask about. (2026-07-23)
-- Do not coin terms or introduce jargon without citing a source; respect real-world conventions instead. (2026-07-18)
