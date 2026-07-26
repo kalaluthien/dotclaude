@@ -2,10 +2,12 @@
   "permissions": {
     "defaultMode": "auto"
   },
+  "model": "fable",
   "worktree": {
     "baseRef": "fresh"
   },
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
+  "outputStyle": "Simplified Technical",
   "promptSuggestionEnabled": false,
   "skipWorkflowUsageWarning": true,
   "theme": "auto",
