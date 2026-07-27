@@ -45,8 +45,10 @@ MUST follow the "golden" principles below regardless of the task.
 
 ## Code to work
 1. Always write atomic commits and a search-optimized git message after finishing a task.
-2. Do not do mental calculations. Write a script to parse, count, and aggregate for you.
-3. Write scripts for repeated complex access to external dependencies. Do not write same script again and again.
+2. Land every patch on its own branch or worktree. A `pre-commit` guard blocks direct commits to `main`, and a blocked commit means you are on the wrong branch, not that the guard is in the way.
+3. Never bypass a hook with `git commit --no-verify` on your own. Report what the hook refused and ask; use the flag only after the user confirms it for that commit.
+4. Do not do mental calculations. Write a script to parse, count, and aggregate for you.
+5. Write scripts for repeated complex access to external dependencies. Do not write same script again and again.
 
 ## Hill climbing
 Transform tasks into objectively verifiable goals. Loop until the criteria are met without hacks.
