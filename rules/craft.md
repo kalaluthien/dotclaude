@@ -34,28 +34,29 @@ Turn-level habits stay in `~/.claude/CLAUDE.md`; append here per
   survives, the owner is elsewhere — usually a framework acting on its own
   signal rather than your call site. One cheap run replaces a long chain of
   inference. (2026-07-19)
+- A changed failure mode — a new error, a later failing line — is not evidence
+  that the earlier cause is gone. Read it as a new symptom until the logs or the
+  actual effect say otherwise. (2026-07-19)
+- When an automated check fails but the manual flow or a sibling test passes,
+  suspect the harness before the product. In a suite already known to flake, the
+  discriminator is whether the *same* assertion fails: a failure that moves
+  between assertions across runs, and reproduces on the unchanged baseline, is
+  environmental. (2026-07-19)
 
 ## Verification
+Claims that need evidence you do not have yet. Do not add checks beyond these.
+
 - A regression test earns trust only by failing first. Before you believe a new
   test covers the bug, revert the fix (`git stash`), watch the test fail, then
   restore. A test authored against an already-fixed tree can pass for reasons
   unrelated to the defect. (2026-07-19)
-- When an automated check fails but the manual flow or a sibling test passes,
-  suspect the harness before the product; isolate the delta, changing one
-  variable at a time. In a suite already known to flake, the discriminator is
-  whether the *same* assertion fails: a failure that moves between assertions
-  across runs, and reproduces on the unchanged baseline, is environmental.
-  (2026-07-19)
 - A design verdict argued only against documents is unverified. Before you ship
   it, run one read-only pass against the actual code: is the claimed state
   observable, does the surface have the claimed capacity, does a latent defect
   contradict a premise. (2026-07-23)
-- Do not read a changed failure mode — a new error, a later failing line — as
-  progress; verify the new state against ground truth (logs, the actual effect)
-  before you believe the earlier cause is gone. (2026-07-19)
-- Treat documentation claims about a tool's or harness's behavior as hypotheses;
-  when a decision hinges on one, verify with a cheap live probe. Docs lag, and a
-  probe costs one run. (2026-07-16)
+- A documentation claim about a tool's or harness's behavior is a hypothesis.
+  When a decision hinges on one, spend one cheap live probe. Docs lag.
+  (2026-07-16)
 
 ## Git
 - Operate on a worktree from the main checkout with `git -C <path>`. Do not `cd`
