@@ -5,7 +5,7 @@ lives in the addressed files:
 - Writing and language: `~/.claude/output-styles/simplified-technical.md`.
 - Design, debugging, verification, and git lessons: `~/.claude/rules/craft.md`
   — read it before you design, debug, verify, or rewrite git history.
-- Machine and tool facts: `setup-*` memories per `~/.claude/rules/memory-types.md`.
+- Machine and tool facts: `setup-*` memories per `~/.claude/rules/filing.md`.
 
 ## Claude Code
 1. Use `PROJECT/.claude/CLAUDE.md` instead of `PROJECT/CLAUDE.md`.
@@ -20,7 +20,7 @@ When the user asks with the keywords below, read the intention as follows.
 "propose/suggest X": Present 2-3 named options with trade-offs and one recommendation. Do not implement until chosen.
 "yes/no": Answer yes or no. No additional explanations. No exceptions.
 "clean X": Close every open item on X — pending update, undecided decision, and repository leftover (uncommitted change, unsynced remote, unpublished output). Report anything that cannot close.
-"learn things": Distill durable takeaways from this session or the project memory, then file each one per `~/.claude/rules/learning-routes.md`.
+"learn things": Distill durable takeaways from this session or the project memory, then file each one per `~/.claude/rules/filing.md`.
 
 # Principles
 MUST follow the "golden" principles below regardless of the task.

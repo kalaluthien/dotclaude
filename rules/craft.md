@@ -2,7 +2,7 @@
 Situational rules with an instruction and its rationale. Read this file before
 you design a system, debug a failure, verify a fix, or rewrite git history.
 Turn-level habits stay in `~/.claude/CLAUDE.md`; append here per
-`~/.claude/rules/learning-routes.md`.
+`~/.claude/rules/filing.md`.
 
 ## Design
 - Judge a module by the ratio of interface to implementation, not by line count:
