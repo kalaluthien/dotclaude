@@ -34,9 +34,11 @@ MUST follow the "golden" principles below regardless of the task.
 3. If multiple interpretations exist, present them. Don't pick silently.
 
 ## Simplicity first
-1. Solve the stated problem with fewer elements as much as possible.
-2. No predictive and speculative abstractions. You aren't gonna need it.
-3. Avoid coupling and duplication when you design any kind of systems.
+1. Elements: solve the stated problem with fewer elements as much as possible; avoid coupling and duplication.
+2. Scope: a bug fix does not need the surrounding code cleaned up; a simple feature does not need extra configurability.
+3. Documentation: no docstrings, comments, or type annotations on code you did not change.
+4. Defensive coding: no handling for cases that cannot happen; validate at boundaries only.
+5. Abstractions: none for a one-time operation, none for a hypothetical requirement. You aren't gonna need it.
 
 ## Deep dive
 1. No shotgun approach when fixing bug or bottleneck.
