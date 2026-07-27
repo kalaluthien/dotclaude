@@ -44,9 +44,9 @@ set `metadata.type` to `episodic`, `semantic`, or `procedural`.
 1. Default pool is the current project's own memory directory.
 2. Machine-wide facts (installed tools, toolchain paths, remote access) go to
    the global pool `~/.claude/projects/-Users-hyungmokim--claude/memory/` as
-   `setup-<topic>` files, so every project finds them in one place. Before
-   JVM/Android, Python, shell-automation, remote-access, or herdr-install work,
-   check that pool's `MEMORY.md` and read the matching topic file.
+   `setup-<topic>` files, so every project finds them in one place. Before work
+   that depends on a machine fact, check that pool's `MEMORY.md` and read the
+   matching topic file.
 3. Never duplicate one fact across pools; link with `[[name]]` instead.
 
 ## Maintenance
