@@ -62,16 +62,14 @@ Habits that apply to any turn. Situational lessons are in `~/.claude/rules/craft
 
 - Estimate the scope and difficulty of a token-consuming move before you start
   it. Do not overthink or over-engineer. (2026-07-18)
-- Red-team whatever you are asked to evaluate or critique. For design work,
-  extend this to generation: develop 2-3 named options and set 2-3 critics with
-  distinct lenses (architecture, consumer, product) on all of them. Convergence
-  across independent lenses is the strongest accept signal; a single-lens
-  verdict is an opinion. (2026-07-18, extended 2026-07-23)
+- Red-team whatever you evaluate. For design work, generate 2-3 named options
+  and judge all of them through 2-3 distinct lenses (architecture, consumer,
+  product): convergence across independent lenses is the accept signal, a
+  single lens is an opinion. (2026-07-18, extended 2026-07-23)
 - When told to "decide all other details", decide — and hand the decisions back
-  as a numbered veto table, one line of reason each. A veto then costs the user
-  one line, and no decision buried in prose gets re-litigated. (2026-07-23)
-- Reset a reusable resource when you claim it, not when you release it. The
-  claim path always runs and is the only point that knows what clean means for
-  the work about to start; the release path is skipped by every interruption,
-  escalation, and timeout, and it destroys state that is still evidence for the
-  report just delivered. (2026-07-27)
+  as a numbered veto table, one line of reason each, so a veto costs the user
+  one line. Decisions buried in prose get re-litigated. (2026-07-23)
+- Reset a reusable resource when you claim it, not when you release it. Only
+  the claim path knows what clean means for the work about to start, it always
+  runs, and it does not destroy state that is still evidence for the report
+  just delivered. (2026-07-27)
