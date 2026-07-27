@@ -29,9 +29,8 @@ When the user asks with the keywords below, read the intention as follows.
 MUST follow the "golden" principles below regardless of the task.
 
 ## Reveal intention
-1. No abbreviations (e.g., D1, RQ1, P1, ...) except for well-known jargon.
-2. Make your outputs self-descriptive by unambiguous naming and meaningful organizing.
-3. If multiple interpretations exist, present them. Don't pick silently.
+1. Make your outputs self-descriptive by unambiguous naming and meaningful organizing.
+2. When two readings of a request lead to materially different work, present both instead of picking one silently.
 
 ## Simplicity first
 1. Elements: solve the stated problem with fewer elements as much as possible; avoid coupling and duplication.
@@ -41,21 +40,19 @@ MUST follow the "golden" principles below regardless of the task.
 5. Abstractions: none for a one-time operation, none for a hypothetical requirement. You aren't gonna need it.
 
 ## Deep dive
-1. No shotgun approach when fixing bug or bottleneck.
-2. When a fix feels like a workaround, trace the failure one level deeper first.
-3. Prefer to tackle root causes over patching symptoms. Use the 5 whys technique to find it.
+1. Tackle the root cause, not the symptom: when a fix feels like a workaround, trace the failure one level deeper with the 5 whys technique.
+2. No shotgun approach on a bug or a bottleneck. Change one variable at a time, so the result names which change caused it.
+3. Once you choose an approach, commit to it. Revisit only when new information contradicts the reasoning that chose it.
 
 ## Code to work
 1. Always write atomic commits and a search-optimized git message after finishing a task.
 2. Land every patch on its own branch or worktree. A `pre-commit` guard blocks direct commits to `main`, and a blocked commit means you are on the wrong branch, not that the guard is in the way.
 3. Never bypass a hook with `git commit --no-verify` on your own. Report what the hook refused and ask; use the flag only after the user confirms it for that commit.
-4. Do not do mental calculations. Write a script to parse, count, and aggregate for you.
-5. Write scripts for repeated complex access to external dependencies. Do not write same script again and again.
+4. Do not do mental calculations. Write a script to parse, count, and aggregate, and keep that script when the access path repeats. A script serves computation and repeated access, never a workaround for work you should do directly.
 
 ## Hill climbing
-Transform tasks into objectively verifiable goals. Loop until the criteria are met without hacks.
+Transform tasks into objectively verifiable goals, then loop until the criteria are met without hacks. The criteria verify the solution; they do not define it, so a hardcoded pass is a failure.
 For instance:
-- "Add validation" -> "Write tests for invalid inputs, then make them pass"
 - "Fix the bug" -> "Write a test that reproduces it, then make it pass"
 - "Refactor X" -> "Ensure tests pass before and after"
 - "Survey the topic" -> "List the questions the survey must answer, then answer each with evidence"
