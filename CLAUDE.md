@@ -52,22 +52,20 @@ For instance:
 - "Survey the topic" -> "List the questions the survey must answer, then answer each with evidence"
 - "Design X" -> "List requirements and use cases, then walk the design through each until none fail"
 
-# Working method
-Habits that apply to any turn.
-
-- Estimate the scope and difficulty of a token-consuming move before you start it. Do not overthink or over-engineer.
-- Red-team whatever you evaluate. For design work, generate 2-3 named options and judge all of them through 2-3 distinct lenses (architecture, consumer, product): convergence across independent lenses is the accept signal, a single lens is an opinion.
-- When told to "decide all other details", decide — and hand the decisions back as a numbered veto table, one line of reason each, so a veto costs the user one line. Decisions buried in prose get re-litigated.
-- Reset a reusable resource when you claim it, not when you release it. Only the claim path knows what clean means for the work about to start, it always runs, and it does not destroy state that is still evidence for the report just delivered.
-
 # Craft
-Situational rules with an instruction and its rationale. Read the matching section before you design a system, debug a failure, verify a fix, or rewrite git history.
+Rules with an instruction and its rationale, grouped by the work they apply to. Read the matching section before you commit to a decision, design a system, debug a failure, verify a fix, rewrite git history, or file a takeaway.
+
+## Deciding
+- Estimate the scope and difficulty of a token-consuming move before you start it. Do not overthink or over-engineer.
+- Red-team whatever you evaluate: generate 2-3 named options and judge all of them through 2-3 distinct lenses (architecture, consumer, product). Convergence across independent lenses is the accept signal; a single lens is an opinion.
+- When told to "decide all other details", decide — and hand the decisions back as a numbered veto table, one line of reason each, so a veto costs the user one line. Decisions buried in prose get re-litigated.
 
 ## Design
 - Judge a module by the ratio of interface to implementation, not by line count: a deep module hides substantial behavior behind a small surface, and a split that multiplies files without shrinking what callers must know adds net complexity. (Ousterhout, *A Philosophy of Software Design*)
 - Classify logic as data, calculation (pure function), or action (side-effect), and push business logic toward calculations the effectful shell calls — pure functions are the cheapest thing to test and compose. (Normand, *Grokking Simplicity*; "functional core, imperative shell")
 - Write spec and design documents as predicates on system properties, generating rules on system structure, or decision records with reasons — never as mirrors of what the artifact already says. A mirror is redundant on the day it is written and a lie after the artifact's next change.
 - When you simplify or trim a design, check every cut against the user's stated top-tier requirements, and make the deliverable show the mapping (requirement as a predicate -> where the design satisfies it). A cut that serves a requirement but does not show it reads as the requirement being dropped.
+- Reset a reusable resource when you claim it, not when you release it. Only the claim path knows what clean means for the work about to start, it always runs, and it does not destroy state that is still evidence for the report just delivered.
 
 ## Debugging
 - Buy evidence instead of inferring, and go deeper rather than wider. For a driven action that does nothing (no effect, no error), read the tool's own diagnostics first — idle, timeout, and harness warnings usually name the cause — then log each decision point to bisect where the pipeline breaks. To find who owns an effect, ablate the suspect: disable the code believed to cause the symptom and re-run, and if the symptom survives the owner is elsewhere, usually a framework acting on its own signal. One cheap run replaces a long chain of inference; re-trying different ways to trigger it is symptom-thrashing that can burn hours.
@@ -85,38 +83,23 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 - Operate on a worktree from the main checkout with `git -C <path>`. Do not `cd` into a worktree inside a command chain that later merges or removes it — the merge then runs inside the worktree ("already up to date") and the removal deletes the shell's own cwd.
 - A release tag names the commit that produced the artifact, not `HEAD`. Before you add "one more fix" to a release whose commit already exists, check which tree the tag will point at; when the fix must ship and nothing is pushed yet, rewrite the unpushed history so the fix precedes the release commit, then rebuild the artifact from that tree.
 
-# Filing
-Where a durable takeaway is filed, and how the memory files it may land in are named and maintained. Route each takeaway by *what would make it wrong*.
+## Filing
+Route a durable takeaway by *what would make it wrong*, and report where you filed it.
 
-## Routes
-1. A general rule, true on any repository, machine, or tool, goes to this file — "Working method" when it is a turn-level habit, "Craft" when it applies to design, debugging, verification, or git.
+1. A general rule, true on any repository, machine, or tool, goes to the section of this file that names the work it applies to.
 2. A writing or language rule goes to the "Simplified Technical" output style, `~/.claude/output-styles/simplified-technical.md`.
-3. A machine or environment fact (installed tools, aliases, shell parsing, toolchain paths) goes to a `setup-*` topic memory in the global pool, per "Pools" below.
+3. A machine or environment fact (installed tools, aliases, shell parsing, toolchain paths) goes to a `setup-<topic>` memory in the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, so every project finds it in one place. Read that pool's `MEMORY.md` before work that depends on a machine fact.
 4. A repository-specific working gotcha — how to build, test, or debug *that* codebase — goes to that repository's `.claude/CLAUDE.md`, edited in a worktree and committed like any other change.
 5. A product, architecture, or verification truth about a repository goes to that repository's own source of truth (its `docs/` or spec), never to its `CLAUDE.md`.
 
-The rule goes to the general file and the evidence stays with the subject. Write instruction and rationale only: no repository names, no war stories. Before you append, compare the item with what is already there and update, merge, or delete instead of stacking a near-duplicate. Report where each takeaway was filed.
+The rule goes to the general file and the evidence stays with the subject. Write instruction and rationale only: no repository names, no war stories. Before you append, update or merge a near-duplicate instead of stacking one beside it.
 
-## Memory types
-Applies to every project memory directory under `~/.claude/projects/<project>/memory/`. Three categories. The subcategory is ad-hoc, named at the front of the slug (`<subcategory>-<topic>`); invent new subcategories when none fits, and record them here in the same change.
+A memory file holds one fact, lives in the pool of the project it serves, and never repeats a fact another pool already holds — link with `[[name]]` instead. Name it `<subcategory>-<topic>`, keep `MEMORY.md` at one line per file, and set `metadata.type` from the table. Invent a subcategory when none fits, and add it here in the same change.
 
-| category | holds | subcategory prefixes | lifecycle |
+| type | holds | subcategory prefixes | lifecycle |
 |---|---|---|---|
-| **Episodic** | what happened | `handoff-<task>-<datetime>`, `history-<topic>` | `handoff-*` is deleted once consumed; `history-*` is append-only |
-| **Semantic** | what is true | `backlog-<project>`, `project-<topic>`, `profile-<topic>` | updated in place; `backlog-*` is pruned when items close |
-| **Procedural** | how to act | `feedback-<topic>`, `reference-<topic>`, `setup-<topic>` | updated in place; deleted when the tool or fact is gone |
+| **episodic** | what happened | `handoff-<task>-<datetime>`, `history-<topic>` | `handoff-*` is deleted once consumed; `history-*` is append-only |
+| **semantic** | what is true | `backlog-<project>`, `project-<topic>`, `profile-<topic>` | updated in place; `backlog-*` is pruned when items close |
+| **procedural** | how to act | `feedback-<topic>`, `reference-<topic>`, `setup-<topic>` | updated in place; deleted when the tool or fact is gone |
 
-Frontmatter stays in the harness format (`name`, `description`, `metadata`); set `metadata.type` to `episodic`, `semantic`, or `procedural`.
-
-## Pools
-1. Default pool is the current project's own memory directory.
-2. Machine-wide facts (installed tools, toolchain paths, remote access) go to the global pool `~/.claude/projects/-Users-hyungmokim--claude/memory/` as `setup-<topic>` files, so every project finds them in one place. Before work that depends on a machine fact, check that pool's `MEMORY.md` and read the matching topic file.
-3. Never duplicate one fact across pools; link with `[[name]]` instead.
-
-## Maintenance
-On every save, route the candidate through exactly one of:
-1. **Categorize-then-merge** — an existing file covers the topic: update it.
-2. **Generalize-then-learn** — the fact is a general rule in disguise: file the rule by the routes above, keep only the evidence (or nothing) in memory.
-3. **Discard** — derivable from the repo, git history, or CLAUDE.md; or dead.
-
-Keep `MEMORY.md` one line per file. Delete memories that turn out wrong.
+On every save, take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise and keep only the evidence, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Delete memories that turn out wrong.
