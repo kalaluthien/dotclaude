@@ -5,6 +5,7 @@
   "worktree": {
     "baseRef": "fresh"
   },
+  "enabledPlugins": {},
   "outputStyle": "Simplified Technical",
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
