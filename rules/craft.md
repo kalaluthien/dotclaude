@@ -24,24 +24,22 @@ Turn-level habits stay in `~/.claude/CLAUDE.md`; append here per
   (2026-07-23)
 
 ## Debugging
-- Debug a driven action that does nothing (no effect, no error) by going deeper,
-  not wider: read the tool or framework's own diagnostics first (idle, timeout,
-  and harness warnings usually name the cause), then log each decision point to
-  bisect where the pipeline breaks. Re-trying different ways to trigger it is
+- Buy evidence instead of inferring, and go deeper rather than wider. For a
+  driven action that does nothing (no effect, no error), read the tool's own
+  diagnostics first — idle, timeout, and harness warnings usually name the
+  cause — then log each decision point to bisect where the pipeline breaks. To
+  find who owns an effect, ablate the suspect: disable the code believed to
+  cause the symptom and re-run, and if the symptom survives the owner is
+  elsewhere, usually a framework acting on its own signal. One cheap run
+  replaces a long chain of inference; re-trying different ways to trigger it is
   symptom-thrashing that can burn hours. (2026-07-19)
-- To find who owns an effect, ablate the suspect instead of reasoning about it:
-  disable the code believed to cause the symptom and re-run. If the symptom
-  survives, the owner is elsewhere — usually a framework acting on its own
-  signal rather than your call site. One cheap run replaces a long chain of
-  inference. (2026-07-19)
-- A changed failure mode — a new error, a later failing line — is not evidence
-  that the earlier cause is gone. Read it as a new symptom until the logs or the
-  actual effect say otherwise. (2026-07-19)
-- When an automated check fails but the manual flow or a sibling test passes,
-  suspect the harness before the product. In a suite already known to flake, the
-  discriminator is whether the *same* assertion fails: a failure that moves
-  between assertions across runs, and reproduces on the unchanged baseline, is
-  environmental. (2026-07-19)
+- Do not over-read a changed signal. A new error or a later failing line is not
+  evidence that the earlier cause is gone — read it as a new symptom until the
+  logs or the actual effect say otherwise. When an automated check fails but
+  the manual flow or a sibling test passes, suspect the harness before the
+  product: in a suite already known to flake, the discriminator is whether the
+  *same* assertion fails, since a failure that moves between assertions across
+  runs and reproduces on the unchanged baseline is environmental. (2026-07-19)
 
 ## Verification
 Claims that need evidence you do not have yet. Do not add checks beyond these.
