@@ -42,19 +42,18 @@ Turn-level habits stay in `~/.claude/CLAUDE.md`; append here per
   runs and reproduces on the unchanged baseline is environmental. (2026-07-19)
 
 ## Verification
-Claims that need evidence you do not have yet. Do not add checks beyond these.
+A claim argued only from documents, memory, or the artifact you just wrote is
+unverified. Spend one cheap check that is able to fail. Do not add checks
+beyond these three.
 
-- A regression test earns trust only by failing first. Before you believe a new
-  test covers the bug, revert the fix (`git stash`), watch the test fail, then
-  restore. A test authored against an already-fixed tree can pass for reasons
-  unrelated to the defect. (2026-07-19)
-- A design verdict argued only against documents is unverified. Before you ship
-  it, run one read-only pass against the actual code: is the claimed state
-  observable, does the surface have the claimed capacity, does a latent defect
-  contradict a premise. (2026-07-23)
-- A documentation claim about a tool's or harness's behavior is a hypothesis.
-  When a decision hinges on one, spend one cheap live probe. Docs lag.
-  (2026-07-16)
+- A regression test earns trust only by failing first: revert the fix
+  (`git stash`), watch the test fail, then restore. A test authored against an
+  already-fixed tree can pass for reasons unrelated to the defect. (2026-07-19)
+- A design verdict needs one read-only pass against the actual code — is the
+  claimed state observable, does the surface have the claimed capacity, does a
+  latent defect contradict a premise. (2026-07-23)
+- A documentation claim about a tool's or harness's behavior is a hypothesis:
+  when a decision hinges on one, spend one live probe. Docs lag. (2026-07-16)
 
 ## Git
 - Operate on a worktree from the main checkout with `git -C <path>`. Do not `cd`
