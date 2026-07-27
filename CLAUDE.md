@@ -59,7 +59,6 @@ Habits that apply to any turn.
 - Red-team whatever you evaluate. For design work, generate 2-3 named options and judge all of them through 2-3 distinct lenses (architecture, consumer, product): convergence across independent lenses is the accept signal, a single lens is an opinion. (2026-07-18, extended 2026-07-23)
 - When told to "decide all other details", decide — and hand the decisions back as a numbered veto table, one line of reason each, so a veto costs the user one line. Decisions buried in prose get re-litigated. (2026-07-23)
 - Reset a reusable resource when you claim it, not when you release it. Only the claim path knows what clean means for the work about to start, it always runs, and it does not destroy state that is still evidence for the report just delivered. (2026-07-27)
-- Treat a "new discovery" — yours or a subagent's — as a false positive until it clears the usual causes: intended implementation (the design intent is written in a comment or another layer), measurement or calculation error (small sample, wrong unit or order), illusion (noise read as a trend, correlation read as causation), local-only judgment (correctness argued from the function alone, callers unread), and instrument error (the measured quantity differs from what its name claims). Only a finding that clears all of these may be useful. (2026-07-27)
 
 # Craft
 Situational rules with an instruction and its rationale. Read the matching section before you design a system, debug a failure, verify a fix, or rewrite git history.
@@ -75,11 +74,12 @@ Situational rules with an instruction and its rationale. Read the matching secti
 - Do not over-read a changed signal. A new error or a later failing line is not evidence that the earlier cause is gone — read it as a new symptom until the logs or the actual effect say otherwise. When an automated check fails but the manual flow or a sibling test passes, suspect the harness before the product: in a suite already known to flake, the discriminator is whether the *same* assertion fails, since a failure that moves between assertions across runs and reproduces on the unchanged baseline is environmental. (2026-07-19)
 
 ## Verification
-A claim argued only from documents, memory, or the artifact you just wrote is unverified. Spend one cheap check that is able to fail. Do not add checks beyond these three.
+A claim argued only from documents, memory, or the artifact you just wrote is unverified. Spend one cheap check that is able to fail. Do not add checks beyond these.
 
 - A regression test earns trust only by failing first: revert the fix (`git stash`), watch the test fail, then restore. A test authored against an already-fixed tree can pass for reasons unrelated to the defect. (2026-07-19)
 - A design verdict needs one read-only pass against the actual code — is the claimed state observable, does the surface have the claimed capacity, does a latent defect contradict a premise. (2026-07-23)
 - A documentation claim about a tool's or harness's behavior is a hypothesis: when a decision hinges on one, spend one live probe. Docs lag. (2026-07-16)
+- A "new discovery" — yours or a subagent's — is a false positive until it clears the usual causes: intended implementation (the design intent is written in a comment or another layer), measurement or calculation error (small sample, wrong unit or order), illusion (noise read as a trend, correlation read as causation), local-only judgment (correctness argued from the function alone, callers unread), and instrument error (the measured quantity differs from what its name claims). Only a finding that clears all of these may be useful. (2026-07-27)
 
 ## Git
 - Operate on a worktree from the main checkout with `git -C <path>`. Do not `cd` into a worktree inside a command chain that later merges or removes it — the merge then runs inside the worktree ("already up to date") and the removal deletes the shell's own cwd. (2026-07-26)
