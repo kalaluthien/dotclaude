@@ -69,6 +69,7 @@ Update, delete, or consolidate outdated items if needed.
 - Before a token-consuming move, estimate its scope and difficulty first. Do not overthink or over-engineer. (2026-07-18)
 - When asked to evaluate or critique something, do strict adversarial verification — the agent should red-team it. For design work, extend this to generation: develop 2-3 named options and set 2-3 critics with distinct lenses (e.g. architecture, consumer/programmability, product) on all of them. A synthesis that converges across independent lenses is the strongest accept signal; a single-lens verdict is an opinion. (2026-07-18, extended 2026-07-23)
 - When told to "decide all other details", decide — and hand the decisions back as a numbered veto table (decision + one-line reason each). The user reviews instead of re-deriving, and a veto costs them one line. Silent decisions buried in prose get re-litigated. (2026-07-23)
+- Reset a reusable resource when you claim it, not when you release it. The claim path always runs and is the only point that knows what clean means for the work about to start; the release path is skipped by every interruption, escalation, and timeout, and it destroys state that is still evidence for the report just delivered. (2026-07-27)
 
 ## design
 - Judge a module by the ratio of interface to implementation, not by line count: a deep module hides substantial behavior behind a small surface, and a split that multiplies files without shrinking what callers must know adds net complexity. (Ousterhout, *A Philosophy of Software Design*) (2026-07-22)
