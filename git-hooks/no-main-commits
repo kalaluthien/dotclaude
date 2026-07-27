@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+# Block a commit made directly on a protected branch, so every patch lands on
+# its own branch or worktree. Wired in as a pre-commit hook, or called first by
+# a repository whose own pre-commit hook already occupies that slot.
+#
+# Deliberate override: git commit --no-verify
+
+branch=$(git symbolic-ref --quiet --short HEAD) || exit 0  # detached: rebase, bisect
+
+case "$branch" in
+	main|master) ;;
+	*) exit 0 ;;
+esac
+
+root=$(git rev-parse --show-toplevel)
+repo=$(basename "$root")
+
+cat >&2 <<EOF
+pre-commit: direct commits to "$branch" are blocked in $repo.
+
+Put this patch on its own branch or worktree:
+  git switch -c <topic>
+  git worktree add ../$repo-<topic> -b <topic>
+
+Deliberate override: git commit --no-verify
+EOF
+exit 1
