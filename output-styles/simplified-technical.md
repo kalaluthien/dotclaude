@@ -1,1 +1,0 @@
-../../workspace/.claude/output-styles/simplified-technical.md
