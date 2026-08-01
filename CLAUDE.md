@@ -2,7 +2,7 @@
 Taste-level preferences that hold on any machine, in any repository. Detail
 lives in the addressed files:
 
-- Writing and language: `~/.claude/output-styles/simplified-technical.md`.
+- Writing and language: `~/workspace/.claude/output-styles/simplified-technical.md` (a symlink under `~/.claude/output-styles/` keeps it discoverable from every repository).
 - Machine and tool facts: `setup-*` memories in the global pool, per "Filing".
 
 ## Claude Code
@@ -91,7 +91,7 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 Route a durable takeaway by *what would make it wrong*, and report where you filed it.
 
 1. A general rule, true on any repository, machine, or tool, goes to the section of this file that names the work it applies to.
-2. A writing or language rule goes to the "Simplified Technical" output style, `~/.claude/output-styles/simplified-technical.md`.
+2. A writing or language rule goes to the "Simplified Technical" output style, `~/workspace/.claude/output-styles/simplified-technical.md`.
 3. A machine or environment fact (installed tools, aliases, shell parsing, toolchain paths) goes to a `setup-<topic>` memory in the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, so every project finds it in one place. Read that pool's `MEMORY.md` before work that depends on a machine fact.
 4. A repository-specific working gotcha — how to build, test, or debug *that* codebase — goes to that repository's `.claude/CLAUDE.md`, edited in a worktree and committed like any other change.
 5. A product, architecture, or verification truth about a repository goes to that repository's own source of truth (its `docs/` or spec), never to its `CLAUDE.md`.
