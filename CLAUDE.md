@@ -8,7 +8,7 @@ lives in the addressed files:
 ## Claude Code
 1. Use `PROJECT/.claude/CLAUDE.md` instead of `PROJECT/CLAUDE.md`.
 2. Name skills in gerund form — verb-ing plus object, e.g. `updating-wiki-pages`, `delegating`. A skill is an operation; its name reads as the action.
-3. Subagents run on Opus, never Fable: medium effort for search, coding, and script runs; high effort for planning and other knowledge work.
+3. Pick the model by task depth and the effort by task breadth. Fable runs only the top-level orchestrating session, never a subagent or a delegated session. Below it, work that decides — ideation, planning, implementation, review — runs Opus; work that retrieves or condenses knowledge — search, classification, summarization — runs Sonnet. Effort measures scope, not difficulty: high or xhigh for a task that spans many exceptional cases or a large state space, low or medium for a narrow one.
 
 ## Signals
 When the user asks with the keywords below, read the intention as follows.
