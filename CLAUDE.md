@@ -52,6 +52,11 @@ For instance:
 - "Survey the topic" -> "List the questions the survey must answer, then answer each with evidence"
 - "Design X" -> "List requirements and use cases, then walk the design through each until none fail"
 
+When the work is delegated, require named failures instead of silent
+compliance: a criterion honestly failed with its reason locates a defect in
+the criteria or the inputs, which a gamed pass hides — the failure report is
+often the more valuable deliverable.
+
 # Craft
 Rules with an instruction and its rationale, grouped by the work they apply to. Read the matching section before you commit to a decision, design a system, debug a failure, verify a fix, rewrite git history, or file a takeaway.
 
@@ -85,6 +90,8 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 ## Git
 - Removing a stale branch is everybody's responsibility, not its author's. Delete any local branch whose commits already sit on `main` or the remote, whoever created it — a branch left for its owner is how a checkout collects dead refs. Confirm the commits exist elsewhere before you delete. A branch that holds the only copy of its work is not stale: report it and leave it standing.
 - Operate on a worktree from the main checkout with `git -C <path>`. Do not `cd` into a worktree inside a command chain that later merges or removes it — the merge then runs inside the worktree ("already up to date") and the removal deletes the shell's own cwd.
+- Merge the protected branch *into* your topic branch, resolve there, then fast-forward the protected branch. A clean merge skips `pre-commit`, but a conflicted one needs a resolution commit, and the no-direct-commits guard blocks it — leaving a half-merged protected branch that another agent can check out.
+- Do not assume the shared checkout stays on your branch. A peer working the same repository moves `HEAD`, so read `git branch --show-current` before each commit, or take a worktree and drive it with `git -C`.
 - A release tag names the commit that produced the artifact, not `HEAD`. Before you add "one more fix" to a release whose commit already exists, check which tree the tag will point at; when the fix must ship and nothing is pushed yet, rewrite the unpushed history so the fix precedes the release commit, then rebuild the artifact from that tree.
 
 ## Filing
@@ -92,18 +99,81 @@ Route a durable takeaway by *what would make it wrong*, and report where you fil
 
 1. A general rule, true on any repository, machine, or tool, goes to the section of this file that names the work it applies to.
 2. A writing or language rule goes to the "Simplified Technical" output style, `~/workspace/.claude/output-styles/simplified-technical.md`.
-3. A machine or environment fact (installed tools, aliases, shell parsing, toolchain paths) goes to a `setup-<topic>` memory in the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, so every project finds it in one place. Read that pool's `MEMORY.md` before work that depends on a machine fact.
-4. A repository-specific working gotcha — how to build, test, or debug *that* codebase — goes to that repository's `.claude/CLAUDE.md`, edited in a worktree and committed like any other change.
-5. A product, architecture, or verification truth about a repository goes to that repository's own source of truth (its `docs/` or spec), never to its `CLAUDE.md`.
+3. A single tool's or environment's own fact (installed tools, aliases, shell parsing, toolchain paths) goes to a `setup-<topic>` memory in the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, so every project finds it in one place. Read that pool's `MEMORY.md` before work that depends on a machine fact.
+4. A procedure that coordinates several projects or third-party services — deploying more than one service, driving one project's output into another, anything whose subject is the combination rather than any one member — goes to the workspace pool, `~/.claude/projects/-Users-hyungmokim-workspace/memory/`. The global pool holds a tool's own facts for visibility; a coordination procedure that lands there hides behind a tool name that names only one of its parts.
+5. A repository-specific working gotcha — how to build, test, or debug *that* codebase — goes to that repository's `.claude/CLAUDE.md`, edited in a worktree and committed like any other change.
+6. A product, architecture, or verification truth about a repository goes to that repository's own source of truth (its `docs/` or spec), never to its `CLAUDE.md`.
 
 The rule goes to the general file and the evidence stays with the subject. Write instruction and rationale only: no repository names, no war stories. Before you append, update or merge a near-duplicate instead of stacking one beside it.
 
-A memory file holds one fact, lives in the pool of the project it serves, and never repeats a fact another pool already holds — link with `[[name]]` instead. Name it `<subcategory>-<topic>`, keep `MEMORY.md` at one line per file, and set `metadata.type` from the table. Invent a subcategory when none fits, and add it here in the same change.
+A memory file holds one fact and never repeats a fact another pool already holds — link with `[[name]]` instead. It lives in the pool of the project it serves; a fact that serves several projects lives in the workspace pool, whose subject is the combination, and only a single tool's own fact goes to the global pool, where every project can see it. Name it `<subcategory>-<topic>`, keep `MEMORY.md` at one line per file, and set `metadata.type` from the table. A file's frontmatter `description` and its `MEMORY.md` line state the file's role, never its contents: an enumerated content list is a mirror that goes stale on the file's next edit. Invent a subcategory when none fits, and add it here in the same change.
 
 | type | holds | subcategory prefixes | lifecycle |
 |---|---|---|---|
-| **episodic** | what happened | `handoff-<task>-<datetime>`, `history-<topic>` | `handoff-*` is deleted once consumed; `history-*` is append-only |
-| **semantic** | what is true | `backlog-<project>`, `project-<topic>`, `profile-<topic>` | updated in place; `backlog-*` is pruned when items close |
+| **episodic** | what happened | `history-<topic>` | `history-*` is append-only |
+| **semantic** | what is true | `backlog`, `project-<topic>`, `profile-<topic>` | updated in place; `backlog` is pruned when items close |
 | **procedural** | how to act | `feedback-<topic>`, `reference-<topic>`, `setup-<topic>` | updated in place; deleted when the tool or fact is gone |
 
+A file name carries no date and no project name: the pool directory already names the project, so a pool holds exactly one `backlog.md`. A date in a name forces a rename on every update, and a second write then lands beside the first instead of on it.
+
+Write every item in a `backlog.md` task-bearing section as `- [<m>] YYYY-MM-DD **Title.** body`, where `<m>` is one of ` ` (open), `/` (working), `?` (waits on the owner), `x` (done), and the date is the day the item was created, never the day it moved. A prose section — Why, How to apply, Horizon, Preliminary research — keeps plain bullets. One fixed grammar lets a reader and a tool read the same file, the marker separates what is blocked on the owner from what is merely open, and the creation date makes an item's age visible without a session log. A `PostToolUse` hook, `~/.claude/hooks/check-backlog-format.py`, rejects a write that breaks the grammar.
+
+Work owed to the owner is a `[?]` item in the pool's `backlog.md`, never a file of its own. The marker already names who the work waits on, and a separate file splits one list into two lists that drift apart.
+
+The next session that touches a `backlog.md` prunes its `[x]` rows. Git history and the repository's own documents hold the evidence of shipped work, so the backlog stays a list of live work. Before you prune a `[x]` row, lift any owed action still buried in it into its own `[?]` item: a shipped row can still carry unshipped debt.
+
 On every save, take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise and keep only the evidence, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Delete memories that turn out wrong.
+
+### The pool contract
+
+The block below is this section's machine copy: where a pool lives, how its directory name encodes a project, which two filenames carry the cards and the index, the item grammar, the prose sections, and the frontmatter keys. Every program that reads a pool parses it instead of keeping its own copy of the rule — the `check-backlog-format.py` hook and the board service both do — so a change to any of those shapes is made here, in the same commit as the prose it follows. Two encodings of one rule is how a hook and a reader come to disagree about the same file.
+
+Three values name a rule rather than spell it, and every reader compiles them the same way. `title_style: bold-lead-required` means the text after the date opens with a bold run, so a bullet without one is prose and yields no card. `match: word-prefix` means a heading names a prose section when it equals a listed name, or opens with that name followed by a space or a colon — "Horizon (noted)" is prose, "Whys and wherefores" is not. `column: 0` means an item starts at column 0; an indented bullet is the body of the item above it.
+
+```json contract=pool
+{
+  "contract": "pool",
+  "version": 1,
+  "updated": "2026-08-02",
+
+  "pool": {
+    "pattern": "projects/*/memory/*.md",
+    "board_file": "backlog.md",
+    "index_file": "MEMORY.md",
+    "encoding": { "replace": ["/", "."], "with": "-" },
+    "suffixes": [
+      { "match": "-workspace-<repo>", "project": "<repo>" },
+      { "match": "-workspace", "project": "workspace", "role": "workspace" },
+      { "match": "--claude", "project": "user", "role": "user" }
+    ]
+  },
+
+  "item": {
+    "bullet": "-",
+    "column": 0,
+    "date": "YYYY-MM-DD",
+    "title_style": "bold-lead-required",
+    "markers": [
+      { "marker": " ", "status": "open" },
+      { "marker": "/", "status": "working" },
+      { "marker": "?", "status": "need-you" },
+      { "marker": "x", "status": "done" }
+    ]
+  },
+
+  "sections": {
+    "prose_prefixes": ["why", "how to apply", "horizon", "preliminary research"],
+    "match": "word-prefix"
+  },
+
+  "frontmatter": {
+    "title": "name",
+    "description": "description",
+    "type": "metadata.type",
+    "conditional_paths": "paths",
+    "modified": "metadata.modified"
+  }
+}
+```
+
+@RTK.md
