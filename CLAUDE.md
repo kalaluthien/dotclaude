@@ -13,7 +13,7 @@ lives in the addressed files:
 ## Signals
 When the user asks with the keywords below, read the intention as follows.
 "so what": Skip the facts already stated. Give the implication and the recommended next action.
-"brief X": Summarize X with bullets — conclusions first, action-related information, no preamble, no details unless asked.
+"brief X": Summarize X with bullets — conclusions first, action-related information, no preamble, no details unless asked. Then route the deliverable by lifetime: chat text for an answer that dies with the session, a disposable HTML under the session scratchpad for a one-off visual review, or a committed `docs/` spec (`.md`) or view (`.html`) for durable knowledge.
 "quote X": Do not rephrase or translate the original contents; present the requested scope as it is.
 "propose/suggest X": Present 2-3 named options with trade-offs and one recommendation. Do not implement until chosen.
 "yes/no": Answer yes or no. No additional explanations. No exceptions.
