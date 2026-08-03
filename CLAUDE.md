@@ -126,16 +126,16 @@ A memory file holds one fact and never repeats a fact another pool already holds
 | type | holds | subcategory prefixes | lifecycle |
 |---|---|---|---|
 | **episodic** | what happened | `history-<topic>` | `history-*` is append-only |
-| **semantic** | what is true | `backlog`, `project-<topic>`, `profile-<topic>` | updated in place; `backlog` is pruned when items close |
+| **semantic** | what is true | `backlog`, `project-<topic>`, `profile-<topic>` | updated in place; a `backlog` item is deleted when it closes |
 | **procedural** | how to act | `feedback-<topic>`, `reference-<topic>`, `setup-<topic>` | updated in place; deleted when the tool or fact is gone |
 
 A file name carries no date and no project name: the pool directory already names the project, so a pool holds exactly one `backlog.md`. A date in a name forces a rename on every update, and a second write then lands beside the first instead of on it.
 
-Write every item in a `backlog.md` task-bearing section as `- [<m>] YYYY-MM-DD **Title.** body`, where `<m>` is one of ` ` (open), `/` (working), `?` (waits on the owner), `x` (done), and the date is the day the item was created, never the day it moved. A prose section — Why, How to apply, Horizon, Preliminary research — keeps plain bullets. One fixed grammar lets a reader and a tool read the same file, the marker separates what is blocked on the owner from what is merely open, and the creation date makes an item's age visible without a session log. A `PostToolUse` hook, `~/.claude/hooks/check-backlog-format.py`, rejects a write that breaks the grammar.
+Write every item in a `backlog.md` task-bearing section as `- [<m>] YYYY-MM-DD #tag … **Title.** body`, where `<m>` is one of ` ` (open) or `/` (working), the date is the day the item was created, never the day it moved, and each optional `#tag` sits between the date and the title. The marker is the item's state; a tag is an orthogonal annotation that combines with either state. A tag names who the item waits on — `#need-you` waits on the owner, `#blocked` waits on an external event the body names — and no tag means the item is workable now. A prose section — Why, How to apply, Horizon, Preliminary research — keeps plain bullets. One fixed grammar lets a reader and a tool read the same file, the tag separates what is waiting from what is merely open, and the creation date makes an item's age visible without a session log. A `PostToolUse` hook, `~/.claude/hooks/check-backlog-format.py`, rejects a write that breaks the grammar.
 
-Work owed to the owner is a `[?]` item in the pool's `backlog.md`, never a file of its own. The marker already names who the work waits on, and a separate file splits one list into two lists that drift apart.
+Work owed to the owner is a `#need-you` item in the pool's `backlog.md`, never a file of its own. The tag already names who the work waits on, and a separate file splits one list into two lists that drift apart.
 
-The next session that touches a `backlog.md` prunes its `[x]` rows. Git history and the repository's own documents hold the evidence of shipped work, so the backlog stays a list of live work. Before you prune a `[x]` row, lift any owed action still buried in it into its own `[?]` item: a shipped row can still carry unshipped debt.
+Done is deletion: an item leaves the file the moment it closes, and no done marker exists. Git history and the repository's own documents hold the evidence of shipped work, so the backlog stays a list of live work. Before you delete a closing item, lift any owed action still buried in it into its own `#need-you` item: a shipped row can still carry unshipped debt.
 
 On every save, take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise and keep only the evidence, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Delete memories that turn out wrong.
 
@@ -143,13 +143,13 @@ On every save, take exactly one route: update the file that already covers the t
 
 The block below is this section's machine copy: where a pool lives, how its directory name encodes a project, which two filenames carry the cards and the index, the item grammar, the prose sections, and the frontmatter keys. Every program that reads a pool parses it instead of keeping its own copy of the rule — the `check-backlog-format.py` hook and the board service both do — so a change to any of those shapes is made here, in the same commit as the prose it follows. Two encodings of one rule is how a hook and a reader come to disagree about the same file.
 
-Three values name a rule rather than spell it, and every reader compiles them the same way. `title_style: bold-lead-required` means the text after the date opens with a bold run, so a bullet without one is prose and yields no card. `match: word-prefix` means a heading names a prose section when it equals a listed name, or opens with that name followed by a space or a colon — "Horizon (noted)" is prose, "Whys and wherefores" is not. `column: 0` means an item starts at column 0; an indented bullet is the body of the item above it.
+Three values name a rule rather than spell it, and every reader compiles them the same way. `title_style: bold-lead-required` means the text after the date opens with a bold run, so a bullet without one is prose and yields no card. `match: word-prefix` means a heading names a prose section when it equals a listed name, or opens with that name followed by a space or a colon — "Horizon (noted)" is prose, "Whys and wherefores" is not. `column: 0` means an item starts at column 0; an indented bullet is the body of the item above it. The tag values name display rules the same way: `rank: first` lifts a tagged item to the top of its state group, and `emphasis` names the visual weight a surface gives the tag's chip — `accent` or `muted` — never a specific color, which each surface picks from its own palette.
 
 ```json contract=pool
 {
   "contract": "pool",
   "version": 1,
-  "updated": "2026-08-02",
+  "updated": "2026-08-04",
 
   "pool": {
     "pattern": "projects/*/memory/*.md",
@@ -170,10 +170,15 @@ Three values name a rule rather than spell it, and every reader compiles them th
     "title_style": "bold-lead-required",
     "markers": [
       { "marker": " ", "status": "open" },
-      { "marker": "/", "status": "working" },
-      { "marker": "?", "status": "need-you" },
-      { "marker": "x", "status": "done" }
-    ]
+      { "marker": "/", "status": "working" }
+    ],
+    "tags": {
+      "position": "after-date",
+      "kinds": [
+        { "tag": "need-you", "waits_on": "owner", "emphasis": "accent", "rank": "first" },
+        { "tag": "blocked", "waits_on": "external", "emphasis": "muted", "rank": "none" }
+      ]
+    }
   },
 
   "sections": {

@@ -13,6 +13,8 @@ What the block declares and this file compiles:
     item.bullet        the list marker an item opens with, at column 0
     item.markers       the bracketed status characters
     item.date          the date form
+    item.tags          the declared #tag kinds, sitting between the date and
+                       the title (position: after-date); optional per item
     item.title_style   bold-lead-required — the text opens with a bold run
     sections.match     word-prefix — a prose heading is a listed name, alone
                        or followed by a space or a colon
@@ -88,6 +90,8 @@ def contract(path=CONTRACT_DOCUMENT):
     pool = data.get("pool") or {}
     sections = data.get("sections") or {}
     markers = [row.get("marker", "") for row in item.get("markers") or []]
+    tags_decl = item.get("tags") or {}
+    tags = [str(row.get("tag", "")) for row in tags_decl.get("kinds") or []]
     date = DATE_PATTERNS.get(item.get("date"))
     title = TITLE_PATTERNS.get(item.get("title_style"))
     match = sections.get("match")
@@ -95,6 +99,13 @@ def contract(path=CONTRACT_DOCUMENT):
 
     if not markers or any(len(m) != 1 for m in markers):
         raise ContractError("%s: item.markers must be single characters" % path)
+    if tags_decl and tags_decl.get("position") != "after-date":
+        raise ContractError(
+            "%s: item.tags.position %r is a rule this hook cannot compile"
+            % (path, tags_decl.get("position"))
+        )
+    if tags_decl and (not tags or any(not t for t in tags)):
+        raise ContractError("%s: item.tags.kinds must name non-empty tags" % path)
     if date is None:
         raise ContractError(
             "%s: item.date %r is a form this hook cannot compile"
@@ -113,13 +124,24 @@ def contract(path=CONTRACT_DOCUMENT):
         raise ContractError("%s: pool.board_file and pool.pattern are required" % path)
 
     bullet = item.get("bullet", "-")
+    tag_run = (
+        r"(?:#(?:%s) )*" % "|".join(re.escape(t) for t in tags) if tags else ""
+    )
     return {
         "item": re.compile(
-            r"^%s \[[%s]\] %s %s"
-            % (re.escape(bullet), "".join(re.escape(m) for m in markers), date, title)
+            r"^%s \[[%s]\] %s %s%s"
+            % (
+                re.escape(bullet),
+                "".join(re.escape(m) for m in markers),
+                date,
+                tag_run,
+                title,
+            )
         ),
-        "form": "`%s [<m>] %s **Title.** body`" % (bullet, item.get("date")),
+        "form": "`%s [<m>] %s%s **Title.** body`"
+        % (bullet, item.get("date"), " [#tag …]" if tags else ""),
         "markers": markers,
+        "tags": tags,
         "prose": [str(p).lower() for p in sections.get("prose_prefixes") or []],
         "board_file": pool["board_file"],
         # A pool's own directory is the pattern's last directory segment:
@@ -178,6 +200,11 @@ def report(path, found, rule):
     for number, line, reason in found:
         lines.append("  line %d: %s" % (number, line.rstrip()))
         lines.append("    %s — <m> is one of %s." % (reason, markers))
+    if rule["tags"]:
+        lines.append(
+            "  (a tag is one of %s, between the date and the title)"
+            % ", ".join("'#%s'" % tag for tag in rule["tags"])
+        )
     lines.append("  (the grammar is declared in %s, section Filing)" % CONTRACT_DOCUMENT)
     return "\n".join(lines)
 
