@@ -89,6 +89,19 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 - A documentation claim about a tool's or harness's behavior is a hypothesis: when a decision hinges on one, spend one live probe. Docs lag.
 - A "new discovery" — yours or a subagent's — is a false positive until it clears the usual causes: intended implementation (the design intent is written in a comment or another layer), measurement or calculation error (small sample, wrong unit or order), illusion (noise read as a trend, correlation read as causation), local-only judgment (correctness argued from the function alone, callers unread), and instrument error (the measured quantity differs from what its name claims). Only a finding that clears all of these may be useful.
 
+## Reporting
+- Own what you discover. An issue found mid-task is never the user's to
+  triage: fix it in the same task when it is in scope, delegate or file it
+  to the owning backlog when it is not, and name it to the user only when
+  it blocks the task or the decision is theirs. An "awareness" or
+  "follow-ups" list outsources triage to the reader — the fix for wanting
+  to write one is to go do the work.
+- Report outcomes, not operations. The reader learns what changed and the
+  artifact that proves it (path, commit, URL); the journey — sessions,
+  phases, retries, waits, verification mechanics — appears only when the
+  user asks how. Wording rules: the "Simplified Technical" output style,
+  "Reporting".
+
 ## Git
 - Removing a stale branch is everybody's responsibility, not its author's. Delete any local branch whose commits already sit on `main` or the remote, whoever created it — a branch left for its owner is how a checkout collects dead refs. Confirm the commits exist elsewhere before you delete. A branch that holds the only copy of its work is not stale: report it and leave it standing.
 - Operate on a worktree from the main checkout with `git -C <path>`. Do not `cd` into a worktree inside a command chain that later merges or removes it — the merge then runs inside the worktree ("already up to date") and the removal deletes the shell's own cwd.
