@@ -2,6 +2,31 @@
   "permissions": {
     "defaultMode": "auto"
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$HOME/.claude/hooks/check-backlog-format.py\""
+          }
+        ]
+      }
+    ]
+  },
+  "model": "fable",
   "worktree": {
     "baseRef": "fresh"
   },
@@ -13,6 +38,8 @@
   "theme": "auto",
   "editorMode": "vim",
   "verbose": false,
+  "switchModelsOnFlag": false,
+  "autoScrollEnabled": true,
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": false
 }
