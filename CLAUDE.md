@@ -3,6 +3,9 @@ Taste-level preferences that hold on any machine, in any repository. Detail
 lives in the addressed files:
 
 - Writing and language: `~/workspace/.claude/output-styles/simplified-technical.md`.
+  **Ground rule for every document: keep it short, and separate the
+  crucial from the detail — obsessively. The body carries only what
+  changes the reader's next action; details collapse or get cut.**
 - Machine and tool facts: `setup-*` memories in the global pool, per "Filing".
 
 ## Claude Code
