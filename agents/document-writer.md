@@ -122,8 +122,10 @@ landmarks walk the reader through small drawings.
 
 ## Color
 
-Color is functional, never decorative. Yellow carries highlights and
-number badges. Blue carries code identifiers, file:line links, and
+Color is functional, never decorative. Yellow carries highlights only.
+A number badge — in prose or a figure — is a white circle with a black
+border and a black numeral. Blue carries code identifiers, file:line
+links, and
 cross-references. Red — usually dashed — carries what is cut, dropped,
 or failing, labelled with the reason ("weak", "< 7 · out"); in a
 proposal, dashed alone still marks the not-yet-built. Everything else
