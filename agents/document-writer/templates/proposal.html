@@ -1,0 +1,216 @@
+<!doctype html>
+<!--
+  Doctype: proposal — a change argued but not decided. Copy to
+  docs/<name>.html (workspace: plane prefix agent- or service-) and fill in;
+  update the same file in place. Delete every comment, including this one.
+
+  A proposal is the one prose view allowed to describe what does not exist.
+  What it says about today is grounded and cited; what it says about
+  tomorrow is an option, and is written as one. Nothing is decided here:
+  acceptance is recorded in a spec, and the Status field then points at
+  that document. Status is one of: Open; Accepted YYYY-MM-DD -> <spec
+  file>; Rejected YYYY-MM-DD, <reason>.
+
+  Naming: the h1 is a noun phrase of one to three words naming the change's
+  subject ("Writer constitution", "Board split"); the opening sentence
+  carries what the change would make true. Every section heading is a noun
+  phrase of one to three words, and the section's first sentence carries
+  its claim.
+
+  Prose rhythm: a paragraph holds one topic in at most three sentences.
+  Prefer one full sentence that carries a claim together with its qualifier
+  over two clipped sentences that split them.
+
+  GROUND RULE — keep the proposal short, and separate the crucial from
+  the detail, obsessively. The body carries only what the reader needs to
+  judge the options and act on the recommendation. Every detail —
+  evidence, raw output, long enumerations — moves to a disclosure block
+  whose summary states the conclusion, or is deleted. Crucial and detail
+  never share a paragraph.
+
+  The skeleton follows the measured argument structure
+  (research: notes/wiki/document-argument-structures.md):
+  - The document opens with one and-but-therefore sentence: the situation,
+    the complication, and the recommendation in about thirty words. A
+    reader who stops there has already reached the answer. No Situation or
+    Question section exists — that sentence carries both.
+  - Problem shows today's cost rather than asserting it: the observation,
+    the file or measurement it came from, and who it costs. A problem no
+    reader can check is a preference.
+  - Options: the axes are named before any option is judged; two options
+    minimum, each with a name (never a letter), its cost, and what it
+    gives up. The options that lost stay in the document forever — the
+    reason one lost is the only thing standing between it and being
+    re-proposed. Check the list for what is missing and what is counted
+    twice; a deliberate overlap is allowed when named. Judgments across
+    options and axes are a table, never flowing prose.
+  - Recommendation: one option, why it wins on the stated axes, what would
+    have to be true for the recommendation to flip, and the smallest first
+    step — accepting should cost one commit, not a project.
+  - An option may be drawn (a mockup is a drawn option). A drawn option
+    follows docs/components/figure.html — small (at most seven elements),
+    the overlap rule, three-word labels: every element that does not ship
+    is dashed, numbered in the drawing, and named in a table with where it
+    comes from; the caption states which parts are proposed. Two options
+    that differ visibly are drawn as small side-by-side panels
+    (.figure-row) rather than one combined drawing. A drawing whose
+    elements all ship is an explanation, not a proposal.
+  - The top-level sections partition the argument — problem, options,
+    recommendation, plus at most two more — and each supports the
+    recommendation independently, so one refuted section leaves the rest
+    standing. A fact that fits two sections marks a wrong split. Three
+    heading levels maximum; a fourth level is an appendix.
+
+  Sources: the header carries no Source field. The specs, code, and
+  research the proposal stands on go in the sources footer at the end,
+  one source per line (docs/components/provenance.html).
+
+  required-fields: Doctype, Status, Updated, Commit
+  required-sections: Problem, Options, Recommendation, Sources
+
+  rubric — the writer checks every item before delivering and reports the
+  result; the reviewer scores against the same list. Binary, no partial
+  credit:
+  - [ ] GROUND RULE: the body carries only what the reader needs to judge
+        the options and act; every detail sits in a disclosure block whose
+        summary states the conclusion, or is cut.
+  - [ ] The h1 is a noun phrase of one to three words, and every section
+        heading is too.
+  - [ ] The document opens with one and-but-therefore sentence that reaches
+        the recommendation.
+  - [ ] Every claim about today cites an observation a reader can check at
+        the pinned commit.
+  - [ ] The axes are named before any option is judged.
+  - [ ] At least two named options, each with cost and what it gives up,
+        judged in a table.
+  - [ ] The recommendation names the flip condition and the smallest first
+        step.
+  - [ ] The top-level sections partition the argument; each supports the
+        recommendation independently.
+  - [ ] Three to five top-level sections, three heading levels maximum.
+  - [ ] No paragraph exceeds three sentences.
+  - [ ] Nothing is decided in the document; Status carries the state.
+  - [ ] Any drawing dashes its speculative elements — and only the
+        speculative: a loop, a held arm, or a not-taken path is drawn
+        solid and labelled with its intent — and names them in a table;
+        no position is described in prose; no figure exceeds seven
+        elements; no text in a figure touches another mark.
+  - [ ] No figure exceeds 620 viewBox units in width; a figure wider than
+        360 units carries class="pan" with an inline min-width equal to
+        its viewBox width, so it pans instead of shrinking.
+  - [ ] The sources footer lists what the proposal stands on; the header
+        carries no Source field.
+  - [ ] Wide content scrolls inside its own container at phone width.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><!-- Title, a noun phrase of 1–3 words --> — <!-- repo --></title>
+<style>
+  /* Base, provenance, callout, figure, disclosure styles — copied from
+     docs/components/ (self-contained by rule; copied, never linked). */
+  html { font-size: 16px; }
+  body {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 8rem;
+    background: #ffffff;
+    color: #111;
+    font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+  }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.25rem; margin: 3rem 0 .5rem; font-weight: 700; }
+  h3 { font-size: 1rem; margin: 2rem 0 .3rem; font-weight: 700; }
+  p, li { margin: .6rem 0; }
+  ul, ol { padding-left: 1.2rem; }
+  a { color: inherit; text-decoration-color: #aaa; }
+  strong { font-weight: 700; }
+  code, pre, .provenance dd {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .85em;
+  }
+  pre { overflow-x: auto; background: #f4f4f4; padding: 1rem; line-height: 1.45; margin: 1.4rem 0; }
+  table { border-collapse: collapse; width: 100%; margin: 1.4rem 0; font-size: .9rem; }
+  th, td { text-align: left; vertical-align: top; padding: .45rem .8rem .45rem 0; border-bottom: 1px solid #e4e4e4; }
+  th { font-weight: 700; }
+  @media (max-width: 42rem) {
+    table { display: block; overflow-x: auto; }
+    th, td { min-width: 9rem; }
+  }
+  .provenance { display: grid; grid-template-columns: max-content 1fr; gap: .15rem 1rem; margin: 0; font-size: .85rem; color: #555; }
+  .provenance dt { font-variant: small-caps; letter-spacing: .04em; }
+  .provenance dd { margin: 0; }
+  .callout { border: 1px solid #ccc; border-left-width: 4px; padding: .55rem .9rem; margin: 1.2rem 0; font-size: .88rem; line-height: 1.5; }
+  .callout .tag { font-variant: small-caps; letter-spacing: .06em; font-weight: 600; margin-right: .45rem; }
+  .callout.notice   { border-left-color: #556; }
+  .callout.gap      { border-left-color: #8a5a00; }
+  .callout.warning  { border-left-color: #a33; }
+  .callout.recovery { border-left-color: #2a6; }
+  .callout ul { margin: .3rem 0; }
+  details { border: 1px solid #e4e4e4; padding: .45rem .9rem; margin: 1.2rem 0; font-size: .92rem; }
+  details summary { cursor: pointer; font-weight: 600; font-size: .88rem; }
+  details[open] summary { margin-bottom: .5rem; }
+  figure { margin: 2.2rem 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { margin-top: .7rem; font-size: .85rem; color: #555; line-height: 1.5; }
+  .figure-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.2rem; margin: 2.2rem 0; }
+  .figure-row figure { margin: 0; }
+  figure.pan { overflow-x: auto; }
+  table.filemap td { border-bottom: none; padding: .12rem .8rem .12rem 0; }
+  table.filemap td:first-child { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; white-space: pre; }
+  figure pre { margin: 0; }
+  footer.sources { margin-top: 4rem; border-top: 1px solid #e4e4e4; padding-top: 1rem; font-size: .85rem; color: #555; }
+  footer.sources h2 { font-size: .8rem; margin: 0 0 .3rem; font-variant: small-caps; letter-spacing: .06em; font-weight: 600; }
+  footer.sources ul { margin: 0; padding-left: 1.1rem; }
+  footer.sources li { margin: .2rem 0; }
+</style>
+</head>
+<body>
+<article>
+
+  <header>
+    <h1><!-- The change's subject as a noun phrase, 1–3 words --></h1>
+    <dl class="provenance">
+      <dt>Doctype</dt> <dd>proposal</dd>
+      <dt>Status</dt>  <dd>Open</dd>
+      <dt>Updated</dt> <dd><!-- YYYY-MM-DD, last render date --></dd>
+      <dt>Commit</dt>  <dd><!-- short sha of the tree the problem was read on --></dd>
+    </dl>
+  </header>
+
+  <section>
+    <p><!-- The one and-but-therefore sentence. --></p>
+
+    <h2 id="problem">Problem</h2>
+    <p><!-- First sentence: the problem as a claim. Then the observation,
+            its source, who it costs. --></p>
+
+    <h2 id="options">Options</h2>
+    <p><!-- First sentence: the claim about the choice. Then the axes,
+            named before any option is judged. --></p>
+    <table>
+      <thead><tr><th>Option</th><th>What it does</th><th>Cost</th><th>What it gives up</th></tr></thead>
+      <tbody>
+        <tr><td><!-- a name, not a letter --></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="recommendation">Recommendation</h2>
+    <p><!-- First sentence: the winner as a claim. Then why it wins on the
+            axes, the flip condition, the smallest first step. --></p>
+  </section>
+
+  <footer class="sources">
+    <h2 id="sources">Sources</h2>
+    <ul>
+      <li><!-- one spec, file, or research page per line --></li>
+    </ul>
+  </footer>
+
+</article>
+</body>
+</html>

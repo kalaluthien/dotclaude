@@ -1,0 +1,80 @@
+<!doctype html>
+<!--
+  Component: disclosure — accessible detail with native <details>/<summary>.
+  This file demonstrates itself: the two blocks below are the component and
+  the CSS between the component markers is its style. No JavaScript — the
+  element is interactive by itself, so the self-containment rule holds.
+
+  Serve the scanner and the specialist in one document: the summary line
+  stays visible, the depth costs one click. On paper this cost space; here a
+  collapsed block costs one line (research: notes/wiki/structured-writing.md,
+  "accessible detail").
+
+  Rules:
+  - The summary is a claim, not a topic — a reader who never opens the block
+    still gets the conclusion. "Four of five checks passed" scans;
+    "Check results" does not.
+  - Never hide a required section, the answer, a warning, or anything the
+    rubric checks. Disclosure holds evidence, raw output, long enumerations
+    — material a reader verifies, not material a reader needs.
+  - Default closed. A block worth opening by default is body content.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>disclosure — docs components</title>
+<style>
+  html { font-size: 16px; }
+  body { max-width: 42rem; margin: 0 auto; padding: 4rem 1.5rem 8rem;
+         background: #ffffff; color: #111;
+         font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+         line-height: 1.55; overflow-wrap: break-word; }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+  p { margin: .6rem 0; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; }
+  pre { overflow-x: auto; background: #f4f4f4; padding: 1rem; line-height: 1.45; margin: .9rem 0; }
+
+  /* component: disclosure */
+  details {
+    border: 1px solid #e4e4e4;
+    padding: .45rem .9rem;
+    margin: 1.2rem 0;
+    font-size: .92rem;
+  }
+  details summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: .88rem;
+  }
+  details[open] summary { margin-bottom: .5rem; }
+  /* end component: disclosure */
+</style>
+</head>
+<body>
+<article>
+  <h1>disclosure</h1>
+  <p>
+    The blocks below are their own example: the summary line carries the
+    conclusion, the body carries the evidence a reader may want to verify.
+  </p>
+
+  <details>
+    <summary>The four listings reproduce the matrix (evidence)</summary>
+<pre>$ ls ~/.claude/{CLAUDE.md,rules,skills,agents}
+CLAUDE.md
+rules/:  skill-authoring.md
+skills/: (empty)
+agents/: (empty)</pre>
+  </details>
+
+  <details>
+    <summary>What a summary must not be: a bare topic like "Details"</summary>
+    <p>
+      A topic-only summary forces the reader to open the block to learn
+      whether it matters — the one cost the component exists to remove.
+    </p>
+  </details>
+</article>
+</body>
+</html>

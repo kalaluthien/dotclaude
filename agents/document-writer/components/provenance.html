@@ -1,0 +1,86 @@
+<!doctype html>
+<!--
+  Component: provenance — the header block that opens every view document,
+  and the sources footer that closes it. This file demonstrates itself: the
+  <header> and <footer> below are the component and the CSS between the
+  component markers is its style.
+
+  Rules:
+  - The h1 is a noun phrase of one to three words that names the slice the
+    document owns — never a sentence, never the genre. The document's
+    conclusion is the first paragraph after the header: one full sentence
+    that a reader who stops there can act on.
+  - The fields carry the derivation. A paragraph restating that the document
+    is derived is meta-description — the fields already say it.
+  - Every view header carries Doctype, Updated, Commit, plus the one field
+    its doctype adds (Question, Goal, or Status). Commit pins the tree the
+    document was rendered against; there is exactly one Commit value — a
+    section that re-walked at a newer tree re-pins the whole document.
+  - The header carries no Source field. What the document stands on — the
+    specs, files, and recorded decisions — is the sources footer at the end
+    of the document, one source per line. The reader meets the answer
+    first and the bibliography last.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>provenance — docs components</title>
+<style>
+  html { font-size: 16px; }
+  body { max-width: 42rem; margin: 0 auto; padding: 4rem 1.5rem 8rem;
+         background: #ffffff; color: #111;
+         font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+         line-height: 1.55; overflow-wrap: break-word; }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+  p { margin: .6rem 0; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; }
+
+  /* component: provenance */
+  .provenance {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: .15rem 1rem;
+    margin: 0;
+    font-size: .85rem;
+    color: #555;
+  }
+  .provenance dt { font-variant: small-caps; letter-spacing: .04em; }
+  .provenance dd { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; }
+
+  footer.sources { margin-top: 4rem; border-top: 1px solid #e4e4e4; padding-top: 1rem; font-size: .85rem; color: #555; }
+  footer.sources h2 { font-size: .8rem; margin: 0 0 .3rem; font-variant: small-caps; letter-spacing: .06em; font-weight: 600; }
+  footer.sources ul { margin: 0; padding-left: 1.1rem; }
+  footer.sources li { margin: .2rem 0; }
+  /* end component: provenance */
+</style>
+</head>
+<body>
+<article>
+  <header>
+    <h1>Header block</h1>
+    <dl class="provenance">
+      <dt>Doctype</dt> <dd>explanation</dd>
+      <dt>Question</dt> <dd>what does a view header carry, and why these fields?</dd>
+      <dt>Updated</dt>  <dd>2026-08-02</dd>
+      <dt>Commit</dt>   <dd>0f2c3c8</dd>
+    </dl>
+  </header>
+  <p>
+    The header carries the derivation and the footer carries the sources, so
+    a reader trusts or distrusts the page from its two ends: what kind it
+    is, when it was rendered, against which tree, and — at the very end —
+    what it stands on. The header and footer of this very page are the
+    component, filled as their own example.
+  </p>
+
+  <footer class="sources">
+    <h2 id="sources">Sources</h2>
+    <ul>
+      <li><code>docs/README.md</code></li>
+      <li><code>docs/templates/</code></li>
+    </ul>
+  </footer>
+</article>
+</body>
+</html>

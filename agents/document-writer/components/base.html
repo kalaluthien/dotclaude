@@ -1,0 +1,109 @@
+<!doctype html>
+<!--
+  Component: base — the page skeleton every view document starts from.
+  This file demonstrates itself: its own <style> block is the component.
+  A template already carries a copy; an author touching the CSS edits the
+  template's copy and, when the change is general, this file in the same
+  commit.
+
+  The design language is manual-style minimalism (owner decision,
+  2026-08-02): flat black-on-white, a plain sans-serif, thin rules,
+  generous whitespace, and numbered landmarks — the page reads like an
+  assembly manual, where the figures and the numerals carry the load and
+  the prose stays short.
+
+  Rules the skeleton enforces:
+  - Self-contained: inline <style>, no JavaScript, no webfonts, no CDN.
+    The document must open from file:// with no network, forever.
+  - White background, system sans-serif (no font download), 42rem measure
+    keeping lines near 65 characters.
+  - Wide content (tables, pre, figures) scrolls inside its own container;
+    the page never scrolls sideways, at any width.
+  - Restraint over polish: no gradients, shadows, emoji, icon fonts, or
+    hover-dependent behavior. One ink color; the accent is whitespace.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>base — docs components</title>
+<style>
+  /* component: base */
+  html { font-size: 16px; }
+  body {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 8rem;
+    background: #ffffff;
+    color: #111;
+    font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+  }
+
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.25rem; margin: 3rem 0 .5rem; font-weight: 700; }
+  h3 { font-size: 1rem; margin: 2rem 0 .3rem; font-weight: 700; }
+  p, li { margin: .6rem 0; }
+  ul, ol { padding-left: 1.2rem; }
+  a { color: inherit; text-decoration-color: #aaa; }
+  strong { font-weight: 700; }
+
+  code, pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .85em;
+  }
+  /* Wide content scrolls inside itself; the page never scrolls sideways. */
+  pre {
+    overflow-x: auto;
+    background: #f4f4f4;
+    padding: 1rem;
+    line-height: 1.45;
+    margin: 1.4rem 0;
+  }
+
+  table { border-collapse: collapse; width: 100%; margin: 1.4rem 0; font-size: .9rem; }
+  th, td { text-align: left; vertical-align: top; padding: .45rem .8rem .45rem 0; border-bottom: 1px solid #e4e4e4; }
+  th { font-weight: 700; }
+  /* Phone-width table scroll: below the body's own max-width a multi-column
+     table would crush to one word per line (width:100% leaves nothing to
+     overflow, so nothing scrolls). The cell minimum keeps columns readable
+     and pushes the table wide; display:block lets it pan inside its own box. */
+  @media (max-width: 42rem) {
+    table { display: block; overflow-x: auto; }
+    th, td { min-width: 9rem; }
+  }
+
+  /* Numbered steps read like manual panels: the numeral is the landmark. */
+  ol.steps { padding-left: 1.6rem; }
+  ol.steps > li { margin: 1.3rem 0; }
+  ol.steps > li::marker { font-weight: 700; }
+
+  /* Sources close the document; the header carries no Source field. */
+  footer.sources { margin-top: 4rem; border-top: 1px solid #e4e4e4; padding-top: 1rem; font-size: .85rem; color: #555; }
+  footer.sources h2 { font-size: .8rem; margin: 0 0 .3rem; font-variant: small-caps; letter-spacing: .06em; font-weight: 600; }
+  footer.sources ul { margin: 0; padding-left: 1.1rem; }
+  footer.sources li { margin: .2rem 0; }
+  /* end component: base */
+</style>
+</head>
+<body>
+<article>
+  <h1>base</h1>
+  <p>
+    The page skeleton every view document starts from. The <code>&lt;style&gt;</code>
+    block of this very file is the component; the rules it enforces are in
+    the header comment. This paragraph, the table below, and the code block
+    demonstrate the three content shapes the skeleton styles.
+  </p>
+  <table>
+    <tr><th>element</th><th>treatment</th></tr>
+    <tr><td>body text</td><td>42rem measure, system sans-serif, white ground</td></tr>
+    <tr><td>wide content</td><td>scrolls inside its own container</td></tr>
+    <tr><td>phone width</td><td>tables pan; the page never scrolls sideways</td></tr>
+  </table>
+<pre>$ echo "a command and its output render like this"
+a command and its output render like this</pre>
+</article>
+</body>
+</html>

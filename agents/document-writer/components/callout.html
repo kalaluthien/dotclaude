@@ -1,0 +1,105 @@
+<!doctype html>
+<!--
+  Component: callout — labeled blocks in the Information Mapping style.
+  This file demonstrates itself: the four blocks below are the component and
+  the CSS between the component markers is its style.
+
+  One block, one observation, under a functional label. A block carries no
+  topic sentence, no transition, and nothing the surrounding prose already
+  says — it exists because the reader must not miss it while scanning
+  (research: notes/wiki/structured-writing.md).
+
+  Four kinds, chosen by what the reader should do with the block:
+  - notice   — read it, then continue; context that prevents a wrong turn.
+  - gap      — a defect found in the document or its subject; names the fix
+               or the owner, so it is also the open-item ledger.
+  - warning  — a hazard at the step it names. Four parts — signal word,
+               hazard, consequence, avoidance — minus any part another one
+               makes obvious; bullets beat flowing prose; obvious hazards
+               are excluded (research: notes/wiki/procedural-instruction-design.md).
+  - recovery — a failure the reader may already be in: how to recognize it
+               and how to get back. Placed under the step that can fail;
+               error recovery has better evidence behind it than error
+               prevention, so a guide without recovery blocks is missing
+               the stronger half.
+
+  Placement: proximate to what it annotates — a warning sits at its step,
+  never grouped at the top. Give a block an id when anything will link to it;
+  a label with an id is an address.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>callout — docs components</title>
+<style>
+  html { font-size: 16px; }
+  body { max-width: 42rem; margin: 0 auto; padding: 4rem 1.5rem 8rem;
+         background: #ffffff; color: #111;
+         font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+         line-height: 1.55; overflow-wrap: break-word; }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+  p, li { margin: .6rem 0; }
+  ul { padding-left: 1.2rem; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; }
+
+  /* component: callout */
+  .callout {
+    border: 1px solid #ccc;
+    border-left-width: 4px;
+    padding: .55rem .9rem;
+    margin: 1.2rem 0;
+    font-size: .88rem;
+    line-height: 1.55;
+  }
+  .callout .tag {
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    font-weight: 600;
+    margin-right: .45rem;
+  }
+  .callout.notice   { border-left-color: #556; }
+  .callout.gap      { border-left-color: #8a5a00; }
+  .callout.warning  { border-left-color: #a33; }
+  .callout.recovery { border-left-color: #2a6; }
+  .callout ul { margin: .3rem 0; }
+  /* end component: callout */
+</style>
+</head>
+<body>
+<article>
+  <h1>callout</h1>
+  <p>Each block below is its own example.</p>
+
+  <div class="callout notice">
+    <span class="tag">notice</span>
+    A notice is context the scanner must not miss. It never repeats the
+    paragraph beside it; if the prose already says it, the block goes.
+  </div>
+
+  <div class="callout gap">
+    <span class="tag">gap</span>
+    A gap records a defect and names its fix or owner. A document's gap
+    blocks double as its open-item ledger: resolve the defect, remove the
+    block, in one change.
+  </div>
+
+  <div class="callout warning">
+    <span class="tag">warning</span>
+    Deleting the worktree deletes the shell's own working directory.
+    <ul>
+      <li>Consequence: every later command in the chain fails silently.</li>
+      <li>Avoidance: drive the worktree with <code>git -C &lt;path&gt;</code>
+        from the main checkout instead of <code>cd</code>.</li>
+    </ul>
+  </div>
+
+  <div class="callout recovery">
+    <span class="tag">recovery</span>
+    Already deleted it? Your shell prints "no such file or directory" on any
+    command. <code>cd</code> to the main checkout; the worktree's commits
+    are safe — list them with <code>git log --all</code>.
+  </div>
+</article>
+</body>
+</html>

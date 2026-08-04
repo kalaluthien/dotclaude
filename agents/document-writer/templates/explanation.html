@@ -1,0 +1,259 @@
+<!doctype html>
+<!--
+  Doctype: explanation — a grounded answer to one question about the subject
+  as it is. Copy to docs/<name>.html (workspace: plane prefix agent- or
+  service-) and fill in; update the same file in place on re-render. Delete
+  every comment, including this one.
+
+  Grounded by rule: every claim is observable in the repository at the
+  pinned commit, or is a decision already recorded in a spec. A claim about
+  what should exist, or a drawing of it, belongs in a proposal.
+
+  Naming: the h1 is a noun phrase of one to three words naming the slice
+  the document owns; the lead paragraph directly under the header states
+  the answer in one full sentence, so a reader who stops there is done.
+  Every section heading is likewise a noun phrase of one to three words,
+  and the section's first sentence carries its claim.
+
+  Structure is MECE: before filling anything, write the section list and
+  check it partitions the question — every part of the answer has exactly
+  one home, and a fact that fits two sections marks a wrong split. Fix the
+  split before writing prose into it.
+
+  Prose rhythm: a paragraph holds one topic in at most three sentences.
+  Prefer one full sentence that carries a claim together with its qualifier
+  or reason over two clipped sentences that split them.
+
+  GROUND RULE — keep the document short, and separate the crucial from
+  the detail, obsessively. The body carries only what changes the
+  reader's next decision or action. Every detail — evidence, raw output,
+  long enumerations, secondary qualification — moves to a disclosure
+  block whose summary states the conclusion, or is deleted. Crucial and
+  detail never share a paragraph.
+
+  A dated finding — a measurement, a check, a survey of a tree — is an
+  explanation whose ground is a run. It states the protocol another reader
+  repeats (naming the script where one exists) and what counts as a real
+  difference before any result; numeric findings carry a median with its
+  min–max range, check findings carry a per-item verdict with the evidence
+  walked; raw output backs the findings from disclosure blocks. A re-run
+  giving a different answer is the document aging normally — re-render and
+  re-pin.
+
+  The question fixes the figure the document owes. Pick one level; a
+  document answering two questions is two documents, and the Question field
+  is where that shows.
+
+    level            the question            the figure it owes
+    mechanism        how does X work?        the path one value takes through the parts
+    decision         why is X this way?      the alternatives, the taken one marked,
+                                             with the date and the spec that records it
+    comparison       X or Y, on what axes?   the axes named before the verdict — often
+                                             a table beats a drawing; then use the table
+    concept view     what are the parts,     the static graph: parts, edges,
+                     what shape is it?       forbidden edges
+    runtime view     what happens when?      a sequence, a state machine, or a lifecycle
+    deployment view  where does it run?      process, device, permission, and storage
+                                             boundaries, and what crosses each
+
+  Figures are many and small: one figure carries one relation among at most
+  seven elements, and a subject that needs more becomes a row of small
+  panels (.figure-row) or one small figure per section, each at the section
+  it serves. Three or more parallel facts are a table, never prose. The
+  lead figure is the overview; detail figures follow their sections.
+  A directory anatomy is a file map, a text artifact whose field order is
+  the grammar is a specimen anatomy, and a sequence with a feedback edge
+  or branch exit is a keyed stage figure — docs/components/figure.html
+  demonstrates all three; a straight-line sequence stays a numbered list,
+  never boxes. Keep a figure within 360 viewBox units where the form
+  allows; a wider figure carries class="pan" with an inline min-width
+  equal to its viewBox width, and stays at or under 620 units.
+  Follow docs/components/figure.html for form choice, notation, the
+  three-word label rule, and the overlap rule — no text touches another
+  mark, ever. Evidence a reader verifies rather than needs (listings, raw
+  output) goes in a disclosure block whose summary states the conclusion
+  (docs/components/disclosure.html). What the figures do not claim goes in
+  "Omissions".
+
+  Sources: the header carries no Source field. What the document stands on
+  goes in the sources footer at the end, one source per line
+  (docs/components/provenance.html).
+
+  required-fields: Doctype, Question, Updated, Commit
+  required-sections: Elements, Omissions, Sources
+  required-elements: figure, figcaption
+
+  rubric — the writer checks every item before delivering and reports the
+  result; the reviewer scores against the same list. Binary, no partial
+  credit:
+  - [ ] GROUND RULE: the body carries only what changes the reader's next
+        decision or action; every detail sits in a disclosure block whose
+        summary states the conclusion, or is cut.
+  - [ ] The h1 is a noun phrase of one to three words, and every section
+        heading is too.
+  - [ ] The lead paragraph states the answer in one full sentence.
+  - [ ] The Question field holds one question; no section answers a
+        different one.
+  - [ ] The section set partitions the question: no fact fits two sections,
+        and no part of the question lacks a section.
+  - [ ] No paragraph exceeds three sentences.
+  - [ ] The lead figure matches the question's level per the table above,
+        and its form fits the data (a list is not drawn as boxes).
+  - [ ] No figure exceeds seven elements; a denser subject is split into
+        small panels or per-section figures.
+  - [ ] Three or more parallel facts appear as a table, not as prose.
+  - [ ] No text in any figure touches another mark; edge labels sit in
+        clear whitespace, never across a box.
+  - [ ] The caption states the diagram's type and scope and carries the key.
+  - [ ] Every figure element is documented with a type and a one-line
+        description — in the Elements table or, for a sequential or
+        specimen figure, in a numbered legend keyed to the figure's
+        numerals or field names, placed under Elements or with the figure
+        it keys (a file map's role column is its own carrier); every line
+        is unidirectional and labelled with intent.
+  - [ ] No figure exceeds 620 viewBox units in width; a figure wider than
+        360 units carries class="pan" with an inline min-width equal to
+        its viewBox width, so it pans instead of shrinking.
+  - [ ] A file map transcribes paths that exist at the pinned commit, and
+        a specimen is a real instance observable there; neither invents an
+        entry.
+  - [ ] Labels sit on the parts inside the drawing (nouns of at most three
+        words, or circled numbers keyed to the Elements table).
+  - [ ] Every claim is observable at the pinned commit or cites a recorded
+        decision by file and date.
+  - [ ] "Omissions" names what the figures do not claim.
+  - [ ] The sources footer lists what the document stands on; the header
+        carries no Source field.
+  - [ ] No meta-description, and no fact stated twice across prose, table,
+        and figure.
+  - [ ] Where the document reports a dated finding: the protocol and the
+        threshold for a real difference precede the results, and results
+        carry spread or per-item evidence.
+  - [ ] Wide content scrolls inside its own container at phone width.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><!-- Title, a noun phrase of 1–3 words --> — <!-- repo --></title>
+<style>
+  /* Base, provenance, callout, figure, disclosure styles — copied from
+     docs/components/ (self-contained by rule; copied, never linked). */
+  html { font-size: 16px; }
+  body {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 8rem;
+    background: #ffffff;
+    color: #111;
+    font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+  }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.25rem; margin: 3rem 0 .5rem; font-weight: 700; }
+  h3 { font-size: 1rem; margin: 2rem 0 .3rem; font-weight: 700; }
+  p, li { margin: .6rem 0; }
+  ul, ol { padding-left: 1.2rem; }
+  a { color: inherit; text-decoration-color: #aaa; }
+  strong { font-weight: 700; }
+  code, pre, .provenance dd {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .85em;
+  }
+  pre { overflow-x: auto; background: #f4f4f4; padding: 1rem; line-height: 1.45; margin: 1.4rem 0; }
+  table { border-collapse: collapse; width: 100%; margin: 1.4rem 0; font-size: .9rem; }
+  th, td { text-align: left; vertical-align: top; padding: .45rem .8rem .45rem 0; border-bottom: 1px solid #e4e4e4; }
+  th { font-weight: 700; }
+  @media (max-width: 42rem) {
+    table { display: block; overflow-x: auto; }
+    th, td { min-width: 9rem; }
+  }
+  .provenance { display: grid; grid-template-columns: max-content 1fr; gap: .15rem 1rem; margin: 0; font-size: .85rem; color: #555; }
+  .provenance dt { font-variant: small-caps; letter-spacing: .04em; }
+  .provenance dd { margin: 0; }
+  .callout { border: 1px solid #ccc; border-left-width: 4px; padding: .55rem .9rem; margin: 1.2rem 0; font-size: .88rem; line-height: 1.5; }
+  .callout .tag { font-variant: small-caps; letter-spacing: .06em; font-weight: 600; margin-right: .45rem; }
+  .callout.notice   { border-left-color: #556; }
+  .callout.gap      { border-left-color: #8a5a00; }
+  .callout.warning  { border-left-color: #a33; }
+  .callout.recovery { border-left-color: #2a6; }
+  .callout ul { margin: .3rem 0; }
+  details { border: 1px solid #e4e4e4; padding: .45rem .9rem; margin: 1.2rem 0; font-size: .92rem; }
+  details summary { cursor: pointer; font-weight: 600; font-size: .88rem; }
+  details[open] summary { margin-bottom: .5rem; }
+  figure { margin: 2.2rem 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { margin-top: .7rem; font-size: .85rem; color: #555; line-height: 1.5; }
+  .figure-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.2rem; margin: 2.2rem 0; }
+  .figure-row figure { margin: 0; }
+  figure.pan { overflow-x: auto; }
+  table.filemap td { border-bottom: none; padding: .12rem .8rem .12rem 0; }
+  table.filemap td:first-child { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; white-space: pre; }
+  figure pre { margin: 0; }
+  footer.sources { margin-top: 4rem; border-top: 1px solid #e4e4e4; padding-top: 1rem; font-size: .85rem; color: #555; }
+  footer.sources h2 { font-size: .8rem; margin: 0 0 .3rem; font-variant: small-caps; letter-spacing: .06em; font-weight: 600; }
+  footer.sources ul { margin: 0; padding-left: 1.1rem; }
+  footer.sources li { margin: .2rem 0; }
+</style>
+</head>
+<body>
+<article>
+
+  <header>
+    <h1><!-- The subject as a noun phrase, 1–3 words --></h1>
+    <dl class="provenance">
+      <dt>Doctype</dt>  <dd>explanation</dd>
+      <dt>Question</dt> <dd><!-- the one question, at one level from the table --></dd>
+      <dt>Updated</dt>  <dd><!-- YYYY-MM-DD, last render date --></dd>
+      <dt>Commit</dt>   <dd><!-- short sha of the tree the render was read on --></dd>
+    </dl>
+  </header>
+
+  <section>
+    <p><!-- The answer in one full sentence — the document's conclusion. --></p>
+
+    <figure>
+      <svg viewBox="0 0 660 300" role="img">
+        <title><!-- One sentence: what this diagram shows --></title>
+        <!-- Follow docs/components/figure.html: at most seven elements,
+             suffixed marker ids, currentColor, three-word labels on the
+             parts, no text touching another mark, dashed only for the
+             speculative (which an explanation should not have). -->
+      </svg>
+      <figcaption>
+        <!-- Diagram type and scope, then the key: what a box is, what an
+             arrow is, what each line label means. -->
+      </figcaption>
+    </figure>
+
+    <h2 id="elements">Elements</h2>
+    <table>
+      <thead><tr><th>Element</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><!-- name as drawn --></td><td><!-- what kind of thing --></td><td><!-- one line --></td></tr>
+      </tbody>
+    </table>
+
+    <h2><!-- A noun phrase, 1–3 words; the first sentence carries the claim --></h2>
+    <p><!-- The prose explains the figure; it does not repeat it. A section
+            with its own relation gets its own small figure; parallel facts
+            get a table. --></p>
+
+    <h2 id="omissions">Omissions</h2>
+    <p><!-- What the figures and tables deliberately do not claim, including
+            sources that were dirty at render time. Tree-level dirtiness
+            that qualifies the Commit pin itself may instead be a notice
+            callout at the header, where the pin is read. --></p>
+  </section>
+
+  <footer class="sources">
+    <h2 id="sources">Sources</h2>
+    <ul>
+      <li><!-- one spec, file, or recorded decision per line --></li>
+    </ul>
+  </footer>
+
+</article>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!doctype html>
+<!--
+  Doctype: guide — one path walked through a procedure at a known commit.
+  Copy to docs/<name>.html (workspace: plane prefix agent- or service-) and
+  fill in; update the same file in place on re-walk. Delete every comment,
+  including this one.
+
+  The Commit field pins the tree the walk ran on — the outputs shown were
+  observed there. A prose-only re-render keeps that pin and changes only
+  Updated; the pin moves only on a re-walk.
+
+  A guide is the concrete twin of a process or runbook spec: the spec states
+  what the procedure must guarantee; the guide gives the exact commands, the
+  exact output, and the one path that worked on the pinned tree. When guide
+  and spec disagree, the guide is stale — fix it or retire it. Write for
+  someone who has the repository and nothing else: a step that cannot be run
+  as written is a bug in the guide, not a gap in the reader.
+
+  Naming: the h1 is a noun phrase of one to three words naming the task's
+  object ("Tailnet hostname", "APK install"); the Goal field carries the
+  end state. Every section heading is a noun phrase of one to three words.
+
+  Prose rhythm: a paragraph holds one topic in at most three sentences.
+  Prefer one full sentence that carries an instruction together with its
+  condition over two clipped sentences that split them.
+
+  GROUND RULE — keep the guide short, and separate the crucial from the
+  detail, obsessively. The body carries only what the reader needs to run
+  the next step. Every detail — long output, background, edge notes —
+  moves to a disclosure block whose summary states the conclusion, or is
+  deleted. Crucial and detail never share a paragraph.
+
+  Structure rules, each carrying its evidence
+  (research: notes/wiki/procedural-instruction-design.md):
+  - The Goal field leads and carries the conclusion; a guide owes no figure.
+    Add one only where a step turns on a spatial relation, placed inside
+    that step, next to the words it serves; such a figure is small (at most
+    seven elements) and follows docs/components/figure.html, including the
+    overlap rule and the width budget — within 360 viewBox units, or
+    class="pan" with an inline min-width equal to the viewBox width.
+  - The four sections partition the walk with nothing counted twice:
+    Prerequisites hold what precedes step 1, Steps hold the path,
+    Acceptance holds the end state, Recovery holds the way back. A fact
+    that fits two of them marks a wrong split.
+  - A step opens with an action verb, and its first sentence summarizes the
+    whole step — readers skim first sentences.
+  - One compositional action per step, 3–10 steps total, on <ol
+    class="steps"> so the numerals read as manual-panel landmarks. A guide
+    that renders as twenty steps has mis-sized its unit: group into
+    sub-steps, or split the guide.
+  - No step refers to another step by number — numbering changes; name the
+    operation instead.
+  - The command verbatim in a <pre>, and what a working run prints under
+    it. A branch is a labelled sub-item under the step that branches,
+    never a new numbered step.
+  - A warning is a callout at the step it names — proximity is the settled
+    finding — with signal word, hazard, consequence, avoidance, minus any
+    part another makes obvious; bullets, not flowing prose; no obvious
+    hazards (docs/components/callout.html).
+  - Recovery is required, and it is not Warnings again: a warning prevents,
+    recovery gets the reader back after the failure happened. Error
+    recovery has the stronger evidence behind it. Record the failures the
+    walk actually met; when none were met, say so.
+
+  Sources: the header carries no Source field. The spec, the scripts, and
+  the memories the guide stands on go in the sources footer at the end,
+  one source per line (docs/components/provenance.html).
+
+  required-fields: Doctype, Goal, Updated, Commit
+  required-sections: Prerequisites, Steps, Acceptance, Recovery, Sources
+
+  rubric — the writer checks every item before delivering and reports the
+  result; the reviewer scores against the same list. Binary, no partial
+  credit:
+  - [ ] GROUND RULE: the body carries only what the reader needs to run
+        the next step; every detail sits in a disclosure block whose
+        summary states the conclusion, or is cut.
+  - [ ] The h1 is a noun phrase of one to three words, and every section
+        heading is too.
+  - [ ] The Goal field states the end state the reader will have, not the
+        activity.
+  - [ ] Every step is runnable as written by a reader with only the
+        repository; commands are verbatim with real output shown (a step
+        with no shell command states its observable result instead).
+  - [ ] Every step opens with an action verb and its first sentence
+        summarizes the step.
+  - [ ] Steps number 3–10, one compositional action each, on the numbered
+        steps list.
+  - [ ] No step refers to another by number.
+  - [ ] No paragraph exceeds three sentences.
+  - [ ] Prerequisites name where the reader gets each one, and exclude the
+        obvious.
+  - [ ] Every warning sits at the step it names, bulleted, non-obvious,
+        with consequence and avoidance.
+  - [ ] Acceptance is an observable end state, not "the command succeeded".
+  - [ ] Recovery records the failures actually met with recognition and
+        way back; when none were met, or the record does not say which
+        were met, it says exactly that.
+  - [ ] Any figure sits inside the step it serves, holds at most seven
+        elements, no text in it touches another mark, and it stays within
+        360 viewBox units or carries class="pan" with an inline min-width
+        equal to its viewBox width.
+  - [ ] The sources footer lists what the guide stands on; the header
+        carries no Source field.
+  - [ ] Wide content scrolls inside its own container at phone width.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><!-- Title, a noun phrase of 1–3 words --> — <!-- repo --></title>
+<style>
+  /* Base, provenance, callout, figure, disclosure styles — copied from
+     docs/components/ (self-contained by rule; copied, never linked). */
+  html { font-size: 16px; }
+  body {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 8rem;
+    background: #ffffff;
+    color: #111;
+    font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+  }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.25rem; margin: 3rem 0 .5rem; font-weight: 700; }
+  h3 { font-size: 1rem; margin: 2rem 0 .3rem; font-weight: 700; }
+  p, li { margin: .6rem 0; }
+  ul, ol { padding-left: 1.2rem; }
+  a { color: inherit; text-decoration-color: #aaa; }
+  strong { font-weight: 700; }
+  code, pre, .provenance dd {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .85em;
+  }
+  pre { overflow-x: auto; background: #f4f4f4; padding: 1rem; line-height: 1.45; margin: 1.4rem 0; }
+  table { border-collapse: collapse; width: 100%; margin: 1.4rem 0; font-size: .9rem; }
+  th, td { text-align: left; vertical-align: top; padding: .45rem .8rem .45rem 0; border-bottom: 1px solid #e4e4e4; }
+  th { font-weight: 700; }
+  @media (max-width: 42rem) {
+    table { display: block; overflow-x: auto; }
+    th, td { min-width: 9rem; }
+  }
+  .provenance { display: grid; grid-template-columns: max-content 1fr; gap: .15rem 1rem; margin: 0; font-size: .85rem; color: #555; }
+  .provenance dt { font-variant: small-caps; letter-spacing: .04em; }
+  .provenance dd { margin: 0; }
+  .callout { border: 1px solid #ccc; border-left-width: 4px; padding: .55rem .9rem; margin: 1.2rem 0; font-size: .88rem; line-height: 1.5; }
+  .callout .tag { font-variant: small-caps; letter-spacing: .06em; font-weight: 600; margin-right: .45rem; }
+  .callout.notice   { border-left-color: #556; }
+  .callout.gap      { border-left-color: #8a5a00; }
+  .callout.warning  { border-left-color: #a33; }
+  .callout.recovery { border-left-color: #2a6; }
+  .callout ul { margin: .3rem 0; }
+  details { border: 1px solid #e4e4e4; padding: .45rem .9rem; margin: 1.2rem 0; font-size: .92rem; }
+  details summary { cursor: pointer; font-weight: 600; font-size: .88rem; }
+  details[open] summary { margin-bottom: .5rem; }
+  figure { margin: 2.2rem 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { margin-top: .7rem; font-size: .85rem; color: #555; line-height: 1.5; }
+  .figure-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.2rem; margin: 2.2rem 0; }
+  .figure-row figure { margin: 0; }
+  figure.pan { overflow-x: auto; }
+  table.filemap td { border-bottom: none; padding: .12rem .8rem .12rem 0; }
+  table.filemap td:first-child { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; white-space: pre; }
+  figure pre { margin: 0; }
+  ol.steps { padding-left: 1.6rem; }
+  ol.steps > li { margin: 1.3rem 0; }
+  ol.steps > li::marker { font-weight: 700; }
+  footer.sources { margin-top: 4rem; border-top: 1px solid #e4e4e4; padding-top: 1rem; font-size: .85rem; color: #555; }
+  footer.sources h2 { font-size: .8rem; margin: 0 0 .3rem; font-variant: small-caps; letter-spacing: .06em; font-weight: 600; }
+  footer.sources ul { margin: 0; padding-left: 1.1rem; }
+  footer.sources li { margin: .2rem 0; }
+</style>
+</head>
+<body>
+<article>
+
+  <header>
+    <h1><!-- The task's object as a noun phrase, 1–3 words --></h1>
+    <dl class="provenance">
+      <dt>Doctype</dt> <dd>guide</dd>
+      <dt>Goal</dt>    <dd><!-- what the reader will have when the last step passes --></dd>
+      <dt>Updated</dt> <dd><!-- YYYY-MM-DD, last walked date --></dd>
+      <dt>Commit</dt>  <dd><!-- short sha of the tree the walk was done on --></dd>
+    </dl>
+  </header>
+
+  <section>
+    <h2 id="prerequisites">Prerequisites</h2>
+    <ul>
+      <li><!-- What must already be true, naming the memory or document that
+               gets the reader each one. --></li>
+    </ul>
+
+    <h2 id="steps">Steps</h2>
+    <ol class="steps">
+      <li>
+        <p><!-- Verb-first summary sentence, then the detail. --></p>
+<pre><!-- $ command
+what a working run prints --></pre>
+        <!-- A warning callout goes here when this step has a hazard;
+             a branch is a labelled sub-item here, not a new step. -->
+      </li>
+    </ol>
+
+    <h2 id="acceptance">Acceptance</h2>
+    <p><!-- The observable end state that says the goal is met. --></p>
+
+    <h2 id="recovery">Recovery</h2>
+    <ul>
+      <li><!-- One failure actually met: how it looks, how to get back.
+               When none were met on the walk, say exactly that. --></li>
+    </ul>
+  </section>
+
+  <footer class="sources">
+    <h2 id="sources">Sources</h2>
+    <ul>
+      <li><!-- the process or runbook spec; the scripts; one per line --></li>
+    </ul>
+  </footer>
+
+</article>
+</body>
+</html>
