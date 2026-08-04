@@ -24,6 +24,16 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Write your reply in plain, everyday language that anyone can follow. Avoid jargon.'"
+          }
+        ]
+      }
     ]
   },
   "model": "fable",
