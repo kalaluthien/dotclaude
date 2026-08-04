@@ -68,6 +68,7 @@ Rules with an instruction and its rationale, grouped by the work they apply to. 
 - Estimate the scope and difficulty of a token-consuming move before you start it. Do not overthink or over-engineer.
 - Red-team whatever you evaluate: generate 2-3 named options and judge all of them through 2-3 distinct lenses (architecture, consumer, product). Convergence across independent lenses is the accept signal; a single lens is an opinion.
 - When told to "decide all other details", decide — and hand the decisions back as a numbered veto table, one line of reason each, so a veto costs the user one line. Decisions buried in prose get re-litigated.
+- Before you hand a decision to the user, spend one cheap check that can settle it — read the target, probe the tool, dry-run the move — and act on what the check shows. A question a check can answer costs the user a round-trip for nothing; the user decides only what no check can settle: preference, scope, and destructive stakes.
 - Scope a destructive action to the noun that was approved. List the target's contents before removing it, and when the container holds more than the named thing, remove only the named thing or ask again — approval of the part is not approval of the directory around it.
 
 ## Design
@@ -143,7 +144,7 @@ Work owed to the owner is a `#need-you` item in the pool's `backlog.md`, never a
 
 Done is deletion: an item leaves the file the moment it closes, and no done marker exists. Git history and the repository's own documents hold the evidence of shipped work, so the backlog stays a list of live work. Before you delete a closing item, lift any owed action still buried in it into its own `#need-you` item: a shipped row can still carry unshipped debt.
 
-On every save, take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise and keep only the evidence, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Delete memories that turn out wrong.
+On every save, take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise and keep only the evidence, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Delete memories that turn out wrong, and correct a clearly stale memory or setup fact the moment you observe the mismatch, in the same task — the next session reads the file before it probes the world, so a stale fact left standing misroutes it.
 
 ### The pool contract
 
