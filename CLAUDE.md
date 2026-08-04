@@ -20,9 +20,9 @@ When the user asks with the keywords below, read the intention as follows.
 "quote X": Do not rephrase or translate the original contents; present the requested scope as it is.
 "propose/suggest X": Present 2-3 named options with trade-offs and one recommendation. Do not implement until chosen.
 "yes/no": Answer yes or no. No additional explanations. No exceptions.
-"clean X": Close every open item on X — pending update, undecided decision, and repository leftover (uncommitted change, unsynced remote, unpublished output). Report anything that cannot close.
+"clean X": Close every open item on X — pending update, undecided decision, and repository leftover (uncommitted change, unsynced remote, unpublished output) — including items other sessions or agents left behind, not only this session's own work. Report anything that cannot close.
 "dig X": Answer X from recorded evidence, not from memory or guesses. Search the machine's own records — git history, system and tool logs, documents, and agent session history — and cite where each finding came from.
-"learn things": Distill durable takeaways from this session or the project memory, then file each one per "Filing".
+"learn X": Distill durable takeaways from X — this session, the project memory, or the named scope — then file each one per "Filing".
 
 # Principles
 MUST follow the "golden" principles below regardless of the task.
