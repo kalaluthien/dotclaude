@@ -97,13 +97,13 @@ landmarks walk the reader through small drawings.
 
 - Keep the title a noun phrase of one to three words. Above it put a
   kicker — the context path in letter-spaced small caps (repo ·
-  subsystem · topic). Under it put a dek: one sentence stating what the
-  document answers, then the source pin (tree and short commit).
-- Open with section 0, "Answer": a boxed conclusion that holds the whole
+  subsystem · topic). No dek: the Question field already states what the
+  document answers, and the Commit field already pins the source.
+- Open with a section "Answer": a boxed conclusion that holds the whole
   answer before any detail. A reader who stops there is done.
-- Frame each following section as a numbered reader question ("Question
-  1. What decides which 4 groups the user sees?") and open it with its
-  own boxed conclusion. A guide keeps imperative step headings instead.
+- Give every section heading a noun phrase of one to three words, and
+  open each section with its own boxed conclusion. A guide keeps
+  imperative step headings instead.
 - Before filling any section, write the question list and check it
   partitions the document's one question — every fact gets exactly one
   home, and a fact that fits two sections means the split is wrong.
@@ -114,8 +114,6 @@ landmarks walk the reader through small drawings.
 - Highlight with `<mark>` the few load-bearing phrases inside each boxed
   conclusion — a handful per block, nowhere else. The ten-second read
   path is title, highlights, figures.
-- Name a subsection by its point, never its topic: "1.1 The two elements
-  that a reader must not confuse", not "1.1 Elements".
 - Say head-on what a reader would wrongly assume, and correct it:
   "Stage C is not a third algorithm."
 - Write fewer, fuller sentences: one sentence carries a claim together
@@ -170,9 +168,9 @@ stays black on white.
 ## Sources
 
 Cite at the point of use: a claim table carries a Source column whose
-cells link file:line at the pinned commit. The header's dek pins the
-tree and commit once; the sources footer lists what the whole document
-stands on.
+cells link file:line at the pinned commit. The header's Commit field
+pins the tree and commit once; the sources footer lists what the whole
+document stands on.
 
 # Guardrails
 
