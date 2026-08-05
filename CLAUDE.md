@@ -62,7 +62,7 @@ the criteria or the inputs, which a gamed pass hides — the failure report is
 often the more valuable deliverable.
 
 # Craft
-Rules with an instruction and its rationale, grouped by the work they apply to. Read the matching section before you commit to a decision, design a system, debug a failure, verify a fix, rewrite git history, or file a takeaway.
+Rules with an instruction and its rationale, grouped by the work they apply to. Read the matching section before you commit to a decision, design a system, verify a fix, rewrite git history, or file a takeaway. Debugging conventions live in each coding repository's own `.claude/CLAUDE.md`.
 
 ## Deciding
 - Estimate the scope and difficulty of a token-consuming move before you start it. Do not overthink or over-engineer.
@@ -81,11 +81,6 @@ Rules with an instruction and its rationale, grouped by the work they apply to. 
 - A label earns a control in a browsing surface only when it is not derivable from something already on screen, and only when its values actually divide the set. A taxonomy that routes well at writing time — where it forces "what would make this wrong?" — can still be worthless at reading time, so check the label against the filename, the path, and the value distribution before it becomes a facet.
 - A declared contract stays true only while a second reader enforces it — a validator or hook on the authoring side, beside the consumer that reads it. With the consumer as its only reader, the contract drifts exactly like the hardcoded copy it replaced, in a file that looks more authoritative.
 - Choose a visual form from the data abstraction and the reader's task, never from the domain noun ("it is a knowledge base, so it gets a graph"). Each form has a measured size range: node-link legibility collapses past ~50 nodes, a calendar heatmap needs ~90 days of span to beat a bar strip, a swimlane degrades by lane count rather than bar count, and a faceted list is bounded by page size and so never expires. State the span and the item count first; the form follows.
-
-## Debugging
-- Buy evidence instead of inferring, and go deeper rather than wider. For a driven action that does nothing (no effect, no error), read the tool's own diagnostics first — idle, timeout, and harness warnings usually name the cause — then log each decision point to bisect where the pipeline breaks. To find who owns an effect, ablate the suspect: disable the code believed to cause the symptom and re-run, and if the symptom survives the owner is elsewhere, usually a framework acting on its own signal. One cheap run replaces a long chain of inference; re-trying different ways to trigger it is symptom-thrashing that can burn hours.
-- Do not over-read a changed signal. A new error or a later failing line is not evidence that the earlier cause is gone — read it as a new symptom until the logs or the actual effect say otherwise. When an automated check fails but the manual flow or a sibling test passes, suspect the harness before the product: in a suite already known to flake, the discriminator is whether the *same* assertion fails, since a failure that moves between assertions across runs and reproduces on the unchanged baseline is environmental.
-- When a fix that landed is reported still broken, compare the running artifact's build point with the fix commit before re-debugging the fix. On a branch that several agents land on, a deploy goes stale within minutes, and the report is then about the old build — one version check settles what re-reading the fix cannot.
 
 ## Verification
 A claim argued only from documents, memory, or the artifact you just wrote is unverified. Spend one cheap check that is able to fail. Do not add checks beyond these.
