@@ -143,7 +143,7 @@ The memtypes divide by what would make the file wrong. Nothing falsifies `histor
 
 A file name carries no date and no project name: the pool directory already names the project, so a pool holds exactly one `backlog.md` and at most one `pitfalls.md`. A date in a name forces a rename on every update, and a second write then lands beside the first instead of on it.
 
-Write every item in a `backlog.md` task-bearing section as `- [<m>] YYYY-MM-DD #tag … **Title.** body`, where `<m>` is one of ` ` (open) or `/` (working), the date is the day the item was created, never the day it moved, and each optional `#tag` sits between the date and the title. The marker is the item's state; a tag is an orthogonal annotation that combines with either state. A tag names who the item waits on — `#need-you` waits on the owner, `#blocked` waits on an external event the body names — and no tag means the item is workable now. A prose section — Why, How to apply, Horizon, Preliminary research — keeps plain bullets. One fixed grammar lets a reader and a tool read the same file, the tag separates what is waiting from what is merely open, and the creation date makes an item's age visible without a session log. A `PostToolUse` hook, `~/.claude/hooks/check-backlog-format.py`, rejects a write that breaks the grammar.
+Write every item in a `backlog.md` task-bearing section as `- [<m>] YYYY-MM-DD #tag … **Title.** body`, where `<m>` is one of ` ` (open) or `/` (working), the date is the day the item was created, never the day it moved, and each optional `#tag` sits between the date and the title. The marker is the item's state; a tag is an orthogonal annotation that combines with either state. A tag names who the item waits on — `#need-you` waits on the owner — and no tag means the item is workable now. A prose section — Why, How to apply, Horizon, Preliminary research — keeps plain bullets. One fixed grammar lets a reader and a tool read the same file, the tag separates what is waiting from what is merely open, and the creation date makes an item's age visible without a session log. A `PostToolUse` hook, `~/.claude/hooks/check-backlog-format.py`, rejects a write that breaks the grammar.
 
 Work owed to the owner is a `#need-you` item in the pool's `backlog.md`, never a file of its own. The tag already names who the work waits on, and a separate file splits one list into two lists that drift apart.
 
@@ -161,7 +161,7 @@ Three values name a rule rather than spell it, and every reader compiles them th
 {
   "contract": "pool",
   "version": 1,
-  "updated": "2026-08-04",
+  "updated": "2026-08-06",
 
   "pool": {
     "pattern": "projects/*/memory/*.md",
@@ -187,8 +187,7 @@ Three values name a rule rather than spell it, and every reader compiles them th
     "tags": {
       "position": "after-date",
       "kinds": [
-        { "tag": "need-you", "waits_on": "owner", "emphasis": "accent", "rank": "first" },
-        { "tag": "blocked", "waits_on": "external", "emphasis": "muted", "rank": "none" }
+        { "tag": "need-you", "waits_on": "owner", "emphasis": "accent", "rank": "first" }
       ]
     }
   },
