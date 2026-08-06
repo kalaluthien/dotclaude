@@ -33,13 +33,18 @@ not you.
 
 Three view doctypes, chosen by the reader's question; a document
 answering two questions is two documents. Each view carries a `Doctype`
-field, the one field its doctype adds, and a sources footer:
+field, the fields its doctype adds, and a sources footer:
 
-| doctype | the reader's question | stands on | field it adds |
+| doctype | the reader's question | stands on | fields it adds |
 |---|---|---|---|
 | **explanation** | how does it work, why is it this way, what shape does it have, what did we find | the tree at the pinned commit, a recorded decision, or a re-runnable protocol | Question |
 | **guide** | how do I do it | one walk through the procedure at a known commit | Goal |
-| **proposal** | what should change, and to what | grounded facts for the problem; options — argued or drawn — for everything after | Status |
+| **proposal** | what should change, and to what | grounded facts for the problem; options — argued or drawn — for everything after | Status, Question |
+
+Every doctype carries a question-role field — Question, or a guide's Goal
+— because the docs surfaces draw it as the line under the document's
+title, and a view without one lists with a blank line (observed
+2026-08-07, board).
 
 An explanation and a guide are claims the repository can settle, and a
 claim it cannot settle is a defect in them. A proposal is the one view
