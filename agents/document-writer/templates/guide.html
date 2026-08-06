@@ -1,9 +1,8 @@
 <!doctype html>
 <!--
-  Doctype: guide — one path walked through a procedure at a known commit.
-  Copy to docs/<name>.html (workspace: plane prefix agent- or service-) and
-  fill in; update the same file in place on re-walk. Delete every comment,
-  including this one.
+  Doctype: guide. The system's rules are in the constitution,
+  ~/.claude/agents/document-writer.md; this file adds only what is
+  particular to this doctype.
 
   The Commit field pins the tree the walk ran on — the outputs shown were
   observed there. A prose-only re-render keeps that pin and changes only
@@ -16,32 +15,14 @@
   someone who has the repository and nothing else: a step that cannot be run
   as written is a bug in the guide, not a gap in the reader.
 
-  Naming: the h1 is a noun phrase of one to three words naming the task's
-  object ("Tailnet hostname", "APK install"); the Goal field carries the
-  end state. Every section heading is a noun phrase of one to three words.
-
-  Prose rhythm: a paragraph holds one topic in at most three sentences.
-  Prefer one full sentence that carries an instruction together with its
-  condition over two clipped sentences that split them.
-
-  GROUND RULE — keep the guide short, and separate the crucial from the
-  detail, obsessively. The body carries only what the reader needs to run
-  the next step. Every detail — long output, background, edge notes —
-  moves to a disclosure block whose summary states the conclusion, or is
-  deleted. Crucial and detail never share a paragraph.
-
   Structure rules, each carrying its evidence
   (research: notes/wiki/procedural-instruction-design.md):
   - The Goal field leads and carries the conclusion; a guide owes no figure.
     Add one only where a step turns on a spatial relation, placed inside
-    that step, next to the words it serves; such a figure is small (at most
-    seven elements) and follows docs/components/figure.html, including the
-    overlap rule and the width budget — within 360 viewBox units, or
-    class="pan" with an inline min-width equal to the viewBox width.
+    that step, next to the words it serves.
   - The four sections partition the walk with nothing counted twice:
     Prerequisites hold what precedes step 1, Steps hold the path,
-    Acceptance holds the end state, Recovery holds the way back. A fact
-    that fits two of them marks a wrong split.
+    Acceptance holds the end state, Recovery holds the way back.
   - A step opens with an action verb, and its first sentence summarizes the
     whole step — readers skim first sentences.
   - One compositional action per step, 3–10 steps total, on <ol
@@ -56,15 +37,13 @@
   - A warning is a callout at the step it names — proximity is the settled
     finding — with signal word, hazard, consequence, avoidance, minus any
     part another makes obvious; bullets, not flowing prose; no obvious
-    hazards (docs/components/callout.html).
+    hazards (components/callout.html).
   - Recovery is required, and it is not Warnings again: a warning prevents,
     recovery gets the reader back after the failure happened. Error
     recovery has the stronger evidence behind it. Record the failures the
     walk actually met; when none were met, say so.
 
-  Sources: the header carries no Source field. The spec, the scripts, and
-  the memories the guide stands on go in the sources footer at the end,
-  one source per line (docs/components/provenance.html).
+  Sources: the header carries no Source field.
 
   required-fields: Doctype, Goal, Updated, Commit
   required-sections: Prerequisites, Steps, Acceptance, Recovery, Sources
@@ -111,7 +90,7 @@
 <title><!-- Title, a noun phrase of 1–3 words --> — <!-- repo --></title>
 <style>
   /* Base, provenance, callout, figure, disclosure styles — copied from
-     docs/components/ (self-contained by rule; copied, never linked). */
+     ~/.claude/agents/document-writer/components/. */
   html { font-size: 16px; }
   body {
     max-width: 42rem;

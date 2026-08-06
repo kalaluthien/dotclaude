@@ -6,20 +6,13 @@
   component markers is its style.
 
   Rules:
-  - The h1 is a noun phrase of one to three words that names the slice the
-    document owns — never a sentence, never the genre. The document's
-    conclusion is the first paragraph after the header: one full sentence
-    that a reader who stops there can act on.
-  - The fields carry the derivation. A paragraph restating that the document
-    is derived is meta-description — the fields already say it.
-  - Every view header carries Doctype, Updated, Commit, plus the one field
-    its doctype adds (Question, Goal, or Status). Commit pins the tree the
-    document was rendered against; there is exactly one Commit value — a
-    section that re-walked at a newer tree re-pins the whole document.
-  - The header carries no Source field. What the document stands on — the
-    specs, files, and recorded decisions — is the sources footer at the end
-    of the document, one source per line. The reader meets the answer
-    first and the bibliography last.
+  - The fields carry the derivation, so a paragraph restating that the
+    document is derived says nothing the fields do not.
+  - There is exactly one Commit value: a section that re-walked at a newer
+    tree re-pins the whole document.
+  - The header carries no Source field — the reader meets the answer first
+    and the bibliography last, so what the document stands on goes in the
+    sources footer at the end, one source per line.
 -->
 <html lang="en">
 <head>
@@ -77,8 +70,8 @@
   <footer class="sources">
     <h2 id="sources">Sources</h2>
     <ul>
-      <li><code>docs/README.md</code></li>
-      <li><code>docs/templates/</code></li>
+      <li><code>~/.claude/agents/document-writer.md</code></li>
+      <li><code>~/.claude/agents/document-writer/templates/</code></li>
     </ul>
   </footer>
 </article>

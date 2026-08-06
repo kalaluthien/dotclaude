@@ -12,20 +12,14 @@
   item count and the task first — if the relation is not genuinely 2D, the
   right figure is a table or a list, and the document owes no SVG.
 
-  Size rule — many small figures beat one dense one:
-  - One figure carries one relation among at most seven elements. A subject
-    that needs more splits into a row of small panels (.figure-row), each
-    with its own caption, read left to right like manual panels; a shared
-    elements table under the row serves all of them.
-  - Three or more parallel facts are a table, never prose and never boxes.
+  Panel rows: the small panels of a split subject each carry their own
+  caption and read left to right like manual panels; one shared elements
+  table under the row serves all of them.
 
-  Label rule — the drawing stays near-wordless, the table carries the words:
-  - A label inside the drawing is a noun phrase of at most three words; its
-    description lives in the elements table. When even a short label cannot
-    fit its part, a circled number marks the part and keys the table row.
-  - Words sit on the part they describe; identity, value, and condition stay
-    adjacent to the mark (spatial contiguity, the largest measured effect in
-    the family — research: notes/wiki/procedural-instruction-design.md).
+  Label placement: words sit on the part they describe, and identity,
+  value, and condition stay adjacent to the mark (spatial contiguity, the
+  largest measured effect in the family — research:
+  notes/wiki/procedural-instruction-design.md).
 
   Overlap rule — no text touches another mark:
   - Estimate a label's width as 0.6 × font-size per character (0.66 when
@@ -36,15 +30,11 @@
     shorten it to its noun, or replace it with a circled number — never
     shrink the font to force a fit.
 
-  Width budget — an SVG shrinks to fit the measure, so width is legibility:
-  - The page measure is 42rem; a phone shows about 312 px of it. A figure
-    wider than 360 viewBox units, left to shrink, renders 9-unit text below
-    8 px on a phone. Draw within 360 units when the form allows — vertical
-    beats horizontal.
-  - A figure that must be wider carries class="pan" on the <figure> and an
-    inline min-width equal to its viewBox width on the <svg>, so it pans at
-    drawn size instead of shrinking. Even a panning figure stays at or
-    under 620 units, the desktop measure.
+  Width budget — where the constitution's numbers come from: the page
+  measure is 42rem and a phone shows about 312 px of it, so a figure wider
+  than 360 viewBox units, left to shrink, renders 9-unit text below 8 px on
+  a phone. Vertical beats horizontal. class="pan" goes on the <figure> and
+  the inline min-width on the <svg>; 620 units is the desktop measure.
 
   Two HTML forms — for text-dense subjects, markup beats SVG: the text
   stays real (screen readers, search, copy) and pans at full size on a
@@ -67,8 +57,7 @@
     themselves (JSON, key=value) is a table, not a specimen.
 
   Keyed stage figure — the SVG form for a sequence with a feedback edge or
-  a branch exit; a straight-line sequence is <ol class="steps"> or a
-  table, never boxes:
+  a branch exit (a straight-line sequence is <ol class="steps">):
   - Each stage box carries a circled numeral punched into its border — the
     circle is drawn after the box with fill #ffffff, so the border does
     not strike the digit — plus a bold title of at most three words and at
@@ -83,11 +72,6 @@
   the figure's numerals or field names, each entry still carrying the
   name, the type, and a one-line description. Order is the legend's extra
   claim over the table.
-
-  Cross-reference — prose that points at a figure gives the figure an id
-  and links it by name ("the run loop", href="#fig-run-loop"), never a
-  bare number: a number goes stale on the next inserted figure, a name
-  survives.
 
   Notation checklist — every diagram obeys all of it (the C4 checklist,
   research: notes/wiki/software-architecture-view-models.md):

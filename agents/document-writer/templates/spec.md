@@ -1,17 +1,16 @@
 # <Title>
 
 <!--
-  Specification — the normative record: what must stay true and why. Copy
-  to docs/<name>.md and fill in. Delete every comment, including this one;
-  the document must read as if written directly. The .md extension is the
-  kind — a spec carries no Doctype field.
+  Specification. The system's rules are in the constitution,
+  ~/.claude/agents/document-writer.md; this file adds only what is
+  particular to the .md kind. The .md extension is the kind — a spec
+  carries no Doctype field, and it is written by the agent doing the work.
 
-  When a spec and the artifact disagree, one of them is wrong — fix
-  whichever lost, in the same change. A spec sentence is a predicate on
-  system properties, a generating rule on system structure, or a decision
-  record with reasons — never a mirror of what the artifact already says.
-  A numeric or enum value carries either the reason and date that make it
-  a decision, or a note that the artifact's own constant owns it.
+  A spec sentence is a predicate on system properties, a generating rule
+  on system structure, or a decision record with reasons — never a mirror
+  of what the artifact already says. A numeric or enum value carries
+  either the reason and date that make it a decision, or a note that the
+  artifact's own constant owns it.
 
   One template, several section shapes. Purpose is required; after it, use
   the shape the content has, and only that shape:

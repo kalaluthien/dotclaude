@@ -1,32 +1,12 @@
 <!doctype html>
 <!--
-  Doctype: proposal — a change argued but not decided. Copy to
-  docs/<name>.html (workspace: plane prefix agent- or service-) and fill in;
-  update the same file in place. Delete every comment, including this one.
+  Doctype: proposal. The system's rules are in the constitution,
+  ~/.claude/agents/document-writer.md; this file adds only what is
+  particular to this doctype.
 
-  A proposal is the one prose view allowed to describe what does not exist.
-  What it says about today is grounded and cited; what it says about
-  tomorrow is an option, and is written as one. Nothing is decided here:
-  acceptance is recorded in a spec, and the Status field then points at
-  that document. Status is one of: Open; Accepted YYYY-MM-DD -> <spec
-  file>; Rejected YYYY-MM-DD, <reason>.
-
-  Naming: the h1 is a noun phrase of one to three words naming the change's
-  subject ("Writer constitution", "Board split"); the opening sentence
-  carries what the change would make true. Every section heading is a noun
-  phrase of one to three words, and the section's first sentence carries
-  its claim.
-
-  Prose rhythm: a paragraph holds one topic in at most three sentences.
-  Prefer one full sentence that carries a claim together with its qualifier
-  over two clipped sentences that split them.
-
-  GROUND RULE — keep the proposal short, and separate the crucial from
-  the detail, obsessively. The body carries only what the reader needs to
-  judge the options and act on the recommendation. Every detail —
-  evidence, raw output, long enumerations — moves to a disclosure block
-  whose summary states the conclusion, or is deleted. Crucial and detail
-  never share a paragraph.
+  Status grammar: Open; Accepted YYYY-MM-DD -> <spec file>; Rejected
+  YYYY-MM-DD, <reason>. Acceptance is recorded in a spec, and Status then
+  points at that document.
 
   The skeleton follows the measured argument structure
   (research: notes/wiki/document-argument-structures.md):
@@ -47,23 +27,18 @@
   - Recommendation: one option, why it wins on the stated axes, what would
     have to be true for the recommendation to flip, and the smallest first
     step — accepting should cost one commit, not a project.
-  - An option may be drawn (a mockup is a drawn option). A drawn option
-    follows docs/components/figure.html — small (at most seven elements),
-    the overlap rule, three-word labels: every element that does not ship
-    is dashed, numbered in the drawing, and named in a table with where it
-    comes from; the caption states which parts are proposed. Two options
-    that differ visibly are drawn as small side-by-side panels
+  - An option may be drawn (a mockup is a drawn option). Every element that
+    does not ship is dashed, numbered in the drawing, and named in a table
+    with where it comes from; the caption states which parts are proposed.
+    Two options that differ visibly are drawn as small side-by-side panels
     (.figure-row) rather than one combined drawing. A drawing whose
     elements all ship is an explanation, not a proposal.
   - The top-level sections partition the argument — problem, options,
     recommendation, plus at most two more — and each supports the
     recommendation independently, so one refuted section leaves the rest
-    standing. A fact that fits two sections marks a wrong split. Three
-    heading levels maximum; a fourth level is an appendix.
+    standing. Three heading levels maximum; a fourth level is an appendix.
 
-  Sources: the header carries no Source field. The specs, code, and
-  research the proposal stands on go in the sources footer at the end,
-  one source per line (docs/components/provenance.html).
+  Sources: the header carries no Source field.
 
   required-fields: Doctype, Status, Updated, Commit
   required-sections: Problem, Options, Recommendation, Sources
@@ -109,7 +84,7 @@
 <title><!-- Title, a noun phrase of 1–3 words --> — <!-- repo --></title>
 <style>
   /* Base, provenance, callout, figure, disclosure styles — copied from
-     docs/components/ (self-contained by rule; copied, never linked). */
+     ~/.claude/agents/document-writer/components/. */
   html { font-size: 16px; }
   body {
     max-width: 42rem;

@@ -1,35 +1,8 @@
 <!doctype html>
 <!--
-  Doctype: explanation — a grounded answer to one question about the subject
-  as it is. Copy to docs/<name>.html (workspace: plane prefix agent- or
-  service-) and fill in; update the same file in place on re-render. Delete
-  every comment, including this one.
-
-  Grounded by rule: every claim is observable in the repository at the
-  pinned commit, or is a decision already recorded in a spec. A claim about
-  what should exist, or a drawing of it, belongs in a proposal.
-
-  Naming: the h1 is a noun phrase of one to three words naming the slice
-  the document owns; the lead paragraph directly under the header states
-  the answer in one full sentence, so a reader who stops there is done.
-  Every section heading is likewise a noun phrase of one to three words,
-  and the section's first sentence carries its claim.
-
-  Structure is MECE: before filling anything, write the section list and
-  check it partitions the question — every part of the answer has exactly
-  one home, and a fact that fits two sections marks a wrong split. Fix the
-  split before writing prose into it.
-
-  Prose rhythm: a paragraph holds one topic in at most three sentences.
-  Prefer one full sentence that carries a claim together with its qualifier
-  or reason over two clipped sentences that split them.
-
-  GROUND RULE — keep the document short, and separate the crucial from
-  the detail, obsessively. The body carries only what changes the
-  reader's next decision or action. Every detail — evidence, raw output,
-  long enumerations, secondary qualification — moves to a disclosure
-  block whose summary states the conclusion, or is deleted. Crucial and
-  detail never share a paragraph.
+  Doctype: explanation. The system's rules are in the constitution,
+  ~/.claude/agents/document-writer.md; this file adds only what is
+  particular to this doctype.
 
   A dated finding — a measurement, a check, a survey of a tree — is an
   explanation whose ground is a run. It states the protocol another reader
@@ -56,28 +29,11 @@
     deployment view  where does it run?      process, device, permission, and storage
                                              boundaries, and what crosses each
 
-  Figures are many and small: one figure carries one relation among at most
-  seven elements, and a subject that needs more becomes a row of small
-  panels (.figure-row) or one small figure per section, each at the section
-  it serves. Three or more parallel facts are a table, never prose. The
-  lead figure is the overview; detail figures follow their sections.
-  A directory anatomy is a file map, a text artifact whose field order is
-  the grammar is a specimen anatomy, and a sequence with a feedback edge
-  or branch exit is a keyed stage figure — docs/components/figure.html
-  demonstrates all three; a straight-line sequence stays a numbered list,
-  never boxes. Keep a figure within 360 viewBox units where the form
-  allows; a wider figure carries class="pan" with an inline min-width
-  equal to its viewBox width, and stays at or under 620 units.
-  Follow docs/components/figure.html for form choice, notation, the
-  three-word label rule, and the overlap rule — no text touches another
-  mark, ever. Evidence a reader verifies rather than needs (listings, raw
-  output) goes in a disclosure block whose summary states the conclusion
-  (docs/components/disclosure.html). What the figures do not claim goes in
+  The lead figure is the overview; detail figures follow their sections,
+  each at the section it serves. What the figures do not claim goes in
   "Omissions".
 
-  Sources: the header carries no Source field. What the document stands on
-  goes in the sources footer at the end, one source per line
-  (docs/components/provenance.html).
+  Sources: the header carries no Source field.
 
   required-fields: Doctype, Question, Updated, Commit
   required-sections: Elements, Omissions, Sources
@@ -138,7 +94,7 @@
 <title><!-- Title, a noun phrase of 1–3 words --> — <!-- repo --></title>
 <style>
   /* Base, provenance, callout, figure, disclosure styles — copied from
-     docs/components/ (self-contained by rule; copied, never linked). */
+     ~/.claude/agents/document-writer/components/. */
   html { font-size: 16px; }
   body {
     max-width: 42rem;
@@ -216,10 +172,8 @@
     <figure>
       <svg viewBox="0 0 660 300" role="img">
         <title><!-- One sentence: what this diagram shows --></title>
-        <!-- Follow docs/components/figure.html: at most seven elements,
-             suffixed marker ids, currentColor, three-word labels on the
-             parts, no text touching another mark, dashed only for the
-             speculative (which an explanation should not have). -->
+        <!-- Per components/figure.html. An explanation has nothing
+             speculative, so nothing here is dashed. -->
       </svg>
       <figcaption>
         <!-- Diagram type and scope, then the key: what a box is, what an
