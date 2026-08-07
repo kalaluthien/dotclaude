@@ -88,15 +88,38 @@ service parse it.
 
 # Style
 
-The model is the assembly-manual page: the answer sits in a box up
-front, a marker pen picks out its load-bearing phrases, and numbered
-landmarks walk the reader through small drawings.
+Write in three named styles at once:
+
+- **IKEA manual style** — the page: the answer sits in a box up front,
+  numbered landmarks walk the reader through small drawings, and the
+  page carries as few words as it can.
+- **Simple Wikipedia style** — the sentences: short, everyday words,
+  one idea per sentence, active voice, no idioms.
+- **ELI5** ("explain like I'm five") — the reader: assume no prior
+  knowledge; explain every term in plain words the first time it
+  appears.
 
 - **Ground rule: keep the document short, and separate the crucial from
   the detail — obsessively.** The crucial is promoted into boxed
   conclusions and highlights; the detail goes in a disclosure block
   whose summary states the conclusion, or is deleted. Before delivering,
   walk every section and cut what fails this rule.
+
+## Language
+
+Start from the "Language" rules of the owner's output style,
+`~/workspace/.claude/output-styles/simplified-technical.md`, then go
+simpler still — a view must read easier than chat.
+
+- Use the everyday word; reach for Basic English first.
+- One idea per sentence. When a sentence needs a comma, try splitting
+  it into two sentences.
+- Name the actor and use the active voice: "the app reads the file",
+  never "the file is read".
+- Explain a technical term in parentheses or a short clause the first
+  time; never leave jargon bare.
+- Read every sentence back and ask: would a smart reader with no
+  context follow it on the first pass? Rewrite until yes.
 
 ## Structure
 
@@ -121,9 +144,8 @@ landmarks walk the reader through small drawings.
   path is title, highlights, figures.
 - Say head-on what a reader would wrongly assume, and correct it:
   "Stage C is not a third algorithm."
-- Write fewer, fuller sentences: one sentence carries a claim together
-  with its qualifier or reason. Keep a paragraph to one topic in at most
-  three sentences.
+- Write short sentences, per the Language rules above. Keep a paragraph
+  to one topic in at most three sentences.
 
 ## Color
 
