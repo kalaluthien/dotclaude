@@ -14,7 +14,9 @@ What the block declares and this file compiles:
     item.markers       the bracketed status characters
     item.date          the date form
     item.tags          the declared #tag kinds, sitting between the date and
-                       the title (position: after-date); optional per item
+                       the title (position: after-date); with scope_required,
+                       every item must carry at least one kind whose
+                       waits_on is "nobody" — the scope kinds
     item.title_style   bold-lead-required — the text opens with a bold run
     sections.match     word-prefix — a prose heading is a listed name, alone
                        or followed by a space or a colon
@@ -91,7 +93,16 @@ def contract(path=CONTRACT_DOCUMENT):
     sections = data.get("sections") or {}
     markers = [row.get("marker", "") for row in item.get("markers") or []]
     tags_decl = item.get("tags") or {}
-    tags = [str(row.get("tag", "")) for row in tags_decl.get("kinds") or []]
+    kinds = tags_decl.get("kinds") or []
+    tags = [str(row.get("tag", "")) for row in kinds]
+    scope_tags = [
+        str(row.get("tag", "")) for row in kinds if row.get("waits_on") == "nobody"
+    ]
+    scope_required = bool(tags_decl.get("scope_required"))
+    if scope_required and not scope_tags:
+        raise ContractError(
+            "%s: item.tags.scope_required is set but no kind waits on nobody" % path
+        )
     date = DATE_PATTERNS.get(item.get("date"))
     title = TITLE_PATTERNS.get(item.get("title_style"))
     match = sections.get("match")
@@ -125,7 +136,7 @@ def contract(path=CONTRACT_DOCUMENT):
 
     bullet = item.get("bullet", "-")
     tag_run = (
-        r"(?:#(?:%s) )*" % "|".join(re.escape(t) for t in tags) if tags else ""
+        r"((?:#(?:%s) )*)" % "|".join(re.escape(t) for t in tags) if tags else "()"
     )
     return {
         "item": re.compile(
@@ -138,6 +149,8 @@ def contract(path=CONTRACT_DOCUMENT):
                 title,
             )
         ),
+        "scope_tags": scope_tags,
+        "scope_required": scope_required,
         "form": "`%s [<m>] %s%s **Title.** body`"
         % (bullet, item.get("date"), " [#tag …]" if tags else ""),
         "markers": markers,
@@ -189,8 +202,20 @@ def violations(path, rule):
             continue
         if prose or not BULLET.match(line):
             continue
-        if not rule["item"].match(line):
+        matched = rule["item"].match(line)
+        if not matched:
             found.append((number, line, "expected %s" % rule["form"]))
+            continue
+        carried = {token[1:] for token in matched.group(1).split()}
+        if rule["scope_required"] and not carried & set(rule["scope_tags"]):
+            found.append(
+                (
+                    number,
+                    line,
+                    "needs at least one scope tag: %s"
+                    % ", ".join("'#%s'" % tag for tag in rule["scope_tags"]),
+                )
+            )
     return found
 
 
@@ -199,7 +224,10 @@ def report(path, found, rule):
     markers = ", ".join("'%s'" % marker for marker in rule["markers"])
     for number, line, reason in found:
         lines.append("  line %d: %s" % (number, line.rstrip()))
-        lines.append("    %s — <m> is one of %s." % (reason, markers))
+        if reason.startswith("expected"):
+            lines.append("    %s — <m> is one of %s." % (reason, markers))
+        else:
+            lines.append("    %s." % reason)
     if rule["tags"]:
         lines.append(
             "  (a tag is one of %s, between the date and the title)"
