@@ -15,8 +15,11 @@ What the block declares and this file compiles:
     item.date          the date form
     item.tags          the declared #tag kinds, sitting between the date and
                        the title (position: after-date); with scope_required,
-                       every item must carry at least one kind whose
-                       waits_on is "nobody" — the scope kinds
+                       every item must carry at least one kind declaring
+                       scope: true — the scope kinds. Not "every kind that
+                       waits on nobody": a priority kind waits on nobody as
+                       well, and a row tagged only #urgent would otherwise
+                       pass a requirement it says nothing about.
     item.title_style   bold-lead-required — the text opens with a bold run
     sections.match     word-prefix — a prose heading is a listed name, alone
                        or followed by a space or a colon
@@ -95,13 +98,11 @@ def contract(path=CONTRACT_DOCUMENT):
     tags_decl = item.get("tags") or {}
     kinds = tags_decl.get("kinds") or []
     tags = [str(row.get("tag", "")) for row in kinds]
-    scope_tags = [
-        str(row.get("tag", "")) for row in kinds if row.get("waits_on") == "nobody"
-    ]
+    scope_tags = [str(row.get("tag", "")) for row in kinds if row.get("scope")]
     scope_required = bool(tags_decl.get("scope_required"))
     if scope_required and not scope_tags:
         raise ContractError(
-            "%s: item.tags.scope_required is set but no kind waits on nobody" % path
+            "%s: item.tags.scope_required is set but no kind declares scope" % path
         )
     date = DATE_PATTERNS.get(item.get("date"))
     title = TITLE_PATTERNS.get(item.get("title_style"))
