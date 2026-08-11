@@ -71,9 +71,11 @@
         numerals or field names, placed under Elements or with the figure
         it keys (a file map's role column is its own carrier); every line
         is unidirectional and labelled with intent.
-  - [ ] No figure exceeds 620 viewBox units in width; a figure wider than
-        360 units carries class="pan" with an inline min-width equal to
-        its viewBox width, so it pans instead of shrinking.
+  - [ ] Every figure annotation is at least 10 viewBox units, the size
+        that still renders at 8 px on a phone; no figure exceeds 620
+        viewBox units in width; a figure wider than 360 units carries
+        class="pan" with an inline min-width equal to its viewBox width,
+        so it pans instead of shrinking.
   - [ ] A file map transcribes paths that exist at the pinned commit, and
         a specimen is a real instance observable there; neither invents an
         entry.
@@ -174,7 +176,7 @@
     <p><!-- The answer in one full sentence — the document's conclusion. --></p>
 
     <figure>
-      <svg viewBox="0 0 660 300" role="img">
+      <svg viewBox="0 0 320 220" role="img">
         <title><!-- One sentence: what this diagram shows --></title>
         <!-- Per components/figure.html. An explanation has nothing
              speculative, so nothing here is dashed. -->

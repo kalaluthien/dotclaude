@@ -30,11 +30,15 @@
     shorten it to its noun, or replace it with a circled number — never
     shrink the font to force a fit.
 
-  Width budget — where the constitution's numbers come from: the page
-  measure is 42rem and a phone shows about 312 px of it, so a figure wider
-  than 360 viewBox units, left to shrink, renders 9-unit text below 8 px on
-  a phone. Vertical beats horizontal. class="pan" goes on the <figure> and
-  the inline min-width on the <svg>; 620 units is the desktop measure.
+  Text size and width — where the constitution's numbers come from: the
+  page measure is 42rem and a phone shows about 312 px of it, so a 10-unit
+  label in a 360-unit figure left to shrink renders at 8.6 px, just over
+  the 8 px floor, while a 9-unit label renders at 7.8 px and is
+  unreadable. The floor is the font size, never the width — 10 units is
+  the minimum for any annotation, at any viewBox. 360 units is where a
+  figure must pan instead of shrink: class="pan" goes on the <figure> and
+  the inline min-width on the <svg>. 620 units, the desktop measure, is
+  the maximum drawn width. Vertical beats horizontal.
 
   Two HTML forms — for text-dense subjects, markup beats SVG: the text
   stays real (screen readers, search, copy) and pans at full size on a
@@ -159,10 +163,10 @@
         </defs>
         <rect x="12" y="45" width="120" height="60" fill="none" stroke="currentColor"/>
         <text x="22" y="72" font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="bold" fill="currentColor">shipped part</text>
-        <text x="22" y="90" font-family="ui-monospace,Menlo,monospace" font-size="9" fill="currentColor" opacity=".65">solid: exists</text>
+        <text x="22" y="90" font-family="ui-monospace,Menlo,monospace" font-size="10" fill="currentColor" opacity=".65">solid: exists</text>
         <rect x="200" y="45" width="112" height="60" fill="none" stroke="currentColor" stroke-dasharray="5 4"/>
         <text x="210" y="72" font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="bold" fill="currentColor">proposed part</text>
-        <text x="210" y="90" font-family="ui-monospace,Menlo,monospace" font-size="9" fill="currentColor" opacity=".65">dashed: planned</text>
+        <text x="210" y="90" font-family="ui-monospace,Menlo,monospace" font-size="10" fill="currentColor" opacity=".65">dashed: planned</text>
         <line x1="132" y1="75" x2="198" y2="75" stroke="currentColor" marker-end="url(#arrow-kit)"/>
         <text x="165" y="66" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="10" fill="currentColor">feeds</text>
       </svg>
@@ -274,13 +278,13 @@
       <circle cx="54" cy="20" r="11" fill="#ffffff" stroke="currentColor"/>
       <text x="54" y="20" dy=".35em" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="bold" fill="currentColor">1</text>
       <text x="44" y="48" font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="bold" fill="currentColor">Render</text>
-      <text x="44" y="64" font-family="ui-monospace,Menlo,monospace" font-size="9" fill="currentColor" opacity=".7">fill the template</text>
+      <text x="44" y="64" font-family="ui-monospace,Menlo,monospace" font-size="10" fill="currentColor" opacity=".7">fill the template</text>
       <line x1="110" y1="76" x2="110" y2="102" stroke="currentColor" marker-end="url(#arrow-stages)"/>
       <rect x="30" y="104" width="160" height="56" fill="none" stroke="currentColor"/>
       <circle cx="54" cy="104" r="11" fill="#ffffff" stroke="currentColor"/>
       <text x="54" y="104" dy=".35em" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="bold" fill="currentColor">2</text>
       <text x="44" y="132" font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="bold" fill="currentColor">Rubric check</text>
-      <text x="44" y="148" font-family="ui-monospace,Menlo,monospace" font-size="9" fill="currentColor" opacity=".7">item by item</text>
+      <text x="44" y="148" font-family="ui-monospace,Menlo,monospace" font-size="10" fill="currentColor" opacity=".7">item by item</text>
       <path d="M190,132 H280 V48 H192" fill="none" stroke="currentColor" marker-end="url(#arrow-stages)"/>
       <text x="235" y="94" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="10" fill="currentColor">on failure</text>
       <line x1="110" y1="160" x2="110" y2="188" stroke="currentColor" marker-end="url(#arrow-stages)"/>

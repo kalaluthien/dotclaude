@@ -192,9 +192,17 @@ stays black on white.
 - A figure can carry invented illustrative values only when its caption
   says so: "Counts are an example, not measured data." A file map or a
   specimen never invents.
-- Keep a figure within 360 viewBox units where the form allows; a wider
-  figure carries `class="pan"` with an inline min-width equal to its
-  viewBox width, and even then stays at or under 620 units.
+- Set every annotation at 10 viewBox units or more — a phone shows about
+  312 px of the measure, so 10 units in the widest shrinking figure still
+  render at 8.6 px, above the 8 px floor. Width does not carry this: a
+  label under 10 units is illegible at any viewBox.
+- 360 viewBox units is the threshold at which a figure must pan, not a
+  legibility guarantee. Past it the figure carries `class="pan"` with an
+  inline min-width equal to its viewBox width, so it draws at full size
+  instead of shrinking; 620 units is the maximum drawn width.
+- `~/.claude/git-hooks/check-figures` checks all three — the 10-unit
+  floor, the pan wiring, the 620-unit maximum — and each entry's
+  pre-commit hook runs it over the views that commit stages.
 - Keep drawings near-wordless: labels are nouns of at most three words,
   or circled numbers keyed to a boxed conclusion or the elements table,
   and no text may touch another mark — check every label's extent per
