@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""Check the writer constitution's figure geometry in view documents.
+
+Three rules, all from ~/.claude/agents/document-writer.md, "Figures":
+
+  1. Annotation text is at least 10 viewBox units. A phone shows about
+     312 px of the 42rem measure, so 10 units in the widest non-panning
+     figure still renders at 8.6 px — above the 8 px legibility floor.
+  2. A figure viewBox is at most 620 units wide, the desktop measure.
+  3. A figure wider than 360 units pans: class="pan" on the <figure> and an
+     inline min-width on the <svg> equal to the viewBox width, so the figure
+     is drawn at full size instead of shrinking to the phone measure.
+
+Only an <svg> inside a <figure> is checked; an svg elsewhere on the page is
+not a figure. Font size follows SVG inheritance, so a size set on a <g>
+applies to the text inside it.
+
+Usage:  check-figures <view.html> [<view.html> ...]
+Exit 1 with one finding per line on stderr when any rule fails.
+"""
+
+import re
+import sys
+from html.parser import HTMLParser
+
+MIN_TEXT_UNITS = 10
+PAN_THRESHOLD_UNITS = 360
+MAX_WIDTH_UNITS = 620
+
+# SVG's own default where nothing sets a size; large enough that it never fails.
+DEFAULT_FONT_UNITS = 16.0
+
+# Elements that carry an inheritable font-size and always have a closing tag,
+# so a stack over them tracks inheritance without counting every leaf shape.
+FONT_SCOPES = ("svg", "g", "text", "a", "switch")
+
+SEPARATOR = re.compile(r"[\s,]+")
+LENGTH = re.compile(r"^\s*([\d.]+)\s*(?:px)?\s*$")
+
+
+def style_value(style, prop):
+    """The value of one declaration in an inline style attribute."""
+    for part in (style or "").split(";"):
+        name, _, value = part.partition(":")
+        if name.strip().lower() == prop:
+            return value.strip()
+    return None
+
+
+def to_units(raw):
+    """A length in SVG user units, or None when it is not one (em, %, unset)."""
+    if raw is None:
+        return None
+    match = LENGTH.match(raw)
+    return float(match.group(1)) if match else None
+
+
+def font_of(attrs):
+    """The font-size an element sets, from its style or its attribute."""
+    size = to_units(style_value(attrs.get("style"), "font-size"))
+    return size if size is not None else to_units(attrs.get("font-size"))
+
+
+class FigureChecker(HTMLParser):
+    def __init__(self, path):
+        super().__init__(convert_charrefs=True)
+        self.path = path
+        self.findings = []
+        self.figure_pans = []   # class="pan", one entry per open <figure>
+        self.fonts = []         # inherited font-size, one entry per open scope
+        self.in_svg = False
+
+    def report(self, message):
+        line, _ = self.getpos()
+        self.findings.append(f"{self.path}:{line}: {message}")
+
+    # --- element walk ------------------------------------------------------
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+
+        if tag == "figure":
+            self.figure_pans.append("pan" in (attrs.get("class") or "").split())
+            return
+        if not self.figure_pans:
+            return
+
+        if tag == "svg" and not self.in_svg:
+            self.in_svg = True
+            self.fonts = [font_of(attrs) or DEFAULT_FONT_UNITS]
+            self.check_width(attrs)
+            return
+        if not self.in_svg:
+            return
+
+        if tag in FONT_SCOPES:
+            self.fonts.append(font_of(attrs))
+        if tag in ("text", "tspan"):
+            self.check_text(font_of(attrs))
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        self.handle_endtag(tag)
+
+    def handle_endtag(self, tag):
+        if tag == "figure":
+            if self.figure_pans:
+                self.figure_pans.pop()
+            return
+        if not self.in_svg:
+            return
+        if tag == "svg" and len(self.fonts) <= 1:
+            self.in_svg = False
+            self.fonts = []
+        elif tag in FONT_SCOPES and self.fonts:
+            self.fonts.pop()
+
+    # --- the rules ---------------------------------------------------------
+
+    def check_width(self, attrs):
+        parts = SEPARATOR.split((attrs.get("viewbox") or "").strip())
+        if len(parts) != 4:
+            return
+        try:
+            width = float(parts[2])
+        except ValueError:
+            return
+
+        if width > MAX_WIDTH_UNITS:
+            self.report(
+                f"figure viewBox is {width:g} units wide; the maximum is "
+                f"{MAX_WIDTH_UNITS} — split the figure or draw it vertically"
+            )
+            return
+        if width <= PAN_THRESHOLD_UNITS:
+            return
+
+        if not self.figure_pans[-1]:
+            self.report(
+                f"figure viewBox is {width:g} units wide, over "
+                f"{PAN_THRESHOLD_UNITS}, but its <figure> has no class=\"pan\""
+            )
+        declared = to_units(style_value(attrs.get("style"), "min-width"))
+        if declared != width:
+            found = f"{declared:g}px" if declared is not None else "none"
+            self.report(
+                f"figure viewBox is {width:g} units wide, over "
+                f"{PAN_THRESHOLD_UNITS}, so its <svg> needs an inline "
+                f"min-width of {width:g}px; found {found}"
+            )
+
+    def check_text(self, own_size):
+        size = own_size
+        if size is None:
+            size = next((f for f in reversed(self.fonts) if f is not None), None)
+        if size is None or size >= MIN_TEXT_UNITS:
+            return
+        self.report(
+            f"figure text is {size:g} viewBox units; the minimum is "
+            f"{MIN_TEXT_UNITS} — a smaller label falls under 8 px on a phone"
+        )
+
+
+def check(path):
+    parser = FigureChecker(path)
+    with open(path, encoding="utf-8") as handle:
+        parser.feed(handle.read())
+    parser.close()
+    return parser.findings
+
+
+def main(paths):
+    findings = [finding for path in paths for finding in check(path)]
+    if not findings:
+        return 0
+    print("check-figures: the figure rules failed —", file=sys.stderr)
+    for finding in findings:
+        print(f"  {finding}", file=sys.stderr)
+    print(
+        "  (convention: ~/.claude/agents/document-writer.md, 'Figures')",
+        file=sys.stderr,
+    )
+    return 1
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("usage: check-figures <view.html> [<view.html> ...]", file=sys.stderr)
+        sys.exit(2)
+    sys.exit(main(sys.argv[1:]))
