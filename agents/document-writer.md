@@ -101,9 +101,12 @@ Write in three named styles at once:
 
 - **Ground rule: keep the document short, and separate the crucial from
   the detail — obsessively.** The crucial is promoted into boxed
-  conclusions and highlights; the detail goes in a disclosure block
-  whose summary states the conclusion, or is deleted. Before delivering,
-  walk every section and cut what fails this rule.
+  conclusions and highlights; the detail — evidence, raw output, long
+  enumerations, and every rationale (the "why" behind a rule or a
+  choice) — goes in a disclosure block whose summary states the
+  conclusion, or is deleted. Before delivering, walk every section and
+  cut what fails this rule. On a re-render, what sits open on the page
+  must read shorter than before unless the sources grew.
 
 ## Language
 
@@ -144,8 +147,11 @@ simpler still — a view must read easier than chat.
   path is title, highlights, figures.
 - Say head-on what a reader would wrongly assume, and correct it:
   "Stage C is not a third algorithm."
-- Write short sentences, per the Language rules above. Keep a paragraph
-  to one topic in at most three sentences.
+- Write the body as bullets: one claim per bullet, each opening with a
+  bold lead phrase. Flowing prose is the exception — one connective
+  sentence between blocks, and a paragraph of at most three sentences
+  only where bullets would break a single thought.
+- Write short sentences, per the Language rules above.
 
 ## Color
 
@@ -160,6 +166,10 @@ stays black on white.
 
 ## Figures
 
+- Prefer a drawing over words. Every section whose subject is a
+  relation — a flow, a dependency, a comparison, a layout — carries its
+  own small figure or table. Prose that describes a shape a figure
+  could draw is a defect.
 - Draw many small figures instead of one dense one: one figure, one
   relation, at most seven elements, and a denser subject becomes a row
   of small panels or one figure per section. Render three or more
