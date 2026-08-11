@@ -20,6 +20,10 @@ What the block declares and this file compiles:
                        waits on nobody": a priority kind waits on nobody as
                        well, and a row tagged only #urgent would otherwise
                        pass a requirement it says nothing about.
+    item.tags.reason   where an item's own reason for wearing a tag goes,
+                       in-parentheses right after the token. The key is the
+                       whole permission: without it the parenthesis belongs to
+                       no token and a row carrying one is refused.
     item.title_style   bold-lead-required — the text opens with a bold run
     sections.match     word-prefix — a prose heading is a listed name, alone
                        or followed by a space or a colon
@@ -56,6 +60,10 @@ BLOCK = re.compile(
 
 DATE_PATTERNS = {"YYYY-MM-DD": r"\d{4}-\d{2}-\d{2}"}
 TITLE_PATTERNS = {"bold-lead-required": r"\*\*\S"}
+# Where an item's own reason for a tag may sit. The empty key is a contract
+# silent on the subject, and it admits none: the parenthesis is then part of no
+# token, so a row carrying one fails the expression like any other stray text.
+REASON_PATTERNS = {"": "", "in-parentheses": r"(?:\([^()]*\))?"}
 
 BULLET = re.compile(r"^(?:[-*+] |\d+[.)] )")
 HEADING = re.compile(r"^#{1,6}\s+(.*?)\s*$")
@@ -136,8 +144,15 @@ def contract(path=CONTRACT_DOCUMENT):
         raise ContractError("%s: pool.board_file and pool.pattern are required" % path)
 
     bullet = item.get("bullet", "-")
+    reason = tags_decl.get("reason", "")
+    if reason and reason not in REASON_PATTERNS:
+        raise ContractError(
+            "%s: item.tags.reason %r is a place this hook cannot compile" % (path, reason)
+        )
     tag_run = (
-        r"((?:#(?:%s) )*)" % "|".join(re.escape(t) for t in tags) if tags else "()"
+        r"((?:#(?:%s)%s )*)" % ("|".join(re.escape(t) for t in tags), REASON_PATTERNS[reason])
+        if tags
+        else "()"
     )
     return {
         "item": re.compile(
@@ -149,6 +164,11 @@ def contract(path=CONTRACT_DOCUMENT):
                 tag_run,
                 title,
             )
+        ),
+        "token": re.compile(
+            r"#(%s)%s" % ("|".join(re.escape(t) for t in tags), REASON_PATTERNS[reason])
+            if tags
+            else r"(?!)"
         ),
         "scope_tags": scope_tags,
         "scope_required": scope_required,
@@ -207,7 +227,10 @@ def violations(path, rule):
         if not matched:
             found.append((number, line, "expected %s" % rule["form"]))
             continue
-        carried = {token[1:] for token in matched.group(1).split()}
+        # Named off the token rather than split on whitespace: a reason holds
+        # spaces, so splitting the run would read "#code(the request named the"
+        # as a tag and lose the one that is there.
+        carried = set(rule["token"].findall(matched.group(1)))
         if rule["scope_required"] and not carried & set(rule["scope_tags"]):
             found.append(
                 (
