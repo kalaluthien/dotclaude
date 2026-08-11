@@ -174,6 +174,11 @@ stays black on white.
   relation, at most seven elements, and a denser subject becomes a row
   of small panels or one figure per section. Render three or more
   parallel facts as a table, never as prose.
+- A table wider than three columns stacks at phone width instead of
+  panning: `class="stack"` on the table, `data-label` naming the column
+  on every cell after each row's first, which is the row's title.
+  Columns past the third must never sit off-screen; panning remains for
+  code blocks, pan figures, and tables of three columns or fewer.
 - Walk a mechanism as keyed steps: circled number badges in reading
   order, each step a bold noun title, one grey qualifier line, and a
   small schematic.

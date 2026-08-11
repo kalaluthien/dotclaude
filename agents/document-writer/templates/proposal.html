@@ -79,7 +79,11 @@
         so it pans instead of shrinking.
   - [ ] The sources footer lists what the proposal stands on; the header
         carries no Source field.
-  - [ ] Wide content scrolls inside its own container at phone width.
+  - [ ] A table wider than three columns carries class="stack" with
+        data-label on every cell after each row's first, so it stacks at
+        phone width and no column sits off-screen.
+  - [ ] Wide content that still pans (pre, pan figures, tables of three
+        columns or fewer) scrolls inside its own container at phone width.
 -->
 <html lang="en">
 <head>
@@ -118,6 +122,12 @@
   @media (max-width: 42rem) {
     table { display: block; overflow-x: auto; }
     th, td { min-width: 9rem; }
+    table.stack, table.stack tbody, table.stack tr, table.stack td { display: block; }
+    table.stack thead { display: none; }
+    table.stack tr { border-bottom: 1px solid #e4e4e4; padding: .5rem 0; }
+    table.stack td { min-width: 0; border-bottom: none; padding: .12rem 0; }
+    table.stack td:first-child { font-weight: 700; }
+    table.stack td[data-label]::before { content: attr(data-label); display: inline-block; width: 7.5rem; color: #555; font-size: .82em; }
   }
   .provenance { display: grid; grid-template-columns: max-content 1fr; gap: .15rem 1rem; margin: 0; font-size: .85rem; color: #555; }
   .provenance dt { font-variant: small-caps; letter-spacing: .04em; }

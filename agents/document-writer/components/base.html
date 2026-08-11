@@ -15,6 +15,11 @@
     keeping lines near 65 characters.
   - Wide content (tables, pre, figures) scrolls inside its own container;
     the page never scrolls sideways, at any width.
+  - A table wider than three columns does not pan: it stacks at phone
+    width. The author puts class="stack" on the table and data-label
+    (the column name) on every cell after each row's first; the first
+    cell is the row's title and carries no label. Panning remains for
+    pre, pan figures, and tables of three columns or fewer.
   - Restraint over polish: no gradients, shadows, emoji, icon fonts, or
     hover-dependent behavior. One ink color; the accent is whitespace.
 -->
@@ -68,6 +73,21 @@
   @media (max-width: 42rem) {
     table { display: block; overflow-x: auto; }
     th, td { min-width: 9rem; }
+    /* Stacked rows: a table over three columns keeps every cell on screen.
+       Each row becomes a block titled by its first cell; the other cells
+       print their column name from data-label. */
+    table.stack, table.stack tbody, table.stack tr, table.stack td { display: block; }
+    table.stack thead { display: none; }
+    table.stack tr { border-bottom: 1px solid #e4e4e4; padding: .5rem 0; }
+    table.stack td { min-width: 0; border-bottom: none; padding: .12rem 0; }
+    table.stack td:first-child { font-weight: 700; }
+    table.stack td[data-label]::before {
+      content: attr(data-label);
+      display: inline-block;
+      width: 7.5rem;
+      color: #555;
+      font-size: .82em;
+    }
   }
 
   /* Numbered steps read like manual panels: the numeral is the landmark. */
