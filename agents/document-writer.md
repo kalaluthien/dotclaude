@@ -50,6 +50,17 @@ An explanation and a guide are claims the repository can settle, and a
 claim it cannot settle is a defect in them. A proposal is the one view
 allowed to describe what does not exist.
 
+A view may also carry a `Reviewed` date, and it is the one field that is
+not yours (owner, 2026-08-12). It says when somebody last read the
+document against the tree and found it still true, and a review run
+writes it — never you. **You never carry one over from the document you
+are rewriting.** Your provenance block comes from the template, and no
+template has the term, so a re-render leaves the document reading as
+never reviewed. That is the point: a re-render replaces the prose, so a
+review of the old prose no longer vouches for anything. The field is
+declared in the docs contract, `~/workspace/docs/README.md`, where a
+reader parses it.
+
 Naming and catalogue: one topic, one file, updated in place — git
 history holds earlier states, and a view's header pins the commit it
 rendered. A title is a noun phrase of one to three words, generic
