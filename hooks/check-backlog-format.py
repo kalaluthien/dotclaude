@@ -25,6 +25,14 @@ What the block declares and this file compiles:
                        whole permission: without it the parenthesis belongs to
                        no token and a row carrying one is refused.
     item.title_style   bold-lead-required — the text opens with a bold run
+    item.body          max_chars, the budget for the text after that bold run.
+                       The body is the whole card: every indented line under
+                       the item is folded in with one space before the count,
+                       so wrapping a row over more lines buys it no room. The
+                       budget is the checkable half of the writing rule; the
+                       three-sentence half stays author discipline, so a row
+                       under budget can still break the rule. A contract
+                       without the key declares no budget and none is checked.
     sections.match     word-prefix — a prose heading is a listed name, alone
                        or followed by a space or a colon
     pool.pattern       where a pool lives, which is how a path is recognised
@@ -112,6 +120,13 @@ def contract(path=CONTRACT_DOCUMENT):
         raise ContractError(
             "%s: item.tags.scope_required is set but no kind declares scope" % path
         )
+    body = item.get("body") or {}
+    budget = body.get("max_chars")
+    if body and not (isinstance(budget, int) and not isinstance(budget, bool) and budget > 0):
+        raise ContractError(
+            "%s: item.body.max_chars %r is not a positive whole number of characters"
+            % (path, budget)
+        )
     date = DATE_PATTERNS.get(item.get("date"))
     title = TITLE_PATTERNS.get(item.get("title_style"))
     match = sections.get("match")
@@ -172,6 +187,7 @@ def contract(path=CONTRACT_DOCUMENT):
         ),
         "scope_tags": scope_tags,
         "scope_required": scope_required,
+        "body_max": budget if body else None,
         "form": "`%s [<m>] %s%s **Title.** body`"
         % (bullet, item.get("date"), " [#tag …]" if tags else ""),
         "markers": markers,
@@ -197,15 +213,19 @@ def is_prose(heading, rule):
     )
 
 
-def violations(path, rule):
-    """Return a list of (line_number, line, reason) for one board file."""
-    with open(path, encoding="utf-8") as handle:
-        lines = handle.read().split("\n")
+def rows(lines, rule):
+    """Every candidate item line, paired with the indented lines that continue it.
 
+    A candidate is a bullet at column 0 outside the front matter, a fence and a
+    prose section. Its continuation is every indented non-empty line that
+    follows — an indented bullet among them, which the contract calls the body
+    of the item above it.
+    """
     found = []
     in_front_matter = lines and lines[0].strip() == "---"
     in_fence = False
     prose = False
+    current = None
 
     for number, line in enumerate(lines, start=1):
         if in_front_matter:
@@ -214,15 +234,46 @@ def violations(path, rule):
             continue
         if FENCE.match(line):
             in_fence = not in_fence
+            current = None
             continue
         if in_fence:
             continue
         heading = HEADING.match(line)
         if heading:
             prose = is_prose(heading.group(1), rule)
+            current = None
             continue
-        if prose or not BULLET.match(line):
+        if prose:
             continue
+        if BULLET.match(line):
+            current = (number, line, [])
+            found.append(current)
+            continue
+        if current is not None and line[:1].isspace() and line.strip():
+            current[2].append(line.strip())
+            continue
+        current = None
+    return found
+
+
+def body(line, matched):
+    """The item line's text after the bold title.
+
+    Empty when the bold run never closes: the whole line is then the title, and
+    an unterminated run is the title style's business, not the budget's.
+    """
+    rest = line[matched.end(1):]
+    closed = rest.find("**", len("**"))
+    return "" if closed < 0 else rest[closed + len("**"):]
+
+
+def violations(path, rule):
+    """Return a list of (line_number, line, reason) for one board file."""
+    with open(path, encoding="utf-8") as handle:
+        lines = handle.read().split("\n")
+
+    found = []
+    for number, line, continuation in rows(lines, rule):
         matched = rule["item"].match(line)
         if not matched:
             found.append((number, line, "expected %s" % rule["form"]))
@@ -240,11 +291,28 @@ def violations(path, rule):
                     % ", ".join("'#%s'" % tag for tag in rule["scope_tags"]),
                 )
             )
+        if rule["body_max"]:
+            text = " ".join([body(line, matched)] + continuation)
+            length = len(" ".join(text.split()))
+            if length > rule["body_max"]:
+                found.append(
+                    (
+                        number,
+                        line,
+                        "the text after the title runs %d characters, over the "
+                        "%d-character budget (indented lines folded in)"
+                        % (length, rule["body_max"]),
+                    )
+                )
     return found
 
 
 def report(path, found, rule):
-    lines = ["%s: %d backlog item(s) break the grammar." % (path, len(found))]
+    # Counted over distinct lines: one item can break two rules at once.
+    lines = [
+        "%s: %d backlog item(s) break the grammar."
+        % (path, len({number for number, _, _ in found}))
+    ]
     markers = ", ".join("'%s'" % marker for marker in rule["markers"])
     for number, line, reason in found:
         lines.append("  line %d: %s" % (number, line.rstrip()))
