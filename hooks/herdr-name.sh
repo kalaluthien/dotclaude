@@ -4,7 +4,9 @@
 # A one-shot `claude -p` writes a short English title; on any failure the
 # slug of the prompt (the old behavior) is the fallback, so a tab is never
 # left numbered. One attempt per session, marker-gated, so later prompts
-# never rename again.
+# never rename again. The yield to a delegating orchestrator is pane-only:
+# the pane keeps the role-task name the orchestrator gave it, the tab still
+# gets the title.
 
 [ -n "$HERDR_TAB_ID" ] || [ -n "$HERDR_PANE_ID" ] || exit 0
 command -v herdr >/dev/null 2>&1 || exit 0
@@ -19,15 +21,20 @@ marker="${TMPDIR:-/tmp}/herdr-named-$session_id"
 [ -e "$marker" ] && exit 0
 touch "$marker"
 
-# Yield to the delegating layer: a pane whose agent claim carries a *name*
-# was named role-task by the orchestrator, and that name is the session's one
-# name. Herdr auto-claims any claude pane with name null, so the name — not
-# the claim — is the predicate.
+# Yield to the delegating layer, pane only: a pane whose agent claim carries
+# a *name* was named role-task by the orchestrator, and that name is the
+# pane's one name. Herdr auto-claims any claude pane with name null, so the
+# name — not the claim — is the predicate. The tab is a different level of
+# the naming strategy (workspace = where, agent = purpose, tab = current
+# work), so a named pane's tab still gets the title; yielding it too is what
+# left a delegated session's tab on its default numeric label.
+named=
 if [ -n "$HERDR_PANE_ID" ]; then
   named=$(herdr agent list 2>/dev/null | jq -r --arg p "$HERDR_PANE_ID" \
     '.result.agents[] | select(.pane_id == $p) | .name // empty')
-  [ -n "$named" ] && exit 0
 fi
+# Nothing left to rename: the pane has yielded and there is no tab.
+[ -n "$named" ] && [ -z "$HERDR_TAB_ID" ] && exit 0
 
 # Fallback slug: lowercase, non-alphanumeric runs become one hyphen.
 # Oniguruma's [[:alnum:]] matches Unicode letters, and jq slices by
@@ -57,7 +64,8 @@ prompt_head=$(jq -r '.prompt // "" | .[0:1000]' <<<"$input")
   fi
   [ -n "$title" ] || title="$slug"
   [ -n "$HERDR_TAB_ID" ] && herdr tab rename "$HERDR_TAB_ID" "$title" >/dev/null 2>&1
-  [ -n "$HERDR_PANE_ID" ] && herdr pane rename "$HERDR_PANE_ID" "$title" >/dev/null 2>&1
+  [ -z "$named" ] && [ -n "$HERDR_PANE_ID" ] &&
+    herdr pane rename "$HERDR_PANE_ID" "$title" >/dev/null 2>&1
 ) >/dev/null 2>&1 &
 
 exit 0
