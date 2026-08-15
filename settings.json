@@ -2,6 +2,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
+  "model": "fable",
   "hooks": {
     "PreToolUse": [
       {
@@ -55,7 +56,6 @@
       }
     ]
   },
-  "model": "fable",
   "worktree": {
     "baseRef": "fresh"
   },
