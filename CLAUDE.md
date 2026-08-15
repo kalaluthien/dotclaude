@@ -12,7 +12,7 @@ lives in the addressed files:
 1. Use `PROJECT/.claude/CLAUDE.md` instead of `PROJECT/CLAUDE.md`.
 2. Name skills in gerund form — verb-ing plus object, e.g. `updating-wiki-pages`, `delegating`. A skill is an operation; its name reads as the action.
 3. Pick the model by task depth and the effort by task breadth. Fable runs only the top-level orchestrating session, never a subagent or a delegated session. Below it, work that decides — ideation, planning, implementation, review — runs Opus; work that retrieves or condenses knowledge — search, classification, summarization — runs Sonnet. Effort measures scope, not difficulty: high or xhigh for a task that spans many exceptional cases or a large state space, low or medium for a narrow one. The same split binds the orchestrator itself: when the top-level Fable session is about to edit files or debug directly, it delegates that work to an Opus session instead — Fable turns cost twice Opus, and hands-on work multiplies turns.
-4. Delegate to a constitution-backed subagent the moment its domain appears — `document-writer` when a document view is ordered, `debugger` when anything needs debugging. Applicability decides; do not judge not to use it.
+4. Delegate to a constitution-backed subagent or skill the moment its domain appears — the `writing` skill (workspace) when a document view is ordered, `debugger` when anything needs debugging. Applicability decides; do not judge not to use it.
 
 ## Signals
 When the user asks with the keywords below, read the intention as follows.

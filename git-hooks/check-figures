@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Check the writer constitution's figure geometry in view documents.
+"""Check the writing skill's figure geometry in view documents.
 
-Three rules, all from ~/.claude/agents/document-writer.md, "Figures":
+Three rules, all from ~/workspace/.claude/skills/writing/references/svg-rules.md:
 
   1. Annotation text is at least 10 viewBox units. A phone shows about
      312 px of the 42rem measure, so 10 units in the widest non-panning
@@ -177,7 +177,7 @@ def main(paths):
     for finding in findings:
         print(f"  {finding}", file=sys.stderr)
     print(
-        "  (convention: ~/.claude/agents/document-writer.md, 'Figures')",
+        "  (convention: ~/workspace/.claude/skills/writing/references/svg-rules.md)",
         file=sys.stderr,
     )
     return 1
