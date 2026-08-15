@@ -18,7 +18,7 @@ What the block declares and this file compiles:
                        every item must carry at least one kind declaring
                        scope: true — the scope kinds. Not "every kind that
                        waits on nobody": a priority kind waits on nobody as
-                       well, and a row tagged only #urgent would otherwise
+                       well, and a row tagged only #optional would otherwise
                        pass a requirement it says nothing about.
     item.tags.reason   where an item's own reason for wearing a tag goes,
                        in-parentheses right after the token. The key is the
