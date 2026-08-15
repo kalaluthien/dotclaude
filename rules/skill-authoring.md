@@ -19,12 +19,34 @@ needs it.
   hyphens only, and identical to the directory name.
 - `description` — one sentence of what the skill does, then a `Use when …`
   clause naming the situations and the words a user would actually type. Third
-  person, no angle brackets, 1024 characters at most.
+  person, no angle brackets. The harness truncates it at 1,536 characters,
+  shared with `when_to_use`.
 - Put the routing words in the first line of the description. The listing
   truncates long entries and drops the least-used ones first, so a trigger
   buried at the end can disappear before the skill is ever considered.
 - Add a `Not for …` clause when a sibling skill can claim the same request.
   Negative scope stops over-triggering; more positive description does not.
+
+## Execution keys
+
+Optional keys that change how the body runs. Omit each one unless the skill
+needs it.
+
+- `context: fork` runs the skill in an isolated subagent with no conversation
+  history. `agent` picks the subagent type: `general-purpose` when omitted,
+  `Explore`, `Plan`, or a name from `.claude/agents/`. The body must state the
+  whole task, because a fork cannot ask the user or read the conversation.
+- Pin `model` on every fork skill. An unpinned fork inherits the invoking
+  session's model, and the top-level orchestrating model must not run inside a
+  fork. Deciding work pins `opus`.
+- `background: false` makes the invoking turn wait for the fork's result.
+- `effort` overrides reasoning effort while the skill is active, `low` through
+  `max`.
+- `allowed-tools` lists tools usable without a permission prompt during the
+  invoking turn only. The grant clears on the next message, and it never
+  restricts baseline permissions.
+- `disable-model-invocation: true` keeps the description out of context; only
+  the user can invoke the skill.
 
 ## Body slots and their order
 
