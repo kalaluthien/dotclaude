@@ -7,6 +7,7 @@ lives in the addressed files:
   crucial from the detail — obsessively. The body carries only what
   changes the reader's next action; details collapse or get cut.**
 - Machine and tool facts: `setup-*` memories in the global pool, per "Filing".
+- This file and everything under `~/.claude`: short and clean. Trim an addition in the same change — instruction plus one-clause rationale; narrative goes to a memory or the commit message. Every session loads this file, so each sentence costs every start. (Owner, 2026-08-15.)
 
 ## Claude Code
 1. Use `PROJECT/.claude/CLAUDE.md` instead of `PROJECT/CLAUDE.md`.
@@ -136,7 +137,7 @@ Route a durable takeaway by *what would make it wrong*, and report where you fil
 
 1. A general rule, true on any repository, machine, or tool, goes to the section of this file that names the work it applies to.
 2. A writing or language rule goes to the "Simplified Technical" output style, `~/workspace/.claude/output-styles/simplified-technical.md`.
-3. A single tool's or environment's own fact — installed tools, aliases, shell parsing, toolchain paths, a tool's observed behavior, where a resource lives — goes to a `setup-<topic>` memory. It lands in the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when the fact holds machine-wide, so every project finds it in one place; it stays in the owning project's pool when only that project touches the tool. Read the global pool's `MEMORY.md` before work that depends on a machine fact.
+3. A single tool's or environment's own fact — installed tools, aliases, shell parsing, toolchain paths, a tool's observed behavior, where a resource lives — goes to a `setup-<topic>` memory. It lands in the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when the fact holds machine-wide, so every project finds it in one place; it stays in the owning project's pool when only that project touches the tool. Read the global pool's `MEMORY.md` before work that depends on a machine fact. A fact that governs authoring files under a recognizable path pattern goes instead to the matching path-scoped rule in `~/.claude/rules/`, which loads itself when a matching file is read; `setup-*` keeps the facts with no path signature (owner redirect, 2026-08-15, dotclaude 98af604).
 4. A procedure that coordinates several projects or third-party services — deploying more than one service, driving one project's output into another, anything whose subject is the combination rather than any one member — goes to the workspace pool, `~/.claude/projects/-Users-hyungmokim-workspace/memory/`. The global pool holds a tool's own facts for visibility; a coordination procedure that lands there hides behind a tool name that names only one of its parts.
 5. A repository-specific working gotcha — how to build or test *that* codebase — goes to that repository's `.claude/CLAUDE.md`, edited in a worktree and committed like any other change. A debugging pitfall specific to a project's technology or conventions goes instead to that project pool's `pitfalls.md`, per the debugger constitution's own filing rule (`~/.claude/agents/debugger.md`) — never to a `CLAUDE.md` or `docs/`.
 6. A product, architecture, or verification truth about a repository goes to that repository's own source of truth (its `docs/` or spec), never to its `CLAUDE.md`.
