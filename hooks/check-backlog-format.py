@@ -25,14 +25,17 @@ What the block declares and this file compiles:
                        whole permission: without it the parenthesis belongs to
                        no token and a row carrying one is refused.
     item.title_style   bold-lead-required — the text opens with a bold run
-    item.body          max_chars, the budget for the text after that bold run.
-                       The body is the whole card: every indented line under
-                       the item is folded in with one space before the count,
-                       so wrapping a row over more lines buys it no room. The
-                       budget is the checkable half of the writing rule; the
-                       three-sentence half stays author discipline, so a row
-                       under budget can still break the rule. A contract
-                       without the key declares no budget and none is checked.
+    item.body          the body shape. style: labeled-fields — the body is
+                       indented `- label: text` bullets drawn from body.fields
+                       in declared order, each label at most once, required
+                       ones present, no others, and nothing after the title
+                       on the head line; field_max_chars bounds each field's
+                       folded text. Without a style, max_chars is the folded
+                       whole-body budget. Bounds are ceilings the hook counts;
+                       plainness stays author discipline, so a row inside
+                       every bound can still break the writing rule.
+    item.tags.reason_max_chars
+                       the bound on one tag's parenthesised reason.
     sections.match     word-prefix — a prose heading is a listed name, alone
                        or followed by a space or a colon
     pool.pattern       where a pool lives, which is how a path is recognised
@@ -120,12 +123,41 @@ def contract(path=CONTRACT_DOCUMENT):
         raise ContractError(
             "%s: item.tags.scope_required is set but no kind declares scope" % path
         )
-    body = item.get("body") or {}
-    budget = body.get("max_chars")
-    if body and not (isinstance(budget, int) and not isinstance(budget, bool) and budget > 0):
+    body_decl = item.get("body") or {}
+    budget = None
+    fields = None
+    field_max = None
+    if body_decl.get("style") == "labeled-fields":
+        fields = [
+            (str(row.get("label", "")), bool(row.get("required")))
+            for row in body_decl.get("fields") or []
+        ]
+        if not fields or any(not label for label, _ in fields):
+            raise ContractError("%s: item.body.fields must name non-empty labels" % path)
+        field_max = body_decl.get("field_max_chars")
+        if not (
+            isinstance(field_max, int)
+            and not isinstance(field_max, bool)
+            and field_max > 0
+        ):
+            raise ContractError(
+                "%s: item.body.field_max_chars %r is not a positive whole number of "
+                "characters" % (path, field_max)
+            )
+    elif body_decl:
+        budget = body_decl.get("max_chars")
+        if not (isinstance(budget, int) and not isinstance(budget, bool) and budget > 0):
+            raise ContractError(
+                "%s: item.body.max_chars %r is not a positive whole number of characters"
+                % (path, budget)
+            )
+    reason_max = tags_decl.get("reason_max_chars")
+    if reason_max is not None and not (
+        isinstance(reason_max, int) and not isinstance(reason_max, bool) and reason_max > 0
+    ):
         raise ContractError(
-            "%s: item.body.max_chars %r is not a positive whole number of characters"
-            % (path, budget)
+            "%s: item.tags.reason_max_chars %r is not a positive whole number of "
+            "characters" % (path, reason_max)
         )
     date = DATE_PATTERNS.get(item.get("date"))
     title = TITLE_PATTERNS.get(item.get("title_style"))
@@ -169,6 +201,19 @@ def contract(path=CONTRACT_DOCUMENT):
         if tags
         else "()"
     )
+    if fields:
+        form = "`%s [<m>] %s%s **Title.**` + indented %s field bullets" % (
+            bullet,
+            item.get("date"),
+            " [#tag …]" if tags else "",
+            "/".join("`- %s:`" % label for label, required in fields if required),
+        )
+    else:
+        form = "`%s [<m>] %s%s **Title.** body`" % (
+            bullet,
+            item.get("date"),
+            " [#tag …]" if tags else "",
+        )
     return {
         "item": re.compile(
             r"^%s \[[%s]\] %s %s%s"
@@ -185,11 +230,18 @@ def contract(path=CONTRACT_DOCUMENT):
             if tags
             else r"(?!)"
         ),
+        "reason_body": re.compile(
+            r"#(?:%s)\(([^()]*)\)" % "|".join(re.escape(t) for t in tags)
+            if tags
+            else r"(?!)"
+        ),
         "scope_tags": scope_tags,
         "scope_required": scope_required,
-        "body_max": budget if body else None,
-        "form": "`%s [<m>] %s%s **Title.** body`"
-        % (bullet, item.get("date"), " [#tag …]" if tags else ""),
+        "body_max": budget,
+        "fields": fields,
+        "field_max": field_max,
+        "reason_max": reason_max,
+        "form": form,
         "markers": markers,
         "tags": tags,
         "prose": [str(p).lower() for p in sections.get("prose_prefixes") or []],
@@ -291,7 +343,25 @@ def violations(path, rule):
                     % ", ".join("'#%s'" % tag for tag in rule["scope_tags"]),
                 )
             )
-        if rule["body_max"]:
+        if rule["reason_max"] is not None:
+            for reason_text in rule["reason_body"].findall(matched.group(1)):
+                if len(reason_text) > rule["reason_max"]:
+                    found.append(
+                        (
+                            number,
+                            line,
+                            "a tag reason runs %d characters, over the %d-character "
+                            "bound" % (len(reason_text), rule["reason_max"]),
+                        )
+                    )
+        if rule["fields"]:
+            found.extend(
+                (number, line, reason)
+                for reason in field_violations(
+                    body(line, matched), continuation, rule
+                )
+            )
+        elif rule["body_max"]:
             text = " ".join([body(line, matched)] + continuation)
             length = len(" ".join(text.split()))
             if length > rule["body_max"]:
@@ -305,6 +375,60 @@ def violations(path, rule):
                     )
                 )
     return found
+
+
+FIELD = re.compile(r"^- ([A-Za-z]+):\s*(.*)$")
+
+
+def field_violations(head_rest, continuation, rule):
+    """Every way one item's labeled-fields body breaks the declaration."""
+    reasons = []
+    if head_rest.strip():
+        reasons.append(
+            "text after the title belongs in the field bullets, not on the item line"
+        )
+    declared = [label for label, _ in rule["fields"]]
+    required = [label for label, req in rule["fields"] if req]
+    parsed = []
+    current = None
+    for text in continuation:
+        matched = FIELD.match(text)
+        if matched:
+            label = matched.group(1)
+            if label not in declared:
+                reasons.append(
+                    "field '%s:' is not declared; the fields are %s"
+                    % (label, ", ".join("'%s:'" % l for l in declared))
+                )
+                current = None
+                continue
+            current = [label, matched.group(2)]
+            parsed.append(current)
+        elif current is not None:
+            current[1] += " " + text
+        else:
+            reasons.append("body text sits outside any field bullet: %r" % text)
+    labels = [label for label, _ in parsed]
+    if len(set(labels)) != len(labels):
+        reasons.append("a field appears more than once")
+    elif labels != [label for label in declared if label in labels]:
+        reasons.append(
+            "fields out of declared order; the order is %s"
+            % ", ".join("'%s:'" % l for l in declared)
+        )
+    missing = [label for label in required if label not in labels]
+    if missing:
+        reasons.append(
+            "missing required field(s): %s" % ", ".join("'%s:'" % l for l in missing)
+        )
+    for label, text in parsed:
+        length = len(" ".join(text.split()))
+        if length > rule["field_max"]:
+            reasons.append(
+                "field '%s:' runs %d characters, over the %d-character bound"
+                % (label, length, rule["field_max"])
+            )
+    return reasons
 
 
 def report(path, found, rule):
