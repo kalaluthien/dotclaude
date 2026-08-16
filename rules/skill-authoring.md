@@ -37,8 +37,8 @@ needs it.
   `Explore`, `Plan`, or a name from `.claude/agents/`. The body must state the
   whole task, because a fork cannot ask the user or read the conversation.
 - Pin `model` on every fork skill. An unpinned fork inherits the invoking
-  session's model, and the top-level orchestrating model must not run inside a
-  fork. Deciding work pins `opus`.
+  session's model, which is whatever the owner selected and says nothing about
+  the fork's work. Deciding work pins `opus`, retrieval pins `sonnet`.
 - `background: false` makes the invoking turn wait for the fork's result.
 - `effort` overrides reasoning effort while the skill is active, `low` through
   `max`.
