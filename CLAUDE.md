@@ -86,6 +86,8 @@ Rules with an instruction and its rationale, grouped by the work they apply to. 
 ## State and events
 A signal means less than its name promises. Before you act on one, enumerate everything that produces it and everything that reads it.
 
+- Anchor a wait on a run's own marker, or write the run to a fresh file. A log that is appended to holds every previous run's success line, so a grep over the whole file matches the last run and returns before this one has started — and the failure looks exactly like success.
+
 - Scope a dedupe or idempotency check to unsettled records only. A key naming *what was asked for* rather than *which attempt* repeats whenever the subject returns to a state it has held, so matching it against the whole history answers a fresh request with a settled one — accepted, nothing spawned, no error to read. A failed record must stay repeatable.
 - Before you trigger on "this record just came into existence", ask what the store's own maintenance does to that signal. Compaction, repacking and reindexing announce a rewrite exactly as a creation, so a trigger reading the committed event alone fires once per record the store has ever held. The distinguishing evidence sits in the phase before the event lands, where a true creation's subject does not yet exist — sample there.
 - Derive a retention window from the longest-lived reader, and enumerate the readers before accepting any premise about who they are. The reader a discussion names is the interesting one, not the durable one: an undo expires in minutes while a drawn card waiting on a human tap outlives it by orders of magnitude. Take the maximum.
