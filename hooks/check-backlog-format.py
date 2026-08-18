@@ -25,6 +25,16 @@ What the block declares and this file compiles:
                        whole permission: without it the parenthesis belongs to
                        no token and a row carrying one is refused.
     item.title_style   bold-lead-required — the text opens with a bold run
+    item.label         where the item's group label sits and how it is spelled:
+                       position title-lead, spelling in-brackets — one or more
+                       bracketed labels at the head of the bold run, which is
+                       the only place anything groups on. With required set, a
+                       row carrying none is refused, and so is a bracket
+                       further into the title: it reads as a label to every
+                       reader that looks for one, and it would group nothing.
+                       The label's words are the author's own — the contract
+                       declares free-text and no vocabulary anywhere does
+                       otherwise.
     item.body          the body shape. style: labeled-fields — the body is
                        indented `- label: text` bullets drawn from body.fields
                        in declared order, each label at most once, required
@@ -75,6 +85,11 @@ TITLE_PATTERNS = {"bold-lead-required": r"\*\*\S"}
 # silent on the subject, and it admits none: the parenthesis is then part of no
 # token, so a row carrying one fails the expression like any other stray text.
 REASON_PATTERNS = {"": "", "in-parentheses": r"(?:\([^()]*\))?"}
+# Where the group label sits, and how it is spelled. The leading run is what a
+# grouping reader matches; the opener is what may not appear after it, since a
+# second bracket looks like a label and groups nothing.
+LABEL_POSITIONS = {"title-lead"}
+LABEL_SPELLINGS = {"in-brackets": (r"^(?:\[[^\[\]\n]+\]\s*)+", "[")}
 
 BULLET = re.compile(r"^(?:[-*+] |\d+[.)] )")
 HEADING = re.compile(r"^#{1,6}\s+(.*?)\s*$")
@@ -151,6 +166,27 @@ def contract(path=CONTRACT_DOCUMENT):
                 "%s: item.body.max_chars %r is not a positive whole number of characters"
                 % (path, budget)
             )
+    label_decl = item.get("label") or {}
+    label = None
+    if label_decl:
+        position = label_decl.get("position")
+        spelling = label_decl.get("spelling")
+        if position not in LABEL_POSITIONS:
+            raise ContractError(
+                "%s: item.label.position %r is a place this hook cannot compile"
+                % (path, position)
+            )
+        if spelling not in LABEL_SPELLINGS:
+            raise ContractError(
+                "%s: item.label.spelling %r is a form this hook cannot compile"
+                % (path, spelling)
+            )
+        lead, opener = LABEL_SPELLINGS[spelling]
+        label = {
+            "lead": re.compile(lead),
+            "opener": opener,
+            "required": bool(label_decl.get("required")),
+        }
     reason_max = tags_decl.get("reason_max_chars")
     if reason_max is not None and not (
         isinstance(reason_max, int) and not isinstance(reason_max, bool) and reason_max > 0
@@ -201,18 +237,21 @@ def contract(path=CONTRACT_DOCUMENT):
         if tags
         else "()"
     )
+    title_form = "**[LABEL] Title.**" if label else "**Title.**"
     if fields:
-        form = "`%s [<m>] %s%s **Title.**` + indented %s field bullets" % (
+        form = "`%s [<m>] %s%s %s` + indented %s field bullets" % (
             bullet,
             item.get("date"),
             " [#tag …]" if tags else "",
-            "/".join("`- %s:`" % label for label, required in fields if required),
+            title_form,
+            "/".join("`- %s:`" % name for name, required in fields if required),
         )
     else:
-        form = "`%s [<m>] %s%s **Title.** body`" % (
+        form = "`%s [<m>] %s%s %s body`" % (
             bullet,
             item.get("date"),
             " [#tag …]" if tags else "",
+            title_form,
         )
     return {
         "item": re.compile(
@@ -235,6 +274,7 @@ def contract(path=CONTRACT_DOCUMENT):
             if tags
             else r"(?!)"
         ),
+        "label": label,
         "scope_tags": scope_tags,
         "scope_required": scope_required,
         "body_max": budget,
@@ -308,6 +348,41 @@ def rows(lines, rule):
     return found
 
 
+def title(line, matched):
+    """The text inside the item's bold run, or all that follows an unclosed one.
+
+    An unterminated run is the title style's business; the label rule still
+    reads the head of it, which is where a label sits either way.
+    """
+    rest = line[matched.end(1):][len("**"):]
+    closed = rest.find("**")
+    return rest if closed < 0 else rest[:closed]
+
+
+def label_violations(text, rule):
+    """Every way one item's group label breaks the declaration.
+
+    The label is what a reader groups rows by, so a title carrying a bracket
+    anywhere but the head is refused rather than read: nothing downstream can
+    tell that one from a label, and it would put the row in a group of one.
+    """
+    lead = rule["label"]["lead"].match(text)
+    if lead is None:
+        if rule["label"]["required"]:
+            return [
+                "the bold title must open with a bracketed label naming which rows "
+                "this one belongs with, as in '**[PARSER] A plus bullet is "
+                "swallowed.**'"
+            ]
+        return []
+    if rule["label"]["opener"] in text[lead.end():]:
+        return [
+            "a bracket sits inside the title text; only the run leading the title "
+            "is a label"
+        ]
+    return []
+
+
 def body(line, matched):
     """The item line's text after the bold title.
 
@@ -354,6 +429,11 @@ def violations(path, rule):
                             "bound" % (len(reason_text), rule["reason_max"]),
                         )
                     )
+        if rule["label"]:
+            found.extend(
+                (number, line, reason)
+                for reason in label_violations(title(line, matched), rule)
+            )
         if rule["fields"]:
             found.extend(
                 (number, line, reason)

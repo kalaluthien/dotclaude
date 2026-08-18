@@ -73,88 +73,191 @@ class Fixtures(unittest.TestCase):
         return [reason for _, _, reason in hook.violations(self.board(body), self.rule(patch))]
 
 
-def item(text, marker=" ", tags="#code", title="**A short title.**"):
+def item(marker=" ", tags="#code", title="**[PARSER] A short title.**", fields=None):
+    """One row in the live labeled-fields form: a head line and field bullets."""
+    if fields is None:
+        fields = {"what": "The work.", "why": "The reason.", "how": "The next step."}
+    head = "- [%s] 2026-08-12 %s %s\n" % (marker, tags, title)
+    return head + "".join("  - %s: %s\n" % (label, text) for label, text in fields.items())
+
+
+def prose_item(text, marker=" ", tags="#code", title="**[PARSER] A short title.**"):
+    """One row in the older whole-body form, for a contract that declares it."""
     return "- [%s] 2026-08-12 %s %s %s\n" % (marker, tags, title, text)
 
 
+def prose_body(max_chars=300):
+    """A patch putting the contract back on a single folded body budget."""
+
+    def patch(data):
+        data["item"]["body"] = {"max_chars": max_chars}
+
+    return patch
+
+
 class TheLiveContract(Fixtures):
-    def test_declares_the_budget_the_writing_rule_names(self):
-        self.assertEqual(hook.contract(CONTRACT_DOCUMENT)["body_max"], 300)
+    def test_declares_the_field_bound_the_writing_rule_names(self):
+        self.assertEqual(hook.contract(CONTRACT_DOCUMENT)["field_max"], 160)
+
+    def test_requires_the_group_label(self):
+        self.assertTrue(hook.contract(CONTRACT_DOCUMENT)["label"]["required"])
 
 
 class TheBudget(Fixtures):
+    """The folded whole-body budget, for a contract that declares one."""
+
     def test_a_body_within_budget_passes(self):
-        self.assertEqual(self.reasons(item("A" * 300)), [])
+        self.assertEqual(self.reasons(prose_item("A" * 300), prose_body()), [])
 
     def test_a_body_over_budget_is_refused_by_the_budget_check(self):
-        found = self.reasons(item("A" * 301))
+        found = self.reasons(prose_item("A" * 301), prose_body())
         self.assertEqual(len(found), 1)
         self.assertIn("301 characters, over the 300-character budget", found[0])
 
     def test_wrapping_a_row_buys_it_no_room(self):
         """Continuation lines are the same body, so the count folds them in."""
-        wrapped = item("A" * 100) + "  " + "B" * 100 + "\n  " + "C" * 100 + "\n"
-        found = self.reasons(wrapped)
+        wrapped = prose_item("A" * 100) + "  " + "B" * 100 + "\n  " + "C" * 100 + "\n"
+        found = self.reasons(wrapped, prose_body())
         self.assertEqual(len(found), 1)
         self.assertIn("302 characters", found[0])
 
     def test_the_same_text_split_under_the_budget_passes(self):
-        wrapped = item("A" * 100) + "  " + "B" * 100 + "\n  " + "C" * 97 + "\n"
-        self.assertEqual(self.reasons(wrapped), [])
+        wrapped = prose_item("A" * 100) + "  " + "B" * 100 + "\n  " + "C" * 97 + "\n"
+        self.assertEqual(self.reasons(wrapped, prose_body()), [])
 
     def test_the_title_itself_is_not_counted(self):
-        long_title = "**%s.**" % ("T" * 400)
-        self.assertEqual(self.reasons(item("A" * 200, title=long_title)), [])
+        long_title = "**[PARSER] %s.**" % ("T" * 400)
+        self.assertEqual(
+            self.reasons(prose_item("A" * 200, title=long_title), prose_body()), []
+        )
 
     def test_a_prose_section_bullet_is_not_measured(self):
         body = "## Horizon (dots noted)\n\n- " + "A" * 500 + "\n"
-        self.assertEqual(self.reasons(body), [])
+        self.assertEqual(self.reasons(body, prose_body()), [])
 
     def test_a_fenced_specimen_is_not_measured(self):
-        body = "```\n" + item("A" * 500) + "```\n"
-        self.assertEqual(self.reasons(body), [])
+        body = "```\n" + prose_item("A" * 500) + "```\n"
+        self.assertEqual(self.reasons(body, prose_body()), [])
 
     def test_a_contract_without_the_key_measures_nothing(self):
         def drop(data):
             del data["item"]["body"]
 
-        self.assertEqual(self.reasons(item("A" * 900), drop), [])
+        self.assertEqual(self.reasons(prose_item("A" * 900), drop), [])
 
     def test_a_budget_that_is_not_a_positive_number_is_a_contract_error(self):
         for bad in ("300", 0, -1, True, None):
-            def patch(data, bad=bad):
-                data["item"]["body"] = {"max_chars": bad}
-
             with self.assertRaises(hook.ContractError) as caught:
-                self.rule(patch)
+                self.rule(prose_body(bad))
             self.assertIn("item.body.max_chars", str(caught.exception))
 
 
+class TheFields(Fixtures):
+    """The labeled-fields body the live contract declares."""
+
+    def test_a_row_with_the_required_fields_passes(self):
+        self.assertEqual(self.reasons(item()), [])
+
+    def test_a_row_missing_a_required_field_is_refused(self):
+        found = self.reasons(item(fields={"what": "The work."}))
+        self.assertEqual(len(found), 1)
+        self.assertIn("missing required field(s): 'why:', 'how:'", found[0])
+
+    def test_a_field_over_its_bound_is_refused(self):
+        found = self.reasons(
+            item(fields={"what": "A" * 161, "why": "The reason.", "how": "The step."})
+        )
+        self.assertEqual(len(found), 1)
+        self.assertIn("161 characters, over the 160-character bound", found[0])
+
+
+class TheLabel(Fixtures):
+    """The bracketed label leading the bold title, which is what groups rows."""
+
+    def test_a_labelled_row_passes(self):
+        self.assertEqual(self.reasons(item(title="**[PARSER] A short title.**")), [])
+
+    def test_a_run_of_leading_labels_passes(self):
+        """A row may lead with more than one; the first is the group it joins."""
+        self.assertEqual(
+            self.reasons(item(title="**[PARSER] [HOOKS] A short title.**")), []
+        )
+
+    def test_a_row_without_a_label_is_refused_by_the_label_check(self):
+        found = self.reasons(item(title="**A short title.**"))
+        self.assertEqual(len(found), 1)
+        self.assertIn("must open with a bracketed label", found[0])
+
+    def test_a_bracket_later_in_the_title_is_refused_by_the_label_check(self):
+        found = self.reasons(item(title="**[PARSER] A [plus] bullet is swallowed.**"))
+        self.assertEqual(len(found), 1)
+        self.assertIn("only the run leading the title is a label", found[0])
+
+    def test_a_bracket_in_the_body_is_left_alone(self):
+        """The rule is about the title; a field may quote whatever it needs."""
+        self.assertEqual(
+            self.reasons(
+                item(
+                    fields={
+                        "what": "Fix [x] input.",
+                        "why": "It breaks.",
+                        "how": "Patch it.",
+                    }
+                )
+            ),
+            [],
+        )
+
+    def test_a_contract_that_does_not_require_one_allows_an_unlabelled_row(self):
+        def optional(data):
+            data["item"]["label"]["required"] = False
+
+        self.assertEqual(self.reasons(item(title="**A short title.**"), optional), [])
+
+    def test_a_contract_without_the_key_asks_for_no_label(self):
+        def drop(data):
+            del data["item"]["label"]
+
+        self.assertEqual(self.reasons(item(title="**A [short] title.**"), drop), [])
+
+    def test_a_label_rule_this_hook_cannot_compile_is_a_contract_error(self):
+        for key, bad in (("position", "anywhere"), ("spelling", "in-braces")):
+            def patch(data, key=key, bad=bad):
+                data["item"]["label"][key] = bad
+
+            with self.assertRaises(hook.ContractError) as caught:
+                self.rule(patch)
+            self.assertIn("item.label.%s" % key, str(caught.exception))
+
+    def test_the_refusal_names_the_form_the_label_belongs_to(self):
+        self.assertIn("**[LABEL] Title.**", self.rule()["form"])
+
+
 class TheGrammar(Fixtures):
-    """The rules that stood before the budget, over the rewritten row reader."""
+    """The rules that stood before the label, over the same row reader."""
 
     def test_a_well_formed_row_passes(self):
-        self.assertEqual(self.reasons(item("Short body.")), [])
+        self.assertEqual(self.reasons(item()), [])
 
     def test_a_row_without_a_scope_tag_is_refused(self):
-        found = self.reasons(item("Short body.", tags="#need-you"))
+        found = self.reasons(item(tags="#need-you"))
         self.assertEqual(len(found), 1)
         self.assertIn("needs at least one scope tag", found[0])
 
     def test_a_row_without_a_bold_title_is_refused(self):
-        found = self.reasons(item("Short body.", title="A plain title."))
+        found = self.reasons(item(title="[PARSER] A plain title."))
         self.assertEqual(len(found), 1)
         self.assertIn("expected", found[0])
 
     def test_one_row_can_break_two_rules_at_once(self):
-        found = self.reasons(item("A" * 400, tags="#need-you"))
+        found = self.reasons(item(tags="#need-you", title="**A short title.**"))
         self.assertEqual(len(found), 2)
 
 
 class TheEntryPoints(Fixtures):
     def test_the_report_counts_items_not_reasons(self):
         rule = self.rule()
-        path = self.board(item("A" * 400, tags="#need-you"))
+        path = self.board(item(tags="#need-you", title="**A short title.**"))
         found = hook.violations(path, rule)
         self.assertIn("1 backlog item(s)", hook.report(path, found, rule))
 
