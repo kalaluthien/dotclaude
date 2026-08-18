@@ -44,6 +44,14 @@ What the block declares and this file compiles:
                        whole-body budget. Bounds are ceilings the hook counts;
                        plainness stays author discipline, so a row inside
                        every bound can still break the writing rule.
+    item.tags.kinds[].field_max_chars
+                       one kind's own field bound, which replaces the body-wide
+                       one for a row carrying it — a hard row needs room to say
+                       what it is and an easy one does not. Absent says nothing
+                       and leaves the body-wide bound answering. Where a row
+                       carries more than one, the widest wins: the bounds move
+                       with difficulty, so the widest is what the hardest claim
+                       on the row asked for.
     item.tags.reason_max_chars
                        the bound on one tag's parenthesised reason.
     sections.match     word-prefix — a prose heading is a listed name, alone
@@ -133,6 +141,21 @@ def contract(path=CONTRACT_DOCUMENT):
     kinds = tags_decl.get("kinds") or []
     tags = [str(row.get("tag", "")) for row in kinds]
     scope_tags = [str(row.get("tag", "")) for row in kinds if row.get("scope")]
+    field_max_by_tag = {}
+    for row in kinds:
+        if "field_max_chars" not in row:
+            continue
+        declared = row["field_max_chars"]
+        if not (
+            isinstance(declared, int)
+            and not isinstance(declared, bool)
+            and declared > 0
+        ):
+            raise ContractError(
+                "%s: item.tags.kinds %r field_max_chars %r is not a positive whole "
+                "number of characters" % (path, str(row.get("tag", "")), declared)
+            )
+        field_max_by_tag[str(row.get("tag", ""))] = declared
     scope_required = bool(tags_decl.get("scope_required"))
     if scope_required and not scope_tags:
         raise ContractError(
@@ -280,6 +303,7 @@ def contract(path=CONTRACT_DOCUMENT):
         "body_max": budget,
         "fields": fields,
         "field_max": field_max,
+        "field_max_by_tag": field_max_by_tag,
         "reason_max": reason_max,
         "form": form,
         "markers": markers,
@@ -435,10 +459,17 @@ def violations(path, rule):
                 for reason in label_violations(title(line, matched), rule)
             )
         if rule["fields"]:
+            # The widest the row's own tags ask for, and the body-wide bound
+            # when they ask for nothing — the same tie-break the effort rule
+            # makes, because the bounds move with the same claim.
+            bound = max(
+                (rule["field_max_by_tag"][tag] for tag in carried if tag in rule["field_max_by_tag"]),
+                default=rule["field_max"],
+            )
             found.extend(
                 (number, line, reason)
                 for reason in field_violations(
-                    body(line, matched), continuation, rule
+                    body(line, matched), continuation, rule, bound
                 )
             )
         elif rule["body_max"]:
@@ -460,8 +491,12 @@ def violations(path, rule):
 FIELD = re.compile(r"^- ([A-Za-z]+):\s*(.*)$")
 
 
-def field_violations(head_rest, continuation, rule):
-    """Every way one item's labeled-fields body breaks the declaration."""
+def field_violations(head_rest, continuation, rule, bound):
+    """Every way one item's labeled-fields body breaks the declaration.
+
+    `bound` is this row's own field ceiling, resolved from the tags it
+    carries, so a row is measured against what its own difficulty asks for.
+    """
     reasons = []
     if head_rest.strip():
         reasons.append(
@@ -503,10 +538,10 @@ def field_violations(head_rest, continuation, rule):
         )
     for label, text in parsed:
         length = len(" ".join(text.split()))
-        if length > rule["field_max"]:
+        if length > bound:
             reasons.append(
                 "field '%s:' runs %d characters, over the %d-character bound"
-                % (label, length, rule["field_max"])
+                % (label, length, bound)
             )
     return reasons
 

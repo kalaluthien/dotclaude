@@ -102,6 +102,14 @@ class TheLiveContract(Fixtures):
     def test_requires_the_group_label(self):
         self.assertTrue(hook.contract(CONTRACT_DOCUMENT)["label"]["required"])
 
+    def test_moves_that_bound_with_the_rows_difficulty(self):
+        """The numbers the writing rule names, read off the kinds that carry
+        them rather than off a list kept here."""
+        self.assertEqual(
+            hook.contract(CONTRACT_DOCUMENT)["field_max_by_tag"],
+            {"easy": 120, "hard": 200},
+        )
+
 
 class TheBudget(Fixtures):
     """The folded whole-body budget, for a contract that declares one."""
@@ -169,6 +177,84 @@ class TheFields(Fixtures):
         )
         self.assertEqual(len(found), 1)
         self.assertIn("161 characters, over the 160-character bound", found[0])
+
+
+def graded(easy=120, hard=200):
+    """A patch giving the two difficulty kinds their own field bounds.
+
+    Written as a patch on the live contract, like every fixture here, so the
+    numbers under test are the shape the pools use and not a second copy.
+    """
+
+    def patch(data):
+        for kind in data["item"]["tags"]["kinds"]:
+            if kind["tag"] == "easy":
+                kind["field_max_chars"] = easy
+            elif kind["tag"] == "hard":
+                kind["field_max_chars"] = hard
+
+    return patch
+
+
+class TheFieldBoundPerRow(Fixtures):
+    """The bound a row is measured against, which its own tags may move."""
+
+    def field(self, length, tags):
+        return item(
+            tags=tags,
+            fields={"what": "A" * length, "why": "The reason.", "how": "The step."},
+        )
+
+    def test_a_hard_row_may_be_written_wider_than_the_body_wide_bound(self):
+        self.assertEqual(self.reasons(self.field(200, "#hard #code"), graded()), [])
+
+    def test_the_same_row_without_the_hard_tag_is_refused(self):
+        """The pair that proves the tag is what moved the bound."""
+        found = self.reasons(self.field(200, "#code"), graded())
+        self.assertEqual(len(found), 1)
+        self.assertIn("200 characters, over the 160-character bound", found[0])
+
+    def test_a_hard_row_past_its_own_wider_bound_is_still_refused(self):
+        found = self.reasons(self.field(201, "#hard #code"), graded())
+        self.assertEqual(len(found), 1)
+        self.assertIn("201 characters, over the 200-character bound", found[0])
+
+    def test_an_easy_row_is_held_to_less_than_the_body_wide_bound(self):
+        found = self.reasons(self.field(121, "#easy #code"), graded())
+        self.assertEqual(len(found), 1)
+        self.assertIn("121 characters, over the 120-character bound", found[0])
+        self.assertEqual(self.reasons(self.field(120, "#easy #code"), graded()), [])
+
+    def test_two_difficulty_claims_on_one_row_resolve_to_the_widest(self):
+        """The tie-break the effort rule already makes, for the same reason:
+        the bounds move with difficulty, so the widest is what the hardest
+        claim on the row asked for."""
+        self.assertEqual(
+            self.reasons(self.field(200, "#easy #hard #code"), graded()), []
+        )
+
+    def test_a_row_wearing_no_difficulty_falls_to_the_body_wide_bound(self):
+        self.assertEqual(self.reasons(self.field(160, "#code"), graded()), [])
+        found = self.reasons(self.field(161, "#code"), graded())
+        self.assertIn("over the 160-character bound", found[0])
+
+    def test_a_contract_whose_kinds_bound_nothing_measures_every_row_alike(self):
+        """The shape the pools had before the key, and the one a pool that
+        never declares it keeps."""
+
+        def drop(data):
+            for kind in data["item"]["tags"]["kinds"]:
+                kind.pop("field_max_chars", None)
+
+        self.assertEqual(self.reasons(self.field(160, "#hard #code"), drop), [])
+        found = self.reasons(self.field(161, "#hard #code"), drop)
+        self.assertIn("over the 160-character bound", found[0])
+
+    def test_a_kinds_bound_that_is_not_a_positive_number_is_a_contract_error(self):
+        for bad in ("200", 0, -1, True, None):
+            with self.assertRaises(hook.ContractError) as caught:
+                self.rule(graded(hard=bad))
+            self.assertIn("field_max_chars", str(caught.exception))
 
 
 class TheLabel(Fixtures):
