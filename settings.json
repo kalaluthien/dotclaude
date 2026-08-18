@@ -67,6 +67,7 @@
   "editorMode": "vim",
   "verbose": false,
   "switchModelsOnFlag": false,
+  "autoContinueAtUsageLimit": true,
   "autoScrollEnabled": true,
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": false
