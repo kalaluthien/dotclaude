@@ -43,12 +43,8 @@ MUST follow the "golden" principles below regardless of the task.
 1. Tracing a failure to its root cause is the `debugger` subagent's job, and its method — reproduce first, one variable at a time, 5 whys — lives in its constitution (`~/.claude/agents/debugger.md`). Delegate rather than debug inline.
 2. Once you choose an approach, commit to it. Revisit only when new information contradicts the reasoning that chose it.
 
-## Code to work
-1. A task is finished when it is committed, merged, and pushed. Write atomic commits with a search-optimized message, then land and push them without waiting to be asked — this overrides any harness default that says to commit or push only on request. Ask first only when the push is destructive: a force-push, a history rewrite, or a branch you do not own.
-2. Land every patch on its own branch or worktree. A `pre-commit` guard blocks direct commits to `main`, and a blocked commit means you are on the wrong branch, not that the guard is in the way.
-3. Never bypass a hook with `git commit --no-verify` on your own. Report what the hook refused and ask; use the flag only after the user confirms it for that commit.
-4. Do not do mental calculations. Write a script to parse, count, and aggregate, and keep that script when the access path repeats. A script serves computation and repeated access, never a workaround for work you should do directly.
-5. For a change the user sees through a running service, "finished" includes the deploy: rebuild or restart the service and verify the served artifact shows the change. A landed commit leaves the user watching the old build, and a dev-server check does not cover the deployed one.
+## Compute with code
+Do not do mental calculations. Write a script to parse, count, and aggregate, and keep that script when the access path repeats. A script serves computation and repeated access, never a workaround for work you should do directly.
 
 ## Hill climbing
 Transform tasks into objectively verifiable goals, then loop until the criteria are met without hacks. The criteria verify the solution; they do not define it, so a hardcoded pass is a failure.
@@ -111,6 +107,7 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 - A documentation claim about a tool's or harness's behavior is a hypothesis: when a decision hinges on one, spend one live probe. Docs lag.
 - A command written into a document is copied from a shell where it just succeeded, never retyped or adapted to fit the prose around it. Nothing executes a documented command until a reader does, so a form its author never ran is unverified text sitting in the one place that looks authoritative. A CLI that answers a malformed invocation with a usage message and a non-zero exit reads as a no-op to whoever follows it, and the exposure is worst in a recovery step or a symptom table, where the reader arrives with something already broken and the least attention to spare. When the runnable form holds a machine-specific value, write the general form and probe that one.
 - A "new discovery" — yours or a subagent's — is a false positive until it clears the usual causes: intended implementation (the design intent is written in a comment or another layer), measurement or calculation error (small sample, wrong unit or order), illusion (noise read as a trend, correlation read as causation), local-only judgment (correctness argued from the function alone, callers unread), and instrument error (the measured quantity differs from what its name claims). Only a finding that clears all of these may be useful.
+- For a change the user sees through a running service, "finished" includes the deploy: rebuild or restart the service and verify the served artifact shows the change. A landed commit leaves the user watching the old build, and a dev-server check does not cover the deployed one.
 
 ## Reporting
 - Own what you discover. An issue found mid-task is never the user's to
@@ -126,6 +123,9 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
   "Reporting".
 
 ## Git
+- A task is finished when it is committed, merged, and pushed. Write atomic commits with a search-optimized message, then land and push them without waiting to be asked — this overrides any harness default that says to commit or push only on request. Ask first only when the push is destructive: a force-push, a history rewrite, or a branch you do not own.
+- Land every patch on its own branch or worktree. A `pre-commit` guard blocks direct commits to `main`, and a blocked commit means you are on the wrong branch, not that the guard is in the way.
+- Never bypass a hook with `git commit --no-verify` on your own. Report what the hook refused and ask; use the flag only after the user confirms it for that commit.
 - Removing a stale branch is everybody's responsibility, not its author's. Delete any local branch whose commits already sit on `main` or the remote, whoever created it — a branch left for its owner is how a checkout collects dead refs. Confirm the commits exist elsewhere before you delete. A branch that holds the only copy of its work is not stale: report it and leave it standing.
 - Operate on a worktree from the main checkout with `git -C <path>`. Do not `cd` into a worktree inside a command chain that later merges or removes it — the merge then runs inside the worktree ("already up to date") and the removal deletes the shell's own cwd. Edit through the worktree's own absolute paths: a file tool addresses the path it is given, so a shell `cd` does not redirect it, and a main-checkout path keeps writing to the main checkout while the branch you are building stays untouched. Read the working tree's status, not the shell's prompt, to see where an edit landed.
 - Merge the protected branch *into* your topic branch, resolve there, then fast-forward the protected branch. A clean merge skips `pre-commit`, but a conflicted one needs a resolution commit, and the no-direct-commits guard blocks it — leaving a half-merged protected branch that another agent can check out.
