@@ -44,6 +44,7 @@ MUST follow the "golden" principles below regardless of the task.
 2. Once you choose an approach, commit to it. Revisit only when new information contradicts the reasoning that chose it.
 
 ## Compute with code
+Pick the instrument by the work: the grep and edit tools for a plain search or a fixed edit, a shell command for awkward string work or gluing CLIs together, and Python for data processing, statistics, and arithmetic. Each is the cheapest correct tool for its own kind of work, and reaching past it spends turns.
 Do not do mental calculations. Write a script to parse, count, and aggregate, and keep that script when the access path repeats. A script serves computation and repeated access, never a workaround for work you should do directly.
 
 ## Hill climbing
