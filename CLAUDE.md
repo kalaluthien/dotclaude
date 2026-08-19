@@ -176,19 +176,19 @@ On every save, take exactly one route: update the file that already covers the t
 
 ### Tickets
 
-A ticket is one filed piece of work. Tickets live in the board server's own store, not in files (owner decision 2026-08-19; board `docs/data-ticket-store.html`). File, change, and close a ticket by calling the server at `localhost:8300` — never by writing a file. The five doors, and the dry run:
+A **backlog-ticket** is one filed piece of work; *ticket* is its short form inside this section. Board's other record, the **service-ticket**, is board's own record of running one and is not filed here. Tickets live in the board server's own store, not in files (owner decision 2026-08-19; the proposal that settled it is in board's git history). File, change, and close a ticket by calling the server at `localhost:8300` — never by writing a file. The five doors, and the dry run:
 
-- `POST /api/tickets` — file a ticket into a pool; with `?validate=1` it runs every check and writes nothing (the dry run).
-- `PATCH /api/tickets/{id}/head` — the marker, tags, labels, and title.
-- `PATCH /api/tickets/{id}/body` — the body fields and the prose, replaced whole.
-- `POST /api/tickets/{id}/claim` — take the working marker; the store refuses a row another session holds.
-- `DELETE /api/tickets/{id}` — close. Closing deletes the row, and the event log keeps its words.
+- `POST /api/backlog-tickets` — file a ticket into a pool; with `?validate=1` it runs every check and writes nothing (the dry run).
+- `PATCH /api/backlog-tickets/{id}/head` — the marker, tags, labels, and title.
+- `PATCH /api/backlog-tickets/{id}/body` — the body fields and the prose, replaced whole.
+- `POST /api/backlog-tickets/{id}/claim` — take the working marker; the store refuses a row another session holds.
+- `DELETE /api/backlog-tickets/{id}` — close. Closing marks the row `done` and keeps it for good; the board stops drawing it.
 
 Read tickets from `GET /api/snapshot` on the same server: it carries every pool's cards. When a task finishes, read the owning pool's tickets and close or update whatever it settled — nothing else retires a row.
 
 The ticket grammar — markers, tag kinds, labels, body fields, bounds, and the reasons behind them — is board's spec, `~/workspace/board/docs/data-ticket-contract.md`; the request shapes are the server's `/openapi.json`. The door checks a request against the grammar before the write, and a refusal is typed: fix what it names and call again. A working example, run 2026-08-19:
 
-    curl -s -X POST 'http://localhost:8300/api/tickets?validate=1' -H 'Content-Type: application/json' -d '{"pool":"workspace","title":"Probe the filing door.","labels":["PROBE"],"tags":["docs"],"fields":{"what":"Check the dry run answers.","why":"A documented command must have run once.","how":"Discard the answer."}}'
+    curl -s -X POST 'http://localhost:8300/api/backlog-tickets?validate=1' -H 'Content-Type: application/json' -d '{"project":"workspace","title":"Probe the filing door.","labels":["PROBE"],"tags":["docs"],"fields":{"what":"Check the dry run answers.","why":"A documented command must have run once.","how":"Discard the answer."}}'
 
 Work owed to the owner is a `#need-you` ticket in the owning pool, never a file or a second list. A `#need-you` ticket holds its own next transition: never start an open one and never close a working one on your own initiative. A prompt saying the owner confirmed the row carries the owner's decision, so it starts the row and drops the tag. Before closing any ticket, lift an owed action still buried in it into its own `#need-you` ticket: a shipped row can still carry unshipped debt.
 
