@@ -184,7 +184,7 @@ A ticket is one filed piece of work. Tickets live in the board server's own stor
 - `POST /api/tickets/{id}/claim` — take the working marker; the store refuses a row another session holds.
 - `DELETE /api/tickets/{id}` — close. Closing deletes the row, and the event log keeps its words.
 
-Read tickets from `GET /api/snapshot` on the same server: it carries every pool's cards, from the store and from any pool file still standing.
+Read tickets from `GET /api/snapshot` on the same server: it carries every pool's cards, from the store and from any pool file still standing. When a task finishes, read the owning pool's tickets and close or update whatever it settled — nothing else retires a row.
 
 The ticket grammar — markers, tag kinds, labels, body fields, bounds, and the reasons behind them — is board's spec, `~/workspace/board/docs/data-ticket-contract.md`; the request shapes are the server's `/openapi.json`. The door checks a request against the grammar before the write, and a refusal is typed: fix what it names and call again. A working example, run 2026-08-19:
 
@@ -192,13 +192,13 @@ The ticket grammar — markers, tag kinds, labels, body fields, bounds, and the 
 
 Work owed to the owner is a `#need-you` ticket in the owning pool, never a file or a second list. A `#need-you` ticket holds its own next transition: never start an open one and never close a working one on your own initiative. A prompt saying the owner confirmed the row carries the owner's decision, so it starts the row and drops the tag. Before closing any ticket, lift an owed action still buried in it into its own `#need-you` ticket: a shipped row can still carry unshipped debt.
 
-Two shapes coexist until the last pool file goes. A **migrated pool** (today: garden, mabinogi-mobile-automation) has no `backlog.md`; every one of its tickets is in the store. A pool whose **`backlog.md` still stands** (today: camera, notes, workspace, board) is still read as before, and a row already in that file is changed or closed by editing that file — one row at a time, with the Edit tool — until the pool migrates. A new ticket goes through the door for every pool, migrated or not, and nothing ever creates a `backlog.md`: a deleted one stays deleted.
+Two shapes coexist until the last pool file goes. A **migrated pool** — every pool but board's, since 2026-08-19 — has no `backlog.md`, and every one of its tickets is filed, changed and closed at the doors above. Board's own pool is the one whose **`backlog.md` still stands**: it is read as before, and a row already in that file is changed or closed by editing the file — one row at a time, with the Edit tool — until that pool migrates too. A new ticket goes through the door for every pool, migrated or not, and nothing ever creates a `backlog.md`: a deleted one stays deleted.
 
 ### The pool contract
 
 The block below is the machine copy of the memory-pool half: where a pool lives, how its directory name encodes a project, the index file, the prose-section rule, and the frontmatter keys. Every program that reads a pool parses it instead of keeping its own copy — the board service and the `check-memtype.py` hook both do — so a change to any of those shapes is made here, in the same commit as the prose it follows. A value the deployed board cannot compile empties its surfaces, so a widening ships in board first (the workspace pool's `topic-pool-contract-rollout`).
 
-The block's `item` half is the ticket grammar of the pool files that still stand, kept only for them: the deployed board still compiles it to read those files. The grammar's home is now board's `contract=ticket` block in `data-ticket-contract.md`; the two copies must agree while both exist, so edit this one only together with board's, and this copy retires with the last `backlog.md`.
+The block's `item` half is the ticket grammar of the one pool file that still stands, board's, and is kept only for it: the deployed board still compiles it to read that file. The grammar's home is now board's `contract=ticket` block in `data-ticket-contract.md`; the two copies must agree while both exist, so edit this one only together with board's, and this copy retires with the last `backlog.md`.
 
 ```json contract=pool
 {
