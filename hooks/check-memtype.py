@@ -11,8 +11,7 @@ opens with, paired with the `type` its row names. This hook parses that table
 out of the document and compiles what it says; a copy kept here would drift
 exactly the way the files did. Where a pool lives, which file is its index, and
 which frontmatter key carries the declaration all come from the same document's
-fenced `json contract=pool` block, read the way check-backlog-format.py reads
-it.
+fenced `json contract=pool` block.
 
 A name matching no row of the table is a refusal too, not a pass: the Filing
 prose says a new memtype is invented by adding it to the table in the same
