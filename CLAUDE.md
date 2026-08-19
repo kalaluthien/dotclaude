@@ -184,6 +184,8 @@ A **backlog-ticket** is one filed piece of work; *ticket* is its short form insi
 - `POST /api/backlog-tickets/{id}/claim` — take the working marker; the store refuses a row another session holds.
 - `DELETE /api/backlog-tickets/{id}` — close. Closing marks the row `done` and keeps it for good; the board stops drawing it.
 
+Name yourself on every one of the five: send `session_id` (your `CLAUDE_CODE_SESSION_ID`) and `session_name` beside `actor` — body fields, or query parameters on the `DELETE`. Board links the row to your session, which is what answers who worked it once it is closed. All three are optional and none is ever a refusal (board v2.1.0).
+
 Read tickets from `GET /api/snapshot` on the same server: it carries every pool's cards. When a task finishes, read the owning pool's tickets and close or update whatever it settled — nothing else retires a row.
 
 The ticket grammar — markers, tag kinds, labels, body fields, bounds, and the reasons behind them — is board's spec, `~/workspace/board/docs/data-ticket-contract.md`; the request shapes are the server's `/openapi.json`. The door checks a request against the grammar before the write, and a refusal is typed: fix what it names and call again. A working example, run 2026-08-19:
