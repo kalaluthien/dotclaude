@@ -128,7 +128,7 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 ## Reporting
 - Own what you discover. An issue found mid-task is never the user's to
   triage: fix it in the same task when it is in scope, delegate or file it
-  to the owning backlog when it is not, and name it to the user only when
+  to the owning pool's tickets when it is not, and name it to the user only when
   it blocks the task or the decision is theirs. An "awareness" or
   "follow-ups" list outsources triage to the reader — the fix for wanting
   to write one is to go do the work.
@@ -165,10 +165,10 @@ A memory file holds one *subject* — the facts a reader asks for in one go, as 
 | type | holds | subcategory prefixes | lifecycle |
 |---|---|---|---|
 | **episodic** | what happened | `history-<topic>` | `history-*` is append-only |
-| **semantic** | what is true | `backlog`, `topic-<topic>` | updated in place; a `backlog` item is deleted when it closes |
+| **semantic** | what is true | `topic-<topic>` | updated in place |
 | **procedural** | how to act | `feedback-<topic>`, `setup-<topic>`, `pitfalls` | updated in place; deleted when the tool or fact is gone |
 
-The memtypes divide by what would make the file wrong. Nothing falsifies `history-`, so it only grows, and it records what version control cannot: changes to unversioned things, and rejected options with their kill reasons. A `backlog` item dies when its work closes. A `topic-` file states the current truth of one subject and is updated in place; the events that made it true stay in the paired `history-` file. It splits from `setup-` by recovery cost: a `setup-` fact is one probe away, a `topic-` truth was bought by analysis no probe re-derives. Neither holds external technical knowledge, which belongs to the notes wiki, nor a repository's own truth, which belongs to that repository's `docs/`. A `feedback-` rule was given by the owner — a correction bought with an observed failure, or a standing fact about what they prefer — so losing one repeats the failure or re-asks the owner. A decision is not a memtype: the choice goes to `history-` when its evidence would otherwise vanish, and the chosen rule lives where rules of its kind live. A file's frontmatter `description` and its `MEMORY.md` line state the file's role, never its contents, because a content list goes stale on the file's next edit.
+The memtypes divide by what would make the file wrong. Nothing falsifies `history-`, so it only grows, and it records what version control cannot: changes to unversioned things, and rejected options with their kill reasons. A `topic-` file states the current truth of one subject and is updated in place; the events that made it true stay in the paired `history-` file. It splits from `setup-` by recovery cost: a `setup-` fact is one probe away, a `topic-` truth was bought by analysis no probe re-derives. Neither holds external technical knowledge, which belongs to the notes wiki, nor a repository's own truth, which belongs to that repository's `docs/`. A `feedback-` rule was given by the owner — a correction bought with an observed failure, or a standing fact about what they prefer — so losing one repeats the failure or re-asks the owner. A decision is not a memtype: the choice goes to `history-` when its evidence would otherwise vanish, and the chosen rule lives where rules of its kind live. A file's frontmatter `description` and its `MEMORY.md` line state the file's role, never its contents, because a content list goes stale on the file's next edit.
 
 A file name carries no date and no project name: the pool directory already names the project, so a pool holds at most one `pitfalls.md`. A date in a name forces a rename on every update, and a second write then lands beside the first instead of on it.
 
@@ -184,7 +184,7 @@ A ticket is one filed piece of work. Tickets live in the board server's own stor
 - `POST /api/tickets/{id}/claim` — take the working marker; the store refuses a row another session holds.
 - `DELETE /api/tickets/{id}` — close. Closing deletes the row, and the event log keeps its words.
 
-Read tickets from `GET /api/snapshot` on the same server: it carries every pool's cards, from the store and from any pool file still standing. When a task finishes, read the owning pool's tickets and close or update whatever it settled — nothing else retires a row.
+Read tickets from `GET /api/snapshot` on the same server: it carries every pool's cards. When a task finishes, read the owning pool's tickets and close or update whatever it settled — nothing else retires a row.
 
 The ticket grammar — markers, tag kinds, labels, body fields, bounds, and the reasons behind them — is board's spec, `~/workspace/board/docs/data-ticket-contract.md`; the request shapes are the server's `/openapi.json`. The door checks a request against the grammar before the write, and a refusal is typed: fix what it names and call again. A working example, run 2026-08-19:
 
@@ -192,13 +192,15 @@ The ticket grammar — markers, tag kinds, labels, body fields, bounds, and the 
 
 Work owed to the owner is a `#need-you` ticket in the owning pool, never a file or a second list. A `#need-you` ticket holds its own next transition: never start an open one and never close a working one on your own initiative. A prompt saying the owner confirmed the row carries the owner's decision, so it starts the row and drops the tag. Before closing any ticket, lift an owed action still buried in it into its own `#need-you` ticket: a shipped row can still carry unshipped debt.
 
-Two shapes coexist until the last pool file goes. A **migrated pool** — every pool but board's, since 2026-08-19 — has no `backlog.md`, and every one of its tickets is filed, changed and closed at the doors above. Board's own pool is the one whose **`backlog.md` still stands**: it is read as before, and a row already in that file is changed or closed by editing the file — one row at a time, with the Edit tool — until that pool migrates too. A new ticket goes through the door for every pool, migrated or not, and nothing ever creates a `backlog.md`: a deleted one stays deleted.
+Every pool's tickets are in the store, since 2026-08-19 — there is no pool `backlog.md` anywhere, and nothing may write one. A file of that name would put a pool's work in two homes nobody reconciles, and the board draws no card from one.
 
 ### The pool contract
 
 The block below is the machine copy of the memory-pool half: where a pool lives, how its directory name encodes a project, the index file, the prose-section rule, and the frontmatter keys. Every program that reads a pool parses it instead of keeping its own copy — the board service and the `check-memtype.py` hook both do — so a change to any of those shapes is made here, in the same commit as the prose it follows. A value the deployed board cannot compile empties its surfaces, so a widening ships in board first (the workspace pool's `topic-pool-contract-rollout`).
 
-The block's `item` half is the ticket grammar of the one pool file that still stands, board's, and is kept only for it: the deployed board still compiles it to read that file. The grammar's home is now board's `contract=ticket` block in `data-ticket-contract.md`; the two copies must agree while both exist, so edit this one only together with board's, and this copy retires with the last `backlog.md`.
+The ticket grammar is not here. It lives in board's `contract=ticket` block, `~/workspace/board/docs/data-ticket-contract.md`, which lands in the same repository as the build that compiles it. This block's `item` half was the copy the last pool file needed, and it retired with that file on 2026-08-19.
+
+`board_file` outlives the files. It is the one filename a pool may not hold, and it is what board reads to keep such a file off its memory listing — a `backlog.md` somebody wrote back would draw no card and appear nowhere.
 
 ```json contract=pool
 {
@@ -216,73 +218,6 @@ The block's `item` half is the ticket grammar of the one pool file that still st
       { "match": "-workspace", "project": "workspace", "role": "workspace" },
       { "match": "--claude", "project": "user", "role": "user" }
     ]
-  },
-
-  "item": {
-    "bullet": "-",
-    "column": 0,
-    "date": "YYYY-MM-DD",
-    "title_style": "bold-lead-required",
-    "label": {
-      "position": "title-lead",
-      "spelling": "in-brackets",
-      "vocabulary": "free-text",
-      "required": true,
-      "means": "which rows of the file this one belongs with"
-    },
-    "body": {
-      "style": "labeled-fields",
-      "field_max_chars": 160,
-      "fields": [
-        { "label": "what", "required": true, "reader": "both",
-          "means": "the work in one plain sentence" },
-        { "label": "why", "required": true, "reader": "reviewer",
-          "means": "why the item exists, and why this way of solving it was chosen — in simple sentences" },
-        { "label": "how", "required": true, "reader": "reviewer",
-          "means": "the next step and who takes it" },
-        { "label": "where", "required": false, "reader": "worker",
-          "means": "what the worker touches" },
-        { "label": "when", "required": false, "reader": "both",
-          "means": "dependencies in and out — rows in other backlogs this item waits on, and rows there that wait on it" },
-        { "label": "context", "required": false, "reader": "worker",
-          "means": "the detailed context — paths, commits, dates, and everything the other fields do not carry" }
-      ]
-    },
-    "markers": [
-      { "marker": " ", "status": "open" },
-      { "marker": "/", "status": "working" }
-    ],
-    "tags": {
-      "position": "after-date",
-      "reason": "in-parentheses",
-      "reason_max_chars": 40,
-      "scope_required": true,
-      "effort_default": "medium",
-      "kinds": [
-        { "tag": "need-you", "waits_on": "owner", "emphasis": "accent", "rank": "first",
-          "means": "the next step is the owner's" },
-        { "tag": "easy", "waits_on": "nobody", "emphasis": "muted", "rank": "none", "effort": "low",
-          "field_max_chars": 120,
-          "means": "the work is well understood and narrow, so a session needs little thinking to finish it" },
-        { "tag": "hard", "waits_on": "nobody", "emphasis": "muted", "rank": "none", "effort": "high",
-          "field_max_chars": 200,
-          "means": "the work is difficult or reads more than one way, so a session needs room to think" },
-        { "tag": "optional", "waits_on": "nobody", "emphasis": "muted", "rank": "last",
-          "means": "the item is worth reading after its untagged neighbours" },
-        { "tag": "agent", "waits_on": "nobody", "emphasis": "muted", "rank": "none", "scope": true,
-          "means": "the change is to how an agent is instructed or configured — an instruction file, a constitution, a skill, a prompt" },
-        { "tag": "code", "waits_on": "nobody", "emphasis": "muted", "rank": "none", "scope": true,
-          "means": "the change is to a program a machine runs — source, a script, a configuration it reads" },
-        { "tag": "docs", "waits_on": "nobody", "emphasis": "muted", "rank": "none", "scope": true,
-          "means": "the change is to a document a person reads — a view, a wiki page, a report" },
-        { "tag": "spec", "waits_on": "nobody", "emphasis": "muted", "rank": "none", "scope": true,
-          "means": "the change is to a spec — a contract or rule document that programs and agents obey" },
-        { "tag": "eval", "waits_on": "nobody", "emphasis": "muted", "rank": "none", "scope": true,
-          "means": "the change is to an eval — a graded scenario or benchmark that measures an agent's output quality" },
-        { "tag": "test", "waits_on": "nobody", "emphasis": "muted", "rank": "early", "scope": true,
-          "means": "the change is to what checks the work — a test, a fixture, a hook or guard that enforces a rule" }
-      ]
-    }
   },
 
   "sections": {

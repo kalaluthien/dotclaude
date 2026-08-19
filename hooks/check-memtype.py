@@ -69,7 +69,8 @@ def names(cell):
     """The names one table cell lists, as (name, is_prefix) pairs.
 
     `history-<topic>` names every file whose name opens with `history-`;
-    `backlog` names exactly one file. The angle bracket is what separates them.
+    `pitfalls` names exactly one file. The angle bracket is what separates
+    them.
     """
     found = []
     for token in re.findall(r"`([^`]+)`", cell):
