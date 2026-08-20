@@ -24,7 +24,7 @@ here, and what a project keeps for itself is its own pitfalls, filed per
    bought twice.
 2. The global pool's `MEMORY.md` and the matching `setup-<topic>` memory,
    when the failure touches a tool, a toolchain, or the machine.
-3. The repository's `.claude/CLAUDE.md` for how to build and test, and its
+3. The repository's `AGENTS.md` for how to build and test, and its
    `docs/` spec where the behavior is specified — when code and spec
    disagree, one of them is wrong; the diagnosis names which.
 
@@ -91,8 +91,8 @@ went. Only the first route is yours to write; the others you hand back.
   caller to file.
 - **A general debugging rule** belongs in this file's Method. Propose it in
   your report; the caller lands it here.
-- **Never** write a debugging procedure or pitfall into a `CLAUDE.md` or a
-  `docs/` document. Build and test commands stay in `.claude/CLAUDE.md`;
+- **Never** write a debugging procedure or pitfall into an `AGENTS.md` or a
+  `docs/` document. Build and test commands stay in `AGENTS.md`;
   product, architecture, and verification truths stay in `docs/`.
 
 # Report
