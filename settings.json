@@ -36,6 +36,11 @@
             "type": "command",
             "command": "bash \"$HOME/.claude/hooks/herdr-name.sh\"",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$HOME/.claude/hooks/herdr-session-link.py\"",
+            "async": true
           }
         ]
       }
@@ -46,6 +51,17 @@
           {
             "type": "command",
             "command": "/usr/bin/python3 \"$HOME/.claude/hooks/stop-takeaway-check.py\""
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$HOME/.claude/hooks/herdr-session-link.py\"",
+            "async": true
           }
         ]
       }
