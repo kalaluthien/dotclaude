@@ -207,7 +207,7 @@ The ticket grammar is not here. It lives in board's `contract=ticket` block, `~/
 {
   "contract": "pool",
   "version": 1,
-  "updated": "2026-08-19",
+  "updated": "2026-08-20",
 
   "pool": {
     "pattern": "projects/*/memory/*.md",
@@ -216,8 +216,7 @@ The ticket grammar is not here. It lives in board's `contract=ticket` block, `~/
     "encoding": { "replace": ["/", "."], "with": "-" },
     "suffixes": [
       { "match": "-workspace-<repo>", "project": "<repo>" },
-      { "match": "-workspace", "project": "workspace", "role": "workspace" },
-      { "match": "--claude", "project": "user", "role": "user" }
+      { "match": "-workspace", "project": "workspace", "role": "workspace" }
     ]
   },
 
