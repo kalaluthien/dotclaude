@@ -55,7 +55,7 @@
     "baseRef": "fresh"
   },
   "enabledPlugins": {},
-  "outputStyle": "Simplified Technical",
+  "outputStyle": "Concise",
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "skipWorkflowUsageWarning": true,
