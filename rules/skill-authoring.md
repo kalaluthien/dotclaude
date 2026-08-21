@@ -42,6 +42,11 @@ needs it.
 - `background: false` makes the invoking turn wait for the fork's result.
 - `effort` overrides reasoning effort while the skill is active, `low` through
   `max`.
+- On a plain skill too, `model` and `effort` beat the flags the session was
+  launched with, in both directions. So a command skill declares the tier its
+  own procedure is worth and gets it however it was started — typed, or spawned
+  by a service that knows only its own default (probed 2026-08-21,
+  claude-code 2.1.238).
 - `allowed-tools` lists tools usable without a permission prompt during the
   invoking turn only. The grant clears on the next message, and it never
   restricts baseline permissions.
