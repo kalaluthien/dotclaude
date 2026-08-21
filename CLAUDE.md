@@ -173,21 +173,9 @@ On every save, take exactly one route: update the file that already covers the t
 
 ### Tickets
 
-A **backlog-ticket** is one filed piece of work; *ticket* is its short form inside this section. Board's other record, the **service-ticket**, is board's own record of running one and is not filed here. Tickets live in the board server's own store, not in files (owner decision 2026-08-19; the proposal that settled it is in board's git history). File, change, and close a ticket by calling the server at `localhost:8300` — never by writing a file. The five doors, and the dry run:
+A **backlog-ticket** is one filed piece of work; *ticket* is its short form inside this section. Board's other record, the **service-ticket**, is board's own record of running one and is not filed here. Tickets live in the board server's own store, not in files (owner decision 2026-08-19; the proposal that settled it is in board's git history). File, change, and close a ticket by calling the server at `localhost:8300` — never by writing a file. Which door does what, what a request carries, and what a refusal means is the server's own `/openapi.json`; the how-to in plain language is the `delegating` skill, `~/workspace/.claude/skills/delegating/SKILL.md`, "Board's doors" — a file a session can read without delegating anything. Neither is copied here: a route list in this file drifts the day the service changes one, and a machine-wide file has no business knowing one service's paths. The grammar every request is checked against — markers, tag kinds, labels, body fields and their bounds — is board's spec, `~/workspace/board/docs/data-ticket-contract.md`.
 
-- `POST /api/backlog-tickets` — file a ticket into a pool; with `?validate=1` it runs every check and writes nothing (the dry run).
-- `PATCH /api/backlog-tickets/{id}/head` — the marker, tags, labels, and title.
-- `PATCH /api/backlog-tickets/{id}/body` — the body fields and the prose, replaced whole.
-- `POST /api/backlog-tickets/{id}/claim` — take the working marker; the store refuses a row another session holds.
-- `DELETE /api/backlog-tickets/{id}` — close. Closing marks the row `done` and keeps it for good; the board stops drawing it.
-
-Name yourself on every one of the five: send `session_id` (your `CLAUDE_CODE_SESSION_ID`) and `session_name` beside `actor` — body fields, or query parameters on the `DELETE`. Board links the row to your session, which is what answers who worked it once it is closed. All three are optional and none is ever a refusal (board v2.1.0).
-
-Read tickets from `GET /api/snapshot` on the same server: it carries every pool's cards. When a task finishes, read the owning pool's tickets and close or update whatever it settled — nothing else retires a row.
-
-The ticket grammar — markers, tag kinds, labels, body fields, bounds, and the reasons behind them — is board's spec, `~/workspace/board/docs/data-ticket-contract.md`; the request shapes are the server's `/openapi.json`. The door checks a request against the grammar before the write, and a refusal is typed: fix what it names and call again. A working example, run 2026-08-19:
-
-    curl -s -X POST 'http://localhost:8300/api/backlog-tickets?validate=1' -H 'Content-Type: application/json' -d '{"project":"workspace","title":"Probe the filing door.","labels":["PROBE"],"tags":["docs"],"fields":{"what":"Check the dry run answers.","why":"A documented command must have run once.","how":"Discard the answer."}}'
+Read tickets from the server's snapshot: it carries every pool's cards. When a task finishes, read the owning pool's tickets and close or update whatever it settled — nothing else retires a row.
 
 Work owed to the owner is a `#need-you` ticket in the owning pool, never a file or a second list. A `#need-you` ticket holds its own next transition: never start an open one and never close a working one on your own initiative. A prompt saying the owner confirmed the row carries the owner's decision, so it starts the row and drops the tag. Before closing any ticket, lift an owed action still buried in it into its own `#need-you` ticket: a shipped row can still carry unshipped debt.
 
