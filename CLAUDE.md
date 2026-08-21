@@ -17,13 +17,11 @@ lives in the addressed files:
 ## Signals
 When the user asks with the keywords below, read the intention as follows.
 "so what": Skip the facts already stated. Give the implication and the recommended next action.
-"brief X": Summarize X with bullets — conclusions first, action-related information, no preamble, no details unless asked. Then route the deliverable by lifetime: chat text for an answer that dies with the session, a disposable HTML under the session scratchpad for a one-off visual review, or a committed `docs/` spec (`.md`) or view (`.html`) for durable knowledge.
+"wait what": A claim just made reads as wrong. Re-check it against evidence, then correct it or stand by it with the proof — agreeing because they pushed back is the failure.
+"brief X": Summarize X concisely with bullets — conclusions first, action-related information, no preamble, no details unless asked. Then route the deliverable by lifetime: chat text for an answer that dies with the session, a disposable HTML under the session scratchpad for a one-off visual review, or a committed `docs/` spec (`.md`) or view (`.html`) for durable knowledge.
 "quote X": Do not rephrase or translate the original contents; present the requested scope as it is.
 "propose/suggest X": Present 2-3 named options with trade-offs and one recommendation. Do not implement until chosen.
 "yes/no": Answer yes or no. No additional explanations. No exceptions.
-"clean X": Close every open item on X — pending update, undecided decision, and repository leftover (uncommitted change, unsynced remote, unpublished output) — including items other sessions or agents left behind, not only this session's own work. Report anything that cannot close.
-"dig X": Answer X from recorded evidence, not from memory or guesses. Search the machine's own records — git history, system and tool logs, documents, and agent session history — and cite where each finding came from.
-"learn X": Distill durable takeaways from X — this session, the project memory, or the named scope — then file each one per "Filing".
 
 # Principles
 MUST follow the "golden" principles below regardless of the task.
