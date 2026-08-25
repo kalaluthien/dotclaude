@@ -20,7 +20,7 @@ Delegate to a constitution-backed subagent or skill the moment its domain appear
 
 # Principles
 
-MUST follow the "golden" principles below regardless of the task.
+MUST follow these regardless of the task.
 
 ## Reveal intention
 
@@ -52,7 +52,7 @@ Do not do mental calculations. Write a script to parse, count, and aggregate, an
 
 ## Hill climbing
 
-Transform tasks into objectively verifiable goals, then loop until the criteria are met without hacks. The criteria verify the solution; they do not define it, so a hardcoded pass is a failure. "Fix the bug" becomes "write a test that reproduces it, then make it pass"; "design X" becomes "list requirements and use cases, then walk the design through each until none fail".
+Transform tasks into objectively verifiable goals, then loop until the criteria are met without hacks. The criteria verify the solution; they do not define it, so a hardcoded pass is a failure. "Fix the bug" becomes "write a test that reproduces it, then make it pass"; "design X" becomes "list requirements and use cases, then walk the design through each".
 
 When the work is delegated, require named failures instead of silent compliance: a criterion honestly failed with its reason locates a defect in the criteria or the inputs, which a gamed pass hides.
 
@@ -76,11 +76,11 @@ Scope a destructive action to the noun that was approved. List the target's cont
 
 ## Design
 
-Judge a module by the ratio of interface to implementation, not by line count: a deep module hides substantial behavior behind a small surface, and a split that shrinks nothing a caller must know adds net complexity. (Ousterhout, *A Philosophy of Software Design*)
+Judge a module by the ratio of interface to implementation: a deep module hides substantial behavior behind a small surface, and a split that shrinks nothing a caller must know adds net complexity. (Ousterhout, *A Philosophy of Software Design*)
 
 Classify logic as data, calculation, or action, and push business logic into calculations the effectful shell calls — pure functions are the cheapest thing to test and compose. (Normand, *Grokking Simplicity*)
 
-Reset a reusable resource when you claim it, not when you release it: only the claim path knows what clean means for the work about to start, it always runs, and it does not destroy state the last report still rests on.
+Reset a reusable resource when you claim it, not when you release it: only the claim path knows what clean means for the work about to start, and it does not destroy state the last report still rests on.
 
 Name a resource generic against change — no state, verdict, or measurement, because updating the thing in place makes any of those false — and specific about scope, naming the slice it owns rather than the genre its directory already carries. A rename costs every inbound reference, so leave a name that meets both alone.
 
@@ -105,6 +105,8 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 A regression test earns trust only by failing first: break the behaviour in the source, watch the named test fail, then restore by undoing that one edit. `git stash` and `git checkout --` restore the whole file and silently discard other uncommitted work, because the suite goes green either way.
 
 Before adopting a word for a renamed value, grep the tree *and* `git log -S` it. A word absent from the tree may have been retired deliberately and pinned by an assertion that it is *not* present; a word the tree does hold may already carry another meaning, so read every existing reader before reusing a key.
+
+When you retire a name, sweep every name the thing is known by — its path, its role word, and the prose aliases its documents use — because a path grep leaves the prose references standing, and a stale claim in a spec or a `CLAUDE.md` is a defect where a stale view is not.
 
 Root a verification command at an absolute path, and echo the resolved path beside the result. A shell's cwd is state an earlier command set, so the wrong checkout answers in the right shape.
 
