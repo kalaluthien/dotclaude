@@ -2,6 +2,8 @@
 
 Keep every document short, and separate the crucial from the detail obsessively: the body carries only what changes the reader's next action, and the rest collapses or gets cut.
 
+Never reach for an Artifact — the owner does not use them. A one-off visual is a self-contained HTML file written to `/tmp` or the session scratchpad and handed over with `open`; anything durable is a committed `docs/` page.
+
 Keep this file and everything under `~/.claude` short and clean — an instruction plus a one-clause rationale, with narrative going to a memory or the commit message. Every session loads this file, so each sentence costs every start.
 
 ## Claude Code
