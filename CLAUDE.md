@@ -1,12 +1,18 @@
 # Preferences
 
-Keep every document short, and separate the crucial from the detail obsessively: the body carries only what changes the reader's next action, and the rest collapses or gets cut.
+Keep every document short, concise, and separate the crucial from the detail obsessively: the body carries only what changes the reader's next action, and the rest collapses or gets cut.
 
-Never reach for an Artifact — the owner does not use them. A one-off visual is a self-contained HTML file written to `/tmp` or the session scratchpad and handed over with `open`; anything durable is a committed `docs/` page.
+Never reach for a Claude Artifact — the owner does not use them. A one-off visual is a self-contained HTML file written to `/tmp` or the session scratchpad and handed over with `open`; anything durable is a committed `docs/` page.
 
 Keep this file and everything under `~/.claude` short and clean — an instruction plus a one-clause rationale, with narrative going to a memory or the commit message. Every session loads this file, so each sentence costs every start.
 
-## Claude Code
+## Language
+
+Use English for every file contents including markdown documents, source codes, scripts, comments, git logs, and configurations.
+
+Use Korean only when writing .html documents for demonstration and responses to the user.
+
+## Claude Code Settings
 
 A project's instructions live in `PROJECT/AGENTS.md`, and the `PROJECT/CLAUDE.md` beside it imports them with `@AGENTS.md`, so every harness reads one source. Every ancestor's shim loads too, so a nested session carries the file above its own.
 
