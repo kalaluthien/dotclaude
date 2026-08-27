@@ -70,17 +70,20 @@
   "worktree": {
     "baseRef": "fresh"
   },
+  "enableWorkflows": false,
+  "enableArtifact": false,
   "enabledPlugins": {},
   "outputStyle": "Concise",
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
+  "askUserQuestionTimeout": "never",
   "skipWorkflowUsageWarning": true,
   "theme": "auto",
   "editorMode": "vim",
   "verbose": false,
-  "switchModelsOnFlag": false,
+  "switchModelsOnFlag": true,
   "autoContinueAtUsageLimit": true,
   "autoScrollEnabled": true,
-  "inputNeededNotifEnabled": false,
-  "agentPushNotifEnabled": false
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true
 }
