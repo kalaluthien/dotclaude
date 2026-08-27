@@ -15,8 +15,11 @@ derive.
 Two keys carry the whole routing decision. Add a third key only when the harness
 needs it.
 
-- `name` — gerund form, verb plus object (`updating-wiki-pages`). Lowercase,
-  hyphens only, and identical to the directory name.
+- `name` — lowercase, hyphens only, identical to the directory name. A skill
+  the model loads takes the gerund form, verb plus object
+  (`updating-wiki-pages`). A user-typed skill takes the voice of its pool: a
+  verb phrase under a project (`clean`, `verify`), the utterance that provokes
+  it under `~/.claude/skills` (`so-what`, `you-sure`).
 - `description` — one sentence of what the skill does, then a `Use when …`
   clause naming the situations and the words a user would actually type. Third
   person, no angle brackets. The harness truncates it at 1,536 characters,
