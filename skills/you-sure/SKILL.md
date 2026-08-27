@@ -1,10 +1,10 @@
 ---
-name: wait-what
-description: Re-check a claim just made against evidence, then correct it or stand by it with proof. Use when the user types /wait-what.
+name: you-sure
+description: Re-check a claim just made against evidence, then correct it or stand by it with proof. Use when the user types /you-sure.
 disable-model-invocation: true
 ---
 
-# Wait what
+# You sure
 
 A claim just made reads as wrong. Go back to the evidence — read the file, run the command, probe the tool — and settle it there.
 
