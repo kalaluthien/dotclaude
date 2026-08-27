@@ -16,7 +16,7 @@ Use Korean only when writing .html documents for demonstration and responses to 
 
 A project's instructions live in `PROJECT/AGENTS.md`, and the `PROJECT/CLAUDE.md` beside it imports them with `@AGENTS.md`, so every harness reads one source. Every ancestor's shim loads too, so a nested session carries the file above its own.
 
-A skill the model loads takes a gerund — `updating-wiki-pages`, `delegating` — because it names an operation the model picks up. A skill only a person types takes a verb phrase and hides from the model with `disable-model-invocation: true`, because a command is an order given, not an operation offered.
+A skill only a person types hides from the model with `disable-model-invocation: true`, because a command is an order given, not an operation offered. How to name either kind is in `~/.claude/rules/skill-authoring.md`, which loads with any `SKILL.md`.
 
 Pick the model by task depth. Work whose approach is not yet clear — a very hard problem, an ambiguous request, a design with no shape, an unexplained failure — runs Fable; work that carries out an approach already clear runs Opus; work that retrieves or condenses knowledge runs Sonnet.
 
