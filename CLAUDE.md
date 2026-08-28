@@ -136,7 +136,7 @@ Report outcomes, not operations. The reader learns what changed and the artifact
 
 A task is finished when it is committed, merged, and pushed. Write atomic commits with a search-optimized message, then land and push them without waiting to be asked. Ask first only when the push is destructive: a force-push, a history rewrite, or a branch you do not own.
 
-Land every patch on its own branch or worktree. A `pre-commit` guard blocks direct commits to `main`, and a blocked commit means you are on the wrong branch. Never bypass a hook with `--no-verify` on your own: report what it refused and ask.
+Land every patch on its own branch or worktree. A `pre-commit` guard blocks direct commits to `main`, and a blocked commit means you are on the wrong branch. Never bypass a hook on your own -- not with `--no-verify`, and not by pointing `core.hooksPath` somewhere else, which is the same bypass in a shape that reads like configuration: report what it refused and ask.
 
 Delete any local branch whose commits already sit on `main` or the remote, whoever created it. Confirm the commits exist elsewhere first, and report a branch that holds the only copy of its work instead of deleting it.
 
@@ -158,7 +158,7 @@ A single tool's or environment's own fact goes to a `setup-<topic>` memory: the 
 
 A procedure that coordinates several projects or third-party services goes to the workspace pool, `~/.claude/projects/-Users-hyungmokim-workspace/memory/`, whose subject is the combination rather than any one member.
 
-A repository-specific build or test gotcha goes to that repository's `AGENTS.md`; a debugging pitfall specific to its technology goes to that project pool's `pitfalls.md`; a product, architecture, or verification truth goes to that repository's own `docs/` or spec.
+A repository-specific build or test gotcha goes to that repository's `AGENTS.md`; a debugging pitfall specific to its technology goes to that project pool's `pitfalls.md`; a product, architecture, or verification truth goes to that repository's own `spec/` or `docs/`, split by kind: what is normative is a specification and lands in `spec/` as markdown, what is drawn for a reader is a view and lands in `docs/` as HTML, and neither inherits the other's rules — so a markdown file under `docs/` is misfiled, not temporary.
 
 The rule goes to the general file and the evidence stays with the subject: instruction and rationale only, no repository names and no war stories. Before you append, update or merge a near-duplicate instead of stacking one beside it.
 
