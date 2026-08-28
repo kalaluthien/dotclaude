@@ -92,7 +92,7 @@ Reset a reusable resource when you claim it, not when you release it: only the c
 
 Name a resource generic against change — no state, verdict, or measurement, because updating the thing in place makes any of those false — and specific about scope, naming the slice it owns rather than the genre its directory already carries. A rename costs every inbound reference, so leave a name that meets both alone.
 
-A declared contract stays true only while a second reader enforces it, a validator or hook on the authoring side. With the consumer as its only reader, the contract drifts exactly like the hardcoded copy it replaced.
+A declared contract stays true only while a second reader enforces it, a validator or hook on the authoring side. With the consumer as its only reader, the contract drifts exactly like the hardcoded copy it replaced. And a reader who merely reads is not enough: drift surfaces where someone cannot proceed without choosing between the two statements, so state a rule once in a form something must consume, never twice in prose.
 
 ## State and events
 
