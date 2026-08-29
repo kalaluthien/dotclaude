@@ -2,6 +2,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -70,12 +71,15 @@
   "worktree": {
     "baseRef": "fresh"
   },
-  "enableWorkflows": false,
   "enableArtifact": false,
+  "enableWorkflows": false,
+  "workflowKeywordTriggerEnabled": false,
   "enabledPlugins": {},
   "outputStyle": "Concise",
+  "feedbackDrafts": "quiet",
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
   "askUserQuestionTimeout": "never",
   "skipWorkflowUsageWarning": true,
   "theme": "auto",
@@ -84,6 +88,7 @@
   "switchModelsOnFlag": true,
   "autoContinueAtUsageLimit": true,
   "autoScrollEnabled": true,
+  "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true
 }
