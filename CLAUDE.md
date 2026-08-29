@@ -84,6 +84,8 @@ Scope a destructive action to the noun that was approved. List the target's cont
 
 ## Design
 
+Where a repo has a `spec/`, start every change there: read the covering spec first, and ship spec and code in one patch.
+
 Judge a module by the ratio of interface to implementation: a deep module hides substantial behavior behind a small surface, and a split that shrinks nothing a caller must know adds net complexity. (Ousterhout, *A Philosophy of Software Design*)
 
 Classify logic as data, calculation, or action, and push business logic into calculations the effectful shell calls — pure functions are the cheapest thing to test and compose. (Normand, *Grokking Simplicity*)
@@ -158,7 +160,7 @@ A single tool's or environment's own fact goes to a `setup-<topic>` memory: the 
 
 A procedure that coordinates several projects or third-party services goes to the workspace pool, `~/.claude/projects/-Users-hyungmokim-workspace/memory/`, whose subject is the combination rather than any one member.
 
-A repository-specific build or test gotcha goes to that repository's `AGENTS.md`; a debugging pitfall specific to its technology goes to that project pool's `pitfalls.md`; a product, architecture, or verification truth goes to that repository's own `spec/` or `docs/`, split by kind: what is normative is a specification and lands in `spec/` as markdown, what is drawn for a reader is a view and lands in `docs/` as HTML, and neither inherits the other's rules — so a markdown file under `docs/` is misfiled, not temporary.
+A repository-specific build or test gotcha goes to that repository's `AGENTS.md`; a debugging pitfall specific to its technology goes to that project pool's `pitfalls.md`; a product, architecture, or verification truth goes to that repository's own `spec/` or `docs/`, split by kind: what is normative is a specification and lands in `spec/` — in a repository that checks its specs with a formal model (Alloy), the model files and their comments are the spec and no markdown lives beside them, since prose next to a model drifts from it; as markdown otherwise — what is drawn for a reader is a view and lands in `docs/` as HTML, and neither inherits the other's rules — so a markdown file under `docs/` is misfiled, not temporary.
 
 The rule goes to the general file and the evidence stays with the subject: instruction and rationale only, no repository names and no war stories. Before you append, update or merge a near-duplicate instead of stacking one beside it.
 
