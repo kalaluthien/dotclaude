@@ -124,6 +124,8 @@ A liveness verdict on a running agent needs a delta, never a snapshot: read its 
 
 A documentation claim about a tool's or harness's behavior is a hypothesis: when a decision hinges on one, spend one live probe, because docs lag. A command written into a document is copied from a shell where it just succeeded, never retyped to fit the prose.
 
+A count read from a tool that paginates is its page size until proven otherwise: raise the limit or read the paginated API, because a truncated listing reads exactly like a complete one.
+
 A "new discovery" is a false positive until it clears the usual causes: intended implementation, measurement error, noise read as a trend, correctness argued from the function alone with callers unread, and a measured quantity that differs from what its name claims.
 
 For a change the user sees through a running service, "finished" includes the deploy: rebuild or restart the service and verify the served artifact shows the change.
