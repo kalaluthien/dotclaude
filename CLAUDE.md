@@ -96,6 +96,10 @@ Name a resource generic against change — no state, verdict, or measurement, be
 
 A declared contract stays true only while a second reader enforces it, a validator or hook on the authoring side. With the consumer as its only reader, the contract drifts exactly like the hardcoded copy it replaced. And a reader who merely reads is not enough: drift surfaces where someone cannot proceed without choosing between the two statements, so state a rule once in a form something must consume, never twice in prose.
 
+Sort every rule by whether a machine can decide it. A rule that can be checked deterministically becomes the check — a hook, a validator, a setting that refuses — and the prose keeps only that the mechanism exists and what it answers, never how. Only what needs judgement stays written. A document of rules grows long because it is storing the ones that had nowhere mechanical to live, and the rules people break are the deterministic ones they can quote while breaking them.
+
+Mechanising a rule moves its failure mode from disobeyed to silent, so the check has to say what it observed. The inputs a check reads about a running system go stale on their own — a session id or pid changes under a restart, a name changes under a rename, a context is compacted and the record it was holding is gone, a file it expects was never written — and each of those arrives at the check as an absence indistinguishable from a pass. Handle every such case explicitly, distinguish *I looked and found nothing* from *I could not look*, and print what was read, from where, and which branch was taken. A bare exit code or a bare verdict word is the shape that gets trusted for months while enforcing nothing, and it is worse than the unenforced rule it replaced, because now everyone believes the rule is held.
+
 ## State and events
 
 A signal means less than its name promises. Before you act on one, enumerate everything that produces it and everything that reads it.
@@ -112,11 +116,15 @@ Give a polling loop's no-evidence verdict a terminal branch. For a finished subj
 
 A claim argued only from documents, memory, or the artifact you just wrote is unverified. Spend one cheap check that is able to fail, and do not add checks beyond these.
 
+A probe that cannot exhibit the counterexample is not evidence: before believing one, name the condition that would separate the two hypotheses and confirm the probe varied it. This bites hardest on the *second* probe — the one that overturned a claim reads as settled, while it usually inherits every condition the first probe held fixed, so the corrected claim comes out right about the mechanism and wrong about its scope.
+
 A regression test earns trust only by failing first: break the behaviour in the source, watch the named test fail, then restore by undoing that one edit. `git stash` and `git checkout --` restore the whole file and silently discard other uncommitted work, because the suite goes green either way.
+
+Break each branch separately, not the feature: a case that several branches can satisfy pins none of them, and it passes while any one of them is deleted. Disable one alternation, flag, or code path at a time and require a *named* case to fail for each; a fixture that fails nothing when a branch is removed is documentation, not coverage. Put the assertion on what the mutation changes, never on a neighbour it leaves alone: a ref *name* survives a force-push, a sentence's opening survives the deletion of its middle, and a case named for the property then passes without ever testing it.
 
 Before adopting a word for a renamed value, grep the tree *and* `git log -S` it. A word absent from the tree may have been retired deliberately and pinned by an assertion that it is *not* present; a word the tree does hold may already carry another meaning, so read every existing reader before reusing a key.
 
-When you retire a name, sweep every name the thing is known by — its path, its role word, and the prose aliases its documents use — because a path grep leaves the prose references standing, and a stale claim in a spec or a `CLAUDE.md` is a defect where a stale view is not.
+When you retire a name or a rule, sweep every place it is stated — its path, its role word, the prose aliases its documents use, the spec or model that calls itself the contract, and any validator whose pattern encodes it — because a path grep leaves the prose standing, a stale claim in a spec or a `CLAUDE.md` is a defect where a stale view is not, and a checker still admitting the retired shape is the loophole with a machine behind it. Run the sweep in every language the tree is written in: a grep in one language cannot see the copy written in the other, and that copy is invisible for exactly as long as nobody searches for it.
 
 Root a verification command at an absolute path, and echo the resolved path beside the result. A shell's cwd is state an earlier command set, so the wrong checkout answers in the right shape.
 
@@ -128,7 +136,7 @@ A count read from a tool that paginates is its page size until proven otherwise:
 
 A "new discovery" is a false positive until it clears the usual causes: intended implementation, measurement error, noise read as a trend, correctness argued from the function alone with callers unread, and a measured quantity that differs from what its name claims.
 
-For a change the user sees through a running service, "finished" includes the deploy: rebuild or restart the service and verify the served artifact shows the change.
+For a change the user sees through a running service, "finished" includes the deploy: rebuild or restart the service and verify the served artifact shows the change. The same holds for anything *installed* rather than called — a hook, a guard, a config: exercise the installed artifact, never a fixture standing in for it. A suite whose fixtures are strings leaves the deployed thing covered by nothing, and reports full marks while its whole body is deleted.
 
 ## Reporting
 
@@ -152,7 +160,7 @@ Merge the protected branch *into* your topic branch, resolve there, then fast-fo
 
 ## Filing
 
-Route a durable takeaway by *what would make it wrong*, and report where you filed it.
+Route a durable takeaway by *what would make it wrong*, and report where you filed it. Probe a fact before filing it, never after: a memory is read later by someone who cannot re-derive it, so a filed guess is worse than a blank — and the guess that feels safest is the one generalised from a neighbouring note you did read.
 
 A general rule, true on any repository, machine, or tool, goes to the section of this file that names the work it applies to.
 
