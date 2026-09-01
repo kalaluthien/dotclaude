@@ -35,11 +35,6 @@
           },
           {
             "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/herdr-name.sh\"",
-            "async": true
-          },
-          {
-            "type": "command",
             "command": "/usr/bin/python3 \"$HOME/.claude/hooks/herdr-session-link.py\"",
             "async": true
           }
@@ -63,6 +58,16 @@
             "type": "command",
             "command": "/usr/bin/python3 \"$HOME/.claude/hooks/herdr-session-link.py\"",
             "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/hyungmokim/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
           }
         ]
       }
