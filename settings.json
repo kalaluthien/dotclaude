@@ -2,7 +2,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -79,6 +79,15 @@
   "enableArtifact": false,
   "enableWorkflows": false,
   "workflowKeywordTriggerEnabled": false,
+  "skillOverrides": {
+    "dataviz": "off",
+    "run": "off",
+    "claude-api": "name-only",
+    "keybindings-help": "user-invocable-only",
+    "init": "user-invocable-only",
+    "security-review": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only"
+  },
   "enabledPlugins": {},
   "outputStyle": "Concise",
   "feedbackDrafts": "quiet",
