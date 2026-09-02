@@ -101,7 +101,8 @@ Two cultures have written proposals against a standing template for over a
 decade: Python's PEPs and Swift Evolution. What they enforce is which slots
 must be filled, and what a slot must say when the honest answer is "nothing".
 They enforce no sentence rules at all — `plain-writing.md` is already stricter
-than either. The full survey is `notes/wiki/proposal-document-conventions.md`.
+than either. The full survey is `wiki/proposal-document-conventions.md` in
+the `notes` repository.
 
 ### Section order
 
