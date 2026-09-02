@@ -2,16 +2,20 @@
 """Check that a memory file's declared memtype matches the name it carries.
 
 A pool file's `metadata.type` is written once, by whoever created the file, and
-nothing re-reads it afterwards; four workspace-pool files had drifted to the
+nothing re-reads it afterwards; four files in one pool had drifted to the
 harness default before anyone counted. This hook is that second reader.
 
 The mapping is not this file's. It is declared once, in the "Filing" section of
 ~/.claude/CLAUDE.md, as the memtype table — the subcategory prefix a file's name
 opens with, paired with the `type` its row names. This hook parses that table
 out of the document and compiles what it says; a copy kept here would drift
-exactly the way the files did. Where a pool lives, which file is its index, and
-which frontmatter key carries the declaration all come from the same document's
-fenced `json contract=pool` block.
+exactly the way the files did.
+
+Where a pool lives, what its files are named, which file is its index, and
+which frontmatter key carries the declaration are the four constants below. They were a fenced
+`json contract=pool` block in the same document while a second program parsed
+it; that program is gone, so the values live with their one remaining reader.
+A constant no second reader consumes is a constant, not a contract.
 
 A name matching no row of the table is a refusal too, not a pass: the Filing
 prose says a new memtype is invented by adding it to the table in the same
@@ -34,12 +38,13 @@ import sys
 CONTRACT_DOCUMENT = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "CLAUDE.md"
 )
-SUPPORTED_MAJOR = 1
+# The pool shape. A pool is `projects/*/memory/*.md`, so its files sit in a
+# `memory` directory and end in `.md`; `MEMORY.md` is the index, not a memory.
+POOL_DIR = "memory"
+POOL_SUFFIX = ".md"
+INDEX_FILE = "MEMORY.md"
+TYPE_KEY = "metadata.type"
 
-BLOCK = re.compile(
-    r"^```json[ \t]+contract=pool[ \t]*\n(.*?)\n```[ \t]*$",
-    re.MULTILINE | re.DOTALL,
-)
 ROW = re.compile(r"^\|(.+)\|\s*$")
 RULE_ROW = re.compile(r"^[\s:|-]+$")
 FENCE = re.compile(r"^\s*(?:```|~~~)")
@@ -130,47 +135,8 @@ def memtypes(text, path):
     return mapping
 
 
-def contract(text, path):
-    """The pool shape: where a pool lives, its index file, the frontmatter key."""
-    found = BLOCK.search(text)
-    if not found:
-        raise ContractError(
-            "%s: no ```json contract=pool block — the pool shape is declared there"
-            % path
-        )
-    try:
-        data = json.loads(found.group(1))
-    except ValueError as exc:
-        raise ContractError("%s: the pool contract block is not JSON: %s" % (path, exc))
-
-    version = data.get("version")
-    if version != SUPPORTED_MAJOR:
-        raise ContractError(
-            "%s: pool contract version %r; this hook reads major %d"
-            % (path, version, SUPPORTED_MAJOR)
-        )
-    pool = data.get("pool") or {}
-    pattern = pool.get("pattern") or ""
-    key = (data.get("frontmatter") or {}).get("type")
-    if len(pattern.split("/")) < 2 or not pool.get("index_file"):
-        raise ContractError("%s: pool.pattern and pool.index_file are required" % path)
-    if not key:
-        raise ContractError("%s: frontmatter.type is required" % path)
-    return {
-        # A pool's own directory is the pattern's last directory segment:
-        # `projects/*/memory/*.md` puts its files in a `memory` directory.
-        "pool_dir": pattern.split("/")[-2],
-        "suffix": os.path.splitext(pattern.split("/")[-1])[1],
-        "index_file": pool["index_file"],
-        "type_key": key,
-    }
-
-
 def rule(path=CONTRACT_DOCUMENT):
-    text = document(path)
-    compiled = contract(text, path)
-    compiled["memtypes"] = memtypes(text, path)
-    return compiled
+    return memtypes(document(path), path)
 
 
 def frontmatter(path):
@@ -231,15 +197,15 @@ def expected(name, mapping):
     return best[1] if best else None
 
 
-def violation(path, compiled):
+def violation(path, table):
     """The one reason this file fails, or None."""
     name = os.path.splitext(os.path.basename(path))[0]
-    want = expected(name, compiled["memtypes"])
+    want = expected(name, table)
     if want is None:
         listed = sorted(
             set(
                 "%s*" % n if is_prefix else n
-                for (n, is_prefix) in compiled["memtypes"]
+                for (n, is_prefix) in table
             )
         )
         return (
@@ -251,28 +217,28 @@ def violation(path, compiled):
     if block is None:
         return (
             "no '---' frontmatter block, so nothing declares %s; the table gives "
-            "'%s' the type '%s'." % (compiled["type_key"], name, want)
+            "'%s' the type '%s'." % (TYPE_KEY, name, want)
         )
-    got = declared(block, compiled["type_key"])
+    got = declared(block, TYPE_KEY)
     if got is None:
         return (
             "the frontmatter declares no %s; the table gives '%s' the type '%s'."
-            % (compiled["type_key"], name, want)
+            % (TYPE_KEY, name, want)
         )
     if got != want:
         return (
             "%s is '%s'; the table gives '%s' the type '%s'."
-            % (compiled["type_key"], got, name, want)
+            % (TYPE_KEY, got, name, want)
         )
     return None
 
 
-def is_pool_file(path, compiled):
+def is_pool_file(path):
     base = os.path.basename(path)
     return (
-        base.endswith(compiled["suffix"])
-        and base != compiled["index_file"]
-        and os.path.basename(os.path.dirname(path)) == compiled["pool_dir"]
+        base.endswith(POOL_SUFFIX)
+        and base != INDEX_FILE
+        and os.path.basename(os.path.dirname(path)) == POOL_DIR
     )
 
 
@@ -286,7 +252,7 @@ def report(path, reason):
 
 def main():
     try:
-        compiled = rule()
+        table = rule()
     except ContractError as exc:
         print("check-memtype: %s" % exc, file=sys.stderr)
         # A write this hook could not check is refused, not waved through.
@@ -295,10 +261,10 @@ def main():
     if len(sys.argv) > 1:
         failed = False
         for path in sys.argv[1:]:
-            if not is_pool_file(path, compiled):
+            if not is_pool_file(path):
                 print("%s: skipped, not a pool file the table covers" % path)
                 continue
-            reason = violation(path, compiled)
+            reason = violation(path, table)
             if reason:
                 failed = True
                 print(report(path, reason), file=sys.stderr)
@@ -311,9 +277,9 @@ def main():
     except (ValueError, OSError):
         return 0
     path = (payload.get("tool_input") or {}).get("file_path") or ""
-    if not path or not is_pool_file(path, compiled) or not os.path.exists(path):
+    if not path or not is_pool_file(path) or not os.path.exists(path):
         return 0
-    reason = violation(path, compiled)
+    reason = violation(path, table)
     if not reason:
         return 0
     print(report(path, reason), file=sys.stderr)
