@@ -3,7 +3,7 @@
 Every command below ran successfully on 2026-09-01 (macOS, Chrome 900-unit
 window). Copy them; do not retype from memory.
 
-`~/workspace/.claude/skills/writing/scripts/render-check` is the wrong tool for
+`~/.claude/skills/writing/scripts/render-check.py` is the wrong tool for
 this: it caps the capture at 16000 units and reports `PAGE IS TALLER THAN THE
 CAPTURE` for a page that is in fact 3785 tall, and it fails an eli5 page on the
 `<dl class="provenance">` rule that only a `docs/` view carries.
