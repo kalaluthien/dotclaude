@@ -23,20 +23,20 @@ A subagent's work does not count either: it is on the sidechain, and a
 subagent files its own takeaways.
 
 The threshold of three is the smallest window that holds a landed piece of
-work - one edit, one commit, one push. Replaying the 2021 recorded firings of
-this hook over 500 sessions (2026-08-04 to 2026-08-19) with
-`~/workspace/scripts/stop-hook-survey --counterfactual`, three is also the
-last step whose marginal cost is worth paying: each step up to three drops
-more than five barren blocks per block that produced a filing, and the next
-step drops three.
+work - one edit, one commit, one push. A counterfactual replay of the 2021
+recorded firings of this hook over 500 sessions (2026-08-04 to 2026-08-19)
+found three to be also the last step whose marginal cost is worth paying: each
+step up to three drops more than five barren blocks per block that produced a
+filing, and the next step drops three. The script that ran that replay was
+retired with the repository it lived in; the numbers above are what it found.
 """
 
 import json
 import re
 import sys
 
-# Change either of these two and the numbers in `stop-hook-survey
-# --counterfactual` are the measurement to redo, not a claim to restate.
+# Change either of these two and the numbers in the docstring are a measurement
+# to redo against fresh recordings, not a claim to restate.
 WORK_THRESHOLD = 3
 CHANGING_TOOLS = {"Write", "Edit", "MultiEdit", "NotebookEdit"}
 CHANGING_COMMAND = re.compile(

@@ -168,8 +168,6 @@ A rule on writing, visualizing, describing, or explaining goes to the `writing` 
 
 A single tool's or environment's own fact goes to a `setup-<topic>` memory: the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when it holds machine-wide, and the owning project's pool when only that project touches the tool. A fact that governs authoring files under a recognizable path pattern goes instead to the matching rule in `~/.claude/rules/`, which loads itself when a matching file is read.
 
-A procedure that coordinates several projects or third-party services goes to the workspace pool, `~/.claude/projects/-Users-hyungmokim-workspace/memory/`, whose subject is the combination rather than any one member.
-
 A repository-specific build or test gotcha goes to that repository's `AGENTS.md`; a debugging pitfall specific to its technology goes to that project pool's `pitfalls.md`; a product, architecture, or verification truth goes to that repository's own `spec/` or `docs/`, split by kind: what is normative is a specification and lands in `spec/` — in a repository that checks its specs with a formal model (Alloy), the model files and their comments are the spec and no markdown lives beside them, since prose next to a model drifts from it; as markdown otherwise — what is drawn for a reader is a view and lands in `docs/` as HTML, and neither inherits the other's rules — so a markdown file under `docs/` is misfiled, not temporary.
 
 The rule goes to the general file and the evidence stays with the subject: instruction and rationale only, no repository names and no war stories. Before you append, update or merge a near-duplicate instead of stacking one beside it.
@@ -187,43 +185,5 @@ Name a memory `<subcategory>-<topic>`, with no date and no project name, since a
 The memtypes divide by what would make the file wrong. Nothing falsifies `history-`, so it only grows, and it records what version control cannot: changes to unversioned things, and rejected options with their kill reasons. A `topic-` file states the current truth of one subject and is updated in place; it splits from `setup-` by recovery cost, since a `setup-` fact is one probe away and a `topic-` truth was bought by analysis no probe re-derives. A `feedback-` rule was given by the owner, so losing one repeats the failure or re-asks them. Invent a memtype when none fits, and add it to the table in the same change.
 
 On every save, take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Promotion has a threshold — a takeaway observed once files with its evidence and moves into this file only when a later, independent task confirms it, because one observation cannot tell a rule from a coincidence. Delete memories that turn out wrong, and correct a stale one the moment you observe the mismatch.
-
-### The pool contract
-
-The block below is the machine copy of the pool half: where a pool lives, how its directory name encodes a project, the index file, the prose-section rule, and the frontmatter keys. Board and `check-memtype.py` both parse it instead of keeping their own copy, so a change to any of those shapes is made here, in the same commit as the prose it follows. A value the deployed board cannot compile empties its surfaces, so a widening ships in board first.
-
-`board_file` is the one filename a pool may not hold, and it is what board reads to keep such a file off its memory listing.
-
-```json contract=pool
-{
-  "contract": "pool",
-  "version": 1,
-  "updated": "2026-08-20",
-
-  "pool": {
-    "pattern": "projects/*/memory/*.md",
-    "board_file": "backlog.md",
-    "index_file": "MEMORY.md",
-    "encoding": { "replace": ["/", "."], "with": "-" },
-    "suffixes": [
-      { "match": "-workspace-<repo>", "project": "<repo>" },
-      { "match": "-workspace", "project": "workspace", "role": "workspace" }
-    ]
-  },
-
-  "sections": {
-    "prose_prefixes": ["why", "how to apply", "horizon", "preliminary research"],
-    "match": "word-prefix"
-  },
-
-  "frontmatter": {
-    "title": "name",
-    "description": "description",
-    "type": "metadata.type",
-    "conditional_paths": "paths",
-    "modified": "metadata.modified"
-  }
-}
-```
 
 @RTK.md
