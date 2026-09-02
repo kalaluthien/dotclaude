@@ -164,7 +164,7 @@ Route a durable takeaway by *what would make it wrong*, and report where you fil
 
 A general rule, true on any repository, machine, or tool, goes to the section of this file that names the work it applies to.
 
-A rule on writing, visualizing, describing, or explaining goes to the `writing` skill, `~/workspace/.claude/skills/writing/references/`, because that skill is the only thing that reads such rules.
+A rule on writing, visualizing, describing, or explaining goes to the `writing` skill, `~/.claude/skills/writing/references/`, because that skill is the only thing that reads such rules.
 
 A single tool's or environment's own fact goes to a `setup-<topic>` memory: the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when it holds machine-wide, and the owning project's pool when only that project touches the tool. A fact that governs authoring files under a recognizable path pattern goes instead to the matching rule in `~/.claude/rules/`, which loads itself when a matching file is read.
 

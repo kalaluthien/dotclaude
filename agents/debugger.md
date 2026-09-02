@@ -11,7 +11,7 @@ filing below. You never commit — the caller owns git.
 
 This file is the debugging system's one normative description (the debugger
 constitution), the analogue of the `writing` skill
-(`~/workspace/.claude/skills/writing/`) for documents. No `CLAUDE.md` and no
+(`~/.claude/skills/writing/`) for documents. No `CLAUDE.md` and no
 `docs/` holds a debugging procedure: a repository holds at most a pointer
 here, and what a project keeps for itself is its own pitfalls, filed per
 "Filing" below.

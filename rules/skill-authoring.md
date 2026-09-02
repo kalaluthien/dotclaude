@@ -16,8 +16,8 @@ what it cannot derive.
 - `name` — lowercase, hyphens only, identical to the directory name. A skill
   the model loads takes the gerund form, verb plus object
   (`updating-wiki-pages`). A user-typed skill takes the voice of its pool: a
-  verb phrase under a project (`clean`, `verify`), the utterance that provokes
-  it under `~/.claude/skills` (`so-what`, `you-sure`). `writing` is fixed by
+  bare verb phrase under a project, the utterance that provokes it under
+  `~/.claude/skills` (`so-what`, `you-sure`). `writing` is fixed by
   owner order and stays as it is, though it is model-loaded and no gerund.
 - `description` — one sentence of what the skill does, then a `Use when …`
   clause naming the situations and the words a user would actually type. Third
