@@ -13,7 +13,7 @@ markup rules, the geometry, and the five SVG construction recipes.
 ## Width and legibility
 
 The page measure is 42rem, and a phone shows about 312 px of it. Three limits
-follow. `~/.claude/git-hooks/check-figures` enforces all three, and
+follow. `scripts/check-figures` enforces all three, and
 `scripts/render-check.py` runs it.
 
 1. **Annotation floor, 10 viewBox units.** A 10-unit label in a shrinking
