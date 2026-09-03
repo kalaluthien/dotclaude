@@ -48,7 +48,9 @@ CHROME_CANDIDATES = (
     "google-chrome",
     "chromium",
 )
-FIGURE_HOOK = os.path.expanduser("~/.claude/git-hooks/check-figures")
+# The guard is this script's sibling in the skill, so a checkout runs the
+# guard it ships with rather than whichever copy happens to be installed.
+FIGURE_HOOK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "check-figures")
 
 FIGURE = re.compile(r"<figure\b.*?</figure>", re.S)
 SVG = re.compile(r"<svg\b.*?</svg>", re.S)
