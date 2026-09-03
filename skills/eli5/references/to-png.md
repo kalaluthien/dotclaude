@@ -31,6 +31,13 @@ last = next(y for y in range(h - 1, -1, -1)
 im.crop((0, 0, w, last + 40)).save('/tmp/eli5-shot/page.png')
 ```
 
-Then split into four equal slices and Read each. Slices land near 950 units,
-which is one comfortable phone screen; a single 3800-unit image arrives
-unreadable.
+**Check that the trim height is well under the window height.** Chrome silently
+crops at `--window-size`, and the trimmed result then looks exactly like a
+correctly-trimmed shorter page. On 2026-09-03 a 7147-tall page shot at
+`--window-size=900,7000` trimmed to 7029 and lost its last section with no
+error. When `last` lands within ~100 units of the window height, re-shoot
+taller.
+
+Then split into `round(height / 950)` slices and Read each. 950 units is one
+comfortable phone screen; a single full-page image arrives unreadable. Four is
+not a constant -- a 7000-unit page needs seven.
