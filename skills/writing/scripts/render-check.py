@@ -228,7 +228,11 @@ def check_svg(source):
 def check_figures(view):
     """(verdict, findings). The hook owns the width rules; this only runs it."""
     if not (os.path.isfile(FIGURE_HOOK) and os.access(FIGURE_HOOK, os.X_OK)):
-        return ("not installed", [])
+        # An absent guard is not a passing guard. Printing the absence and
+        # returning no finding ended the run `VERDICT ok`, exit 0, so a lost
+        # file or a lost execute bit read exactly like three rules checked.
+        return ("missing", [f"the figure guard is not runnable at {FIGURE_HOOK}, "
+                            "so no figure was checked against svg-rules.md"])
     done = subprocess.run([FIGURE_HOOK, view], capture_output=True, text=True)
     if done.returncode == 0:
         return ("ok", [])
