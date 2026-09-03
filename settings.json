@@ -2,7 +2,16 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "claude-fable-5-1[1m]",
+  "skillOverrides": {
+    "dataviz": "off",
+    "run": "off",
+    "claude-api": "name-only",
+    "keybindings-help": "user-invocable-only",
+    "init": "user-invocable-only",
+    "security-review": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only"
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -11,6 +20,15 @@
           {
             "type": "command",
             "command": "rtk hook claude"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/agent-workspace/scripts/check-campaign-claim.py\""
           }
         ]
       }
@@ -24,6 +42,15 @@
             "command": "/usr/bin/python3 \"$HOME/.claude/hooks/check-memtype.py\""
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/agent-workspace/scripts/check-campaign-claim.py\" --released"
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -31,7 +58,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'Write your reply in plain, everyday language that anyone can follow. Avoid jargon.'"
+            "command": "echo 'Reply in plain everyday words, extremely concise, in a structured shape: headers, tables, lists. No jargon, no pleasantries, no mannered prose.'"
           },
           {
             "type": "command",
@@ -79,19 +106,15 @@
   "enableArtifact": false,
   "enableWorkflows": false,
   "workflowKeywordTriggerEnabled": false,
-  "skillOverrides": {
-    "dataviz": "off",
-    "run": "off",
-    "claude-api": "name-only",
-    "keybindings-help": "user-invocable-only",
-    "init": "user-invocable-only",
-    "security-review": "user-invocable-only",
-    "fewer-permission-prompts": "user-invocable-only"
-  },
   "enabledPlugins": {},
   "outputStyle": "Concise",
   "feedbackDrafts": "quiet",
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "medium"
+    }
+  },
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
   "askUserQuestionTimeout": "never",
