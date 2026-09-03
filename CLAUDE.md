@@ -122,6 +122,8 @@ A regression test earns trust only by failing first: break the behaviour in the 
 
 Break each branch separately, not the feature: a case that several branches can satisfy pins none of them, and it passes while any one of them is deleted. Disable one alternation, flag, or code path at a time and require a *named* case to fail for each; a fixture that fails nothing when a branch is removed is documentation, not coverage. Put the assertion on what the mutation changes, never on a neighbour it leaves alone: a ref *name* survives a force-push, a sentence's opening survives the deletion of its middle, and a case named for the property then passes without ever testing it.
 
+An exit status is not a verdict, so a case asserting one is satisfied by every other cause that shares it: a crash and a refusal both exit non-zero, and a check the change silently disabled exits zero exactly like a check that passed. Assert on what the run *said* — the diagnosis, and the finding that must be absent — because the absent finding is the only thing that separates a rule enforced from a rule collapsed.
+
 Before adopting a word for a renamed value, grep the tree *and* `git log -S` it. A word absent from the tree may have been retired deliberately and pinned by an assertion that it is *not* present; a word the tree does hold may already carry another meaning, so read every existing reader before reusing a key.
 
 When you retire a name or a rule, sweep every place it is stated — its path, its role word, the prose aliases its documents use, the spec or model that calls itself the contract, and any validator whose pattern encodes it — because a path grep leaves the prose standing, a stale claim in a spec or a `CLAUDE.md` is a defect where a stale view is not, and a checker still admitting the retired shape is the loophole with a machine behind it. Run the sweep in every language the tree is written in: a grep in one language cannot see the copy written in the other, and that copy is invisible for exactly as long as nobody searches for it.
@@ -134,6 +136,8 @@ A documentation claim about a tool's or harness's behavior is a hypothesis: when
 
 A count read from a tool that paginates is its page size until proven otherwise: raise the limit or read the paginated API, because a truncated listing reads exactly like a complete one.
 
+State the set beside every count, and count it yourself. One word covering three sets — "the citations" meaning the ones in one directory, in the tree, and of the shape a checker reads — makes three correct numbers read as three contradictions. A number a delegate reported is that delegate's until you re-derive it; relay it as theirs or run it. And assert a loop's iteration count, because a body that never ran still prints one line per iteration.
+
 A "new discovery" is a false positive until it clears the usual causes: intended implementation, measurement error, noise read as a trend, correctness argued from the function alone with callers unread, and a measured quantity that differs from what its name claims.
 
 For a change the user sees through a running service, "finished" includes the deploy: rebuild or restart the service and verify the served artifact shows the change. The same holds for anything *installed* rather than called — a hook, a guard, a config: exercise the installed artifact, never a fixture standing in for it. A suite whose fixtures are strings leaves the deployed thing covered by nothing, and reports full marks while its whole body is deleted.
@@ -143,6 +147,8 @@ For a change the user sees through a running service, "finished" includes the de
 Own what you discover. An issue found mid-task is never the user's to triage: fix it in the same task when it is in scope, file it to the owning pool when it is not, and name it to the user only when it blocks the task or the decision is theirs.
 
 Report outcomes, not operations. The reader learns what changed and the artifact that proves it — path, commit, URL — and the journey appears only when the user asks how.
+
+Shape every briefing the way its final, clarified version would read: state in one line, then what is open as a table or list in plain words, then the reasons, then the decisions that are the reader's — each under its own heading, so nobody has to ask for the simple version twice.
 
 ## Git
 
