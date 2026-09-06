@@ -52,11 +52,15 @@ refuses nothing. `PostToolUse` fires after the write has landed, so the refusal
 does not undo it — it puts the reason in front of the model that wrote it, which
 is the only correction left once the bytes are on disk.
 
-A link is checked when it can only mean this `docs/`: spelled from the home
-directory (`~/.claude/docs/...`, `$HOME/...`, `/Users/<user>/...`) anywhere on
-the machine, or written relative inside `docs/` itself. A bare `docs/x.html#y`
-elsewhere names some other repository's `docs/` and is left alone, and so does
-a URL that merely ends in a page and a fragment
+A link is checked when it can only mean this `docs/` **and** sits in a file
+inside this checkout: spelled from the home directory (`~/.claude/docs/...`,
+`$HOME/...`, `/Users/<user>/...`) anywhere under it — a pool memory included,
+since the pools live here — or written relative inside `docs/` itself. A file
+outside the checkout is skipped and says so; a scratch note in `/tmp` is
+nobody's contract.
+
+A bare `docs/x.html#y` elsewhere names some other repository's `docs/` and is
+left alone, and so does a URL that merely ends in a page and a fragment
 (`https://docs.python.org/3/library/re.html#re.DOTALL`).
 
 The three entry rows below hold on a **declared** decision page only, and every

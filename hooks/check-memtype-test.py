@@ -278,6 +278,74 @@ def main():
                   and "opens with none of the memory prefixes" in said(r),
                   "exit %d: %s" % (r.returncode, said(r)[:300]))
 
+    # ---- refuse: a document that announces the set twice. Taking the union
+    # is how a list of the names being RETIRED widens what is accepted, and
+    # the shipped document already names them in prose one edit away from
+    # this shape. Two declarations is a contradiction, not a longer list.
+    with tempfile.TemporaryDirectory() as d:
+        twice = (
+            "# CLAUDE\n\nThe three memory prefixes are:\n\n"
+            "- `topic-<subject>` — a fact looked up.\n"
+            "- `pitfall-<subject>` — a trap read when stuck.\n"
+            "- `feedback-<subject>` — a rule the owner gave.\n\n"
+            "That list is the whole rule.\n\n"
+            "For the record, the retired memory prefixes are:\n\n"
+            "- `setup-<subject>` — was `topic-` under its old name.\n"
+            "- `history-<subject>` — has left the pool.\n"
+        )
+        hook, pool = tree(d, document=twice)
+        r = posttooluse(hook, memory(pool, "setup-herdr"))
+        check("refused: a second list does not widen the set",
+              r.returncode == 2 and "a second time" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+        r = posttooluse(hook, memory(pool, "topic-still-fine"))
+        check("and the contradiction refuses a well-named file too, rather "
+              "than answering from half the document",
+              r.returncode == 2 and "a second time" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # The second announcement can be the very line that ends the first list,
+    # with no prose between them. That line is a terminator AND a lead, and
+    # reading it as only the first hides the contradiction entirely.
+    with tempfile.TemporaryDirectory() as d:
+        adjacent = (
+            "# CLAUDE\n\nThe three memory prefixes are:\n\n"
+            "- `topic-<subject>` — a fact looked up.\n"
+            "- `pitfall-<subject>` — a trap read when stuck.\n"
+            "- `feedback-<subject>` — a rule the owner gave.\n\n"
+            "The retired memory prefixes are:\n\n"
+            "- `setup-<subject>` — was `topic-` under its old name.\n"
+        )
+        hook, pool = tree(d, document=adjacent)
+        r = posttooluse(hook, memory(pool, "topic-real"))
+        check("refused: a line that both ends the list and announces a second",
+              r.returncode == 2 and "a second time" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- allow: a FENCED declaration is an example being shown, not a second
+    # one. Without the fence skip the mutant reads five prefixes here.
+    with tempfile.TemporaryDirectory() as d:
+        fenced = (
+            "# CLAUDE\n\nThe three memory prefixes are:\n\n"
+            "- `topic-<subject>` — a fact looked up.\n"
+            "- `pitfall-<subject>` — a trap read when stuck.\n"
+            "- `feedback-<subject>` — a rule the owner gave.\n\n"
+            "How the list is written:\n\n```\n"
+            "The three memory prefixes are:\n\n"
+            "- `example-<subject>` — a sample.\n"
+            "- `sample-<subject>` — another.\n"
+            "```\n"
+        )
+        hook, pool = tree(d, document=fenced)
+        r = posttooluse(hook, memory(pool, "topic-real"))
+        check("allowed: a fenced example of the declaration is not a second one",
+              r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
+        r = posttooluse(hook, memory(pool, "example-thing"))
+        check("refused: a prefix that appears only inside the fenced example",
+              r.returncode == 2
+              and "opens with none of the memory prefixes" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
     # ---- refuse: a prefix nobody declared. Inventing one is a document that
     # was never updated, so the reason names the list rather than the file.
     with tempfile.TemporaryDirectory() as d:

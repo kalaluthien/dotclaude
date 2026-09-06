@@ -104,9 +104,9 @@ def prefixes(text, path):
     document that stops declaring them refuses every write rather than falling
     back on a stale copy.
     """
-    lines, found, reading = text.split("\n"), [], False
+    lines, found, reading, done = text.split("\n"), [], False, False
     in_fence = False
-    for line in lines:
+    for number, line in enumerate(lines, start=1):
         if FENCE.match(line):
             in_fence = not in_fence
             continue
@@ -117,10 +117,22 @@ def prefixes(text, path):
             if item:
                 found.append(item.group(1) + "-")
                 continue
-            if line.strip():
-                reading = False
-            continue
+            if not line.strip():
+                continue
+            # Any other non-empty line ends the list. It is still tested for a
+            # lead below, because a line that both ends one list and announces
+            # another is the contradiction, not a terminator.
+            reading, done = False, True
         if PREFIX_LEAD.search(line):
+            # A second announcement is a document that declares the set twice.
+            # Taking the union would let a list of the names being RETIRED
+            # widen what is accepted, and the widening would be silent.
+            if done or found:
+                raise ContractError(
+                    "%s: line %d announces the memory prefixes a second time. "
+                    "One list is the declaration; two contradict, and a reader "
+                    "cannot tell which is meant." % (path, number)
+                )
             reading = True
     if not found:
         raise ContractError(
