@@ -19,6 +19,7 @@ Usage: hooks/check-memtype-test.py
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -66,6 +67,20 @@ def memory(pool, name, body="", type_=None, index=True, title=None):
     return path
 
 
+def target_prefixes():
+    """The name set § Filing calls the target, read out of the document.
+
+    That paragraph is prose sitting beside a table a program parses, so nothing
+    else would notice it going false. This is its reader: every prefix it names
+    has to be one the table already accepts, or the widening does not admit the
+    scheme it claims to be widening to.
+    """
+    text = DOCUMENT.read_text(encoding="utf-8")
+    para = next(
+        (block for block in text.split("\n\n") if "The target set is" in block), "")
+    return re.findall(r"`([a-z]+-)<subject>`", para)
+
+
 def cli(hook, *paths):
     return subprocess.run(
         [sys.executable, str(hook)] + [str(p) for p in paths],
@@ -102,6 +117,21 @@ def main():
             r = posttooluse(hook, path)
             check("allowed: '%s' declaring '%s'" % (name, kind),
                   r.returncode == 0 and not said(r).strip(),
+                  "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- allow: every prefix the document calls the target. The paragraph is
+    # prose with no other consumer, so this case is what keeps it true.
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        prefixes = target_prefixes()
+        check("the document still names a target set at all",
+              len(prefixes) == 3,
+              "read %r from the 'The target set is' paragraph" % (prefixes,))
+        for prefix in prefixes:
+            path = memory(pool, "%sprobe" % prefix)
+            r = posttooluse(hook, path)
+            check("allowed: '%sprobe', a prefix the document calls the target"
+                  % prefix, r.returncode == 0,
                   "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- allow: the widening proper. The target frontmatter is `name` and
@@ -209,14 +239,84 @@ def main():
               and "semantic" in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
 
-    # ---- refuse: a document with no table. This hook has no fallback copy, so
-    # an unreadable declaration is a refusal and says which document it read.
+    # ---- refuse: a link that is not the line's first element. A neighbour's
+    # prose naming the file is what a split leaves behind, and it is not a
+    # route to the file; a fenced example is being shown, not filed.
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        buried = memory(pool, "topic-old", type_="semantic", index=False)
+        (pool / "MEMORY.md").write_text(
+            "- [New](topic-new.md) - split out of [old](topic-old.md).\n",
+            encoding="utf-8")
+        r = posttooluse(hook, buried)
+        check("refused: linked only from the middle of another entry's line",
+              r.returncode == 2 and "carries no line linking" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+        (pool / "MEMORY.md").write_text(
+            "How to write one:\n\n```\n- [Old](topic-old.md) - a hook.\n```\n",
+            encoding="utf-8")
+        r = posttooluse(hook, buried)
+        check("refused: linked only from inside a fenced example",
+              r.returncode == 2 and "carries no line linking" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- allow: the link shapes a writer plausibly reaches for. A refusal
+    # here stops a session that did nothing wrong.
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        for line, note in (
+                ("- [Alloy](./topic-alloy.md) - a hook.", "a './' prefix"),
+                ("- [Alloy](topic-alloy.md#modules) - a hook.", "an '#anchor'"),
+                ("* [Alloy](topic-alloy.md) - a hook.", "a '*' bullet"),
+                ("  - [Alloy]( topic-alloy.md ) - a hook.", "indented and spaced")):
+            (pool / "MEMORY.md").write_text(line + "\n", encoding="utf-8")
+            r = posttooluse(hook, path)
+            check("allowed: an index line with %s" % note, r.returncode == 0,
+                  "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- refuse: an index that cannot be decoded. PostToolUse treats exit 1
+    # as non-blocking and shows it to the person, not to Claude, so a traceback
+    # here is a pool that silently stops being checked.
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        (pool / "MEMORY.md").write_bytes(
+            b"- [Alloy](topic-alloy.md) - \xff\xfe not utf-8.\n")
+        r = posttooluse(hook, path)
+        check("refused: an index that is not valid UTF-8, with exit 2",
+              r.returncode == 2 and "no readable MEMORY.md" in said(r)
+              and "Traceback" not in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+        bad = pool / "topic-bytes.md"
+        bad.write_bytes(b"---\nname: topic-bytes\n\xff\xfe\n---\n")
+        (pool / "MEMORY.md").write_text(
+            "- [Alloy](topic-alloy.md) - h.\n- [B](topic-bytes.md) - h.\n",
+            encoding="utf-8")
+        r = posttooluse(hook, bad)
+        check("allowed: a memory that is not valid UTF-8, read as no frontmatter",
+              r.returncode == 0 and "Traceback" not in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- refuse: a document this hook cannot compile. It keeps no fallback
+    # copy of the table, so an unreadable declaration refuses with exit 2 and
+    # says which document it read -- never a traceback, which exits 1 and is
+    # non-blocking.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d, table="# CLAUDE\n\nNo table here.\n")
         path = memory(pool, "topic-alloy", type_="semantic")
         r = posttooluse(hook, path)
         check("refused: a document carrying no memtype table",
               r.returncode == 2 and "no memtype table" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        (Path(d) / "CLAUDE.md").write_bytes(b"# CLAUDE\n\n\xff\xfe\n")
+        path = memory(pool, "topic-alloy", type_="semantic")
+        r = posttooluse(hook, path)
+        check("refused: a document that is not valid UTF-8, with exit 2",
+              r.returncode == 2 and "cannot be read" in said(r)
+              and "Traceback" not in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- allow, replayed: every real pool file on this machine, against the

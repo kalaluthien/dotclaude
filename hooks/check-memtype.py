@@ -31,6 +31,12 @@ A name matching no row of the table is a refusal too, not a pass: the Filing
 prose says a new memtype is invented by adding it to the table in the same
 change, so an unlisted prefix is a table that was never updated.
 
+What this hook does not cover: settings.json matches it on `Write` and `Edit`
+only, and a payload from any other tool carries no `tool_input.file_path`, so a
+memory written by `sed` or a heredoc is never checked. And a new memory's first
+write is always refused, its index line not existing yet -- one round-trip per
+new file, which is the nudge, not a defect.
+
 Two entry points:
   - as a Claude Code PostToolUse hook: reads the tool payload on stdin, checks
     the touched file, exits 2 with the reason on stderr.
@@ -55,9 +61,12 @@ POOL_DIR = "memory"
 POOL_SUFFIX = ".md"
 INDEX_FILE = "MEMORY.md"
 TYPE_KEY = "metadata.type"
-# The index line's one machine-readable part: a Markdown link whose target is
-# the file. Its title and its trailing hook are written for a person.
-LINK = r"\]\(\s*%s\s*\)"
+# The index line as the document prescribes it: a list item whose first element
+# is a Markdown link to the file. Anchored to the bullet, because a link further
+# along the line is a neighbour's prose naming the file -- what a split leaves
+# behind -- and prose is not a route to anything. A `./` prefix and an `#anchor`
+# are tolerated; the title and the trailing hook are a person's and unread.
+LINK = r"(?m)^[ \t]*[-*][ \t]+\[[^\]]*\]\([ \t]*\.?/?%s(?:#[^)\s]*)?[ \t]*\)"
 
 ROW = re.compile(r"^\|(.+)\|\s*$")
 RULE_ROW = re.compile(r"^[\s:|-]+$")
@@ -76,7 +85,7 @@ def document(path):
     try:
         with open(path, encoding="utf-8") as handle:
             return handle.read()
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise ContractError("%s: cannot be read: %s" % (path, exc))
 
 
@@ -154,9 +163,17 @@ def rule(path=CONTRACT_DOCUMENT):
 
 
 def frontmatter(path):
-    """The file's YAML frontmatter block, or None when it carries none."""
-    with open(path, encoding="utf-8") as handle:
-        lines = handle.read().split("\n")
+    """The file's YAML frontmatter block, or None when it carries none.
+
+    A file that cannot be decoded carries no readable block; the index check
+    has already run by here, so the caller reports the absence rather than
+    dying on it, which on PostToolUse would exit 1 and enforce nothing.
+    """
+    try:
+        with open(path, encoding="utf-8") as handle:
+            lines = handle.read().split("\n")
+    except UnicodeDecodeError:
+        return None
     if not lines or lines[0].strip() != "---":
         return None
     for number, line in enumerate(lines[1:], start=1):
@@ -211,6 +228,22 @@ def expected(name, mapping):
     return best[1] if best else None
 
 
+def unfenced(text):
+    """The text with its fenced blocks dropped.
+
+    A fence in an index holds an example of an index line -- the shape a reader
+    is being shown how to write -- and an example is not an entry.
+    """
+    kept, in_fence = [], False
+    for line in text.split("\n"):
+        if FENCE.match(line):
+            in_fence = not in_fence
+            continue
+        if not in_fence:
+            kept.append(line)
+    return "\n".join(kept)
+
+
 def indexed(path):
     """Why the pool's index does not name this file, or None when it does.
 
@@ -223,13 +256,13 @@ def indexed(path):
     try:
         with open(index, encoding="utf-8") as handle:
             text = handle.read()
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         return "the pool has no readable %s (%s), so nothing can index '%s'." % (
             INDEX_FILE,
             exc,
             base,
         )
-    if not re.search(LINK % re.escape(base), text):
+    if not re.search(LINK % re.escape(base), unfenced(text)):
         return (
             "%s was read and carries no line linking to '%s'; add "
             "`- [<name>](%s) - <what a reader would come for>`. The harness "
