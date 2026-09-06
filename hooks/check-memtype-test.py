@@ -80,7 +80,7 @@ def target_prefixes():
         return []
     found = []
     for line in after[1].split("\n"):
-        item = re.match(r"^[ \t]*[-*+][ \t]+`([a-z]+-)<subject>`", line)
+        item = re.match(r"^[-*+][ \t]+`([a-z]+-)<subject>`", line)
         if item:
             found.append(item.group(1))
         elif found and line.strip():
@@ -312,7 +312,7 @@ def main():
             "# CLAUDE\n\nThe three memory prefixes are:\n\n"
             "- `topic-<subject>` — a fact looked up.\n"
             "- `pitfall-<subject>` — a trap read when stuck.\n"
-            "- `feedback-<subject>` — a rule the owner gave.\n\n"
+            "- `feedback-<subject>` — a rule the owner gave.\n"
             "The retired memory prefixes are:\n\n"
             "- `setup-<subject>` — was `topic-` under its old name.\n"
         )
@@ -344,6 +344,47 @@ def main():
         check("refused: a prefix that appears only inside the fenced example",
               r.returncode == 2
               and "opens with none of the memory prefixes" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- the list is CONTIGUOUS. A later bullet of the same shape must not
+    # join it, and none of these shapes announces itself, so the second-list
+    # refusal above cannot be what catches them. The document names the
+    # RETIRED prefixes a few lines below the real list, so every one of these
+    # is one edit away on the shipped file.
+    #
+    # A bullet written straight into the list with no blank line is NOT here:
+    # that is an edit to the declaration itself, and the document is what
+    # declares. The hook is not the place to argue with it.
+    LIST = ("# CLAUDE\n\nThe three memory prefixes are:\n\n"
+            "- `topic-<subject>` — a fact looked up.\n"
+            "- `pitfall-<subject>` — a trap read when stuck.\n"
+            "- `feedback-<subject>` — a rule the owner gave.\n")
+    for tail, note in (
+            ("\n- `setup-<subject>` — retired.\n", "after a blank line"),
+            ("\n```\nan example\n```\n\n- `setup-<subject>` — retired.\n",
+             "after a fenced block"),
+            ("  - `setup-<subject>` — retired.\n", "indented, with no blank line")):
+        with tempfile.TemporaryDirectory() as d:
+            hook, pool = tree(d, document=LIST + tail)
+            r = posttooluse(hook, memory(pool, "setup-herdr"))
+            check("refused: a stray bullet %s does not join the list" % note,
+                  r.returncode == 2
+                  and "opens with none of the memory prefixes" in said(r),
+                  "exit %d: %s" % (r.returncode, said(r)[:300]))
+            r = posttooluse(hook, memory(pool, "topic-fine"))
+            check("and the list is still read, with a stray bullet %s" % note,
+                  r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- allow: prose that merely ENDS in those words declares nothing, so it
+    # is not a second declaration either. Read as one, it refuses every memory
+    # write on the machine -- the widest possible false refusal.
+    with tempfile.TemporaryDirectory() as d:
+        empty_lead = ("# CLAUDE\n\nA note on what the memory prefixes are:\n\n"
+                      "they are named after their readers.\n\n" + LIST[len("# CLAUDE\n\n"):])
+        hook, pool = tree(d, document=empty_lead)
+        r = posttooluse(hook, memory(pool, "topic-fine"))
+        check("allowed: an announcement that yields no bullets is not a "
+              "declaration", r.returncode == 0,
               "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- refuse: a prefix nobody declared. Inventing one is a document that

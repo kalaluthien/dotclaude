@@ -81,7 +81,10 @@ FENCE = re.compile(r"^\s*(?:```|~~~)")
 # then one bullet per prefix opening with the prefix in backticks. The count is
 # not in the anchor, so adding a fourth prefix is one bullet and no edit here.
 PREFIX_LEAD = re.compile(r"memory prefixes are:\s*$")
-PREFIX_ITEM = re.compile(r"^[ \t]*[-*+][ \t]+`([A-Za-z0-9]+)-<[^`]*>`")
+# The bullet sits at column 0, where the declaration writes it. An indented
+# one is nested under something else, and admitting it is another way for a
+# stray bullet to join the list.
+PREFIX_ITEM = re.compile(r"^[-*+][ \t]+`([A-Za-z0-9]+)-<[^`]*>`")
 
 
 class ContractError(Exception):
@@ -99,41 +102,50 @@ def document(path):
 def prefixes(text, path):
     """The memory prefixes the document declares, in the order it lists them.
 
-    One home for the rule: the hook does not carry a list of its own, so a
-    prefix added to the document is accepted the moment it is written and a
-    document that stops declaring them refuses every write rather than falling
-    back on a stale copy.
+    One home for the rule: the hook carries no list of its own, so a prefix
+    added to the document is accepted the moment it is written and a document
+    that stops declaring them refuses every write rather than falling back on a
+    stale copy.
+
+    The list is CONTIGUOUS -- it ends at the first line after it that is not a
+    bullet -- and there is exactly one of them. Neither is fussiness. Reading
+    on past the end absorbs any later bullet of the same shape, and the
+    document names the RETIRED prefixes a few lines below; reading a second
+    list would union the two and let every retired name back in, silently. A
+    blank line before the first bullet is the ordinary gap after the lead and
+    is not the end.
+
+    An announcement that yields no bullets is not a declaration, so ordinary
+    prose that happens to end in those words neither declares nor contradicts.
     """
-    lines, found, reading, done = text.split("\n"), [], False, False
+    found, collecting, closed = [], False, False
     in_fence = False
-    for number, line in enumerate(lines, start=1):
+    for number, line in enumerate(text.split("\n"), start=1):
         if FENCE.match(line):
             in_fence = not in_fence
             continue
         if in_fence:
+            # A fenced declaration is an example being shown, not a second one.
             continue
-        if reading:
+        if collecting:
             item = PREFIX_ITEM.match(line)
             if item:
                 found.append(item.group(1) + "-")
                 continue
-            if not line.strip():
+            if not line.strip() and not found:
                 continue
-            # Any other non-empty line ends the list. It is still tested for a
-            # lead below, because a line that both ends one list and announces
-            # another is the contradiction, not a terminator.
-            reading, done = False, True
+            collecting = False
+            closed = bool(found)
+            # No `continue`: a line that ends one list may announce another,
+            # which is the contradiction with nothing in between.
         if PREFIX_LEAD.search(line):
-            # A second announcement is a document that declares the set twice.
-            # Taking the union would let a list of the names being RETIRED
-            # widen what is accepted, and the widening would be silent.
-            if done or found:
+            if closed:
                 raise ContractError(
                     "%s: line %d announces the memory prefixes a second time. "
                     "One list is the declaration; two contradict, and a reader "
                     "cannot tell which is meant." % (path, number)
                 )
-            reading = True
+            collecting = True
     if not found:
         raise ContractError(
             "%s: no memory prefixes -- a line ending 'memory prefixes are:' "
