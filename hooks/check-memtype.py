@@ -1,35 +1,40 @@
 #!/usr/bin/env python3
 """Check a memory pool file against what the "Filing" section says about it.
 
-A file is refused when its name matches no row of the memtype table, when its
-pool's `MEMORY.md` carries no line linking to it, or when a `metadata.type` it
-does declare contradicts its row.
+A file is refused when its name opens with none of the memory prefixes, when
+its pool's `MEMORY.md` carries no line linking to it, or when it still declares
+`metadata.type`.
 
 The index line is the load-bearing check. The harness injects a pool's
 `MEMORY.md` and never a memory file, so an unindexed memory has no way of being
 read at all, and one written without its line is indistinguishable from one
-nobody needed. `metadata.type` is the retiring check: nothing re-read it after
-it was written and four files in one pool had drifted to the harness default
-before anyone counted, so a declaration is still compared against its row — but
-the subcategory is being renamed after its reader (`topic-`, `pitfall-`,
-`feedback-`), and a file declaring no type is the target shape rather than a
-drift.
+nobody needed.
 
-The name mapping is not this file's. It is declared once, in the "Filing"
-section of ~/.claude/CLAUDE.md, as the memtype table — the subcategory prefix a file's name
-opens with, paired with the `type` its row names. This hook parses that table
-out of the document and compiles what it says; a copy kept here would drift
-exactly the way the files did.
+The name is the second. A memory is named after its reader -- `topic-` for a
+fact looked up, `pitfall-` for a trap read when stuck, `feedback-` for a rule
+the owner gave -- because the type it used to be named after predicted nothing
+about whether the file was ever read and the prefix did. `setup-`, `pitfalls`,
+`backlog` and `history-` are the names that scheme retired; the refusal names
+each one's successor, and `history-`'s is a decision page under `docs/` rather
+than anything in the pool (`spec/decision-pages.md`).
+
+`metadata.type` is the third and the smallest edit: nothing re-read it after it
+was written, four files in one pool had drifted to the harness default before
+anyone counted, and the prefix now carries what it claimed. `name` and
+`description` are the whole frontmatter.
+
+The prefix list is not this file's. It is declared once, in the "Filing"
+section of ~/.claude/CLAUDE.md, as the bullets under "memory prefixes are:".
+This hook parses them out of the document; a copy kept here would drift exactly
+the way the files did, and a document that declares none refuses every write
+rather than falling back on one.
 
 Where a pool lives, what its files are named, which file is its index, and
-which frontmatter key carries the declaration are the four constants below. They were a fenced
-`json contract=pool` block in the same document while a second program parsed
-it; that program is gone, so the values live with their one remaining reader.
-A constant no second reader consumes is a constant, not a contract.
-
-A name matching no row of the table is a refusal too, not a pass: the Filing
-prose says a new memtype is invented by adding it to the table in the same
-change, so an unlisted prefix is a table that was never updated.
+which frontmatter key carries the retired declaration are the four constants
+below. They were a fenced `json contract=pool` block in the same document while
+a second program parsed it; that program is gone, so the values live with their
+one remaining reader. A constant no second reader consumes is a constant, not a
+contract.
 
 What this hook does not cover: settings.json matches it on `Write` and `Edit`
 only, so a memory written by `sed` or a heredoc is never checked. And a new
@@ -42,7 +47,7 @@ Two entry points:
   - as a CLI: `check-memtype.py FILE...`, exits 1 on any violation.
 
 A declaration that cannot be read is a refusal, never a pass: this hook has no
-table of its own to fall back to. So is an index, in one of three wordings a
+list of its own to fall back to. So is an index, in one of three wordings a
 reader acts on differently: it could not be read at all, an unclosed fence ate
 the entry, or it was read and simply does not carry one.
 """
@@ -71,13 +76,12 @@ LINK = (
     r"\[[^\]]*\]\([ \t]*\.?/?%s(?:#[^)\s]*)?[ \t]*\)"
 )
 
-ROW = re.compile(r"^\|(.+)\|\s*$")
-RULE_ROW = re.compile(r"^[\s:|-]+$")
 FENCE = re.compile(r"^\s*(?:```|~~~)")
-# The header names the two columns this hook needs; their order is the table's
-# to choose, so it is read rather than assumed.
-TYPE_COLUMN = "type"
-PREFIX_COLUMN = "subcategory prefixes"
+# The prefix list as the document writes it: a line that ends by announcing it,
+# then one bullet per prefix opening with the prefix in backticks. The count is
+# not in the anchor, so adding a fourth prefix is one bullet and no edit here.
+PREFIX_LEAD = re.compile(r"memory prefixes are:\s*$")
+PREFIX_ITEM = re.compile(r"^[ \t]*[-*+][ \t]+`([A-Za-z0-9]+)-<[^`]*>`")
 
 
 class ContractError(Exception):
@@ -92,77 +96,43 @@ def document(path):
         raise ContractError("%s: cannot be read: %s" % (path, exc))
 
 
-def cells(line):
-    return [cell.strip() for cell in ROW.match(line).group(1).split("|")]
+def prefixes(text, path):
+    """The memory prefixes the document declares, in the order it lists them.
 
-
-def names(cell):
-    """The names one table cell lists, as (name, is_prefix) pairs.
-
-    `history-<topic>` names every file whose name opens with `history-`;
-    `pitfalls` names exactly one file. The angle bracket is what separates
-    them.
+    One home for the rule: the hook does not carry a list of its own, so a
+    prefix added to the document is accepted the moment it is written and a
+    document that stops declaring them refuses every write rather than falling
+    back on a stale copy.
     """
-    found = []
-    for token in re.findall(r"`([^`]+)`", cell):
-        placeholder = token.find("<")
-        if placeholder >= 0:
-            found.append((token[:placeholder], True))
-        else:
-            found.append((token, False))
-    return found
-
-
-def memtypes(text, path):
-    """The memtype table, compiled to (name, is_prefix) -> type.
-
-    The table is the one whose header row names both columns this hook reads;
-    a document holding several tables therefore needs no positional guess.
-    """
-    lines = text.split("\n")
+    lines, found, reading = text.split("\n"), [], False
     in_fence = False
-    mapping = {}
-    header = None
     for line in lines:
         if FENCE.match(line):
             in_fence = not in_fence
             continue
         if in_fence:
             continue
-        if not ROW.match(line):
-            header = None
+        if reading:
+            item = PREFIX_ITEM.match(line)
+            if item:
+                found.append(item.group(1) + "-")
+                continue
+            if line.strip():
+                reading = False
             continue
-        row = cells(line)
-        if header is None:
-            plain = [re.sub(r"[*`]", "", cell).strip().lower() for cell in row]
-            if TYPE_COLUMN in plain and PREFIX_COLUMN in plain:
-                header = (plain.index(TYPE_COLUMN), plain.index(PREFIX_COLUMN))
-            continue
-        if RULE_ROW.match(line.replace("|", "")):
-            continue
-        type_at, prefix_at = header
-        if max(type_at, prefix_at) >= len(row):
-            continue
-        kind = re.sub(r"[*`]", "", row[type_at]).strip()
-        for name, is_prefix in names(row[prefix_at]):
-            # One name in two rows is a table that contradicts itself; taking
-            # the row that happens to be last would answer with half of it.
-            if mapping.get((name, is_prefix), kind) != kind:
-                raise ContractError(
-                    "%s: the memtype table gives '%s' both '%s' and '%s'"
-                    % (path, name, mapping[(name, is_prefix)], kind)
-                )
-            mapping[(name, is_prefix)] = kind
-    if not mapping:
+        if PREFIX_LEAD.search(line):
+            reading = True
+    if not found:
         raise ContractError(
-            "%s: no memtype table — a row names a `type` and its "
-            "`subcategory prefixes`" % path
+            "%s: no memory prefixes -- a line ending 'memory prefixes are:' "
+            "followed by one bullet per prefix, each opening with "
+            "`<prefix>-<subject>` in backticks" % path
         )
-    return mapping
+    return found
 
 
 def rule(path=CONTRACT_DOCUMENT):
-    return memtypes(document(path), path)
+    return prefixes(document(path), path)
 
 
 def frontmatter(path):
@@ -213,22 +183,6 @@ def declared(block, dotted):
             return None
         lines, parent_indent, value = rest
     return value.strip("\"'") or None
-
-
-def expected(name, mapping):
-    """The type the table gives a file's name, or None when no row names it.
-
-    An exact row wins over a prefix row, and the longest prefix wins among
-    prefixes, so a table that later adds `setup-android-` still reads.
-    """
-    if (name, False) in mapping:
-        return mapping[(name, False)]
-    best = None
-    for (candidate, is_prefix), kind in mapping.items():
-        if is_prefix and name.startswith(candidate):
-            if best is None or len(candidate) > len(best[0]):
-                best = (candidate, kind)
-    return best[1] if best else None
 
 
 def unfenced(text):
@@ -314,39 +268,36 @@ def indexed(path):
     return None
 
 
-def violation(path, table):
+def violation(path, names):
     """The one reason this file fails, or None.
 
-    Ordered by what outlives the rename: the name and the index line are the
-    whole of the target scheme's check, and the type is read last because it is
-    the one being retired.
+    Three checks, in the order a reader fixes them: the name says who reads the
+    file, the index line is what makes it readable at all, and the retired
+    declaration is last because removing it is the smallest edit of the three.
     """
     name = os.path.splitext(os.path.basename(path))[0]
-    want = expected(name, table)
-    if want is None:
-        listed = sorted(
-            set(
-                "%s*" % n if is_prefix else n
-                for (n, is_prefix) in table
-            )
-        )
+    if not any(name.startswith(prefix) for prefix in names):
         return (
-            "'%s' matches no row of the memtype table. A new memtype is added to "
-            "the table in the same change that first uses it; the table names %s."
-            % (name, ", ".join("'%s'" % row for row in listed))
+            "'%s' opens with none of the memory prefixes (%s). A memory is "
+            "named after its reader, so `setup-` is `topic-`, `pitfalls` is one "
+            "`pitfall-<subject>` per subject, and `history-` is a decision page "
+            "under `docs/` -- see `spec/decision-pages.md`. A genuinely new "
+            "prefix is added to the list in the same change that first uses it."
+            % (name, ", ".join("'%s'" % prefix for prefix in names))
         )
     reason = indexed(path)
     if reason:
         return reason
     block = frontmatter(path)
     got = declared(block, TYPE_KEY) if block is not None else None
-    # A file that declares no type is the target scheme's shape, where the
-    # frontmatter is `name` and `description` alone; only a declaration that
-    # contradicts its row is the drift this check was written for.
-    if got is not None and got != want:
+    # The declaration is retired outright, not checked against a row: the type
+    # predicted nothing about whether the file was read, and nothing re-read it
+    # after it was written. `name` and `description` are the whole frontmatter.
+    if got is not None:
         return (
-            "%s is '%s'; the table gives '%s' the type '%s'."
-            % (TYPE_KEY, got, name, want)
+            "%s is declared ('%s'), and that key is retired. `name` and "
+            "`description` are the whole frontmatter; the prefix carries what "
+            "the type used to claim." % (TYPE_KEY, got)
         )
     return None
 

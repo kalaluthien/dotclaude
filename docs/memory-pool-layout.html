@@ -378,6 +378,40 @@ almost none, missing every named tier, model, assertion and default.
   <code>hooks/check-memtype.py</code> compiles it.</li>
 </ul>
 
+<h2 id="2026-09-06-table-retired">2026-09-06 &mdash; The memtype table retired</h2>
+
+<p>The table went out of &sect; Filing and the three prefixes became a bullet list the
+hook parses. <code>hooks/check-memtype.py</code> now refuses a name opening with none of
+them &mdash; <code>setup-</code>, <code>pitfalls</code>, <code>backlog</code> and
+<code>history-</code> included &mdash; and refuses <code>metadata.type</code> outright
+rather than checking a declaration against a row.
+<span class="src">CLAUDE.md:185-191, hooks/check-memtype.py</span></p>
+
+<p>This <strong>supersedes one clause</strong> of the entry above: the table no longer
+keeps <code>setup-</code>, because no pool holds such a file any more. The two that did
+were renamed in this change &mdash; <code>setup-android-emulator</code> became
+<code>topic-android-emulator</code>, <code>setup-chirpy-post-url</code> became
+<code>topic-chirpy-post-url</code> &mdash; and their index lines and inbound links moved
+with them. Everything else that entry records still holds.
+<a href="memory-pool-layout.html#2026-09-06-reader-named-prefixes">the entry it
+supersedes</a></p>
+
+<p>What the machine looks like after it: <span class="ct">96&times; pool file</span>, of
+which 92 pass. Every metadata block is gone (61 files lost one). The last three
+<code>pitfalls.md</code> became six <code>pitfall-&lt;subject&gt;</code> files, in the
+camera, garden and mabinogi pools.
+<span class="src">hooks/check-memtype.py over ~/.claude/projects/*/memory/*.md</span></p>
+
+<h3>What the four refusals are for</h3>
+
+<p>The four that do not pass are <code>history-*</code> files in the camera and garden
+pools. Leaving the retired rows in the table would have kept them quiet, and that was
+the option rejected: a checker that still admits a retired shape is the loophole with a
+machine behind it, and the refusal is fired by a <code>PostToolUse</code> hook, so the
+write still lands and the reason is what arrives. Each of those files needs a decision
+page in its own repository, which is a change to a repository this one does not
+reach.</p>
+
 </article>
 </body>
 </html>

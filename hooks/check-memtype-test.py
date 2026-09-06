@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Prove the widened pool check refuses what Filing refuses and allows the rest,
+"""Prove the narrowed pool check refuses what Filing refuses and allows the rest,
 through the script settings.json actually runs.
 
 Every case copies the shipped `check-memtype.py` and the shipped `CLAUDE.md`
 into a temporary tree and runs the copy, so what is under test is the file that
-gets installed and the table a reader would actually read. The allow half is
+gets installed and the prefix list a reader would actually read. The allow half is
 the load-bearing one: this hook is registered machine-wide on every `Write` and
 `Edit`, so a false refusal stops every session at once, while a missed one is
 caught by the next sweep. The last case replays every real pool file on this
@@ -39,13 +39,13 @@ def check(name, ok, detail=""):
         fails.append("%s\n      %s" % (name, detail))
 
 
-def tree(root, table=None):
+def tree(root, document=None):
     """A temporary copy of the shipped hook, its document, and an empty pool."""
     root = Path(root)
     (root / "hooks").mkdir()
     shutil.copy(HOOK, root / "hooks" / "check-memtype.py")
     (root / "CLAUDE.md").write_text(
-        DOCUMENT.read_text(encoding="utf-8") if table is None else table,
+        DOCUMENT.read_text(encoding="utf-8") if document is None else document,
         encoding="utf-8",
     )
     pool = root / "project" / "memory"
@@ -68,17 +68,24 @@ def memory(pool, name, body="", type_=None, index=True, title=None):
 
 
 def target_prefixes():
-    """The name set § Filing calls the target, read out of the document.
+    """The prefixes § Filing declares, read out of the document independently.
 
-    That paragraph is prose sitting beside a table a program parses, so nothing
-    else would notice it going false. This is its reader: every prefix it names
-    has to be one the table already accepts, or the widening does not admit the
-    scheme it claims to be widening to.
+    Deliberately not the hook's own parser: this reads the bullets the way a
+    person does, so a hook that quietly stopped seeing one of them, or saw one
+    the document does not list, fails here rather than passing itself.
     """
     text = DOCUMENT.read_text(encoding="utf-8")
-    para = next(
-        (block for block in text.split("\n\n") if "The target set is" in block), "")
-    return re.findall(r"`([a-z]+-)<subject>`", para)
+    after = text.split("memory prefixes are:", 1)
+    if len(after) < 2:
+        return []
+    found = []
+    for line in after[1].split("\n"):
+        item = re.match(r"^[ \t]*[-*+][ \t]+`([a-z]+-)<subject>`", line)
+        if item:
+            found.append(item.group(1))
+        elif found and line.strip():
+            break
+    return found
 
 
 def cli(hook, *paths):
@@ -100,38 +107,56 @@ def said(result):
 
 
 def main():
-    # ---- allow: every name the table carries today still passes, and so does
-    # the one the rename adds. A widening that dropped one would strand a pool.
-    with tempfile.TemporaryDirectory() as d:
-        hook, pool = tree(d)
-        today = {
-            "history-shape": "episodic",
-            "topic-layout": "semantic",
-            "feedback-sizing": "procedural",
-            "setup-herdr": "procedural",
-            "pitfalls": "procedural",
-            "pitfall-alloy": "procedural",
-        }
-        for name, kind in today.items():
-            path = memory(pool, name, type_=kind)
-            r = posttooluse(hook, path)
-            check("allowed: '%s' declaring '%s'" % (name, kind),
-                  r.returncode == 0 and not said(r).strip(),
-                  "exit %d: %s" % (r.returncode, said(r)[:300]))
-
-    # ---- allow: every prefix the document calls the target. The paragraph is
-    # prose with no other consumer, so this case is what keeps it true.
+    # ---- allow: a memory under each prefix the document declares, in the
+    # target shape -- `name` and `description` and no declaration at all. The
+    # bullets are the only statement of the rule, so this is their second
+    # reader: a hook that stopped seeing one of them strands a whole prefix.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
         prefixes = target_prefixes()
-        check("the document names 3 target prefixes (raise this count when "
+        check("the document declares 3 memory prefixes (raise this count when "
               "the scheme gains one)", len(prefixes) == 3,
-              "read %r from the 'The target set is' paragraph" % (prefixes,))
+              "read %r from the bullets after 'memory prefixes are:'" % (prefixes,))
+        check("the three are topic-, pitfall- and feedback-",
+              sorted(prefixes) == ["feedback-", "pitfall-", "topic-"],
+              "read %r" % (prefixes,))
         for prefix in prefixes:
             path = memory(pool, "%sprobe" % prefix)
             r = posttooluse(hook, path)
-            check("allowed: '%sprobe', a prefix the document calls the target"
-                  % prefix, r.returncode == 0,
+            check("allowed: '%sprobe', a prefix the document declares" % prefix,
+                  r.returncode == 0 and not said(r).strip(),
+                  "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- refuse: every name the scheme retired. Each is a real file shape
+    # that lived in a pool, and each gets the same reason naming its successor.
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        for name in ("history-shape", "setup-herdr", "pitfalls", "backlog"):
+            path = memory(pool, name)
+            r = posttooluse(hook, path)
+            check("refused: '%s', a retired name" % name,
+                  r.returncode == 2
+                  and "opens with none of the memory prefixes" in said(r)
+                  and "named after its reader" in said(r),
+                  "exit %d: %s" % (r.returncode, said(r)[:300]))
+        # `history-` is the one with nowhere in the pool to go, so its reason
+        # has to name where it went instead.
+        r = posttooluse(hook, pool / "history-shape.md")
+        check("the refusal sends a `history-` file to the decision page",
+              "decision page" in said(r) and "spec/decision-pages.md" in said(r),
+              said(r)[:300])
+
+    # ---- refuse: any `metadata.type`, not merely a contradicting one. Nothing
+    # re-read the key after it was written, and the prefix now carries what it
+    # claimed, so a declaration is a file that has not been migrated.
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        for kind in ("semantic", "procedural", "episodic"):
+            path = memory(pool, "topic-declares-%s" % kind, type_=kind)
+            r = posttooluse(hook, path)
+            check("refused: metadata.type '%s' on a well-named file" % kind,
+                  r.returncode == 2 and "that key is retired" in said(r)
+                  and "opens with none" not in said(r),
                   "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- allow: the widening proper. The target frontmatter is `name` and
@@ -158,7 +183,7 @@ def main():
     # entries, and a Markdown file outside a pool is nobody's business here.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        memory(pool, "topic-alloy", type_="semantic")
+        memory(pool, "topic-alloy")
         r = posttooluse(hook, pool / "MEMORY.md")
         check("allowed: MEMORY.md itself, which no line indexes",
               r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
@@ -172,7 +197,7 @@ def main():
     # read. A title unlike the name and space inside the parentheses pass.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        path = memory(pool, "topic-alloy", index=False)
         (pool / "MEMORY.md").write_text(
             "# Memory index\n\n- [Alloy, and its module system]( topic-alloy.md )"
             " — read before writing a model.\n", encoding="utf-8")
@@ -184,8 +209,8 @@ def main():
     # memory, so this is the file nobody can reach.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        memory(pool, "topic-alloy", type_="semantic")
-        orphan = memory(pool, "topic-lost", type_="semantic", index=False)
+        memory(pool, "topic-alloy")
+        orphan = memory(pool, "topic-lost", index=False)
         r = posttooluse(hook, orphan)
         check("refused: a pool file the index does not link to",
               r.returncode == 2 and "topic-lost.md" in said(r)
@@ -197,8 +222,8 @@ def main():
     # so a mention passes a substring test and must not pass this one.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        memory(pool, "topic-alloy-modules", type_="semantic", index=False)
-        short = memory(pool, "topic-alloy", type_="semantic", index=False)
+        memory(pool, "topic-alloy-modules", index=False)
+        short = memory(pool, "topic-alloy", index=False)
         (pool / "MEMORY.md").write_text(
             "- [Alloy modules](topic-alloy-modules.md) — split out of "
             "topic-alloy.md, which the index no longer links.\n",
@@ -216,27 +241,53 @@ def main():
     # file that was never added.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        path = memory(pool, "topic-alloy", index=False)
         r = posttooluse(hook, path)
         check("refused: a pool with no MEMORY.md, said as 'no readable'",
               r.returncode == 2 and "no readable MEMORY.md" in said(r)
               and "carries no line linking" not in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
 
-    # ---- refuse: the checks the widening keeps. A name outside the table, and
-    # a declared type contradicting its row.
+    # ---- the list has a start and an end, and neither is decorative. A
+    # document holding a bullet of the same shape somewhere else must not
+    # widen the set: read with no anchor, or with no terminator, the hook
+    # accepts whatever that other bullet names, and nothing on the shipped
+    # document would show it.
+    with tempfile.TemporaryDirectory() as d:
+        decoy = (
+            "# CLAUDE\n\n"
+            "Somewhere above:\n\n"
+            "- `above-<subject>` — a bullet that is not the list.\n\n"
+            "The three memory prefixes are:\n\n"
+            "- `topic-<subject>` — a fact looked up.\n"
+            "- `pitfall-<subject>` — a trap read when stuck.\n"
+            "- `feedback-<subject>` — a rule the owner gave.\n\n"
+            "Somewhere below:\n\n"
+            "- `below-<subject>` — another bullet that is not the list.\n"
+        )
+        hook, pool = tree(d, document=decoy)
+        r = posttooluse(hook, memory(pool, "topic-inside"))
+        check("allowed: a prefix from the list itself, with decoys around it",
+              r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
+        for name, where in (("above-thing", "before the list"),
+                            ("below-thing", "after the list")):
+            r = posttooluse(hook, memory(pool, name))
+            check("refused: a bullet of the same shape %s is not in the list"
+                  % where,
+                  r.returncode == 2
+                  and "opens with none of the memory prefixes" in said(r),
+                  "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- refuse: a prefix nobody declared. Inventing one is a document that
+    # was never updated, so the reason names the list rather than the file.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        stray = memory(pool, "notes-alloy", type_="semantic")
+        stray = memory(pool, "notes-alloy")
         r = posttooluse(hook, stray)
-        check("refused: a name matching no row of the table",
-              r.returncode == 2 and "matches no row" in said(r),
-              "exit %d: %s" % (r.returncode, said(r)[:300]))
-        drifted = memory(pool, "topic-drift", type_="procedural")
-        r = posttooluse(hook, drifted)
-        check("refused: metadata.type contradicting its row",
-              r.returncode == 2 and "metadata.type is 'procedural'" in said(r)
-              and "semantic" in said(r),
+        check("refused: a prefix the document does not declare",
+              r.returncode == 2
+              and "opens with none of the memory prefixes" in said(r)
+              and "'topic-'" in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- refuse: a link that is not the line's first element. A neighbour's
@@ -244,7 +295,7 @@ def main():
     # route to the file; a fenced example is being shown, not filed.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        buried = memory(pool, "topic-old", type_="semantic", index=False)
+        buried = memory(pool, "topic-old", index=False)
         (pool / "MEMORY.md").write_text(
             "- [New](topic-new.md) - split out of [old](topic-old.md).\n",
             encoding="utf-8")
@@ -321,7 +372,7 @@ def main():
     # second entry for a file the index already names.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        path = memory(pool, "topic-alloy", index=False)
         for line, note in (
                 ("- **[Alloy](topic-alloy.md)** - a hook.", "the link inside bold"),
                 ("| [Alloy](topic-alloy.md) | a hook |", "the link in a table cell"),
@@ -338,7 +389,7 @@ def main():
     # second Markdown parser in a hook, and nobody comments an entry out.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        path = memory(pool, "topic-alloy", index=False)
         (pool / "MEMORY.md").write_text(
             "<!--\n- [Alloy](topic-alloy.md) - retired.\n-->\n", encoding="utf-8")
         r = posttooluse(hook, path)
@@ -349,7 +400,7 @@ def main():
     # here stops a session that did nothing wrong.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        path = memory(pool, "topic-alloy", index=False)
         for line, note in (
                 ("- [Alloy](./topic-alloy.md) - a hook.", "a './' prefix"),
                 ("1. [Alloy](topic-alloy.md) - a hook.", "a numbered list"),
@@ -368,7 +419,7 @@ def main():
     # here is a pool that silently stops being checked.
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        path = memory(pool, "topic-alloy", index=False)
         (pool / "MEMORY.md").write_bytes(
             b"- [Alloy](topic-alloy.md) - \xff\xfe not utf-8.\n")
         r = posttooluse(hook, path)
@@ -391,36 +442,58 @@ def main():
     # says which document it read -- never a traceback, which exits 1 and is
     # non-blocking.
     with tempfile.TemporaryDirectory() as d:
-        hook, pool = tree(d, table="# CLAUDE\n\nNo table here.\n")
-        path = memory(pool, "topic-alloy", type_="semantic")
+        hook, pool = tree(d, document="# CLAUDE\n\nNo prefixes here.\n")
+        path = memory(pool, "topic-alloy")
         r = posttooluse(hook, path)
-        check("refused: a document carrying no memtype table",
-              r.returncode == 2 and "no memtype table" in said(r),
+        check("refused: a document declaring no memory prefixes",
+              r.returncode == 2 and "no memory prefixes" in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
         (Path(d) / "CLAUDE.md").write_bytes(b"# CLAUDE\n\n\xff\xfe\n")
-        path = memory(pool, "topic-alloy", type_="semantic")
+        path = memory(pool, "topic-alloy")
         r = posttooluse(hook, path)
         check("refused: a document that is not valid UTF-8, with exit 2",
               r.returncode == 2 and "cannot be read" in said(r)
               and "Traceback" not in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
 
-    # ---- allow, replayed: every real pool file on this machine, against the
-    # shipped document. A widening that refuses one of these stops every
-    # session that writes a memory.
+    # ---- replayed: every real pool file on this machine, against the shipped
+    # document. This is the load-bearing half -- a false refusal here stops
+    # every session that writes a memory.
+    #
+    # A file still carrying a retired name is refused on purpose, so the case
+    # cannot be "everything passes": it is every file with a target name
+    # passing, and every file with a retired one refused FOR THAT REASON.
+    # Written the other way round it would go green the day the last retired
+    # file is migrated and also on the day the check stopped refusing.
+    prefixes = tuple(target_prefixes())
     corpus = sorted(
         p for pool in Path.home().glob(".claude/projects/*/memory")
         for p in pool.glob("*.md") if p.name != "MEMORY.md")
-    r = cli(HOOK, *corpus) if corpus else None
-    check("allowed: every real pool file on this machine (%d)" % len(corpus),
-          bool(corpus) and r.returncode == 0
-          and r.stdout.count(": ok") == len(corpus),
-          "no pool files found" if not corpus else
-          "exit %d, %d of %d ok: %s" % (
-              r.returncode, r.stdout.count(": ok"), len(corpus),
-              (r.stderr or r.stdout)[:400]))
+    migrated = [p for p in corpus if p.stem.startswith(prefixes)]
+    retired = [p for p in corpus if not p.stem.startswith(prefixes)]
+    check("the machine holds pool files to replay", bool(corpus),
+          "no pool files found under ~/.claude/projects/*/memory")
+    if migrated:
+        r = cli(HOOK, *migrated)
+        check("allowed: every migrated pool file on this machine (%d of %d)"
+              % (len(migrated), len(corpus)),
+              r.returncode == 0 and r.stdout.count(": ok") == len(migrated),
+              "exit %d, %d of %d ok: %s" % (
+                  r.returncode, r.stdout.count(": ok"), len(migrated),
+                  (r.stderr or r.stdout)[:400]))
+    for path in retired:
+        r = cli(HOOK, path)
+        check("refused, and named as a retired name: %s/%s"
+              % (path.parent.parent.name, path.name),
+              r.returncode == 1
+              and "opens with none of the memory prefixes" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+    check("the replay states its two sets (%d migrated, %d still retired)"
+          % (len(migrated), len(retired)),
+          len(migrated) + len(retired) == len(corpus),
+          "%d + %d != %d" % (len(migrated), len(retired), len(corpus)))
 
     if not ran:
         print("FAIL  the suite ran no case at all")
