@@ -378,10 +378,11 @@ def main():
             check("and the list is still read, with a stray bullet %s" % note,
                   r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
 
-    # ---- the fence terminator has TWO effects and a case pins one each. It
-    # closes the list, which the stray-bullet case above pins; it also marks
-    # the list CLOSED, so a second announcement past the fence contradicts
-    # rather than reopening. Without the second effect the retired list a few
+    # ---- the fence terminator has two effects and a firing condition, and a
+    # case pins one each. It closes the list, which the stray-bullet case
+    # above pins; it also marks the list CLOSED, so a second announcement past
+    # the fence contradicts rather than reopening; and it waits for the list to
+    # have a bullet, which the case after this one pins. Without the second effect the retired list a few
     # lines below the real one is collected, silently.
     with tempfile.TemporaryDirectory() as d:
         past_fence = (LIST + "```\nan example\n```\n"
@@ -400,14 +401,30 @@ def main():
     # refuses every memory write on the machine.
     with tempfile.TemporaryDirectory() as d:
         fence_first = ("# CLAUDE\n\nThe three memory prefixes are:\n"
-                       "```\nhow the list is written\n```\n"
+                       "```\n- `setup-<subject>` — how a bullet is written.\n```\n"
                        "- `topic-<subject>` — a fact looked up.\n"
                        "- `pitfall-<subject>` — a trap read when stuck.\n")
         hook, pool = tree(d, document=fence_first)
         r = posttooluse(hook, memory(pool, "pitfall-fine"))
         check("allowed: a fence before the first bullet does not end the list",
-              r.returncode == 0 and "no memory prefixes" not in said(r),
+              r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
+        r = posttooluse(hook, memory(pool, "setup-herdr"))
+        check("refused: a prefix inside a fence before the first bullet",
+              r.returncode == 2
+              and "opens with none of the memory prefixes" in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- the lead is anchored at END OF LINE, and that is what keeps the
+    # phrase usable mid-sentence. The document names the retired prefixes in
+    # running prose a few lines below the list; read as an announcement, that
+    # sentence contradicts the real one and refuses every memory write.
+    with tempfile.TemporaryDirectory() as d:
+        inline = (LIST + "\nThe retired memory prefixes are: `setup-`, "
+                  "`history-` and `pitfalls`.\n")
+        hook, pool = tree(d, document=inline)
+        r = posttooluse(hook, memory(pool, "topic-fine"))
+        check("allowed: the lead phrase mid-sentence announces nothing",
+              r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- allow: prose that merely ENDS in those words declares nothing, so it
     # is not a second declaration either. Read as one, it refuses every memory
