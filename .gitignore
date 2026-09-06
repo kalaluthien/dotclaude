@@ -11,3 +11,5 @@
 !/rules/
 !/git-hooks/
 !/hooks/
+!/spec/
+!/docs/

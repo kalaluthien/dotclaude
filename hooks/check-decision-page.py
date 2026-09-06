@@ -17,6 +17,12 @@ what it does is put the reason in front of the model that wrote it, which is the
 only correction available once the bytes are on disk. The rule this enforces is
 therefore loud, not preventive, and `spec/decision-pages.md` says so too.
 
+A page declares itself a decision page with `class="decision-page"` on its
+`<body>`, and only a declared page is held to the entry rules. `docs/` holds
+every doctype the `writing` skill defines, and an ordinary explanation's
+`<h2>First section</h2>` is not a malformed decision -- judging every page here
+would refuse the skill's own skeleton on every write.
+
 Every path outside this checkout's `docs/` and its links is skipped, and the
 skip says so: a hook registered machine-wide sees every write on the machine,
 and a silent skip and a pass look identical from the outside.
@@ -37,10 +43,24 @@ DOCS = os.path.join(ROOT, "docs")
 # read from. Every other markdown file under `docs/` is misfiled.
 INDEX = "INDEX.md"
 
-H2 = re.compile(r"<h2\b([^>]*)>(.*?)</h2>", re.DOTALL | re.IGNORECASE)
+# An attribute value may hold a `>` (`title="a > b"`), so the attribute run is
+# scanned quote by quote rather than up to the first `>`; the naive form read
+# the rest of the tag as the entry's title.
+ATTRS = r"""((?:[^>"']|"[^"]*"|'[^']*')*)"""
+H2 = re.compile(r"<h2\b" + ATTRS + r">(.*?)</h2>", re.DOTALL | re.IGNORECASE)
+BODY = re.compile(r"<body\b" + ATTRS + r">", re.IGNORECASE)
 ID = re.compile(r"""\bid\s*=\s*["']([^"']*)["']""", re.IGNORECASE)
+CLASS = re.compile(r"""\bclass\s*=\s*["']([^"']*)["']""", re.IGNORECASE)
 TAG = re.compile(r"<[^>]*>")
 DATE = re.compile(r"\s*(\d{4}-\d{2}-\d{2})\b")
+
+# Commented-out markup is not in the page. Both the entries and the links are
+# read from the text with comments removed, so a draft entry parked in a comment
+# is neither counted nor refused.
+COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
+
+# The class that declares a decision page.
+MARK = "decision-page"
 
 # A link that unambiguously addresses THIS docs root: spelled from the home
 # directory. A bare `docs/x.html#y` is not one -- every repository on the
@@ -55,7 +75,11 @@ PAGE_RE = r"([A-Za-z0-9._-]+\.html)"
 ANCHOR_RE = r"([A-Za-z0-9_-]+(?:[.][A-Za-z0-9_-]+)*)"
 HOME_LINK = re.compile(
     r"(?:~|\$HOME|/Users/[^/\s]+)/\.claude/docs/" + PAGE_RE + "#" + ANCHOR_RE)
-LOCAL_LINK = re.compile(r"(?:\./|\.\./docs/|docs/)?" + PAGE_RE + "#" + ANCHOR_RE)
+# The local form has to START a path, or `https://docs.python.org/3/library/
+# re.html#re.DOTALL` reads as a sibling page named `re.html`. The lookbehind
+# refuses a match that continues someone else's path, host, or word.
+LOCAL_LINK = re.compile(
+    r"(?<![\w/.:-])(?:\./|\.\./docs/|docs/)?" + PAGE_RE + "#" + ANCHOR_RE)
 
 
 def under(path, directory):
@@ -74,10 +98,24 @@ def read(path):
         return None
 
 
+def visible(text):
+    """The page with its comments removed."""
+    return COMMENT.sub("", text)
+
+
+def declared(text):
+    """Whether the page declares itself a decision page on its `<body>`."""
+    match = BODY.search(visible(text))
+    if not match:
+        return False
+    attrs = CLASS.search(match.group(1))
+    return bool(attrs) and MARK in attrs.group(1).split()
+
+
 def entries(text):
     """Every `<h2>` in the page, as (id, visible text) in document order."""
     found = []
-    for attrs, inner in H2.findall(text):
+    for attrs, inner in H2.findall(visible(text)):
         match = ID.search(attrs)
         anchor = match.group(1) if match else None
         found.append((anchor, TAG.sub("", inner).strip()))
@@ -121,6 +159,7 @@ def page_faults(text):
 
 def link_faults(path, text):
     """Links into this checkout's `docs/` that resolve to nothing."""
+    text = visible(text)
     wanted = set(HOME_LINK.findall(text))
     if under(path, DOCS):
         # Inside `docs/` the relative form is unambiguous: it can only mean a
@@ -147,25 +186,40 @@ def verdict(path):
     if not os.path.exists(path):
         return True, "%s: skipped, no such file" % path
 
+    base = os.path.basename(path)
+    # By name, before the file is read: the misfiling is the extension, and a
+    # `.md` that is not valid UTF-8 is misfiled just the same. Reading first
+    # let a binary file under `docs/` skip a check it had already failed.
+    if under(path, DOCS) and base.endswith(".md") and base != INDEX:
+        return False, (
+            "%s is markdown under %s, and only `%s` may be. A view is HTML and "
+            "`spec/` is where normative markdown lives, so this is misfiled, "
+            "not temporary." % (path, DOCS, INDEX)
+        )
+
     text = read(path)
     if text is None:
         return True, "%s: skipped, not readable as UTF-8 text" % path
 
     if under(path, DOCS):
-        base = os.path.basename(path)
-        if not base.endswith(".html") and base != INDEX:
-            return False, (
-                "%s is under %s and is neither a `.html` view nor `%s`. Markdown "
-                "under `docs/` is misfiled, not temporary: a decision page is a "
-                "view, and `spec/` is where normative markdown lives."
-                % (path, DOCS, INDEX)
-            )
-        if base.endswith(".html"):
-            faults = page_faults(text) + link_faults(path, text)
+        if base == INDEX:
+            return True, "%s: ok, the docs index" % path
+        if not base.endswith(".html"):
+            # A stylesheet, a font, a rendered PNG. `docs/` holds what a view
+            # needs, and only its markdown is misfiled.
+            return True, "%s: skipped, not a view" % path
+        faults = link_faults(path, text)
+        if not declared(text):
+            # Every doctype the `writing` skill defines lives here. Without the
+            # marker the entry rules do not apply, and only the links are read.
             if faults:
-                return False, "%s is a decision page and %s" % (path, "; also ".join(faults))
-            return True, "%s: ok, decision page, %d entries" % (path, len(entries(text)))
-        return True, "%s: ok, the docs index" % path
+                return False, "%s %s" % (path, "; also ".join(faults))
+            return True, ("%s: ok, a view, not declared a decision page; links only"
+                          % path)
+        faults = page_faults(text) + faults
+        if faults:
+            return False, "%s is a decision page and %s" % (path, "; also ".join(faults))
+        return True, "%s: ok, decision page, %d entries" % (path, len(entries(text)))
 
     if not under(path, ROOT):
         return True, "%s: skipped, outside %s" % (path, ROOT)

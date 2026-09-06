@@ -24,7 +24,8 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 SCRIPT = os.path.join(HERE, "check-decision-page.py")
 
-PAGE = """<!doctype html><html><head><title>Pool shape</title></head><body>
+PAGE = """<!doctype html><html><head><title>Pool shape</title></head>
+<body class="decision-page">
 <h1>Pool shape</h1>
 <dl class="provenance">
   <dt>Doctype</dt>  <dd>explanation</dd>
@@ -37,6 +38,16 @@ PAGE = """<!doctype html><html><head><title>Pool shape</title></head><body>
 <p>The memtype axis went.</p>
 </body></html>
 """
+
+
+def decision(inner):
+    """A minimal page that declares itself a decision page."""
+    return '<html><body class="decision-page"><h1>T</h1>%s</body></html>' % inner
+
+
+def view(inner):
+    """A page under `docs/` that is some other doctype."""
+    return '<html><body><h1>T</h1>%s</body></html>' % inner
 
 
 class Tree(object):
@@ -155,24 +166,24 @@ def allow_cases(t):
            says=["not readable as UTF-8"])
 
     t.write("docs/subheads.html",
-            '<h1>T</h1><h2 id="a">2026-01-01 one</h2><h3>a subhead with no id</h3>')
+            decision('<h2 id="a">2026-01-01 one</h2><h3>a subhead with no id</h3>'))
     code, out = t.run(os.path.join(t.root, "docs", "subheads.html"))
     expect("only h2 is an entry; an h3 needs no id", code, out, 0, says=["1 entries"])
 
     t.write("docs/rich.html",
-            '<h1>T</h1><h2 id="b">2026-02-03 the <code>setup-</code> row</h2>')
+            decision('<h2 id="b">2026-02-03 the <code>setup-</code> row</h2>'))
     code, out = t.run(os.path.join(t.root, "docs", "rich.html"))
     expect("an entry title may carry markup around its words", code, out, 0,
            says=["ok, decision page"])
 
     t.write("docs/extra-fields.html",
-            '<h1>T</h1><dl><dt>Doctype</dt><dd>guide</dd><dt>Commit</dt><dd>abc</dd></dl>'
-            '<h2 id="c">2026-02-04 a decision</h2>')
+            decision('<dl><dt>Doctype</dt><dd>guide</dd><dt>Commit</dt><dd>abc</dd></dl>'
+                     '<h2 id="c">2026-02-04 a decision</h2>'))
     code, out = t.run(os.path.join(t.root, "docs", "extra-fields.html"))
     expect("the provenance block is render-check's, not this hook's", code, out, 0,
            says=["ok, decision page"], absent=["Doctype", "provenance"])
 
-    t.write("docs/empty.html", "<h1>Nothing decided yet</h1>")
+    t.write("docs/empty.html", decision("<p>Nothing decided yet.</p>"))
     code, out = t.run(os.path.join(t.root, "docs", "empty.html"))
     expect("a page with no entries yet is accepted", code, out, 0, says=["0 entries"])
 
@@ -189,6 +200,50 @@ def allow_cases(t):
     expect("an unparseable payload is not an error", done.returncode,
            done.stdout + done.stderr, 0)
 
+    t.write("docs/explainer.html", view('<h2>First section</h2>'))
+    code, out = t.run(os.path.join(t.root, "docs", "explainer.html"))
+    expect("an undeclared view keeps its own h2 rules", code, out, 0,
+           says=["not declared a decision page"],
+           absent=["carries no id", "does not open with a YYYY-MM-DD date"])
+
+    t.write("docs/nearly.html", '<html><body class="my-decision-page">'
+                                '<h1>T</h1><h2>First section</h2></body></html>')
+    code, out = t.run(os.path.join(t.root, "docs", "nearly.html"))
+    expect("the marker is a whole class, not a substring of one", code, out, 0,
+           says=["not declared a decision page"], absent=["carries no id"])
+
+    t.write("docs/external.html",
+            decision('<h2 id="x">2026-04-01 a decision</h2><p>see '
+                     '<a href="https://docs.python.org/3/library/re.html#re.DOTALL">re</a></p>'))
+    code, out = t.run(os.path.join(t.root, "docs", "external.html"))
+    expect("a URL ending in a page and a fragment is not a sibling page",
+           code, out, 0, says=["ok, decision page"], absent=["holds no such page"])
+
+    t.write("docs/style.css", "body { margin: 0 }")
+    code, out = t.run(os.path.join(t.root, "docs", "style.css"))
+    expect("a stylesheet under docs/ is not markdown and is not refused",
+           code, out, 0, says=["skipped, not a view"], absent=["misfiled"])
+
+    t.write("docs/diagram.png", b"\x89PNG\r\n\x1a\n\xff", binary=True)
+    code, out = t.run(os.path.join(t.root, "docs", "diagram.png"))
+    expect("a rendered PNG under docs/ is not refused", code, out, 0,
+           absent=["misfiled"])
+
+    t.write("docs/commented.html",
+            decision('<h2 id="live">2026-04-02 a decision</h2>'
+                     '<!-- <h2>a draft</h2> and <a href="gone.html#nope">a dead link</a> -->'))
+    code, out = t.run(os.path.join(t.root, "docs", "commented.html"))
+    expect("commented-out markup is not in the page", code, out, 0,
+           says=["ok, decision page, 1 entries"],
+           absent=["carries no id", "holds no such page"])
+
+    t.write("docs/attr.html",
+            decision('<h2 id="k" title="a > b">2026-04-03 a decision</h2>'))
+    code, out = t.run(os.path.join(t.root, "docs", "attr.html"))
+    expect("a `>` inside an attribute value does not end the tag", code, out, 0,
+           says=["ok, decision page, 1 entries"],
+           absent=["does not open with a YYYY-MM-DD date"])
+
     bare = Tree()
     os.rmdir(os.path.join(bare.root, "docs"))
     code, out = bare.run(bare.write("projects/-tmp-p/memory/topic-y.md", "hi\n"))
@@ -203,24 +258,25 @@ def refuse_cases(t):
     expect("markdown under docs/ that is not INDEX.md is refused", code, out, 2,
            says=["misfiled"])
 
-    t.write("docs/no-id.html", '<h1>T</h1><h2>2026-03-01 a decision with no id</h2>')
+    t.write("docs/no-id.html", decision('<h2>2026-03-01 a decision with no id</h2>'))
     code, out = t.run(os.path.join(t.root, "docs", "no-id.html"))
     expect("an entry with no id is refused", code, out, 2,
            says=["carries no id"], absent=["YYYY-MM-DD date"])
 
-    t.write("docs/no-date.html", '<h1>T</h1><h2 id="d">a decision with no date</h2>')
+    t.write("docs/no-date.html", decision('<h2 id="d">a decision with no date</h2>'))
     code, out = t.run(os.path.join(t.root, "docs", "no-date.html"))
     expect("an entry that does not open with a date is refused", code, out, 2,
            says=["does not open with a YYYY-MM-DD date"], absent=["carries no id"])
 
     t.write("docs/late-date.html",
-            '<h1>T</h1><h2 id="f">a decision taken on 2026-03-05</h2>')
+            decision('<h2 id="f">a decision taken on 2026-03-05</h2>'))
     code, out = t.run(os.path.join(t.root, "docs", "late-date.html"))
     expect("a date anywhere but the opening is not an opening date", code, out, 2,
            says=["does not open with a YYYY-MM-DD date"])
 
     t.write("docs/dupes.html",
-            '<h1>T</h1><h2 id="same">2026-03-02 first</h2><h2 id="same">2026-03-03 second</h2>')
+            decision('<h2 id="same">2026-03-02 first</h2>'
+                     '<h2 id="same">2026-03-03 second</h2>'))
     code, out = t.run(os.path.join(t.root, "docs", "dupes.html"))
     expect("two entries sharing an id are refused", code, out, 2,
            says=["repeats the id 'same'"])
@@ -238,11 +294,29 @@ def refuse_cases(t):
            says=["carries no entry with that id"], absent=["holds no such page"])
 
     t.write("docs/sibling.html",
-            '<h1>T</h1><h2 id="e">2026-03-04 a decision</h2>'
-            '<p>as in <a href="pool-shape.html#never-decided">the other page</a></p>')
+            decision('<h2 id="e">2026-03-04 a decision</h2>'
+                     '<p>as in <a href="pool-shape.html#never-decided">the other page</a></p>'))
     code, out = t.run(os.path.join(t.root, "docs", "sibling.html"))
     expect("inside docs/, a relative link to a missing anchor is refused", code, out, 2,
            says=["carries no entry with that id"])
+
+    t.write("docs/binary-note.md", b"\xff\xfe\x00# a decision", binary=True)
+    code, out = t.run(os.path.join(t.root, "docs", "binary-note.md"))
+    expect("markdown under docs/ is refused by name, before it is read",
+           code, out, 2, says=["misfiled"], absent=["not readable as UTF-8"])
+
+    t.write("docs/many-classes.html",
+            '<html><body class="note decision-page wide"><h1>T</h1>'
+            '<h2>2026-04-04 a decision with no id</h2></body></html>')
+    code, out = t.run(os.path.join(t.root, "docs", "many-classes.html"))
+    expect("the marker is found among other classes", code, out, 2,
+           says=["carries no id"])
+
+    t.write("docs/plain-view.html",
+            view('<h2>First section</h2><p><a href="gone.html#nope">x</a></p>'))
+    code, out = t.run(os.path.join(t.root, "docs", "plain-view.html"))
+    expect("an undeclared view still has its links checked", code, out, 2,
+           says=["holds no such page"], absent=["carries no id"])
 
     code, out = t.hook(os.path.join(t.root, "docs", "no-id.html"))
     expect("the stdin hook refuses with 2 and gives the reason", code, out, 2,
