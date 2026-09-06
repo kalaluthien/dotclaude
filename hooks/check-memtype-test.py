@@ -270,6 +270,28 @@ def main():
               and "fence that is never closed" in said(r)
               and "carries no line linking" not in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
+        # The fence is the diagnosis only when the fence is what hid the entry.
+        # Gated on the fence alone, it rewrites the reason for every miss in the
+        # file -- so these two pin the branch's scope, where the case above pins
+        # only its wording.
+        (pool / "MEMORY.md").write_text(
+            "- [Other](topic-other.md) - a hook.\n\n```\nan example\n",
+            encoding="utf-8")
+        r = posttooluse(hook, buried)
+        check("refused as a missing entry, not as the fence, when a stray fence "
+              "is open but did not hide it", r.returncode == 2
+              and "carries no line linking" in said(r)
+              and "fence that is never closed" not in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+        (pool / "MEMORY.md").write_text(
+            "- **[Old](topic-old.md)** - a hook.\n\n```\nan example\n",
+            encoding="utf-8")
+        r = posttooluse(hook, buried)
+        check("refused with the shape named, not as the fence, when a stray "
+              "fence is open", r.returncode == 2
+              and "FIRST element is the link" in said(r)
+              and "fence that is never closed" not in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- refuse: the shapes the bullet anchor newly rejects. The message has
     # to name the shape, or a session reads "the line is missing" and appends a
@@ -280,7 +302,7 @@ def main():
         for line, note in (
                 ("- **[Alloy](topic-alloy.md)** - a hook.", "the link inside bold"),
                 ("| [Alloy](topic-alloy.md) | a hook |", "the link in a table cell"),
-                ("1. [Alloy](topic-alloy.md) - a hook.", "a numbered list")):
+                ):
             (pool / "MEMORY.md").write_text(line + "\n", encoding="utf-8")
             r = posttooluse(hook, path)
             check("refused with the shape named: %s" % note,
@@ -307,6 +329,9 @@ def main():
         path = memory(pool, "topic-alloy", type_="semantic", index=False)
         for line, note in (
                 ("- [Alloy](./topic-alloy.md) - a hook.", "a './' prefix"),
+                ("1. [Alloy](topic-alloy.md) - a hook.", "a numbered list"),
+                ("1) [Alloy](topic-alloy.md) - a hook.", "a '1)' marker"),
+                ("+ [Alloy](topic-alloy.md) - a hook.", "a '+' bullet"),
                 ("- [Alloy](topic-alloy.md#modules) - a hook.", "an '#anchor'"),
                 ("* [Alloy](topic-alloy.md) - a hook.", "a '*' bullet"),
                 ("  - [Alloy]( topic-alloy.md ) - a hook.", "indented and spaced")):

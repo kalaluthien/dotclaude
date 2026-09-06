@@ -32,7 +32,8 @@ prose says a new memtype is invented by adding it to the table in the same
 change, so an unlisted prefix is a table that was never updated.
 
 What this hook does not cover: settings.json matches it on `Write` and `Edit`
-only, so a memory written by `sed` or a heredoc is never checked. And a new memory's first
+only, so a memory written by `sed` or a heredoc is never
+checked. And a new memory's first
 write is always refused, its index line not existing yet -- one round-trip per
 new file, which is the nudge, not a defect.
 
@@ -65,7 +66,10 @@ TYPE_KEY = "metadata.type"
 # along the line is a neighbour's prose naming the file -- what a split leaves
 # behind -- and prose is not a route to anything. A `./` prefix and an `#anchor`
 # are tolerated; the title and the trailing hook are a person's and unread.
-LINK = r"(?m)^[ \t]*[-*][ \t]+\[[^\]]*\]\([ \t]*\.?/?%s(?:#[^)\s]*)?[ \t]*\)"
+LINK = (
+    r"(?m)^[ \t]*(?:[-*+]|\d+[.)])[ \t]+"
+    r"\[[^\]]*\]\([ \t]*\.?/?%s(?:#[^)\s]*)?[ \t]*\)"
+)
 
 ROW = re.compile(r"^\|(.+)\|\s*$")
 RULE_ROW = re.compile(r"^[\s:|-]+$")
@@ -235,10 +239,6 @@ def unfenced(text):
     unterminated fence swallows every line below it, which is fail-closed and
     right, but it is a different defect from a missing entry and is fixed by a
     different edit, so the caller is told which it observed.
-
-    An HTML comment is not read, so a commented-out entry still counts as one.
-    Accepted, and written down rather than left silent: nobody comments an entry
-    out, and reading them would put a second Markdown parser inside a hook.
     """
     kept, in_fence = [], False
     for line in text.split("\n"):
@@ -253,9 +253,14 @@ def unfenced(text):
 def indexed(path):
     """Why the pool's index does not name this file, or None when it does.
 
-    A pool with no readable index and an index that was read and omits the file
-    are different failures, and a reader acts on them differently, so each
-    reason says which of the two was observed.
+    A pool with no readable index, an index whose unclosed fence swallowed the
+    entry, and an index that was read and simply omits the file are three
+    different failures fixed by three different edits, so each reason says
+    which of them was observed.
+
+    An HTML comment is not read, so a commented-out entry still counts as one.
+    Accepted, and written down rather than left silent: nobody comments an
+    entry out, and reading them would put a second Markdown parser in a hook.
     """
     index = os.path.join(os.path.dirname(path), INDEX_FILE)
     base = os.path.basename(path)
@@ -270,7 +275,12 @@ def indexed(path):
         )
     body, unterminated = unfenced(text)
     if not re.search(LINK % re.escape(base), body):
-        if unterminated:
+        # The fence is the diagnosis only when the fence is what hid the entry.
+        # Gated on `unterminated` alone it rewrote the reason for every miss in
+        # the file, so a wrongly shaped entry was answered "close the fence" --
+        # and "the entry may well be there" would name a condition no branch
+        # had read.
+        if unterminated and re.search(LINK % re.escape(base), text):
             return (
                 "%s has a fence that is never closed, so every line below it "
                 "was read as an example and not as an entry, '%s' among them. "
