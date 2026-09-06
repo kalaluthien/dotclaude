@@ -124,8 +124,8 @@ def main():
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
         prefixes = target_prefixes()
-        check("the document still names a target set at all",
-              len(prefixes) == 3,
+        check("the document names 3 target prefixes (raise this count when "
+              "the scheme gains one)", len(prefixes) == 3,
               "read %r from the 'The target set is' paragraph" % (prefixes,))
         for prefix in prefixes:
             path = memory(pool, "%sprobe" % prefix)
@@ -259,6 +259,46 @@ def main():
         check("refused: linked only from inside a fenced example",
               r.returncode == 2 and "carries no line linking" in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
+        # A fence nobody closed swallows the entry below it. Fail-closed is
+        # right; calling it a missing entry sends the reader to the wrong edit.
+        (pool / "MEMORY.md").write_text(
+            "How to write one:\n\n```\n- [Old](topic-old.md)\n\n"
+            "- [Old](topic-old.md) - a hook.\n", encoding="utf-8")
+        r = posttooluse(hook, buried)
+        check("refused: an unterminated fence, named as the fence and not as a "
+              "missing entry", r.returncode == 2
+              and "fence that is never closed" in said(r)
+              and "carries no line linking" not in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- refuse: the shapes the bullet anchor newly rejects. The message has
+    # to name the shape, or a session reads "the line is missing" and appends a
+    # second entry for a file the index already names.
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        for line, note in (
+                ("- **[Alloy](topic-alloy.md)** - a hook.", "the link inside bold"),
+                ("| [Alloy](topic-alloy.md) | a hook |", "the link in a table cell"),
+                ("1. [Alloy](topic-alloy.md) - a hook.", "a numbered list")):
+            (pool / "MEMORY.md").write_text(line + "\n", encoding="utf-8")
+            r = posttooluse(hook, path)
+            check("refused with the shape named: %s" % note,
+                  r.returncode == 2 and "FIRST element is the link" in said(r)
+                  and "a second line for the same file is not the fix" in said(r),
+                  "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- allowed, and accepted rather than left silent: an HTML comment is not
+    # read, so a commented-out entry still counts. Reading them would put a
+    # second Markdown parser in a hook, and nobody comments an entry out.
+    with tempfile.TemporaryDirectory() as d:
+        hook, pool = tree(d)
+        path = memory(pool, "topic-alloy", type_="semantic", index=False)
+        (pool / "MEMORY.md").write_text(
+            "<!--\n- [Alloy](topic-alloy.md) - retired.\n-->\n", encoding="utf-8")
+        r = posttooluse(hook, path)
+        check("allowed, accepted difference: an entry inside an HTML comment",
+              r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- allow: the link shapes a writer plausibly reaches for. A refusal
     # here stops a session that did nothing wrong.

@@ -32,8 +32,7 @@ prose says a new memtype is invented by adding it to the table in the same
 change, so an unlisted prefix is a table that was never updated.
 
 What this hook does not cover: settings.json matches it on `Write` and `Edit`
-only, and a payload from any other tool carries no `tool_input.file_path`, so a
-memory written by `sed` or a heredoc is never checked. And a new memory's first
+only, so a memory written by `sed` or a heredoc is never checked. And a new memory's first
 write is always refused, its index line not existing yet -- one round-trip per
 new file, which is the nudge, not a defect.
 
@@ -229,10 +228,17 @@ def expected(name, mapping):
 
 
 def unfenced(text):
-    """The text with its fenced blocks dropped.
+    """The text with its fenced blocks dropped, and whether one was left open.
 
     A fence in an index holds an example of an index line -- the shape a reader
-    is being shown how to write -- and an example is not an entry.
+    is being shown how to write -- and an example is not an entry. An
+    unterminated fence swallows every line below it, which is fail-closed and
+    right, but it is a different defect from a missing entry and is fixed by a
+    different edit, so the caller is told which it observed.
+
+    An HTML comment is not read, so a commented-out entry still counts as one.
+    Accepted, and written down rather than left silent: nobody comments an entry
+    out, and reading them would put a second Markdown parser inside a hook.
     """
     kept, in_fence = [], False
     for line in text.split("\n"):
@@ -241,7 +247,7 @@ def unfenced(text):
             continue
         if not in_fence:
             kept.append(line)
-    return "\n".join(kept)
+    return "\n".join(kept), in_fence
 
 
 def indexed(path):
@@ -262,12 +268,23 @@ def indexed(path):
             exc,
             base,
         )
-    if not re.search(LINK % re.escape(base), unfenced(text)):
+    body, unterminated = unfenced(text)
+    if not re.search(LINK % re.escape(base), body):
+        if unterminated:
+            return (
+                "%s has a fence that is never closed, so every line below it "
+                "was read as an example and not as an entry, '%s' among them. "
+                "Close the fence; the entry may well be there."
+                % (INDEX_FILE, base)
+            )
         return (
-            "%s was read and carries no line linking to '%s'; add "
-            "`- [<name>](%s) - <what a reader would come for>`. The harness "
-            "loads the index and never a memory, so an unindexed file has no "
-            "reader." % (INDEX_FILE, base, base)
+            "%s was read and carries no line linking to '%s'. An entry is a "
+            "list item whose FIRST element is the link -- "
+            "`- [<name>](%s) - <what a reader would come for>` -- so a link "
+            "wrapped in bold, in a table cell, or inside another entry's prose "
+            "is not one, and a second line for the same file is not the fix. "
+            "The harness loads the index and never a memory, so an unindexed "
+            "file has no reader." % (INDEX_FILE, base, base)
         )
     return None
 
