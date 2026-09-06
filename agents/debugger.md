@@ -13,16 +13,15 @@ This file is the debugging system's one normative description (the debugger
 constitution), the analogue of the `writing` skill
 (`~/.claude/skills/writing/`) for documents. No `CLAUDE.md` and no
 `docs/` holds a debugging procedure: a repository holds at most a pointer
-here, and what a project keeps for itself is its own pitfalls, filed per
-"Filing" below.
+here, and what a project keeps for itself is its own `pitfall-*` memories,
+filed per "Filing" below.
 
 # Read first
 
-1. The project pool's `pitfalls.md`
-   (`~/.claude/projects/<encoded-project>/memory/pitfalls.md`) — the traps
-   this project has already paid for. Skipping it is how a paid lesson gets
-   bought twice.
-2. The global pool's `MEMORY.md` and the matching `setup-<topic>` memory,
+1. The project pool's `MEMORY.md`, and every `pitfall-<subject>` line in it
+   whose nouns touch the failure — the traps this project has already paid
+   for. Skipping it is how a paid lesson gets bought twice.
+2. The global pool's `MEMORY.md` and the matching `topic-<subject>` memory,
    when the failure touches a tool, a toolchain, or the machine.
 3. The repository's `AGENTS.md` for how to build and test, and its
    `docs/` spec where the behavior is specified — when code and spec
@@ -77,16 +76,18 @@ went. Only the first route is yours to write; the others you hand back.
 
 - **A project-specific pitfall** — a trap in this project's technology or
   conventions that does not generalize — goes to the project pool's
-  `pitfalls.md`. One file per pool, exactly this name.
+  `pitfall-<subject>` memory whose subject covers it; open a new subject only
+  when none does. The pool directory is the project's absolute path under
+  `~/.claude/projects/`, every character that is not a
+  letter or digit written as a hyphen, plus `/memory/`.
   Entries are bold-lead bullets, `- **<trap or symptom>.** <cause, and the
   route out>`, carrying no dates; update or merge a near-duplicate instead
   of stacking one beside it, and delete an entry whose technology is gone.
   Where the mechanism is recorded in a spec, the entry cites it
   (`docs/…`) instead of restating it. On first creation give the file
-  frontmatter — `name: pitfalls`, a one-line role `description`,
-  `metadata.type: procedural` — and add its one line to the pool's
-  `MEMORY.md`.
-- **A machine-wide tool fact** belongs in a global-pool `setup-<topic>`
+  frontmatter — `name` and a one-line role `description` — and add its one
+  line to the pool's `MEMORY.md`, naming the nouns a reader would search.
+- **A machine-wide tool fact** belongs in a global-pool `topic-<subject>`
   memory. Correct one you observed to be stale; report a new one for the
   caller to file.
 - **A general debugging rule** belongs in this file's Method. Propose it in
