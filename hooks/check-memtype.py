@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
-"""Check that a memory file's declared memtype matches the name it carries.
+"""Check a memory pool file against what the "Filing" section says about it.
 
-A pool file's `metadata.type` is written once, by whoever created the file, and
-nothing re-reads it afterwards; four files in one pool had drifted to the
-harness default before anyone counted. This hook is that second reader.
+A file is refused when its name matches no row of the memtype table, when its
+pool's `MEMORY.md` carries no line linking to it, or when a `metadata.type` it
+does declare contradicts its row.
 
-The mapping is not this file's. It is declared once, in the "Filing" section of
-~/.claude/CLAUDE.md, as the memtype table — the subcategory prefix a file's name
+The index line is the load-bearing check. The harness injects a pool's
+`MEMORY.md` and never a memory file, so an unindexed memory has no way of being
+read at all, and one written without its line is indistinguishable from one
+nobody needed. `metadata.type` is the retiring check: nothing re-read it after
+it was written and four files in one pool had drifted to the harness default
+before anyone counted, so a declaration is still compared against its row — but
+the subcategory is being renamed after its reader (`topic-`, `pitfall-`,
+`feedback-`), and a file declaring no type is the target shape rather than a
+drift.
+
+The name mapping is not this file's. It is declared once, in the "Filing"
+section of ~/.claude/CLAUDE.md, as the memtype table — the subcategory prefix a file's name
 opens with, paired with the `type` its row names. This hook parses that table
 out of the document and compiles what it says; a copy kept here would drift
 exactly the way the files did.
@@ -21,13 +31,20 @@ A name matching no row of the table is a refusal too, not a pass: the Filing
 prose says a new memtype is invented by adding it to the table in the same
 change, so an unlisted prefix is a table that was never updated.
 
+What this hook does not cover: settings.json matches it on `Write` and `Edit`
+only, so a memory written by `sed` or a heredoc is never checked. And a new
+memory's first write is always refused, its index line not existing yet -- one
+round-trip per new file, which is the nudge, not a defect.
+
 Two entry points:
   - as a Claude Code PostToolUse hook: reads the tool payload on stdin, checks
     the touched file, exits 2 with the reason on stderr.
   - as a CLI: `check-memtype.py FILE...`, exits 1 on any violation.
 
 A declaration that cannot be read is a refusal, never a pass: this hook has no
-table of its own to fall back to.
+table of its own to fall back to. So is an index, in one of three wordings a
+reader acts on differently: it could not be read at all, an unclosed fence ate
+the entry, or it was read and simply does not carry one.
 """
 
 import json
@@ -44,6 +61,15 @@ POOL_DIR = "memory"
 POOL_SUFFIX = ".md"
 INDEX_FILE = "MEMORY.md"
 TYPE_KEY = "metadata.type"
+# The index line as the document prescribes it: a list item whose first element
+# is a Markdown link to the file. Anchored to the bullet, because a link further
+# along the line is a neighbour's prose naming the file -- what a split leaves
+# behind -- and prose is not a route to anything. A `./` prefix and an `#anchor`
+# are tolerated; the title and the trailing hook are a person's and unread.
+LINK = (
+    r"(?m)^[ \t]*(?:[-*+]|\d+[.)])[ \t]+"
+    r"\[[^\]]*\]\([ \t]*\.?/?%s(?:#[^)\s]*)?[ \t]*\)"
+)
 
 ROW = re.compile(r"^\|(.+)\|\s*$")
 RULE_ROW = re.compile(r"^[\s:|-]+$")
@@ -62,7 +88,7 @@ def document(path):
     try:
         with open(path, encoding="utf-8") as handle:
             return handle.read()
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise ContractError("%s: cannot be read: %s" % (path, exc))
 
 
@@ -140,9 +166,17 @@ def rule(path=CONTRACT_DOCUMENT):
 
 
 def frontmatter(path):
-    """The file's YAML frontmatter block, or None when it carries none."""
-    with open(path, encoding="utf-8") as handle:
-        lines = handle.read().split("\n")
+    """The file's YAML frontmatter block, or None when it carries none.
+
+    A file that cannot be decoded carries no readable block; the index check
+    has already run by here, so the caller reports the absence rather than
+    dying on it, which on PostToolUse would exit 1 and enforce nothing.
+    """
+    try:
+        with open(path, encoding="utf-8") as handle:
+            lines = handle.read().split("\n")
+    except UnicodeDecodeError:
+        return None
     if not lines or lines[0].strip() != "---":
         return None
     for number, line in enumerate(lines[1:], start=1):
@@ -197,8 +231,96 @@ def expected(name, mapping):
     return best[1] if best else None
 
 
+def unfenced(text):
+    """The text with its fenced blocks dropped, and the tail an open fence ate.
+
+    A fence in an index holds an example of an index line -- the shape a reader
+    is being shown how to write -- and an example is not an entry. An
+    unterminated fence swallows every line below it, which is fail-closed and
+    right, but it is a different defect from a missing entry and is fixed by a
+    different edit, so the caller gets the swallowed tail itself and can say
+    which of the two it observed. A closed fence is not in that tail: its
+    contents are examples on purpose, and blaming them on the last unclosed
+    fence somewhere else would be the same misdiagnosis one step along.
+
+    This is a fence model, not a Markdown parser, and the differences it admits
+    are written down rather than left silent. It pairs any fence line with any
+    other, so `~~~` opened and ``` closed reads as one block; it does not know
+    the 4-space indented code block, so an entry indented that far still counts
+    as one; and neither it nor `LINK` knows CommonMark's nine-digit cap on an
+    ordered marker. Each is fail-open on a shape no pool index contains -- none
+    of the six holds a fence at all -- and closing them means a second Markdown
+    parser inside a hook.
+    """
+    kept, swallowed, in_fence = [], [], False
+    for line in text.split("\n"):
+        if FENCE.match(line):
+            in_fence = not in_fence
+            if in_fence:
+                # Only the LAST opener can be the unmatched one.
+                swallowed = []
+            continue
+        (swallowed if in_fence else kept).append(line)
+    return "\n".join(kept), "\n".join(swallowed) if in_fence else ''
+
+
+def indexed(path):
+    """Why the pool's index does not name this file, or None when it does.
+
+    A pool with no readable index, an index whose unclosed fence swallowed the
+    entry, and an index that was read and simply omits the file are three
+    different failures fixed by three different edits, so each reason says
+    which of them was observed.
+
+    An HTML comment is not read, so a commented-out entry still counts as one.
+    Accepted, and written down rather than left silent: nobody comments an
+    entry out, and reading them would put a second Markdown parser in a hook.
+    """
+    index = os.path.join(os.path.dirname(path), INDEX_FILE)
+    base = os.path.basename(path)
+    try:
+        with open(index, encoding="utf-8") as handle:
+            text = handle.read()
+    except (OSError, UnicodeDecodeError) as exc:
+        return "the pool has no readable %s (%s), so nothing can index '%s'." % (
+            INDEX_FILE,
+            exc,
+            base,
+        )
+    body, swallowed = unfenced(text)
+    if not re.search(LINK % re.escape(base), body):
+        # The fence is the diagnosis only when the unclosed fence ate THIS
+        # entry. Gated on "a fence is open" it rewrote the reason for every
+        # miss in the file, so a wrongly shaped entry was answered "close the
+        # fence"; gated on the raw text it did the same for an entry sitting in
+        # a fence that was closed on purpose. Both would name a condition no
+        # branch had read.
+        if swallowed and re.search(LINK % re.escape(base), swallowed):
+            return (
+                "%s has a fence that is never closed, so every line below it "
+                "was read as an example and not as an entry, '%s' among them. "
+                "Close the fence; the entry may well be there."
+                % (INDEX_FILE, base)
+            )
+        return (
+            "%s was read and carries no line linking to '%s'. An entry is a "
+            "list item whose FIRST element is the link -- "
+            "`- [<name>](%s) - <what a reader would come for>` -- so a link "
+            "wrapped in bold, in a table cell, or inside another entry's prose "
+            "is not one, and a second line for the same file is not the fix. "
+            "The harness loads the index and never a memory, so an unindexed "
+            "file has no reader." % (INDEX_FILE, base, base)
+        )
+    return None
+
+
 def violation(path, table):
-    """The one reason this file fails, or None."""
+    """The one reason this file fails, or None.
+
+    Ordered by what outlives the rename: the name and the index line are the
+    whole of the target scheme's check, and the type is read last because it is
+    the one being retired.
+    """
     name = os.path.splitext(os.path.basename(path))[0]
     want = expected(name, table)
     if want is None:
@@ -213,19 +335,15 @@ def violation(path, table):
             "the table in the same change that first uses it; the table names %s."
             % (name, ", ".join("'%s'" % row for row in listed))
         )
+    reason = indexed(path)
+    if reason:
+        return reason
     block = frontmatter(path)
-    if block is None:
-        return (
-            "no '---' frontmatter block, so nothing declares %s; the table gives "
-            "'%s' the type '%s'." % (TYPE_KEY, name, want)
-        )
-    got = declared(block, TYPE_KEY)
-    if got is None:
-        return (
-            "the frontmatter declares no %s; the table gives '%s' the type '%s'."
-            % (TYPE_KEY, name, want)
-        )
-    if got != want:
+    got = declared(block, TYPE_KEY) if block is not None else None
+    # A file that declares no type is the target scheme's shape, where the
+    # frontmatter is `name` and `description` alone; only a declaration that
+    # contradicts its row is the drift this check was written for.
+    if got is not None and got != want:
         return (
             "%s is '%s'; the table gives '%s' the type '%s'."
             % (TYPE_KEY, got, name, want)
@@ -243,7 +361,7 @@ def is_pool_file(path):
 
 
 def report(path, reason):
-    return "%s: %s\n  (the memtype table is declared in %s, section Filing)" % (
+    return "%s: %s\n  (what a pool file is checked against is declared in %s, section Filing)" % (
         path,
         reason,
         CONTRACT_DOCUMENT,
@@ -262,7 +380,7 @@ def main():
         failed = False
         for path in sys.argv[1:]:
             if not is_pool_file(path):
-                print("%s: skipped, not a pool file the table covers" % path)
+                print("%s: skipped, not a pool file" % path)
                 continue
             reason = violation(path, table)
             if reason:
