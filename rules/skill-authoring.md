@@ -29,6 +29,13 @@ what it cannot derive.
 - Add a `Not for …` clause when a sibling skill can claim the same request.
   Negative scope stops over-triggering; more positive description does not.
 
+## Vendored skills
+
+`skills/herdr/` is a byte-identical copy of its upstream
+(`herdrdev/herdr`, tag `v0.8.2`). Nothing here applies to it: do not rename it,
+do not cut its sections, do not rewrite its description. An upgrade replaces the
+whole file, and any edit breaks the identity that makes that replacement safe.
+
 ## Execution keys
 
 Optional. Omit each one unless the skill needs it.

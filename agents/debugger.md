@@ -77,7 +77,8 @@ went. Only the first route is yours to write; the others you hand back.
 - **A project-specific pitfall** — a trap in this project's technology or
   conventions that does not generalize — goes to the project pool's
   `pitfall-<subject>` memory whose subject covers it; open a new subject only
-  when none does.
+  when none does. The pool directory is the project's absolute path under
+  `~/.claude/projects/`, every slash written as a hyphen, plus `/memory/`.
   Entries are bold-lead bullets, `- **<trap or symptom>.** <cause, and the
   route out>`, carrying no dates; update or merge a near-duplicate instead
   of stacking one beside it, and delete an entry whose technology is gone.
