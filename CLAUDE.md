@@ -180,17 +180,15 @@ The rule goes to the general file and the evidence stays with the subject: instr
 
 A memory file holds one *subject* — the facts a reader asks for in one go, as `##` sections of one file — and never repeats a fact another pool already holds; link with `[[name]]` instead. Merge a new fact into the file whose subject covers it rather than opening a sibling: every extra file is a line every session loads and one more place to look.
 
-Name a memory `<subcategory>-<topic>`, with no date and no project name, since a date forces a rename on every update and the pool directory already names the project. Keep `MEMORY.md` at one line per file, and file nothing without its line: the index is the only thing the harness loads by itself, so an unindexed memory has no reader at all. A file's `description` states its role, never its contents, because a content list goes stale on the file's next edit.
+Name a memory `<prefix>-<subject>`, with no date and no project name, since a date forces a rename on every update and the pool directory already names the project. Keep `MEMORY.md` at one line per file, and file nothing without its line: the index is the only thing the harness loads by itself, so an unindexed memory has no reader at all. A file's `description` states its role, never its contents, because a content list goes stale on the file's next edit.
 
-**The subcategory is being renamed after its reader**, because the type predicted nothing about whether a file was ever read and the prefix did. The target set is `topic-<subject>` for a fact looked up, `pitfall-<subject>` for a trap read when stuck, and `feedback-<subject>` for a rule the owner gave, with `name` and `description` the whole frontmatter. Until the last file has moved, the table below is what the hook accepts, and `metadata.type` is optional there — declared, it is still checked against its row.
+**A memory is named after its reader**, because the type it used to be named after predicted nothing about whether a file was ever read and the prefix did. The three memory prefixes are:
 
-| type | holds | subcategory prefixes | lifecycle |
-|---|---|---|---|
-| **episodic** | what happened | `history-<topic>` | `history-*` is append-only |
-| **semantic** | what is true | `topic-<topic>` | updated in place |
-| **procedural** | how to act | `feedback-<topic>`, `setup-<topic>`, `pitfalls`, `pitfall-<subject>` | updated in place; deleted when the tool or fact is gone |
+- `topic-<subject>` — a fact looked up. States the current truth of one subject, updated in place.
+- `pitfall-<subject>` — a trap read when stuck. Deleted when the tool or the fact is gone.
+- `feedback-<subject>` — a rule the owner gave. Losing one repeats the failure or re-asks them.
 
-The memtypes divide by what would make the file wrong. Nothing falsifies `history-`, so it only grows, and it records what version control cannot: changes to unversioned things, and rejected options with their kill reasons. A `topic-` file states the current truth of one subject and is updated in place; `setup-` was the same thing under its old name and is retiring into it, so no new file takes that prefix — the table still accepts it because two project pools each still hold one. A `feedback-` rule was given by the owner, so losing one repeats the failure or re-asks them. Invent a memtype when none fits, and add it to the table in the same change.
+`name` and `description` are the whole frontmatter. A `metadata.type` is the retired declaration and is refused, as is a name outside the three: `setup-` was `topic-` under its old name, `pitfalls.md` and `backlog.md` were one file per pool where it now holds one per subject, and `history-` has left the pool. What that prefix held — a change to something git does not track, and a rejected option with its kill reason — is a **decision page** under `docs/`, because a pool file is untracked and dies with a rename while a page can be linked to and reviewed: `spec/decision-pages.md` is the contract and `hooks/check-decision-page.py` refuses a malformed page, or a link into one that resolves to nothing.
 
 On every save, take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Promotion has a threshold — a takeaway observed once files with its evidence and moves into this file only when a later, independent task confirms it, because one observation cannot tell a rule from a coincidence. Delete memories that turn out wrong, and correct a stale one the moment you observe the mismatch.
 
