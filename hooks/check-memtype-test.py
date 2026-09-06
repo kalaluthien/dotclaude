@@ -382,8 +382,8 @@ def main():
     # case pins one each. It closes the list, which the stray-bullet case
     # above pins; it also marks the list CLOSED, so a second announcement past
     # the fence contradicts rather than reopening; and it waits for the list to
-    # have a bullet, which the case after this one pins. Without the second effect the retired list a few
-    # lines below the real one is collected, silently.
+    # have a bullet, which the case after this one pins. Without the second
+    # effect a retired list past the fence is collected, silently.
     with tempfile.TemporaryDirectory() as d:
         past_fence = (LIST + "```\nan example\n```\n"
                       "The retired memory prefixes are:\n"
@@ -415,9 +415,11 @@ def main():
               "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- the lead is anchored at END OF LINE, and that is what keeps the
-    # phrase usable mid-sentence. The document names the retired prefixes in
-    # running prose a few lines below the list; read as an announcement, that
-    # sentence contradicts the real one and refuses every memory write.
+    # phrase usable mid-sentence. The shipped document does not carry the
+    # phrase mid-sentence today -- measured: the line naming the retired
+    # prefixes in prose holds no `memory prefixes are:` at all -- so this
+    # fixture's sentence is invented, and the hazard is one prose edit away
+    # rather than present. Unanchored, that edit refuses every memory write.
     with tempfile.TemporaryDirectory() as d:
         inline = (LIST + "\nThe retired memory prefixes are: `setup-`, "
                   "`history-` and `pitfalls`.\n")
