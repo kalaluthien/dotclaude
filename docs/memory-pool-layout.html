@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory pool layout</title>
+<style>
+  :root { --ink:#111; --mute:#555; --hair:#e4e4e4; --wash:#f4f4f4; }
+  html { font-size: 16px; }
+  body { max-width: 42rem; margin: 0 auto; padding: 4rem 1.5rem 8rem;
+         background: #ffffff; color: var(--ink);
+         font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+         line-height: 1.55; overflow-wrap: break-word; }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.25rem; margin: 3rem 0 .5rem; font-weight: 700; }
+  h3 { font-size: 1rem; margin: 2rem 0 .3rem; font-weight: 700; }
+  h4 { font-size: .95rem; margin: 0 0 .4rem; font-weight: 700; }
+  p, li { margin: .6rem 0; }
+  ul, ol { padding-left: 1.2rem; }
+  ol.steps { padding-left: 1.6rem; }
+  ol.steps > li { margin: 1.3rem 0; }
+  ol.steps > li::marker { font-weight: 700; }
+  ol.keys { list-style: none; padding-left: 0; margin: 1rem 0; }
+  ol.keys > li { display: grid; grid-template-columns: 1.6rem 1fr; gap: .6rem; margin: .8rem 0; }
+  ol.keys > li > p, ol.keys > li > div { min-width: 0; }
+  ol.keys > li > p, ol.keys > li > div > p { margin: 0; }
+  ol.keys ul { margin: .3rem 0 0; padding-left: 1.05rem; }
+  ol.keys ul li { margin: .2rem 0; }
+  .k { display: inline-flex; align-items: center; justify-content: center; width: 1.45rem; height: 1.45rem;
+    border: 1px solid var(--ink); border-radius: 50%; font-size: .72rem; font-weight: 700; }
+  a { color: #14459b; text-decoration-color: #9bb0d8; }
+  code, pre, .provenance dd, .src { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; }
+  pre { overflow-x: auto; background: var(--wash); padding: 1rem; line-height: 1.45; margin: 1.4rem 0; }
+  .src { color: var(--mute); }
+  table { border-collapse: collapse; width: 100%; margin: 1.4rem 0; font-size: .9rem; }
+  th, td { text-align: left; vertical-align: top; padding: .45rem .8rem .45rem 0; border-bottom: 1px solid var(--hair); }
+  th { font-weight: 700; }
+  tr.grp td { background: var(--wash); font-weight: 700; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+  @media (max-width: 42rem) {
+    table { font-size: .85rem; }
+    th, td { padding-right: .5rem; }
+  }
+  .provenance { display: grid; grid-template-columns: max-content 1fr; gap: .15rem 1rem;
+    margin: 0 0 2.4rem; font-size: .85rem; color: var(--mute); }
+  .provenance dt { font-variant: small-caps; letter-spacing: .04em; }
+  .provenance dd { margin: 0; }
+  figure { margin: 2.2rem 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figure pre { margin: 0; }
+  figure.pan { overflow-x: auto; }
+  figcaption { margin-top: .7rem; font-size: .85rem; color: var(--mute); line-height: 1.5; }
+  .figure-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.2rem; margin: 2.2rem 0; }
+  .figure-row figure { margin: 0; }
+  table.filemap td { border-bottom: none; padding: .12rem .8rem .12rem 0; }
+  table.filemap td:first-child { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .85em; white-space: pre; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin: 1.4rem 0; }
+  .do, .dont { border: 2px solid var(--ink); padding: .8rem 1rem; }
+  .dont { border-style: dashed; }
+  .do h4::before { content: "\2713\00a0"; }
+  .dont h4::before { content: "\2715\00a0"; }
+  .recs { display: grid; gap: .9rem; margin: 1.4rem 0; }
+  .rec { border: 1px solid var(--ink); }
+  .rec-n { margin: 0; padding: .35rem .75rem; background: var(--wash);
+    border-bottom: 1px solid var(--ink); font-weight: 700; font-size: .92rem; }
+  .rec-t { font-weight: 400; color: var(--mute); font-size: .78rem; }
+  .rec dl { display: grid; grid-template-columns: max-content 1fr; gap: .25rem .8rem;
+    margin: 0; padding: .55rem .75rem .65rem; font-size: .9rem; }
+  .rec dt { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .74rem;
+    color: var(--mute); padding-top: .22rem; white-space: nowrap; }
+  .rec dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+  .rec dd ul { margin: .1rem 0 0; padding-left: 1.05rem; }
+  .rec dd li { margin: .15rem 0; }
+  .ct { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .72rem;
+    border: 1px solid var(--ink); border-radius: 3px; padding: 1px 4px; white-space: nowrap; }
+  .hum { display: inline-flex; align-items: center; gap: .3rem; font-size: .8rem;
+    border: 1px solid var(--ink); border-radius: 11px; padding: 1px 8px; }
+  .chip { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .72rem;
+    background: var(--wash); border-radius: 3px; padding: 1px 5px; }
+  .callout { display: grid; grid-template-columns: 1.5rem 1fr; gap: .7rem; align-items: start;
+    background: var(--wash); border-left: 3px solid var(--hair); padding: .8rem 1rem; margin: 1.4rem 0; }
+  .callout .g { font-size: 1.05rem; line-height: 1.35; }
+  .callout p { margin: 0; font-size: .92rem; }
+  .callout strong { font-weight: 700; }
+  details { border: 1px solid var(--hair); border-radius: 3px; padding: .45rem .9rem;
+    margin: 1.2rem 0; font-size: .92rem; }
+  details summary { cursor: pointer; font-weight: 600; font-size: .92rem; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: "\25B8\00a0\00a0"; color: var(--mute); }
+  details[open] summary::before { content: "\25BE\00a0\00a0"; }
+  details[open] summary { margin-bottom: .5rem; }
+  @media (max-width: 42rem) { .pair { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body class="decision-page">
+<article>
+
+<h1>Memory pool layout</h1>
+<dl class="provenance">
+  <dt>Doctype</dt>  <dd>explanation</dd>
+  <dt>Question</dt> <dd>Which decisions shaped this machine's memory pools, and what did each one give up?</dd>
+  <dt>Updated</dt>  <dd>2026-09-06</dd>
+</dl>
+
+<p>The five entries before 2026-08-18 were not written on their own dates. They were
+recovered on 2026-09-02 from a pool keyed to a container repository that has since been
+retired, and only the entries about the pools themselves survived the fold; the rest
+described that repository's own layout and went with it. Their dates are the dates the
+decisions were taken.
+<span class="src">memory/history-pool-shape.md</span></p>
+
+<h2 id="2026-07-26-setup-prefix">2026-07-26 — Machine facts in the pool</h2>
+
+<p>Machine-setup facts left a project instruction file on this date. They landed in
+<code>~/.claude/projects/-Users-hyungmokim--claude/memory/</code> as <code>setup-*</code>
+memories. The same change wrote the memory taxonomy into <code>~/.claude/CLAUDE.md</code>,
+under the heading Filing. The pool's <code>setup-</code> convention starts here.
+<span class="src">memory/history-pool-shape.md</span></p>
+
+<p>A pool is untracked, so a move inside it leaves no diff. The taxonomy half of this
+change is in git, and the file move is not.
+<span class="src">CLAUDE.md:193 @ 0eb2813</span></p>
+
+<h2 id="2026-08-04-mece-audit">2026-08-04 — Exclusive memtype prefixes</h2>
+
+<p>An audit made the prefixes mutually exclusive and collectively exhaustive. Each
+prefix now names one reason a file would go wrong. Nothing falsifies an
+<span class="chip">episodic</span> file, so a <code>history-</code> file only grows. A
+<span class="chip">semantic</span> file states the current truth of one subject, so a
+<code>topic-</code> file is updated in place. A <span class="chip">procedural</span>
+file says how to act, so a <code>feedback-</code> file is deleted when its fact is gone.
+<span class="src">CLAUDE.md:189-193 @ 0eb2813</span></p>
+
+<p><code>hooks/check-memtype.py</code> compiles that table out of <code>CLAUDE.md</code>
+and refuses a file name that matches no row. The rule and its reader stay one statement.
+<span class="src">hooks/check-memtype.py:19-32 @ 0eb2813</span></p>
+
+<h2 id="2026-08-12-backlog-deleted">2026-08-12 — Backlog file deletion</h2>
+
+<div class="callout">
+  <span class="g" aria-hidden="true">⚠️</span>
+  <p><strong>One question was dropped without an answer.</strong> Does the 8-unit label
+  clearance apply between lines inside one stacked text block? Re-filing it is legitimate.</p>
+</div>
+
+<p>The owner deleted this pool's <code>backlog.md</code>. The scope was confirmed as the
+backlog file alone, and every other memory was kept. Its one open ticket was the figure
+text-spacing question above, filed on 2026-08-11 by two document-writer sessions.
+<span class="hum">the owner deletes the file</span>
+<span class="src">memory/history-backlog.md</span></p>
+
+<p>The deletion followed the owner not recognising the pool. It did not follow a judgement
+on the ticket. The clearance rule the ticket asks about is
+<code>skills/writing/references/svg-rules.md</code>, which sets label clearance at
+8 units from every other mark.
+<span class="src">skills/writing/references/svg-rules.md:93 @ 0eb2813</span></p>
+
+<h2 id="2026-08-12-agentmemory-rejected">2026-08-12 — Pool store</h2>
+
+<div class="figure-row">
+  <figure>
+    <svg viewBox="0 0 240 180" role="img" aria-labelledby="f1t">
+      <title id="f1t">A pool index file linking one plain-text memory file</title>
+      <defs>
+        <marker id="arrow-pool" viewBox="0 0 8 8" refX="7" refY="4"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <rect x="20" y="24" width="200" height="56" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="120" y="50" text-anchor="middle" font-size="12" font-weight="bold">Pool index</text>
+      <text x="120" y="68" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, monospace">MEMORY.md</text>
+      <line x1="120" y1="80" x2="120" y2="108" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow-pool)"/>
+      <text x="132" y="98" font-size="11">links</text>
+      <rect x="20" y="110" width="200" height="56" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="120" y="136" text-anchor="middle" font-size="12" font-weight="bold">Memory file</text>
+      <text x="120" y="154" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, monospace">topic-git.md</text>
+      <circle cx="20" cy="24" r="11" fill="#ffffff" stroke="currentColor" stroke-width="1.2"/>
+      <text x="20" y="24" dy=".35em" text-anchor="middle" font-size="11" font-weight="bold">1</text>
+    </svg>
+    <figcaption>The pool as it is stored. One index file links each memory file, and
+      both are plain text.</figcaption>
+  </figure>
+  <figure>
+    <svg viewBox="0 0 240 180" role="img" aria-labelledby="f2t">
+      <title id="f2t">A record store reached only through its own query runtime</title>
+      <defs>
+        <marker id="arrow-store" viewBox="0 0 8 8" refX="7" refY="4"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <rect x="20" y="24" width="200" height="56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <text x="120" y="50" text-anchor="middle" font-size="12" font-weight="bold">Query runtime</text>
+      <text x="120" y="68" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, monospace">iii-engine</text>
+      <line x1="120" y1="80" x2="120" y2="108" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrow-store)"/>
+      <text x="132" y="98" font-size="11">retrieves</text>
+      <rect x="20" y="110" width="200" height="56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <text x="120" y="136" text-anchor="middle" font-size="12" font-weight="bold">Record store</text>
+      <text x="120" y="154" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, monospace">SQLite</text>
+      <circle cx="20" cy="24" r="11" fill="#ffffff" stroke="currentColor" stroke-width="1.2"/>
+      <text x="20" y="24" dy=".35em" text-anchor="middle" font-size="11" font-weight="bold">2</text>
+    </svg>
+    <figcaption>agentmemory reaches its records only through its own runtime. Dashed
+      marks the store this machine did not adopt.</figcaption>
+  </figure>
+</div>
+
+<ol class="keys">
+  <li><span class="k">1</span><div>
+    <p><strong>Markdown pool</strong> — taken. It gives up hybrid retrieval and automatic
+    session capture.</p>
+    <p>Every file stays plain text a person reads and a hook parses.</p>
+  </div></li>
+  <li><span class="k">2</span><div>
+    <p><strong>agentmemory</strong>, from <code>rohitg00/agentmemory</code> — rejected. It
+    would have bought hybrid retrieval and automatic session capture.</p>
+    <p>It cost three things. The pools sit far below the 100 to 400 file line where its
+    retrieval starts paying. It trades plain markdown plus git for an opaque store behind a
+    proprietary, version-pinned runtime. The project is effectively single-author, with
+    self-reported and unverified benchmarks, despite 26.9K stars.</p>
+  </div></li>
+</ol>
+
+<p>Two lenses reached the same verdict: operator cost, and data durability. The Apache-2.0
+licence allows borrowing ideas, and automatic session capture is the one worth importing.
+<span class="src">memory/history-pool-shape.md</span></p>
+
+<h2 id="2026-08-15-profile-merged">2026-08-15 — Prefix for owner-given facts</h2>
+
+<p><code>profile-</code> merged into <code>feedback-</code>. An owner preference and an
+owner correction are one kind of fact: given rather than derived. The one file that moved is
+<code>profile-model-architectures</code>, which now reads
+<code>feedback-model-architectures.md</code>.
+<span class="src">memory/history-pool-shape.md</span></p>
+
+<h2 id="2026-08-16-topic-prefix">2026-08-16 — Prefix for distilled facts</h2>
+
+<p><code>topic-</code> was added for a current truth that no probe re-derives. That split it
+from <code>setup-</code>, whose facts are one probe away. The split held for three weeks, and
+the entry dated 2026-09-06 retires <code>setup-</code> into <code>topic-</code>.
+<span class="src">memory/history-pool-shape.md</span></p>
+
+<h2 id="2026-08-18-setup-consolidation">2026-08-18 — Setup file consolidation</h2>
+
+<table>
+  <thead><tr><th>folded file</th><th>home on 2026-08-18</th></tr></thead>
+  <tbody>
+    <tr><td><code>setup-claude-launch-args</code></td><td><code>setup-claude-sessions</code></td></tr>
+    <tr><td><code>setup-claude-rules</code></td><td><code>setup-claude-sessions</code></td></tr>
+    <tr><td><code>setup-claude-subagents</code></td><td><code>setup-claude-sessions</code></td></tr>
+    <tr><td><code>setup-claude-permissions</code></td><td><code>setup-claude-sessions</code></td></tr>
+    <tr><td><code>setup-claude-cli-build</code></td><td><code>setup-claude-sessions</code></td></tr>
+    <tr><td><code>setup-claude-usage-readout</code></td><td><code>setup-claude-usage</code></td></tr>
+    <tr><td><code>setup-claude-token-usage</code></td><td><code>setup-claude-usage</code></td></tr>
+    <tr><td><code>setup-claude-limit-detection</code></td><td><code>setup-claude-usage</code></td></tr>
+    <tr><td><code>setup-chrome-automation</code></td><td><code>setup-chrome</code></td></tr>
+    <tr><td><code>setup-chrome-headless</code></td><td><code>setup-chrome</code></td></tr>
+    <tr><td><code>setup-backlog-format-hook</code></td><td><code>setup-pool-hooks</code></td></tr>
+    <tr><td><code>setup-memtype-hook</code></td><td><code>setup-pool-hooks</code></td></tr>
+    <tr><td><code>setup-python-uv</code></td><td><code>setup-language-runtimes</code></td></tr>
+    <tr><td><code>setup-ruby</code></td><td><code>setup-language-runtimes</code></td></tr>
+    <tr><td><code>setup-colima</code></td><td><code>setup-service-runtime</code></td></tr>
+    <tr><td><code>setup-autostart</code></td><td><code>setup-service-runtime</code></td></tr>
+  </tbody>
+</table>
+
+<p>The owner asked for fewer lines in <code>MEMORY.md</code>, and for facts read together to
+sit together. <span class="ct">16&times; folded file</span> became
+<span class="ct">6&times; home</span>. The pool went from 26 <code>setup-*</code> files to 16,
+and the index from 38 lines to 30.
+<span class="src">memory/history-pool-shape.md</span></p>
+
+<p>No fact was rewritten. Each old file became a <code>##</code> section of its new home,
+verbatim, and only the <code>[[links]]</code> between merged files changed into section
+references. The same change repointed <span class="ct">3&times; citation</span> in the workspace
+repository, at commit
+<code>9f374d5</code>: <code>docs/agent-config-scopes.html</code>,
+<code>docs/service-tailnet-hostname.html</code> and <code>docs/agent-memtypes.html</code>.</p>
+
+<h2 id="2026-08-19-backlog-retired">2026-08-19 — Ticket filing route</h2>
+
+<p>Phase 3 of the board ticket-store plan re-taught filing. A new ticket goes through the
+board server's doors, and nothing creates a <code>backlog.md</code> any more. This supersedes
+<a href="memory-pool-layout.html#2026-08-12-backlog-deleted">2026-08-12 — Backlog file
+deletion</a> in its mechanism only. Re-filing the dropped question stays legitimate, at the
+door.
+<span class="src">memory/history-backlog.md</span></p>
+
+<p>The migration finished the same day. Board's own pool held the last file, and it moved to
+the store too. The <code>backlog</code> row left the memtype table, and every archived copy
+went to <code>~/.local/state/board/migrated/&lt;pool&gt;/backlog.md</code>.</p>
+
+<details>
+  <summary>The checker refuses a file named backlog.md, because no table row names it</summary>
+  <pre>$ python3 hooks/check-memtype.py /tmp/dpprobe/memory/backlog.md
+/tmp/dpprobe/memory/backlog.md: 'backlog' matches no row of the memtype
+table. A new memtype is added to the table in the same change that first
+uses it; the table names 'feedback-*', 'history-*', 'pitfall-*',
+'pitfalls', 'setup-*', 'topic-*'.
+  (what a pool file is checked against is declared in
+  ~/campaign-base/memory-scheme-260906/repos/dotclaude/CLAUDE.md,
+  section Filing)</pre>
+</details>
+
+<h2 id="2026-08-25-feedback-consolidation">2026-08-25 — Feedback file consolidation</h2>
+
+<table>
+  <thead><tr><th>file</th><th>outcome</th></tr></thead>
+  <tbody>
+    <tr><td><code>feedback-silenced-runs</code></td><td>renamed <code>feedback-stale-evidence</code></td></tr>
+    <tr><td><code>feedback-merge-resolutions</code></td><td>folded into <code>feedback-silent-reverts</code></td></tr>
+    <tr><td><code>feedback-regenerated-artifacts</code></td><td>folded into <code>feedback-silent-reverts</code></td></tr>
+    <tr><td><code>feedback-moving-baselines</code></td><td>deleted</td></tr>
+    <tr><td><code>feedback-briefed-diagnoses</code></td><td>deleted</td></tr>
+    <tr><td><code>feedback-delegated-rubrics</code></td><td>kept, trimmed</td></tr>
+    <tr><td><code>feedback-memory-findability</code></td><td>renamed <code>feedback-memory-curation</code></td></tr>
+    <tr><td><code>feedback-retirement-sweeps</code></td><td>promoted to <code>CLAUDE.md</code></td></tr>
+  </tbody>
+</table>
+
+<p>The owner asked for the pool's <code>feedback-*</code> detail to be merged, and for
+whatever a fresh session derives on its own to be deleted. Each of the <span class="ct">8&times; file</span> became one scenario, with its
+answer withheld, and a sonnet subagent answered them. It derived four of them unaided and
+missed four. Eight files became four, 15.1K became 7.4K, and the index lost four lines.
+<span class="src">memory/history-pool-shape.md</span></p>
+
+<p><code>feedback-memory-findability</code> was kept although the probe derived its rule,
+because the owner gave that rule. On <code>feedback-delegated-rubrics</code> the probe
+recommended a delegate self-report, which is the failure mode that file names. <code>feedback-retirement-sweeps</code> was promoted into
+<code>~/.claude/CLAUDE.md</code> under Verification, and deleted here. This task was that
+rule's second, independent confirmation: removing sections from that file left prose
+references a path grep never reaches.
+<span class="src">CLAUDE.md:129 @ 0eb2813</span></p>
+
+<h2 id="2026-09-06-reader-named-prefixes">2026-09-06 — Reader-named prefixes</h2>
+
+<table>
+  <thead><tr><th>verdict</th><th>files</th></tr></thead>
+  <tbody>
+    <tr><td>kept, owner-given</td><td>19</td></tr>
+    <tr><td>kept, the probe missed the rule</td><td>13</td></tr>
+    <tr><td>trimmed to the clause it missed</td><td>13</td></tr>
+    <tr><td>deleted as derivable</td><td>0</td></tr>
+    <tr><td>promoted to <code>CLAUDE.md</code></td><td>0</td></tr>
+  </tbody>
+</table>
+
+<p>Campaign #219 dropped the memtype axis and named each prefix after its reader.
+<code>setup-*</code> became <code>topic-*</code> across both pools, so every
+<code>setup-</code> name in an earlier entry now reads <code>topic-</code>. Each
+<code>pitfalls.md</code> split into <code>pitfall-&lt;subject&gt;</code> files, six in the
+campaign-base pool and two in the global pool. <code>metadata.type</code> stopped being
+required. The hook now refuses a pool file the pool's <code>MEMORY.md</code> does not link
+to, so the index line is enforced rather than asked for. The per-file move tables are on
+<code>kalaluthien/campaign-base#219</code>.
+<span class="src">hooks/check-memtype.py:5-9 @ 0eb2813</span></p>
+
+<p>The curation probe ran over <span class="ct">45&times; feedback file</span> in two
+sessions. One session wrote a scenario per file with the answer withheld, and a second sonnet
+session answered them cold with no pool access. The result worth keeping is the split it
+exposed. The probe reached the right instinct on nearly every scenario and the right value on
+almost none, missing every named tier, model, assertion and default.
+<code>feedback-service-undo</code> was the one file where even the instinct was missed.
+<span class="src">memory/history-pool-shape.md</span></p>
+
+<h3>Prefixes and rules outside the rename</h3>
+
+<ul>
+  <li>No file was deleted, because every file the probe fully derived carries a direct owner
+  quotation.</li>
+  <li>No rule was promoted into <code>~/.claude/CLAUDE.md</code>.</li>
+  <li>The memtype table keeps <code>setup-</code>, because two project pools each hold one
+  such file: <code>setup-android-emulator</code> and <code>setup-chirpy-post-url</code>.
+  Nothing new takes the prefix. <span class="src">CLAUDE.md:193 @ 0eb2813</span></li>
+  <li>The taxonomy's home did not move. <code>CLAUDE.md</code> holds the table, and
+  <code>hooks/check-memtype.py</code> compiles it.</li>
+</ul>
+
+</article>
+</body>
+</html>
