@@ -378,6 +378,37 @@ def main():
             check("and the list is still read, with a stray bullet %s" % note,
                   r.returncode == 0, "exit %d: %s" % (r.returncode, said(r)[:300]))
 
+    # ---- the fence terminator has TWO effects and a case pins one each. It
+    # closes the list, which the stray-bullet case above pins; it also marks
+    # the list CLOSED, so a second announcement past the fence contradicts
+    # rather than reopening. Without the second effect the retired list a few
+    # lines below the real one is collected, silently.
+    with tempfile.TemporaryDirectory() as d:
+        past_fence = (LIST + "```\nan example\n```\n"
+                      "The retired memory prefixes are:\n"
+                      "- `setup-<subject>` — retired.\n")
+        hook, pool = tree(d, document=past_fence)
+        r = posttooluse(hook, memory(pool, "topic-fine"))
+        check("refused: a second announcement past a fence contradicts the "
+              "first", r.returncode == 2
+              and "announces the memory prefixes a second time" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
+    # ---- and the terminator only fires once the list HAS a bullet. A fence
+    # between the lead and the first bullet is the document showing how the
+    # list is written; ending the list there declares no prefix at all and
+    # refuses every memory write on the machine.
+    with tempfile.TemporaryDirectory() as d:
+        fence_first = ("# CLAUDE\n\nThe three memory prefixes are:\n"
+                       "```\nhow the list is written\n```\n"
+                       "- `topic-<subject>` — a fact looked up.\n"
+                       "- `pitfall-<subject>` — a trap read when stuck.\n")
+        hook, pool = tree(d, document=fence_first)
+        r = posttooluse(hook, memory(pool, "pitfall-fine"))
+        check("allowed: a fence before the first bullet does not end the list",
+              r.returncode == 0 and "no memory prefixes" not in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+
     # ---- allow: prose that merely ENDS in those words declares nothing, so it
     # is not a second declaration either. Read as one, it refuses every memory
     # write on the machine -- the widest possible false refusal.
