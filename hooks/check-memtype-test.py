@@ -361,8 +361,11 @@ def main():
             "- `feedback-<subject>` — a rule the owner gave.\n")
     for tail, note in (
             ("\n- `setup-<subject>` — retired.\n", "after a blank line"),
-            ("\n```\nan example\n```\n\n- `setup-<subject>` — retired.\n",
-             "after a fenced block"),
+            # Glued to the list on both sides ON PURPOSE. With a blank line
+            # before the fence the blank-line terminator has already closed
+            # the list, and this case passes with the fence branch deleted.
+            ("```\nan example\n```\n- `setup-<subject>` — retired.\n",
+             "across a fence glued to the list"),
             ("  - `setup-<subject>` — retired.\n", "indented, with no blank line")):
         with tempfile.TemporaryDirectory() as d:
             hook, pool = tree(d, document=LIST + tail)

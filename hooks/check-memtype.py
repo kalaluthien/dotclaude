@@ -113,7 +113,11 @@ def prefixes(text, path):
     document names the RETIRED prefixes a few lines below; reading a second
     list would union the two and let every retired name back in, silently. A
     blank line before the first bullet is the ordinary gap after the lead and
-    is not the end.
+    is not the end -- but a blank line BETWEEN bullets is, which makes a loose
+    list read as its first prefix alone. That asymmetry is the price of the
+    contiguity above, and it fails loudly rather than silently: this suite's
+    own independent reader of the document accepts a loose list, so the two
+    disagree and the cross-check case names the document.
 
     An announcement that yields no bullets is not a declaration, so ordinary
     prose that happens to end in those words neither declares nor contradicts.
@@ -121,6 +125,11 @@ def prefixes(text, path):
     found, collecting, closed = [], False, False
     in_fence = False
     for number, line in enumerate(text.split("\n"), start=1):
+        if collecting and found and FENCE.match(line):
+            # A fence is a line that is not a bullet, so it ends an open list
+            # like any other. Deciding that below, after the fence skip, let
+            # the block's far side rejoin the list the block interrupted.
+            collecting, closed = False, True
         if FENCE.match(line):
             in_fence = not in_fence
             continue
