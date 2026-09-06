@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
-"""Check that a memory file's declared memtype matches the name it carries.
+"""Check a memory pool file against what the "Filing" section says about it.
 
-A pool file's `metadata.type` is written once, by whoever created the file, and
-nothing re-reads it afterwards; four files in one pool had drifted to the
-harness default before anyone counted. This hook is that second reader.
+A file is refused when its name matches no row of the memtype table, when its
+pool's `MEMORY.md` carries no line linking to it, or when a `metadata.type` it
+does declare contradicts its row.
 
-The mapping is not this file's. It is declared once, in the "Filing" section of
-~/.claude/CLAUDE.md, as the memtype table — the subcategory prefix a file's name
+The index line is the load-bearing check. The harness injects a pool's
+`MEMORY.md` and never a memory file, so an unindexed memory has no way of being
+read at all, and one written without its line is indistinguishable from one
+nobody needed. `metadata.type` is the retiring check: nothing re-read it after
+it was written and four files in one pool had drifted to the harness default
+before anyone counted, so a declaration is still compared against its row — but
+the subcategory is being renamed after its reader (`topic-`, `pitfall-`,
+`feedback-`), and a file declaring no type is the target shape rather than a
+drift.
+
+The name mapping is not this file's. It is declared once, in the "Filing"
+section of ~/.claude/CLAUDE.md, as the memtype table — the subcategory prefix a file's name
 opens with, paired with the `type` its row names. This hook parses that table
 out of the document and compiles what it says; a copy kept here would drift
 exactly the way the files did.
@@ -27,7 +37,8 @@ Two entry points:
   - as a CLI: `check-memtype.py FILE...`, exits 1 on any violation.
 
 A declaration that cannot be read is a refusal, never a pass: this hook has no
-table of its own to fall back to.
+table of its own to fall back to. An index that cannot be read is one too, and
+it says so in different words from an index that was read and omits the file.
 """
 
 import json
@@ -44,6 +55,9 @@ POOL_DIR = "memory"
 POOL_SUFFIX = ".md"
 INDEX_FILE = "MEMORY.md"
 TYPE_KEY = "metadata.type"
+# The index line's one machine-readable part: a Markdown link whose target is
+# the file. Its title and its trailing hook are written for a person.
+LINK = r"\]\(\s*%s\s*\)"
 
 ROW = re.compile(r"^\|(.+)\|\s*$")
 RULE_ROW = re.compile(r"^[\s:|-]+$")
@@ -197,8 +211,41 @@ def expected(name, mapping):
     return best[1] if best else None
 
 
+def indexed(path):
+    """Why the pool's index does not name this file, or None when it does.
+
+    A pool with no readable index and an index that was read and omits the file
+    are different failures, and a reader acts on them differently, so each
+    reason says which of the two was observed.
+    """
+    index = os.path.join(os.path.dirname(path), INDEX_FILE)
+    base = os.path.basename(path)
+    try:
+        with open(index, encoding="utf-8") as handle:
+            text = handle.read()
+    except OSError as exc:
+        return "the pool has no readable %s (%s), so nothing can index '%s'." % (
+            INDEX_FILE,
+            exc,
+            base,
+        )
+    if not re.search(LINK % re.escape(base), text):
+        return (
+            "%s was read and carries no line linking to '%s'; add "
+            "`- [<name>](%s) - <what a reader would come for>`. The harness "
+            "loads the index and never a memory, so an unindexed file has no "
+            "reader." % (INDEX_FILE, base, base)
+        )
+    return None
+
+
 def violation(path, table):
-    """The one reason this file fails, or None."""
+    """The one reason this file fails, or None.
+
+    Ordered by what outlives the rename: the name and the index line are the
+    whole of the target scheme's check, and the type is read last because it is
+    the one being retired.
+    """
     name = os.path.splitext(os.path.basename(path))[0]
     want = expected(name, table)
     if want is None:
@@ -213,19 +260,15 @@ def violation(path, table):
             "the table in the same change that first uses it; the table names %s."
             % (name, ", ".join("'%s'" % row for row in listed))
         )
+    reason = indexed(path)
+    if reason:
+        return reason
     block = frontmatter(path)
-    if block is None:
-        return (
-            "no '---' frontmatter block, so nothing declares %s; the table gives "
-            "'%s' the type '%s'." % (TYPE_KEY, name, want)
-        )
-    got = declared(block, TYPE_KEY)
-    if got is None:
-        return (
-            "the frontmatter declares no %s; the table gives '%s' the type '%s'."
-            % (TYPE_KEY, name, want)
-        )
-    if got != want:
+    got = declared(block, TYPE_KEY) if block is not None else None
+    # A file that declares no type is the target scheme's shape, where the
+    # frontmatter is `name` and `description` alone; only a declaration that
+    # contradicts its row is the drift this check was written for.
+    if got is not None and got != want:
         return (
             "%s is '%s'; the table gives '%s' the type '%s'."
             % (TYPE_KEY, got, name, want)
@@ -243,7 +286,7 @@ def is_pool_file(path):
 
 
 def report(path, reason):
-    return "%s: %s\n  (the memtype table is declared in %s, section Filing)" % (
+    return "%s: %s\n  (what a pool file is checked against is declared in %s, section Filing)" % (
         path,
         reason,
         CONTRACT_DOCUMENT,
@@ -262,7 +305,7 @@ def main():
         failed = False
         for path in sys.argv[1:]:
             if not is_pool_file(path):
-                print("%s: skipped, not a pool file the table covers" % path)
+                print("%s: skipped, not a pool file" % path)
                 continue
             reason = violation(path, table)
             if reason:

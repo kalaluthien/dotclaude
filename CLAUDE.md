@@ -180,13 +180,15 @@ The rule goes to the general file and the evidence stays with the subject: instr
 
 A memory file holds one *subject* — the facts a reader asks for in one go, as `##` sections of one file — and never repeats a fact another pool already holds; link with `[[name]]` instead. Merge a new fact into the file whose subject covers it rather than opening a sibling: every extra file is a line every session loads and one more place to look.
 
-Name a memory `<subcategory>-<topic>`, with no date and no project name, since a date forces a rename on every update and the pool directory already names the project. Keep `MEMORY.md` at one line per file, and set `metadata.type` from the memtype table below. A file's `description` states its role, never its contents, because a content list goes stale on the file's next edit.
+Name a memory `<subcategory>-<topic>`, with no date and no project name, since a date forces a rename on every update and the pool directory already names the project. Keep `MEMORY.md` at one line per file, and file nothing without its line: the index is the only thing the harness loads by itself, so an unindexed memory has no reader at all. A file's `description` states its role, never its contents, because a content list goes stale on the file's next edit.
+
+**The subcategory is being renamed after its reader**, because the type predicted nothing about whether a file was ever read and the prefix did. The target set is `topic-<subject>` for a fact looked up, `pitfall-<subject>` for a trap read when stuck, and `feedback-<subject>` for a rule the owner gave, with `name` and `description` the whole frontmatter. Until the last file has moved, the table below is what the hook accepts, and `metadata.type` is optional there — declared, it is still checked against its row.
 
 | type | holds | subcategory prefixes | lifecycle |
 |---|---|---|---|
 | **episodic** | what happened | `history-<topic>` | `history-*` is append-only |
 | **semantic** | what is true | `topic-<topic>` | updated in place |
-| **procedural** | how to act | `feedback-<topic>`, `setup-<topic>`, `pitfalls` | updated in place; deleted when the tool or fact is gone |
+| **procedural** | how to act | `feedback-<topic>`, `setup-<topic>`, `pitfalls`, `pitfall-<subject>` | updated in place; deleted when the tool or fact is gone |
 
 The memtypes divide by what would make the file wrong. Nothing falsifies `history-`, so it only grows, and it records what version control cannot: changes to unversioned things, and rejected options with their kill reasons. A `topic-` file states the current truth of one subject and is updated in place; it splits from `setup-` by recovery cost, since a `setup-` fact is one probe away and a `topic-` truth was bought by analysis no probe re-derives. A `feedback-` rule was given by the owner, so losing one repeats the failure or re-asks them. Invent a memtype when none fits, and add it to the table in the same change.
 
