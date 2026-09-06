@@ -292,6 +292,29 @@ def main():
               and "FIRST element is the link" in said(r)
               and "fence that is never closed" not in said(r),
               "exit %d: %s" % (r.returncode, said(r)[:300]))
+        # The entry sits in a fence that was CLOSED on purpose, and an unrelated
+        # fence is left open. Blaming the closed one on the open one is the same
+        # misdiagnosis one step along, so only the tail the open fence ate counts.
+        (pool / "MEMORY.md").write_text(
+            "```\n- [Old](topic-old.md) - a hook.\n```\n\n"
+            "- [Other](topic-other.md) - a hook.\n\n```\nan example\n",
+            encoding="utf-8")
+        r = posttooluse(hook, buried)
+        check("refused as a missing entry when the entry sits in a fence that "
+              "was closed and a different fence is open", r.returncode == 2
+              and "carries no line linking" in said(r)
+              and "fence that is never closed" not in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
+        # Closed, then reopened: the tail after the LAST opener is what was
+        # eaten, so this one is the fence's fault.
+        (pool / "MEMORY.md").write_text(
+            "```\nan example\n```\n\n```\n- [Old](topic-old.md) - a hook.\n",
+            encoding="utf-8")
+        r = posttooluse(hook, buried)
+        check("refused as the fence when a closed fence is reopened above the "
+              "entry", r.returncode == 2
+              and "fence that is never closed" in said(r),
+              "exit %d: %s" % (r.returncode, said(r)[:300]))
 
     # ---- refuse: the shapes the bullet anchor newly rejects. The message has
     # to name the shape, or a session reads "the line is missing" and appends a

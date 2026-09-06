@@ -32,10 +32,9 @@ prose says a new memtype is invented by adding it to the table in the same
 change, so an unlisted prefix is a table that was never updated.
 
 What this hook does not cover: settings.json matches it on `Write` and `Edit`
-only, so a memory written by `sed` or a heredoc is never
-checked. And a new memory's first
-write is always refused, its index line not existing yet -- one round-trip per
-new file, which is the nudge, not a defect.
+only, so a memory written by `sed` or a heredoc is never checked. And a new
+memory's first write is always refused, its index line not existing yet -- one
+round-trip per new file, which is the nudge, not a defect.
 
 Two entry points:
   - as a Claude Code PostToolUse hook: reads the tool payload on stdin, checks
@@ -43,8 +42,9 @@ Two entry points:
   - as a CLI: `check-memtype.py FILE...`, exits 1 on any violation.
 
 A declaration that cannot be read is a refusal, never a pass: this hook has no
-table of its own to fall back to. An index that cannot be read is one too, and
-it says so in different words from an index that was read and omits the file.
+table of its own to fall back to. So is an index, in one of three wordings a
+reader acts on differently: it could not be read at all, an unclosed fence ate
+the entry, or it was read and simply does not carry one.
 """
 
 import json
@@ -232,22 +232,36 @@ def expected(name, mapping):
 
 
 def unfenced(text):
-    """The text with its fenced blocks dropped, and whether one was left open.
+    """The text with its fenced blocks dropped, and the tail an open fence ate.
 
     A fence in an index holds an example of an index line -- the shape a reader
     is being shown how to write -- and an example is not an entry. An
     unterminated fence swallows every line below it, which is fail-closed and
     right, but it is a different defect from a missing entry and is fixed by a
-    different edit, so the caller is told which it observed.
+    different edit, so the caller gets the swallowed tail itself and can say
+    which of the two it observed. A closed fence is not in that tail: its
+    contents are examples on purpose, and blaming them on the last unclosed
+    fence somewhere else would be the same misdiagnosis one step along.
+
+    This is a fence model, not a Markdown parser, and the differences it admits
+    are written down rather than left silent. It pairs any fence line with any
+    other, so `~~~` opened and ``` closed reads as one block; it does not know
+    the 4-space indented code block, so an entry indented that far still counts
+    as one; and neither it nor `LINK` knows CommonMark's nine-digit cap on an
+    ordered marker. Each is fail-open on a shape no pool index contains -- none
+    of the six holds a fence at all -- and closing them means a second Markdown
+    parser inside a hook.
     """
-    kept, in_fence = [], False
+    kept, swallowed, in_fence = [], [], False
     for line in text.split("\n"):
         if FENCE.match(line):
             in_fence = not in_fence
+            if in_fence:
+                # Only the LAST opener can be the unmatched one.
+                swallowed = []
             continue
-        if not in_fence:
-            kept.append(line)
-    return "\n".join(kept), in_fence
+        (swallowed if in_fence else kept).append(line)
+    return "\n".join(kept), "\n".join(swallowed) if in_fence else ''
 
 
 def indexed(path):
@@ -273,14 +287,15 @@ def indexed(path):
             exc,
             base,
         )
-    body, unterminated = unfenced(text)
+    body, swallowed = unfenced(text)
     if not re.search(LINK % re.escape(base), body):
-        # The fence is the diagnosis only when the fence is what hid the entry.
-        # Gated on `unterminated` alone it rewrote the reason for every miss in
-        # the file, so a wrongly shaped entry was answered "close the fence" --
-        # and "the entry may well be there" would name a condition no branch
-        # had read.
-        if unterminated and re.search(LINK % re.escape(base), text):
+        # The fence is the diagnosis only when the unclosed fence ate THIS
+        # entry. Gated on "a fence is open" it rewrote the reason for every
+        # miss in the file, so a wrongly shaped entry was answered "close the
+        # fence"; gated on the raw text it did the same for an entry sitting in
+        # a fence that was closed on purpose. Both would name a condition no
+        # branch had read.
+        if swallowed and re.search(LINK % re.escape(base), swallowed):
             return (
                 "%s has a fence that is never closed, so every line below it "
                 "was read as an example and not as an entry, '%s' among them. "
