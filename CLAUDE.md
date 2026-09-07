@@ -142,6 +142,18 @@ A "new discovery" is a false positive until it clears the usual causes: intended
 
 For a change the user sees through a running service, "finished" includes the deploy: rebuild or restart the service and verify the served artifact shows the change. The same holds for anything *installed* rather than called — a hook, a guard, a config: exercise the installed artifact, never a fixture standing in for it. A suite whose fixtures are strings leaves the deployed thing covered by nothing, and reports full marks while its whole body is deleted.
 
+## Visual encoding
+
+A control rides on something already drawn — the heading, or the element it acts on — and never takes a row of its own, because every extra line spends the phone screen the control was meant to serve. A refresh is a heading-aligned icon carrying its own loading state, and it replaces the cached reading only when the new one arrives, never invalidating it first.
+
+A state change moves nothing: the verdict travels in colour, an icon or a word, the layout stays where it was, and what exactly failed goes to the tooltip. One fact takes one form in every context it is drawn in.
+
+A surface carries labels, values, empty states and errors, and no prose explaining how it behaves. A glyph earns its place only when nothing beside it already says what it says, and a short message takes no box.
+
+Plumbing is hidden and work identity is shown: no orchestration status or control on a user-facing page, while the session working an item is named on it, and only while the item is being worked.
+
+An ordering problem is answered by folding the missing signal into the one rank, never by a second order or a sort setting a reader picks.
+
 ## Reporting
 
 Own what you discover. An issue found mid-task is never the user's to triage: fix it in the same task when it is in scope, file it to the owning pool when it is not, and name it to the user only when it blocks the task or the decision is theirs.
