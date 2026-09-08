@@ -104,7 +104,7 @@ it; check with ToolSearch before naming it.
 
 ## The rules
 
-Rules on writing and drawing live in `references/`. Read the ones that apply
+Rules on writing and drawing belong in `references/`. Read the ones that apply
 before drawing a figure or drafting the prose beside it, and file a new one
 there.
 

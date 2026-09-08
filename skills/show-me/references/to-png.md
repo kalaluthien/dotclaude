@@ -1,7 +1,8 @@
 # Rendering a show-me page to PNG for a phone
 
-Every command below ran successfully on 2026-09-01 (macOS, Chrome 900-unit
-window). Copy them; do not retype from memory.
+Every command below ran successfully on 2026-09-01, and the `mkdir` on
+2026-09-08 (macOS, Chrome 900-unit window). Copy them; do not retype from
+memory.
 
 Shoot taller than the page, then trim to the last row that differs from the
 background — Chrome has no full-page flag here.
