@@ -5,10 +5,8 @@
 !/.gitignore
 !/CLAUDE.md
 !/settings.json
-!/agents/
 !/skills/
 !/output-styles/
-!/rules/
 !/git-hooks/
 !/hooks/
 !/spec/
