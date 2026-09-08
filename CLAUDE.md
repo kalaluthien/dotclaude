@@ -16,7 +16,7 @@ A skill only a person types hides from the model with `disable-model-invocation:
 
 Pick the model by task depth: Fable when the approach is not yet clear, Opus to carry out an approach that is, Sonnet to retrieve or condense.
 
-Pick the effort by breadth and difficulty, taking the higher where the two disagree; a ticket's `#easy` or `#hard` is that estimate already made.
+Pick the effort by breadth and difficulty — high or xhigh for many exceptional cases or one genuinely hard one, low or medium for work both narrow and well understood — taking the higher where the two disagree; a ticket's `#easy` or `#hard` is that estimate already made.
 
 An orchestrator above Opus delegates its hands-on editing and debugging; on Opus it may do narrow hands-on work itself.
 
@@ -60,13 +60,13 @@ When two readings of a request lead to materially different work, present both i
 
 Estimate the scope and difficulty of a token-consuming move before you start it.
 
-Red-team whatever you evaluate: 2-3 named options through 2-3 distinct lenses, handed over with their trade-offs and one recommendation. Convergence across independent lenses is the accept signal; a single lens is an opinion.
+Red-team whatever you evaluate: 2-3 named options through 2-3 distinct lenses, handed over with their trade-offs and one recommendation, and none implemented until one is chosen. Convergence across independent lenses is the accept signal; a single lens is an opinion.
 
 Told to "decide all other details", decide — and hand the decisions back as a numbered veto table, one line of reason each.
 
 Spend one cheap check that can settle a decision before handing it to the user; they decide only preference, scope and destructive stakes.
 
-Scope a destructive action to the noun that was approved, and list the target's contents before removing it.
+Scope a destructive action to the noun that was approved, and list the target's contents before removing it; where the container holds more than the named thing, remove only that or ask again.
 
 ## Design
 
@@ -78,7 +78,7 @@ Classify logic as data, calculation, or action, and push business logic into cal
 
 Reset a reusable resource when you claim it, not when you release it: only the claim path knows what clean means for the work about to start.
 
-Name a resource generic against change and specific about scope, because a rename costs every inbound reference.
+Name a resource generic against change — no state, verdict or measurement — and specific about scope, naming the slice it owns; a rename costs every inbound reference.
 
 A declared contract stays true only while a second reader enforces it, so state a rule once in a form something must consume, never twice in prose.
 
@@ -128,7 +128,7 @@ A single tool's or environment's own fact goes to a `topic-<subject>` memory —
 
 A repository's build or test gotcha goes to its `AGENTS.md`, a technology-specific debugging pitfall to the project pool's `pitfall-<subject>`, and a product, architecture or verification truth to the repository itself: what is normative is a specification in `spec/`, what is drawn for a reader is a view in `docs/` as HTML, and neither inherits the other's rules.
 
-The rule goes to the general file and the evidence stays with the subject. Merge a near-duplicate instead of stacking one beside it.
+The rule goes to the general file and the evidence stays with the subject — instruction and rationale only, no repository names and no war stories. Merge a near-duplicate instead of stacking one beside it.
 
 A memory file holds one *subject*, as `##` sections of one file, and never repeats a fact another pool holds; link with `[[name]]` instead.
 
