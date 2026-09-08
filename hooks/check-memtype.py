@@ -12,11 +12,12 @@ nobody needed.
 
 The name is the second. A memory is named after its reader -- `topic-` for a
 fact looked up, `pitfall-` for a trap read when stuck, `feedback-` for a rule
-the owner gave -- because the type it used to be named after predicted nothing
-about whether the file was ever read and the prefix did. `setup-`, `pitfalls`,
-`backlog` and `history-` are the names that scheme retired; the refusal names
-each one's successor, and `history-`'s is a decision page under `docs/` rather
-than anything in the pool (`spec/decision-pages.md`).
+the owner gave, `archive-` for what a deleted thing knew -- because the type it
+used to be named after predicted nothing about whether the file was ever read
+and the prefix did. `setup-`, `pitfalls`, `backlog` and `history-` are the
+names that scheme retired; the refusal names each one's successor, and
+`history-`'s is a decision page under `docs/` rather than anything in the pool
+(`spec/decision-pages.md`).
 
 `metadata.type` is the third and the smallest edit: nothing re-read it after it
 was written, four files in one pool had drifted to the harness default before

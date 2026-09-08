@@ -28,14 +28,6 @@ Delegate to a constitution-backed subagent or skill the moment its domain appear
 
 # Principles
 
-MUST follow these regardless of the task.
-
-## Reveal intention
-
-Make your outputs self-descriptive by unambiguous naming and meaningful organizing.
-
-When two readings of a request lead to materially different work, present both instead of picking one silently.
-
 ## Simplicity first
 
 Elements: solve the stated problem with fewer elements as much as possible; avoid coupling and duplication.
@@ -58,7 +50,7 @@ Do not do mental calculations. Write a script to parse, count, and aggregate, an
 
 ## Hill climbing
 
-Transform tasks into objectively verifiable goals, then loop until the criteria are met without hacks. The criteria verify the solution; they do not define it, so a hardcoded pass is a failure. "Fix the bug" becomes "write a test that reproduces it, then make it pass"; "design X" becomes "list requirements and use cases, then walk the design through each".
+Transform tasks into objectively verifiable goals, then loop until the criteria are met without hacks. The criteria verify the solution; they do not define it, so a hardcoded pass is a failure. "Fix the bug" becomes "write a test that reproduces it, then make it pass".
 
 When the work is delegated, require named failures instead of silent compliance: a criterion honestly failed with its reason locates a defect in the criteria or the inputs, which a gamed pass hides.
 
@@ -66,13 +58,13 @@ Write goal criteria so the honest empty outcome can pass — "remove X, or repor
 
 # Craft
 
-Read the matching section before you decide, design, read a signal, verify a fix, rewrite git history, or file a takeaway.
-
 ## Deciding
+
+When two readings of a request lead to materially different work, present both instead of picking one silently.
 
 Estimate the scope and difficulty of a token-consuming move before you start it. Do not overthink or over-engineer.
 
-Red-team whatever you evaluate: generate 2-3 named options and judge all of them through 2-3 distinct lenses (architecture, consumer, product). Convergence across independent lenses is the accept signal; a single lens is an opinion. Hand them over as named options with their trade-offs and one recommendation, and do not implement until one is chosen.
+Red-team whatever you evaluate: 2-3 named options, each judged through 2-3 distinct lenses (architecture, consumer, product). Convergence across independent lenses is the accept signal; a single lens is an opinion. Hand them over with their trade-offs and one recommendation, and implement none until one is chosen.
 
 When told to "decide all other details", decide — and hand the decisions back as a numbered veto table, one line of reason each, so a veto costs the user one line.
 
@@ -96,7 +88,7 @@ A declared contract stays true only while a second reader enforces it, a validat
 
 Sort every rule by whether a machine can decide it. A rule that can be checked deterministically becomes the check — a hook, a validator, a setting that refuses — and the prose keeps only that the mechanism exists and what it answers, never how. Only what needs judgement stays written. A document of rules grows long because it is storing the ones that had nowhere mechanical to live, and the rules people break are the deterministic ones they can quote while breaking them.
 
-Mechanising a rule moves its failure mode from disobeyed to silent, so the check has to say what it observed. The inputs a check reads about a running system go stale on their own — a session id or pid changes under a restart, a name changes under a rename, a context is compacted and the record it was holding is gone, a file it expects was never written — and each of those arrives at the check as an absence indistinguishable from a pass. Handle every such case explicitly, distinguish *I looked and found nothing* from *I could not look*, and print what was read, from where, and which branch was taken. A bare exit code or a bare verdict word is the shape that gets trusted for months while enforcing nothing, and it is worse than the unenforced rule it replaced, because now everyone believes the rule is held. Give the check one last-resort handler so an unpredicted failure is loud rather than a stack trace, and make that handler PERMIT rather than refuse: a blanket refusal turns any bug in the check into a wall across everything it guards, while a loud permit costs one unjudged call and names itself. Each failure the design did foresee is still handled where it happens.
+Mechanising a rule moves its failure mode from disobeyed to silent, so the check must say what it observed: what was read, from where, and which branch was taken. Its inputs go stale on their own — a pid, a session id, a name, a file never written — and each arrives as an absence indistinguishable from a pass, so distinguish *I looked and found nothing* from *I could not look*. A bare exit code or verdict word is worse than the unenforced rule it replaced, because now everyone believes the rule is held. Give the check one last-resort handler, and make it PERMIT rather than refuse: a bug in the check then costs one unjudged call that names itself, instead of a wall across everything it guards.
 
 ## State and events
 
@@ -114,17 +106,17 @@ Give a polling loop's no-evidence verdict a terminal branch. For a finished subj
 
 A claim argued only from documents, memory, or the artifact you just wrote is unverified. Spend one cheap check that is able to fail, and do not add checks beyond these.
 
-A probe that cannot exhibit the counterexample is not evidence: before believing one, name the condition that would separate the two hypotheses and confirm the probe varied it. This bites hardest on the *second* probe — the one that overturned a claim reads as settled, while it usually inherits every condition the first probe held fixed, so the corrected claim comes out right about the mechanism and wrong about its scope.
+A probe that cannot exhibit the counterexample is not evidence: name the condition that separates the two hypotheses, and confirm the probe varied it. This bites hardest on the *second* probe, which inherits every condition the first held fixed and comes out right about the mechanism and wrong about its scope.
 
 A regression test earns trust only by failing first: break the behaviour in the source, watch the named test fail, then restore by undoing that one edit. `git stash` and `git checkout --` restore the whole file and silently discard other uncommitted work, because the suite goes green either way.
 
-Break each branch separately, not the feature: a case that several branches can satisfy pins none of them, and it passes while any one of them is deleted. Disable one alternation, flag, or code path at a time and require a *named* case to fail for each; a fixture that fails nothing when a branch is removed is documentation, not coverage. Put the assertion on what the mutation changes, never on a neighbour it leaves alone: a ref *name* survives a force-push, a sentence's opening survives the deletion of its middle, and a case named for the property then passes without ever testing it.
+Break each branch separately, not the feature: disable one alternation, flag or code path at a time and require a *named* case to fail for each. A case several branches satisfy pins none of them, and a fixture that fails nothing when a branch is removed is documentation, not coverage. Put the assertion on what the mutation changes, never on a neighbour it leaves alone — a ref *name* survives a force-push, and a case named for the property then passes without ever testing it.
 
-An exit status is not a verdict, so a case asserting one is satisfied by every other cause that shares it: a crash and a refusal both exit non-zero, and a check the change silently disabled exits zero exactly like a check that passed. Assert on what the run *said* — the diagnosis, and the finding that must be absent — because the absent finding is the only thing that separates a rule enforced from a rule collapsed.
+An exit status is not a verdict: a crash and a refusal both exit non-zero, and a check the change silently disabled exits zero exactly like one that passed. Assert on what the run *said* — the diagnosis, and the finding that must be absent, which is the only thing separating a rule enforced from a rule collapsed.
 
 Before adopting a word for a renamed value, grep the tree *and* `git log -S` it. A word absent from the tree may have been retired deliberately and pinned by an assertion that it is *not* present; a word the tree does hold may already carry another meaning, so read every existing reader before reusing a key.
 
-When you retire a name or a rule, sweep every place it is stated — its path, its role word, the prose aliases its documents use, the spec or model that calls itself the contract, and any validator whose pattern encodes it — because a path grep leaves the prose standing, a stale claim in a spec or a `CLAUDE.md` is a defect where a stale view is not, and a checker still admitting the retired shape is the loophole with a machine behind it. Run the sweep in every language the tree is written in: a grep in one language cannot see the copy written in the other, and that copy is invisible for exactly as long as nobody searches for it.
+When you retire a name or a rule, sweep every place it is stated — its path, its role word, the prose aliases its documents use, the spec or model that calls itself the contract, and any validator whose pattern encodes it. A path grep leaves the prose standing, a stale claim in a spec or a `CLAUDE.md` is a defect where a stale view is not, and a checker still admitting the retired shape is the loophole with a machine behind it. Sweep in every language the tree is written in.
 
 Root a verification command at an absolute path, and echo the resolved path beside the result. A shell's cwd is state an earlier command set, so the wrong checkout answers in the right shape.
 
@@ -134,23 +126,23 @@ A documentation claim about a tool's or harness's behavior is a hypothesis: when
 
 A count read from a tool that paginates is its page size until proven otherwise: raise the limit or read the paginated API, because a truncated listing reads exactly like a complete one.
 
-State the set beside every count, and count it yourself. One word covering three sets — "the citations" meaning the ones in one directory, in the tree, and of the shape a checker reads — makes three correct numbers read as three contradictions. A number a delegate reported is that delegate's until you re-derive it; relay it as theirs or run it. And assert a loop's iteration count, because a body that never ran still prints one line per iteration.
+State the set beside every count, and count it yourself: one word covering three sets makes three correct numbers read as three contradictions. A number a delegate reported is that delegate's until you re-derive it — relay it as theirs or run it. Assert a loop's iteration count, because a body that never ran still prints one line per iteration.
 
 A "new discovery" is a false positive until it clears the usual causes: intended implementation, measurement error, noise read as a trend, correctness argued from the function alone with callers unread, and a measured quantity that differs from what its name claims.
 
-For a change the user sees through a running service, "finished" includes the deploy: rebuild or restart the service and verify the served artifact shows the change. The same holds for anything *installed* rather than called — a hook, a guard, a config: exercise the installed artifact, never a fixture standing in for it. A suite whose fixtures are strings leaves the deployed thing covered by nothing, and reports full marks while its whole body is deleted.
+"Finished" includes the deploy: restart the service and verify the served artifact shows the change. The same holds for anything *installed* rather than called — a hook, a guard, a config — so exercise the installed artifact, never a fixture standing in for it. A suite of string fixtures reports full marks while the deployed body is deleted.
 
 ## Visual encoding
 
-A control rides on something already drawn — the heading, or the element it acts on — and never takes a row of its own, because every extra line spends the phone screen the control was meant to serve. A refresh is a heading-aligned icon carrying its own loading state, and it replaces the cached reading only when the new one arrives, never invalidating it first.
+Controls: a control rides on the heading or the element it acts on, never a row of its own; a refresh is a heading-aligned icon with its own loading state, replacing the cached reading only when the new one arrives.
 
-A state change moves nothing: the verdict travels in colour, an icon or a word, the layout stays where it was, and what exactly failed goes to the tooltip. One fact takes one form in every context it is drawn in.
+State: a state change moves nothing. The verdict travels in colour, an icon or a word; what exactly failed goes to the tooltip; one fact takes one form in every context.
 
-A surface carries labels, values, empty states and errors, and no prose explaining how it behaves. A glyph earns its place only when nothing beside it already says what it says, and a short message takes no box.
+Content: labels, values, empty states and errors, no prose about how the surface behaves. A glyph earns its place only when nothing beside it says the same, and a short message takes no box.
 
-Plumbing is hidden and work identity is shown: no orchestration status or control on a user-facing page, while the session working an item is named on it, and only while the item is being worked.
+Identity: plumbing is hidden and work identity is shown — no orchestration status on a user-facing page, and the session working an item named on it only while it is worked.
 
-An ordering problem is answered by folding the missing signal into the one rank, never by a second order or a sort setting a reader picks.
+Ordering: fold the missing signal into the one rank, never a second order or a sort setting a reader picks.
 
 ## Reporting
 
@@ -180,11 +172,11 @@ Route a durable takeaway by *what would make it wrong*, and report where you fil
 
 A general rule, true on any repository, machine, or tool, goes to the section of this file that names the work it applies to.
 
-A rule on writing, visualizing, describing, or explaining goes to the `show-me` skill, `~/.claude/skills/show-me/`, because that skill is the only thing that reads such rules.
+A rule on writing or explaining goes to the `show-me` skill, `~/.claude/skills/show-me/`, the only thing that reads such rules. A rule on a product surface goes to § Visual encoding instead.
 
 A single tool's or environment's own fact goes to a `topic-<subject>` memory: the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when it holds machine-wide, and the owning project's pool when only that project touches the tool. A fact that governs authoring files under a recognizable path pattern goes instead to the matching rule in `~/.claude/rules/`, which loads itself when a matching file is read.
 
-A repository-specific build or test gotcha goes to that repository's `AGENTS.md`; a debugging pitfall specific to its technology goes to the project pool's `pitfall-<subject>` memory whose subject covers it; a product, architecture, or verification truth goes to that repository's own `spec/` or `docs/`, split by kind: what is normative is a specification and lands in `spec/` — in a repository that checks its specs with a formal model (Alloy), the model files and their comments are the spec and no markdown lives beside them, since prose next to a model drifts from it; as markdown otherwise — what is drawn for a reader is a view and lands in `docs/` as HTML, and neither inherits the other's rules — so a markdown file under `docs/` is misfiled, not temporary.
+A repository-specific build or test gotcha goes to that repository's `AGENTS.md`; a debugging pitfall specific to its technology goes to the project pool's `pitfall-<subject>`; a product, architecture or verification truth goes to the repository itself, split by kind. What is normative is a specification in `spec/`, as markdown — or, where a formal model checks it, as the model files and their comments, with no markdown beside them, since prose next to a model drifts from it. What is drawn for a reader is a view in `docs/`, as HTML. Neither kind inherits the other's rules, so a markdown file under `docs/` is misfiled, not temporary.
 
 The rule goes to the general file and the evidence stays with the subject: instruction and rationale only, no repository names and no war stories. Before you append, update or merge a near-duplicate instead of stacking one beside it.
 
@@ -199,8 +191,8 @@ Name a memory `<prefix>-<subject>`, with no date and no project name, since a da
 - `feedback-<subject>` — a rule the owner gave. Losing one repeats the failure or re-asks them.
 - `archive-<subject>` — what a deleted thing knew, read when one is rebuilt. Names the commit that deleted it, its upstream if it had one, and the essence worth reusing.
 
-`name` and `description` are the whole frontmatter. A `metadata.type` is the retired declaration and is refused, as is a name outside the four: `setup-` was `topic-` under its old name, `pitfalls.md` and `backlog.md` were one file per pool where it now holds one per subject, and `history-` has left the pool. What that prefix held — a change to something git does not track, and a rejected option with its kill reason — is a **decision page** under `docs/`, because a pool file is untracked and dies with a rename while a page can be linked to and reviewed: `spec/decision-pages.md` is the contract and `hooks/check-decision-page.py` refuses a malformed page, or a link into one that resolves to nothing.
+`name` and `description` are the whole frontmatter; a `metadata.type` and a name outside the four are refused. A change git does not track, and a rejected option with its kill reason, are not pool files at all — they are a **decision page** under `docs/`, because a pool file is untracked and dies with a rename while a page can be linked to and reviewed: `spec/decision-pages.md` is the contract and `hooks/check-decision-page.py` refuses a malformed page, or a link into one that resolves to nothing.
 
-**Ask first whether a machine could decide it, and mechanise it instead** — a takeaway that a checker, a hook or a validator could hold is one nobody should have to remember, so the fix is the check plus its named failing case, and no memory is filed. Only what needs judgement is left to route. Then take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Promotion has a threshold — a takeaway observed once files with its evidence and moves into this file only when a later, independent task confirms it, because one observation cannot tell a rule from a coincidence. Delete memories that turn out wrong, and correct a stale one the moment you observe the mismatch.
+**Ask first whether a machine could decide it, and mechanise it instead** — the fix is then the check plus its named failing case, and no memory is filed. What is left takes exactly one route: update the file that already covers the topic, promote it to a rule in this file when it is a general rule in disguise, or discard it as derivable from the repository or its history. Promotion needs a second, independent task to confirm it, because one observation cannot tell a rule from a coincidence. Delete a memory that turns out wrong, and correct a stale one the moment you see the mismatch.
 
 @RTK.md
