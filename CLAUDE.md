@@ -12,7 +12,7 @@ English for every file: documents, source, scripts, comments, git logs, configur
 
 A project's instructions live in `PROJECT/AGENTS.md`, and `PROJECT/CLAUDE.md` imports them with `@AGENTS.md`; every ancestor's shim loads too.
 
-A skill only a person types hides from the model with `disable-model-invocation: true`, because a command is an order given, not an operation offered. How to name either kind is `~/.claude/rules/skill-authoring.md`.
+A skill only a person types hides from the model with `disable-model-invocation: true`, because a command is an order given, not an operation offered. How to name and shape either kind, and the scripts under them, is `~/campaign-base/AGENTS.md` § Authoring a script or a skill.
 
 Pick the model by task depth: Fable when the approach is not yet clear, Opus to carry out an approach that is, Sonnet to retrieve or condense.
 
@@ -124,7 +124,7 @@ A general rule, true on any repository, machine or tool, goes to the section of 
 
 A rule on writing or explaining goes to the `show-me` skill, `~/.claude/skills/show-me/`; a rule on a product surface goes to § Visual encoding.
 
-A single tool's or environment's own fact goes to a `topic-<subject>` memory — the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when it is machine-wide, and the owning project's pool otherwise. One that governs authoring files under a path pattern goes to the matching `~/.claude/rules/` file instead.
+A single tool's or environment's own fact goes to a `topic-<subject>` memory — the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when it is machine-wide, and the owning project's pool otherwise.
 
 A repository's build or test gotcha goes to its `AGENTS.md`, a technology-specific debugging pitfall to the project pool's `pitfall-<subject>`, and a product, architecture or verification truth to the repository itself: what is normative is a specification in `spec/`, what is drawn for a reader is a view in `docs/` as HTML, and neither inherits the other's rules.
 
