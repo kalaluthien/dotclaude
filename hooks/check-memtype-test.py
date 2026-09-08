@@ -114,11 +114,11 @@ def main():
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
         prefixes = target_prefixes()
-        check("the document declares 3 memory prefixes (raise this count when "
-              "the scheme gains one)", len(prefixes) == 3,
+        check("the document declares 4 memory prefixes (raise this count when "
+              "the scheme gains one)", len(prefixes) == 4,
               "read %r from the bullets after 'memory prefixes are:'" % (prefixes,))
-        check("the three are topic-, pitfall- and feedback-",
-              sorted(prefixes) == ["feedback-", "pitfall-", "topic-"],
+        check("the four are topic-, pitfall-, feedback- and archive-",
+              sorted(prefixes) == ["archive-", "feedback-", "pitfall-", "topic-"],
               "read %r" % (prefixes,))
         for prefix in prefixes:
             path = memory(pool, "%sprobe" % prefix)
@@ -126,6 +126,16 @@ def main():
             check("allowed: '%sprobe', a prefix the document declares" % prefix,
                   r.returncode == 0 and not said(r).strip(),
                   "exit %d: %s" % (r.returncode, said(r)[:300]))
+        # `archive-` is the fourth, added when the writing skill and the
+        # debugger agent were retired: what a deleted thing knew has to land
+        # where a rebuild will read it. Named on its own, because the loop
+        # above is generated FROM the list -- delete the bullet and that loop
+        # quietly runs one case fewer, while this one fails and says which.
+        r = posttooluse(hook, memory(pool, "archive-writing-skill"))
+        check("allowed: 'archive-writing-skill' -- § Filing declares "
+              "`archive-<subject>` and the hook honours it",
+              "archive-" in prefixes and r.returncode == 0,
+              "read %r; exit %d: %s" % (prefixes, r.returncode, said(r)[:300]))
 
     # ---- refuse: every name the scheme retired. Each is a real file shape
     # that lived in a pool, and each gets the same reason naming its successor.

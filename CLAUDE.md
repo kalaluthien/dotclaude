@@ -48,8 +48,6 @@ Abstractions: none for a one-time operation, none for a hypothetical requirement
 
 ## Deep dive
 
-Tracing a failure to its root cause is the `debugger` subagent's job, and its method lives in its constitution, `~/.claude/agents/debugger.md`. Delegate rather than debug inline.
-
 Once you choose an approach, commit to it. Revisit only when new information contradicts the reasoning that chose it.
 
 ## Compute with code
@@ -68,7 +66,7 @@ Write goal criteria so the honest empty outcome can pass — "remove X, or repor
 
 # Craft
 
-Read the matching section before you decide, design, read a signal, verify a fix, rewrite git history, or file a takeaway. Rules on writing and drawing live in the `writing` skill; debugging method lives in the debugger constitution.
+Read the matching section before you decide, design, read a signal, verify a fix, rewrite git history, or file a takeaway.
 
 ## Deciding
 
@@ -182,7 +180,7 @@ Route a durable takeaway by *what would make it wrong*, and report where you fil
 
 A general rule, true on any repository, machine, or tool, goes to the section of this file that names the work it applies to.
 
-A rule on writing, visualizing, describing, or explaining goes to the `writing` skill, `~/.claude/skills/writing/references/`, because that skill is the only thing that reads such rules.
+A rule on writing, visualizing, describing, or explaining goes to the `show-me` skill, `~/.claude/skills/show-me/`, because that skill is the only thing that reads such rules.
 
 A single tool's or environment's own fact goes to a `topic-<subject>` memory: the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when it holds machine-wide, and the owning project's pool when only that project touches the tool. A fact that governs authoring files under a recognizable path pattern goes instead to the matching rule in `~/.claude/rules/`, which loads itself when a matching file is read.
 
@@ -194,13 +192,14 @@ A memory file holds one *subject* — the facts a reader asks for in one go, as 
 
 Name a memory `<prefix>-<subject>`, with no date and no project name, since a date forces a rename on every update and the pool directory already names the project. Keep `MEMORY.md` at one line per file, and file nothing without its line: the index is the only thing the harness loads by itself, so an unindexed memory has no reader at all. A file's `description` states its role, never its contents, because a content list goes stale on the file's next edit.
 
-**A memory is named after its reader**, because the type it used to be named after predicted nothing about whether a file was ever read and the prefix did. The three memory prefixes are:
+**A memory is named after its reader**, because the type it used to be named after predicted nothing about whether a file was ever read and the prefix did. The four memory prefixes are:
 
 - `topic-<subject>` — a fact looked up. States the current truth of one subject, updated in place.
 - `pitfall-<subject>` — a trap read when stuck. Deleted when the tool or the fact is gone.
 - `feedback-<subject>` — a rule the owner gave. Losing one repeats the failure or re-asks them.
+- `archive-<subject>` — what a deleted thing knew, read when one is rebuilt. Names the commit that deleted it, its upstream if it had one, and the essence worth reusing.
 
-`name` and `description` are the whole frontmatter. A `metadata.type` is the retired declaration and is refused, as is a name outside the three: `setup-` was `topic-` under its old name, `pitfalls.md` and `backlog.md` were one file per pool where it now holds one per subject, and `history-` has left the pool. What that prefix held — a change to something git does not track, and a rejected option with its kill reason — is a **decision page** under `docs/`, because a pool file is untracked and dies with a rename while a page can be linked to and reviewed: `spec/decision-pages.md` is the contract and `hooks/check-decision-page.py` refuses a malformed page, or a link into one that resolves to nothing.
+`name` and `description` are the whole frontmatter. A `metadata.type` is the retired declaration and is refused, as is a name outside the four: `setup-` was `topic-` under its old name, `pitfalls.md` and `backlog.md` were one file per pool where it now holds one per subject, and `history-` has left the pool. What that prefix held — a change to something git does not track, and a rejected option with its kill reason — is a **decision page** under `docs/`, because a pool file is untracked and dies with a rename while a page can be linked to and reviewed: `spec/decision-pages.md` is the contract and `hooks/check-decision-page.py` refuses a malformed page, or a link into one that resolves to nothing.
 
 **Ask first whether a machine could decide it, and mechanise it instead** — a takeaway that a checker, a hook or a validator could hold is one nobody should have to remember, so the fix is the check plus its named failing case, and no memory is filed. Only what needs judgement is left to route. Then take exactly one route: update the file that already covers the topic, promote the item to a rule in this file when it is a general rule in disguise, or discard it as derivable from the repository, git history, or a `CLAUDE.md`. Promotion has a threshold — a takeaway observed once files with its evidence and moves into this file only when a later, independent task confirms it, because one observation cannot tell a rule from a coincidence. Delete memories that turn out wrong, and correct a stale one the moment you observe the mismatch.
 
