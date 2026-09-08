@@ -8,8 +8,8 @@ memory is untracked and dies with a rename.
 ## What a decision page is
 
 A view under `docs/`, one page per **subject**, holding that subject's decisions
-in dated entries. It is the `explanation` doctype of the `writing` skill — the
-skill owns the provenance block, the title, and the prose rules, and this spec
+in dated entries. It is an explanation page: the provenance block, the title and
+the prose rules were the `writing` skill's, retired in `f94ce33`, and this spec
 adds nothing to them and restates none of them.
 
 The page records only what version control cannot:
@@ -23,8 +23,8 @@ Anything the tree already states belongs in the tree.
 ## Where it lives, and how it is addressed
 
 - `docs/<slug>.html`, the slug being the subject in kebab-case, and its
-  `<body>` carries `class="decision-page"`. `docs/` holds every doctype the
-  `writing` skill defines, and only a page that declares itself is held to the
+  `<body>` carries `class="decision-page"`. `docs/` holds views of every kind,
+  and only a page that declares itself is held to the
   rules below — an ordinary explanation's `<h2>First section</h2>` is not a
   malformed decision. A page that omits the marker is checked for nothing but
   its links, which is the cost of the declaration and is why it is one word.
@@ -75,9 +75,10 @@ is not in the page.
 | two `<h2>` elements sharing an `id` | the link resolves to whichever the browser reaches first |
 | a link into this `docs/` that names no existing page or `id` | this is the failure the record exists to prevent. Checked on every page under `docs/`, declared or not |
 
-The provenance block, the doctype and the prose are **not** checked here. The
-`writing` skill's `render-check.py` owns them, and a second reader of one rule
-drifts from the first.
+The provenance block, the doctype and the prose are **not** checked here. They
+were the `writing` skill's `render-check.py`'s, and a second reader of one rule
+drifts from the first. That skill was retired in `f94ce33`, so those three are
+contract with no checker until one is written.
 
 ## The option that lost
 

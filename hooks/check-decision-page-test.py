@@ -180,7 +180,7 @@ def allow_cases(t):
             decision('<dl><dt>Doctype</dt><dd>guide</dd><dt>Commit</dt><dd>abc</dd></dl>'
                      '<h2 id="c">2026-02-04 a decision</h2>'))
     code, out = t.run(os.path.join(t.root, "docs", "extra-fields.html"))
-    expect("the provenance block is render-check's, not this hook's", code, out, 0,
+    expect("the provenance block is not this hook's to judge", code, out, 0,
            says=["ok, decision page"], absent=["Doctype", "provenance"])
 
     t.write("docs/empty.html", decision("<p>Nothing decided yet.</p>"))
