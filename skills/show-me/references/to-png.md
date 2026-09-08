@@ -8,6 +8,7 @@ background — Chrome has no full-page flag here.
 
 ```sh
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+mkdir -p /tmp/show-me-shot          # Chrome exits 0 and writes nothing without it
 "$CHROME" --headless --disable-gpu --hide-scrollbars \
   --screenshot=/tmp/show-me-shot/tall.png --window-size=900,6000 \
   "file:///tmp/show-me-<slug>.html"

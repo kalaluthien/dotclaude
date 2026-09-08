@@ -3,8 +3,10 @@
 
 `spec/decision-pages.md` is the contract; this enforces the machine-decidable
 half of it and nothing else. The provenance block, the doctype and the prose
-belong to the `writing` skill's `render-check.py`, and a second reader of one
-rule drifts from the first, so none of them is read here.
+were the `writing` skill's `render-check.py`'s, and a second reader of one rule
+drifts from the first, so none of them is read here. That skill was retired in
+`f94ce33` and nothing enforces those three today: they are contract without a
+checker until one is written.
 
 Two entry points, one judgement, and one exit code for it: 0 allows, 2 refuses,
 anything else is this script's own failure and refuses nothing.
@@ -19,9 +21,9 @@ therefore loud, not preventive, and `spec/decision-pages.md` says so too.
 
 A page declares itself a decision page with `class="decision-page"` on its
 `<body>`, and only a declared page is held to the entry rules. `docs/` holds
-every doctype the `writing` skill defines, and an ordinary explanation's
-`<h2>First section</h2>` is not a malformed decision -- judging every page here
-would refuse the skill's own skeleton on every write.
+views of every kind, and an ordinary explanation's `<h2>First section</h2>` is
+not a malformed decision -- judging every page here would refuse an ordinary
+view on every write.
 
 Every path outside this checkout's `docs/` and its links is skipped, and the
 skip says so: a hook registered machine-wide sees every write on the machine,
@@ -210,8 +212,8 @@ def verdict(path):
             return True, "%s: skipped, not a view" % path
         faults = link_faults(path, text)
         if not declared(text):
-            # Every doctype the `writing` skill defines lives here. Without the
-            # marker the entry rules do not apply, and only the links are read.
+            # A `docs/` tree holds views of every kind. Without the marker
+            # the entry rules do not apply, and only the links are read.
             if faults:
                 return False, "%s %s" % (path, "; also ".join(faults))
             return True, ("%s: ok, a view, not declared a decision page; links only"

@@ -1,6 +1,6 @@
 ---
 name: show-me
-description: Explain the current topic visually — pseudocode, a tree, a Mermaid diagram, a diff, or one self-contained HTML page delivered to desktop and phone. Use when the user types /show-me <topic>.
+description: Explain the current topic visually — pseudocode, a tree, a Mermaid diagram, a diff, or one self-contained HTML page delivered to desktop and phone. Use when the user types /show-me X.
 disable-model-invocation: true
 ---
 
@@ -85,7 +85,7 @@ ownership or order, or when the user needs a copyable target shape.
 ## The HTML page
 
 For a visual UI, a layout, a state comparison, or a concept too dense for
-Mermaid, write one self-contained HTML page to `/tmp/show-me-<topic-slug>.html`
+Mermaid, write one self-contained HTML page to `/tmp/show-me-<slug>.html`
 — inline styles and inline SVG only, nothing fetched from the network, so it
 opens with no connection. Match the product's colours, type, spacing and
 components; use real labels and real data; lay out for desktop and phone.
@@ -101,5 +101,11 @@ Then deliver it both ways, and tell the user the one-sentence version in chat.
 
 SendUserFile is not available in every harness, so never build the delivery on
 it; check with ToolSearch before naming it.
+
+## The rules
+
+Rules on writing and drawing live in `references/`. Read the ones that apply
+before drawing a figure or drafting the prose beside it, and file a new one
+there.
 
 Topic: $ARGUMENTS

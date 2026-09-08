@@ -134,7 +134,8 @@ def main():
         r = posttooluse(hook, memory(pool, "archive-writing-skill"))
         check("allowed: 'archive-writing-skill' -- § Filing declares "
               "`archive-<subject>` and the hook honours it",
-              "archive-" in prefixes and r.returncode == 0,
+              "archive-" in prefixes and r.returncode == 0
+              and not said(r).strip(),
               "read %r; exit %d: %s" % (prefixes, r.returncode, said(r)[:300]))
 
     # ---- refuse: every name the scheme retired. Each is a real file shape
