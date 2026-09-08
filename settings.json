@@ -24,13 +24,13 @@
         ]
       },
       {
-        "matcher": "Edit|Write|NotebookEdit|Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"/Users/hyungmokim/agent-workspace/scripts/check-campaign-claim.py\""
+            "command": "python3 \"/Users/hyungmokim/campaign-base/scripts/check-campaign-claim.py\""
           }
-        ]
+        ],
+        "matcher": "Edit|Write|NotebookEdit|Bash"
       }
     ],
     "PostToolUse": [
@@ -46,15 +46,6 @@
             "command": "/usr/bin/python3 \"$HOME/.claude/hooks/check-decision-page.py\""
           }
         ]
-      },
-      {
-        "matcher": "Edit|Write|NotebookEdit|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"/Users/hyungmokim/agent-workspace/scripts/check-campaign-claim.py\" --released"
-          }
-        ]
       }
     ],
     "UserPromptSubmit": [
@@ -68,6 +59,14 @@
             "type": "command",
             "command": "/usr/bin/python3 \"$HOME/.claude/hooks/herdr-session-link.py\"",
             "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/assuming-role/scripts/campaign-role-brief.py\""
           }
         ]
       }
@@ -99,6 +98,25 @@
             "type": "command",
             "command": "bash '/Users/hyungmokim/.claude/hooks/herdr-agent-state.sh' session",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/assuming-role/scripts/campaign-role-brief.py\""
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "tldraw-offline",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node '/Users/hyungmokim/skills/tldraw-offline/inject-server-context.mjs' SubagentStart"
           }
         ]
       }
