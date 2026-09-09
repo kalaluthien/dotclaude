@@ -2,8 +2,6 @@
 
 Keep every document short: the body carries only what changes the reader's next action, and the rest is cut. This file and everything under `~/.claude` costs every session start, so an instruction plus one clause of reason, with the narrative going to a memory or a commit message.
 
-Never reach for a Claude Artifact. A one-off visual is a self-contained HTML file in `/tmp` handed over with `open`; anything durable is a committed `docs/` page.
-
 ## Language
 
 English for every file: documents, source, scripts, comments, git logs, configuration. Korean only in `.html` documents for demonstration, and in responses to the user.
