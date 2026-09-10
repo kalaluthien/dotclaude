@@ -114,7 +114,7 @@
   "worktree": {
     "baseRef": "fresh"
   },
-  "enableArtifact": false,
+  "enableArtifact": true,
   "enableWorkflows": false,
   "workflowKeywordTriggerEnabled": false,
   "enabledPlugins": {},

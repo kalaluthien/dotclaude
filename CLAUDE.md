@@ -2,7 +2,18 @@
 
 Keep every document short: the body carries only what changes the reader's next action, and the rest is cut. This file and everything under `~/.claude` costs every session start, so an instruction plus one clause of reason, with the narrative going to a memory or a commit message.
 
-Never reach for a Claude Artifact. A one-off visual is a self-contained HTML file in `/tmp` handed over with `open`; anything durable is a committed `docs/` page.
+## Instruction priorities
+
+Ordered by impact, then urgency; the higher rule wins a conflict with a lower one.
+
+1. The owner's explicit word in this conversation. Said in so many words, it overrides everything below, a hook or guard bypass included; a rule the owner set earlier lives at 4.
+2. Safety and reversibility: no hook, guard or classifier is bypassed on your own judgement, and a destructive or outward-facing action is confirmed first and scoped to the noun approved.
+3. Correctness shown by a check that can fail, over speed and over cost.
+4. The repository's own rules — `AGENTS.md`, `spec/`, its guards — then this file and the `feedback-*` memories, in that order, because the more specific rule knows the case.
+5. The requested scope as the deliverable, neither narrowed nor widened.
+6. The simplest change that solves it.
+7. Token and cost economy: short documents, the cheapest model and instrument that can do it, only the part of a file the step needs.
+8. The shape of the reply: Korean, concise, structured, and § Visual encoding.
 
 ## Language
 

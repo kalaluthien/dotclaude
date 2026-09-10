@@ -1,6 +1,6 @@
 ---
 name: show-me
-description: Explain the current topic visually — pseudocode, a tree, a Mermaid diagram, a diff, or one self-contained HTML page delivered to desktop and phone. Use when the user types /show-me X.
+description: Explain the current topic visually — pseudocode, a tree, a Mermaid diagram, a diff, or one self-contained HTML page delivered to desktop and phone, or as a Claude artifact; the delivery is asked, never assumed. Use when the user types /show-me X.
 disable-model-invocation: true
 ---
 
@@ -81,6 +81,18 @@ file tree, a call tree, a component tree, pseudocode:
 
 **The whole block** when most of it is new, when omitted context would hide
 ownership or order, or when the user needs a copyable target shape.
+
+## Choosing the delivery
+
+Do not decide the output format yourself. Once the form is clear, ask with
+`AskUserQuestion` which delivery the user wants, and build only that one:
+
+- **in chat** — one of the forms above, inline;
+- **an HTML page** — the section below, opened on the desktop and sliced to
+  images for the phone;
+- **a Claude artifact** — the same page handed to the `Artifact` tool, so it
+  renders on claude.ai web and mobile; when that tool is absent from the
+  session, say so and offer `SendUserFile` with `display: render` instead.
 
 ## The HTML page
 
