@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a memory pool file against what the "Filing" section says about it.
+"""Check a memory pool file against what the filing skill's memory reference says.
 
 A file is refused when its name opens with none of the memory prefixes, when
 its pool's `MEMORY.md` carries no line linking to it, or when it still declares
@@ -24,8 +24,9 @@ was written, four files in one pool had drifted to the harness default before
 anyone counted, and the prefix now carries what it claimed. `name` and
 `description` are the whole frontmatter.
 
-The prefix list is not this file's. It is declared once, in the "Filing"
-section of ~/.claude/CLAUDE.md, as the bullets under "memory prefixes are:".
+The prefix list is not this file's. It is declared once, in
+~/.claude/skills/filing/references/memory.md, as the bullets under "memory
+prefixes are:".
 This hook parses them out of the document; a copy kept here would drift exactly
 the way the files did, and a document that declares none refuses every write
 rather than falling back on one.
@@ -59,7 +60,8 @@ import re
 import sys
 
 CONTRACT_DOCUMENT = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "CLAUDE.md"
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "skills", "filing", "references", "memory.md",
 )
 # The pool shape. A pool is `projects/*/memory/*.md`, so its files sit in a
 # `memory` directory and end in `.md`; `MEMORY.md` is the index, not a memory.
@@ -346,7 +348,7 @@ def is_pool_file(path):
 
 
 def report(path, reason):
-    return "%s: %s\n  (what a pool file is checked against is declared in %s, section Filing)" % (
+    return "%s: %s\n  (what a pool file is checked against is declared in %s)" % (
         path,
         reason,
         CONTRACT_DOCUMENT,
