@@ -427,6 +427,22 @@ declaration (<code>CLAUDE.md</code>, section Filing); what those entries say abo
 prefixes and the refusals still holds.
 <a href="memory-pool-layout.html#2026-09-06-table-retired">the entry it supersedes</a></p>
 
+<h3>The options that lost</h3>
+
+<ul>
+  <li><code>assuming-role/references/</code>: authoring is not a role moment, and a
+  reference reached only from a role brief is read by workers alone.</li>
+  <li><code>~/.claude/rules/*.md</code> with <code>paths:</code>, the mechanism the two
+  deleted rule files used: fires on <code>Read</code> only, never on a write or a Bash read,
+  and the owner refused it outright.</li>
+  <li>A nested <code>CLAUDE.md</code> under <code>scripts/</code> and <code>.claude/skills/</code>
+  in campaign-base: unverified load behaviour, and campaign-base only.</li>
+  <li>A subagent or a <code>PreToolUse</code> hook injecting the rules: the main session
+  writing a script would not see them, or every edit would re-inject them.</li>
+  <li>Keeping the section in <code>AGENTS.md</code>: 14% of that file paid at every
+  campaign-base session start, by sessions that author nothing.</li>
+</ul>
+
 </article>
 </body>
 </html>
