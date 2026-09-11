@@ -2,7 +2,7 @@
 """Prove the narrowed pool check refuses what Filing refuses and allows the rest,
 through the script settings.json actually runs.
 
-Every case copies the shipped `check-memtype.py` and the shipped `CLAUDE.md`
+Every case copies the shipped `check-memtype.py` and the shipped memory reference
 into a temporary tree and runs the copy, so what is under test is the file that
 gets installed and the prefix list a reader would actually read. The allow half is
 the load-bearing one: this hook is registered machine-wide on every `Write` and
@@ -28,7 +28,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 HOOK = HERE / "check-memtype.py"
-DOCUMENT = HERE.parent / "CLAUDE.md"
+DOCUMENT = HERE.parent / "skills" / "filing" / "references" / "memory.md"
 
 ran, fails = [], []
 
@@ -44,7 +44,9 @@ def tree(root, document=None):
     root = Path(root)
     (root / "hooks").mkdir()
     shutil.copy(HOOK, root / "hooks" / "check-memtype.py")
-    (root / "CLAUDE.md").write_text(
+    doc = root / "skills" / "filing" / "references" / "memory.md"
+    doc.parent.mkdir(parents=True)
+    doc.write_text(
         DOCUMENT.read_text(encoding="utf-8") if document is None else document,
         encoding="utf-8",
     )
@@ -623,7 +625,7 @@ def main():
               "exit %d: %s" % (r.returncode, said(r)[:300]))
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        (Path(d) / "CLAUDE.md").write_bytes(b"# CLAUDE\n\n\xff\xfe\n")
+        (Path(d) / "skills" / "filing" / "references" / "memory.md").write_bytes(b"# CLAUDE\n\n\xff\xfe\n")
         path = memory(pool, "topic-alloy")
         r = posttooluse(hook, path)
         check("refused: a document that is not valid UTF-8, with exit 2",

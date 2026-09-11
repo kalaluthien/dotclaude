@@ -50,8 +50,8 @@ HOOK_NAME = "stop-takeaway-check.py"
 REASON = (
     "Before you finish: check the work since the last check for a durable "
     "takeaway - a rule, a tool or machine fact, feedback, or a decision whose "
-    "evidence would vanish. If one exists, file it per the Filing rules in "
-    "~/.claude/CLAUDE.md, then finish. If none exists, finish now without "
+    "evidence would vanish. If one exists, load the filing skill and file it "
+    "there, then finish. If none exists, finish now without "
     "extra commentary."
 )
 REASON_MARK = "durable takeaway"

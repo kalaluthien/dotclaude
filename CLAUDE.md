@@ -23,7 +23,7 @@ English for every file: documents, source, scripts, comments, git logs, configur
 
 A project's instructions live in `PROJECT/AGENTS.md`, and `PROJECT/CLAUDE.md` imports them with `@AGENTS.md`; every ancestor's shim loads too.
 
-A skill only a person types hides from the model with `disable-model-invocation: true`, because a command is an order given, not an operation offered. How to name and shape either kind, and the scripts under them, is `~/campaign-base/AGENTS.md` § Authoring a script or a skill.
+A skill only a person types hides from the model with `disable-model-invocation: true`, because a command is an order given, not an operation offered. How to name and shape either kind, and the scripts under them, is the `filing` skill.
 
 Pick the model by task depth: Fable when the approach is not yet clear, Opus to carry out an approach that is, Sonnet to retrieve or condense.
 
@@ -131,31 +131,6 @@ Ordering: fold the missing signal into the one rank, never a second order or a s
 
 ## Filing
 
-Route a durable takeaway by *what would make it wrong*, report where you filed it, and probe the fact before filing rather than after.
-
-A general rule, true on any repository, machine or tool, goes to the section of this file that names the work it applies to.
-
-A rule on writing or explaining goes to the `show-me` skill, `~/.claude/skills/show-me/`; a rule on a product surface goes to § Visual encoding.
-
-A single tool's or environment's own fact goes to a `topic-<subject>` memory — the global pool, `~/.claude/projects/-Users-hyungmokim--claude/memory/`, when it is machine-wide, and the owning project's pool otherwise.
-
-A repository's build or test gotcha goes to its `AGENTS.md`, a technology-specific debugging pitfall to the project pool's `pitfall-<subject>`, and a product, architecture or verification truth to the repository itself: what is normative is a specification in `spec/`, what is drawn for a reader is a view in `docs/` as HTML, and neither inherits the other's rules.
-
-The rule goes to the general file and the evidence stays with the subject — instruction and rationale only, no repository names and no war stories. Merge a near-duplicate instead of stacking one beside it.
-
-A memory file holds one *subject*, as `##` sections of one file, and never repeats a fact another pool holds; link with `[[name]]` instead.
-
-Name a memory `<prefix>-<subject>`, with no date and no project name, and file nothing without its one line in `MEMORY.md` — the only index the harness loads by itself. A `description` states the file's role, never its contents.
-
-**A memory is named after its reader**, because the type it used to be named after predicted nothing about whether a file was ever read and the prefix did. The four memory prefixes are:
-
-- `topic-<subject>` — a fact looked up. States the current truth of one subject, updated in place.
-- `pitfall-<subject>` — a trap read when stuck. Deleted when the tool or the fact is gone.
-- `feedback-<subject>` — a rule the owner gave. Losing one repeats the failure or re-asks them.
-- `archive-<subject>` — what a deleted thing knew, read when one is rebuilt. Names the commit that deleted it, its upstream if it had one, and the essence worth reusing.
-
-`name` and `description` are the whole frontmatter; a `metadata.type` and a name outside the four are refused. A change git does not track, and a rejected option with its kill reason, are a **decision page** under `docs/` instead, because a pool file is untracked and dies with a rename: `spec/decision-pages.md` is the contract and `hooks/check-decision-page.py` refuses a malformed page, or a link into one that resolves to nothing.
-
-**Ask first whether a machine could decide it, and mechanise it instead** — the fix is then the check plus its named failing case, and no memory is filed. What is left takes exactly one route: update the file that already covers the topic, promote it to a rule in this file, or discard it as derivable from the repository or its history. Promotion needs a second, independent task to confirm it. Delete a memory that turns out wrong, and correct a stale one the moment you see the mismatch.
+A durable takeaway, and any script, hook, skill or agent you write, goes through the `filing` skill, `~/.claude/skills/filing/`: its table routes by *what would make it wrong*, and its references hold each destination's shape. `hooks/check-memtype.py` reads the memory prefixes from that skill's memory reference, so the declaration lives there once.
 
 @RTK.md
