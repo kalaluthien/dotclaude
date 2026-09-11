@@ -103,6 +103,8 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 
 A probe that cannot exhibit the counterexample is not evidence; name the condition that separates the two hypotheses, and confirm the probe varied it.
 
+A signal read by PRESENCE confirms whatever was already true: on a surface that keeps what it showed -- a screen, an appended log, a status field -- count or order it against a reading taken BEFORE you acted, or the confirmation reproduces the defect it was added to close.
+
 A regression test earns trust only by failing first: break the behaviour, watch the named test fail, restore by undoing that one edit.
 
 Root a verification command at an absolute path, and echo the resolved path beside the result.
