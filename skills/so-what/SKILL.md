@@ -9,5 +9,3 @@ disable-model-invocation: true
 Skip the facts already on screen. Say what they imply and what to do next, in that order, and stop there.
 
 Recommend one action. If nothing follows from the facts, say that plainly instead of manufacturing a next step.
-
-The answer is a `doc`, the doctype `~/.claude/skills/show-me/references/doctype.md` defines.
