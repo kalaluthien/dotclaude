@@ -25,9 +25,6 @@ takes 15). A wide figure left outside its own scroll box reads `592/305`.
 Without `--allow-file-access-from-files` the frame is unreadable and nothing
 is printed, which is not a pass.
 
-For a dashboard, run the same frame at `width:1280px;height:800px` and
-read `d.scrollHeight+'/'+d.clientHeight`: equal numbers are one screen.
-
 ## The PNG for a phone
 
 Shoot taller than the page, then trim to the last row that differs from the

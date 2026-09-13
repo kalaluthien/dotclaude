@@ -1,0 +1,71 @@
+<title>{{type}}: {{scope}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The `diagram` template, the artifact medium: doctype.md § Doctypes gives
+     the parts, § Page and § Figures the rules. Replace every {{...}}; a part
+     with nothing to say is removed, never left as a placeholder. -->
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fbfaf7; --fg: #1d1d1f; --muted: #5b5f66; --line: #cfccc4;
+    --box: #ffffff; --accent: #2458c6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
+      --box: #222427; --accent: #8fb4ff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
+    --box: #222427; --accent: #8fb4ff;
+  }
+  body { background: var(--bg); color: var(--fg); margin: 0;
+         font: 16px/1.5 system-ui, sans-serif; padding-block: 24px; padding-inline: 16px; }
+  main { max-width: 60rem; margin: 0 auto; }
+  h1 { font-size: 1.4rem; margin: 0 0 1rem; }
+  figure { margin: 0; overflow-x: auto; }
+  svg { display: block; max-width: 100%; height: auto; }
+  svg .box { fill: var(--box); stroke: var(--fg); }
+  svg .edge { stroke: var(--accent); fill: none; }
+  svg text { fill: var(--fg); font: 14px system-ui, sans-serif; }
+  svg .label { fill: var(--muted); font-size: 12px; }
+  dl.key { display: grid; grid-template-columns: auto 1fr; gap: .25rem .75rem; margin: 1rem 0; }
+  dl.key dt { font-weight: 600; }
+  dl.key dd { margin: 0; }
+  .read { font-size: 1.1rem; border-inline-start: 3px solid var(--accent); padding-inline-start: .75rem; }
+  footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<main>
+  <h1>{{type}}: {{scope}}</h1>
+
+  <figure aria-labelledby="fig-caption">
+    <svg viewBox="0 0 520 160" role="img" aria-labelledby="fig-caption">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <rect class="box" x="10" y="50" width="160" height="60" rx="6"/>
+      <text x="90" y="78" text-anchor="middle">{{element A}}</text>
+      <text class="label" x="90" y="96" text-anchor="middle">{{level, technology}}</text>
+      <rect class="box" x="350" y="50" width="160" height="60" rx="6"/>
+      <text x="430" y="78" text-anchor="middle">{{element B}}</text>
+      <text class="label" x="430" y="96" text-anchor="middle">{{level, technology}}</text>
+      <path class="edge" d="M170,80 H348" marker-end="url(#arrow)" style="color: var(--accent)"/>
+      <text class="label" x="260" y="70" text-anchor="middle">{{intent, protocol}}</text>
+    </svg>
+    <figcaption id="fig-caption">
+      <dl class="key">
+        <dt>box</dt><dd>{{what a box is}}</dd>
+        <dt>arrow</dt><dd>{{what a line means, read in its direction}}</dd>
+      </dl>
+    </figcaption>
+  </figure>
+
+  <p class="read">{{the one thing to read off it}}</p>
+
+  <footer>Source: <a href="{{url}}">{{path}}</a> at <code>{{sha}}</code></footer>
+</main>
