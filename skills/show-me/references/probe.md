@@ -19,7 +19,8 @@ cat >| <dir>/show-me-probe/frame.html <<'EOF'
 <script>f.onload=function(){var w=f.contentWindow,d=w.document,e=d.documentElement,t=d.createTreeWalker(d.body,4),n,p,m,s=1/0,c,x=0;
 while(n=t.nextNode()){p=n.parentElement;if(!n.data.trim()||/^(script|style|title)$/i.test(p.tagName))continue;m=p.getScreenCTM&&p.getScreenCTM();s=Math.min(s,parseFloat(w.getComputedStyle(p).fontSize)*(m?Math.hypot(m.a,m.b):1))}
 var F=parseFloat(location.search.slice(1)),r=e.scrollWidth+'/'+e.clientWidth+' '+s.toFixed(1)+'px',k=e.scrollWidth==e.clientWidth&&s>=F;c=d.querySelectorAll('button,summary');
-c.forEach(function(b){var h=e.outerHTML;b.click();if(e.outerHTML==h)x++});document.body.dataset.r=r+' '+x+'/'+c.length+' floor '+F+(k&&!x?' pass':' FAIL')};f.src=location.hash.slice(1)</script>
+c.forEach(function(b){var h=e.outerHTML;b.click();if(e.outerHTML==h)x++});var y=c.length;
+d.querySelectorAll('figure').forEach(function(g){if(g.scrollWidth>g.clientWidth){y++;g.focus();if(g.tabIndex<0||w.getComputedStyle(g).outlineStyle=='none')x++}});document.body.dataset.r=r+' '+x+'/'+y+' floor '+F+(k&&!x?' pass':' FAIL')};f.src=location.hash.slice(1)</script>
 EOF
 for P in <page>...; do
   R=$("$CHROME" --headless --disable-gpu --allow-file-access-from-files --dump-dom \
@@ -41,7 +42,8 @@ It prints one line per page: the page, then `<scroll>/<client> <smallest>px
   does from a checkout whose `types/` the install does not have yet: point
   `FLOOR` at the checkout's copy there.
 - **Controls**: the dead count is 0: every button and summary, clicked once,
-  changed the page.
+  changed the page, and every figure that scrolls sideways has a `tabindex`
+  and a focus ring. Chrome focuses a scroller without one; Safari does not.
 
 A page the frame cannot read -- a wrong path, or no
 `--allow-file-access-from-files` -- prints `no reading FAIL`.
