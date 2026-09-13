@@ -15,8 +15,9 @@ is named.
   only through an artifact.
 - A `dashboard` is never built at a run-named or `/tmp` path.
 - Every HTML page passes the 320 px probe ([to-png](to-png.md)) before it is
-  delivered, which checks for a sideways page scroll and nothing else; a
-  `dashboard` also passes its desktop-width run.
+  delivered; it tests the sideways-scroll clause of `doctype.md § HTML: Phone
+  width` and nothing else. A `dashboard` also passes the desktop-width run,
+  which tests `doctype.md § Visualisation: Dashboard`.
 - Reading the `.html` back is not a delivery: it renders as source text.
 - Tell the user the one-sentence version in chat, whatever the delivery.
 

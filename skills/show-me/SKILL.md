@@ -95,9 +95,9 @@ ownership or order, or when the user needs a copyable target shape.
 
 ## The HTML page
 
-For a `view` too dense for Mermaid — a visual UI, a layout, a state
-comparison — and for every `dashboard` and `ui`: one page. Where it is
-written and how it is delivered is [delivery](references/delivery.md); how it
-is rendered to PNG and probed at 320 px is [to-png](references/to-png.md).
+A `view` too dense for Mermaid — a visual UI, a layout, a state comparison —
+takes a page. Where a page is written and how it is delivered is
+[delivery](references/delivery.md); how it is rendered to PNG and probed at
+320 px is [to-png](references/to-png.md).
 
 Topic: $ARGUMENTS

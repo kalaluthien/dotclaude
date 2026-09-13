@@ -8,4 +8,4 @@ disable-model-invocation: true
 
 Answer yes or no. No additional explanations. No exceptions.
 
-The answer is a `doc`, the doctype `~/.claude/skills/show-me/references/doctype.md` defines.
+The answer is a `doc`, the doctype `~/.claude/skills/show-me/references/doctype.md` defines: markdown, and nothing more than the word.
