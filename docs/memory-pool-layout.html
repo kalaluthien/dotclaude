@@ -5,10 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Memory pool layout</title>
 <style>
-  :root { --ink:#111; --mute:#555; --hair:#e4e4e4; --wash:#f4f4f4; }
+  :root { --ink:#111; --mute:#555; --hair:#e4e4e4; --wash:#f4f4f4; --paper:#ffffff;
+          --link:#14459b; --link-line:#9bb0d8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#e8e8e8; --mute:#a8a8a8; --hair:#3a3a3a; --wash:#242424; --paper:#161616;
+            --link:#8fb0f0; --link-line:#4a5f8a; }
+  }
   html { font-size: 16px; }
   body { max-width: 42rem; margin: 0 auto; padding: 4rem 1.5rem 8rem;
-         background: #ffffff; color: var(--ink);
+         background: var(--paper); color: var(--ink);
          font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
          line-height: 1.55; overflow-wrap: break-word; }
   h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
@@ -28,7 +33,7 @@
   ol.keys ul li { margin: .2rem 0; }
   .k { display: inline-flex; align-items: center; justify-content: center; width: 1.45rem; height: 1.45rem;
     border: 1px solid var(--ink); border-radius: 50%; font-size: .72rem; font-weight: 700; }
-  a { color: #14459b; text-decoration-color: #9bb0d8; }
+  a { color: var(--link); text-decoration-color: var(--link-line); }
   code, pre, .provenance dd, .src { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; }
   pre { overflow-x: auto; background: var(--wash); padding: 1rem; line-height: 1.45; margin: 1.4rem 0; }
   .src { color: var(--mute); }
@@ -46,6 +51,7 @@
   .provenance dd { margin: 0; }
   figure { margin: 2.2rem 0; }
   figure svg { display: block; width: 100%; height: auto; }
+  figure svg text { fill: currentColor; }
   figure pre { margin: 0; }
   figure.pan { overflow-x: auto; }
   figcaption { margin-top: .7rem; font-size: .85rem; color: var(--mute); line-height: 1.5; }
@@ -93,7 +99,7 @@
   @media (max-width: 42rem) { .pair { grid-template-columns: 1fr; } }
 </style>
 </head>
-<body class="decision-page">
+<body class="doc decision-page">
 <article>
 
 <h1>Memory pool layout</h1>
@@ -108,7 +114,7 @@ recovered on 2026-09-02 from a pool keyed to a container repository that has sin
 retired, and only the entries about the pools themselves survived the fold; the rest
 described that repository's own layout and went with it. Their dates are the dates the
 decisions were taken.
-<span class="src">memory/history-pool-shape.md</span></p>
+Recorded in <code>memory/history-pool-shape.md</code>, since retired.</p>
 
 <h2 id="2026-07-26-setup-prefix">2026-07-26 — Machine facts in the pool</h2>
 
@@ -116,11 +122,11 @@ decisions were taken.
 <code>~/.claude/projects/-Users-hyungmokim--claude/memory/</code> as <code>setup-*</code>
 memories. The same change wrote the memory taxonomy into <code>~/.claude/CLAUDE.md</code>,
 under the heading Filing. The pool's <code>setup-</code> convention starts here.
-<span class="src">memory/history-pool-shape.md</span></p>
+Recorded in <code>memory/history-pool-shape.md</code>, since retired.</p>
 
 <p>A pool is untracked, so a move inside it leaves no diff. The taxonomy half of this
 change is in git, and the file move is not.
-<span class="src">CLAUDE.md:193 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/CLAUDE.md#L193">CLAUDE.md:193 @ 0eb2813</a></p>
 
 <h2 id="2026-08-04-mece-audit">2026-08-04 — Exclusive memtype prefixes</h2>
 
@@ -130,11 +136,11 @@ prefix now names one reason a file would go wrong. Nothing falsifies an
 <span class="chip">semantic</span> file states the current truth of one subject, so a
 <code>topic-</code> file is updated in place. A <span class="chip">procedural</span>
 file says how to act, so a <code>feedback-</code> file is deleted when its fact is gone.
-<span class="src">CLAUDE.md:189-193 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/CLAUDE.md#L189-L193">CLAUDE.md:189-193 @ 0eb2813</a></p>
 
 <p><code>hooks/check-memtype.py</code> compiles that table out of <code>CLAUDE.md</code>
 and refuses a file name that matches no row. The rule and its reader stay one statement.
-<span class="src">hooks/check-memtype.py:19-32 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/hooks/check-memtype.py#L19-L32">hooks/check-memtype.py:19-32 @ 0eb2813</a></p>
 
 <h2 id="2026-08-12-backlog-deleted">2026-08-12 — Backlog file deletion</h2>
 
@@ -148,13 +154,13 @@ and refuses a file name that matches no row. The rule and its reader stay one st
 backlog file alone, and every other memory was kept. Its one open ticket was the figure
 text-spacing question above, filed on 2026-08-11 by two document-writer sessions.
 <span class="hum">the owner deletes the file</span>
-<span class="src">memory/history-backlog.md</span></p>
+Recorded in <code>memory/history-backlog.md</code>, since retired.</p>
 
 <p>The deletion followed the owner not recognising the pool. It did not follow a judgement
 on the ticket. The clearance rule the ticket asks about is
 <code>skills/writing/references/svg-rules.md</code>, which sets label clearance at
 8 units from every other mark.
-<span class="src">skills/writing/references/svg-rules.md:93 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/skills/writing/references/svg-rules.md#L93">skills/writing/references/svg-rules.md:93 @ 0eb2813</a></p>
 
 <h2 id="2026-08-12-agentmemory-rejected">2026-08-12 — Pool store</h2>
 
@@ -176,7 +182,7 @@ on the ticket. The clearance rule the ticket asks about is
       <rect x="20" y="110" width="200" height="56" fill="none" stroke="currentColor" stroke-width="1.4"/>
       <text x="120" y="136" text-anchor="middle" font-size="12" font-weight="bold">Memory file</text>
       <text x="120" y="154" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, monospace">topic-git.md</text>
-      <circle cx="20" cy="24" r="11" fill="#ffffff" stroke="currentColor" stroke-width="1.2"/>
+      <circle cx="20" cy="24" r="11" style="fill:var(--paper)" stroke="currentColor" stroke-width="1.2"/>
       <text x="20" y="24" dy=".35em" text-anchor="middle" font-size="11" font-weight="bold">1</text>
     </svg>
     <figcaption>The pool as it is stored. One index file links each memory file, and
@@ -199,7 +205,7 @@ on the ticket. The clearance rule the ticket asks about is
       <rect x="20" y="110" width="200" height="56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4"/>
       <text x="120" y="136" text-anchor="middle" font-size="12" font-weight="bold">Record store</text>
       <text x="120" y="154" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, monospace">SQLite</text>
-      <circle cx="20" cy="24" r="11" fill="#ffffff" stroke="currentColor" stroke-width="1.2"/>
+      <circle cx="20" cy="24" r="11" style="fill:var(--paper)" stroke="currentColor" stroke-width="1.2"/>
       <text x="20" y="24" dy=".35em" text-anchor="middle" font-size="11" font-weight="bold">2</text>
     </svg>
     <figcaption>agentmemory reaches its records only through its own runtime. Dashed
@@ -225,7 +231,7 @@ on the ticket. The clearance rule the ticket asks about is
 
 <p>Two lenses reached the same verdict: operator cost, and data durability. The Apache-2.0
 licence allows borrowing ideas, and automatic session capture is the one worth importing.
-<span class="src">memory/history-pool-shape.md</span></p>
+Recorded in <code>memory/history-pool-shape.md</code>, since retired.</p>
 
 <h2 id="2026-08-15-profile-merged">2026-08-15 — Prefix for owner-given facts</h2>
 
@@ -233,14 +239,14 @@ licence allows borrowing ideas, and automatic session capture is the one worth i
 owner correction are one kind of fact: given rather than derived. The one file that moved is
 <code>profile-model-architectures</code>, which now reads
 <code>feedback-model-architectures.md</code>.
-<span class="src">memory/history-pool-shape.md</span></p>
+Recorded in <code>memory/history-pool-shape.md</code>, since retired.</p>
 
 <h2 id="2026-08-16-topic-prefix">2026-08-16 — Prefix for distilled facts</h2>
 
 <p><code>topic-</code> was added for a current truth that no probe re-derives. That split it
 from <code>setup-</code>, whose facts are one probe away. The split held for three weeks, and
 the entry dated 2026-09-06 retires <code>setup-</code> into <code>topic-</code>.
-<span class="src">memory/history-pool-shape.md</span></p>
+Recorded in <code>memory/history-pool-shape.md</code>, since retired.</p>
 
 <h2 id="2026-08-18-setup-consolidation">2026-08-18 — Setup file consolidation</h2>
 
@@ -270,7 +276,7 @@ the entry dated 2026-09-06 retires <code>setup-</code> into <code>topic-</code>.
 sit together. <span class="ct">16&times; folded file</span> became
 <span class="ct">6&times; home</span>. The pool went from 26 <code>setup-*</code> files to 16,
 and the index from 38 lines to 30.
-<span class="src">memory/history-pool-shape.md</span></p>
+Recorded in <code>memory/history-pool-shape.md</code>, since retired.</p>
 
 <p>No fact was rewritten. Each old file became a <code>##</code> section of its new home,
 verbatim, and only the <code>[[links]]</code> between merged files changed into section
@@ -286,7 +292,7 @@ board server's doors, and nothing creates a <code>backlog.md</code> any more. Th
 <a href="memory-pool-layout.html#2026-08-12-backlog-deleted">2026-08-12 — Backlog file
 deletion</a> in its mechanism only. Re-filing the dropped question stays legitimate, at the
 door.
-<span class="src">memory/history-backlog.md</span></p>
+Recorded in <code>memory/history-backlog.md</code>, since retired.</p>
 
 <p>The migration finished the same day. Board's own pool held the last file, and it moved to
 the store too. The <code>backlog</code> row left the memtype table, and every archived copy
@@ -324,7 +330,7 @@ uses it; the table names 'feedback-*', 'history-*', 'pitfall-*',
 whatever a fresh session derives on its own to be deleted. Each of the <span class="ct">8&times; file</span> became one scenario, with its
 answer withheld, and a sonnet subagent answered them. It derived four of them unaided and
 missed four. Eight files became four, 15.1K became 7.4K, and the index lost four lines.
-<span class="src">memory/history-pool-shape.md</span></p>
+Recorded in <code>memory/history-pool-shape.md</code>, since retired.</p>
 
 <p><code>feedback-memory-findability</code> was kept although the probe derived its rule,
 because the owner gave that rule. On <code>feedback-delegated-rubrics</code> the probe
@@ -332,7 +338,7 @@ recommended a delegate self-report, which is the failure mode that file names. <
 <code>~/.claude/CLAUDE.md</code> under Verification, and deleted here. This task was that
 rule's second, independent confirmation: removing sections from that file left prose
 references a path grep never reaches.
-<span class="src">CLAUDE.md:129 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/CLAUDE.md#L129">CLAUDE.md:129 @ 0eb2813</a></p>
 
 <h2 id="2026-09-06-reader-named-prefixes">2026-09-06 — Reader-named prefixes</h2>
 
@@ -355,7 +361,7 @@ campaign-base pool and two in the global pool. <code>metadata.type</code> stoppe
 required. The hook now refuses a pool file the pool's <code>MEMORY.md</code> does not link
 to, so the index line is enforced rather than asked for. The per-file move tables are on
 <code>kalaluthien/campaign-base#219</code>.
-<span class="src">hooks/check-memtype.py:5-9 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/hooks/check-memtype.py#L5-L9">hooks/check-memtype.py:5-9 @ 0eb2813</a></p>
 
 <p>The curation probe ran over <span class="ct">45&times; feedback file</span> in two
 sessions. One session wrote a scenario per file with the answer withheld, and a second sonnet
@@ -363,7 +369,7 @@ session answered them cold with no pool access. The result worth keeping is the 
 exposed. The probe reached the right instinct on nearly every scenario and the right value on
 almost none, missing every named tier, model, assertion and default.
 <code>feedback-service-undo</code> was the one file where even the instinct was missed.
-<span class="src">memory/history-pool-shape.md</span></p>
+Recorded in <code>memory/history-pool-shape.md</code>, since retired.</p>
 
 <h3>Prefixes and rules outside the rename</h3>
 
@@ -373,7 +379,7 @@ almost none, missing every named tier, model, assertion and default.
   <li>No rule was promoted into <code>~/.claude/CLAUDE.md</code>.</li>
   <li>The memtype table keeps <code>setup-</code>, because two project pools each hold one
   such file: <code>setup-android-emulator</code> and <code>setup-chirpy-post-url</code>.
-  Nothing new takes the prefix. <span class="src">CLAUDE.md:193 @ 0eb2813</span></li>
+  Nothing new takes the prefix. <a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/CLAUDE.md#L193">CLAUDE.md:193 @ 0eb2813</a></li>
   <li>The taxonomy's home did not move. <code>CLAUDE.md</code> holds the table, and
   <code>hooks/check-memtype.py</code> compiles it.</li>
 </ul>
@@ -385,7 +391,7 @@ hook parses. <code>hooks/check-memtype.py</code> now refuses a name opening with
 them &mdash; <code>setup-</code>, <code>pitfalls</code>, <code>backlog</code> and
 <code>history-</code> included &mdash; and refuses <code>metadata.type</code> outright
 rather than checking a declaration against a row.
-<span class="src">CLAUDE.md:185-191, hooks/check-memtype.py</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/92bc370/CLAUDE.md#L185-L191">CLAUDE.md:185-191 @ 92bc370</a>, <a class="src" href="https://github.com/kalaluthien/dotclaude/blob/92bc370/hooks/check-memtype.py">hooks/check-memtype.py @ 92bc370</a></p>
 
 <p>This <strong>supersedes one clause</strong> of the entry above: the table no longer
 keeps <code>setup-</code>, because no pool holds such a file any more. The two that did
@@ -400,7 +406,7 @@ supersedes</a></p>
 which 92 pass. Every metadata block is gone (61 files lost one). The last three
 <code>pitfalls.md</code> became six <code>pitfall-&lt;subject&gt;</code> files, in the
 camera, garden and mabinogi pools.
-<span class="src">hooks/check-memtype.py over ~/.claude/projects/*/memory/*.md</span></p>
+Counted by <code>hooks/check-memtype.py</code> over <code>~/.claude/projects/*/memory/*.md</code>, untracked.</p>
 
 <h3>What the four refusals are for</h3>
 
@@ -420,7 +426,7 @@ shape is a reference. The prefix bullets <code>hooks/check-memtype.py</code> com
 in <code>skills/filing/references/memory.md</code>, and the hook's
 <code>CONTRACT_DOCUMENT</code> names that file; <code>CLAUDE.md</code> keeps a one-paragraph
 pointer. The prefixes themselves did not change, so no pool file moved.
-<span class="src">skills/filing/references/memory.md, hooks/check-memtype.py</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/7338383/skills/filing/references/memory.md#L17-L20">skills/filing/references/memory.md:17-20 @ 7338383</a>, <a class="src" href="https://github.com/kalaluthien/dotclaude/blob/7338383/hooks/check-memtype.py#L62-L65">hooks/check-memtype.py:62-65 @ 7338383</a></p>
 
 <p>This <strong>supersedes the location</strong> every earlier entry gives for the
 declaration (<code>CLAUDE.md</code>, section Filing); what those entries say about the

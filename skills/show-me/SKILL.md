@@ -97,10 +97,9 @@ Do not decide the output format yourself. Once the form is clear, ask with
 ## The HTML page
 
 For a visual UI, a layout, a state comparison, or a concept too dense for
-Mermaid, write one self-contained HTML page to `/tmp/show-me-<slug>.html`
-— inline styles and inline SVG only, nothing fetched from the network, so it
-opens with no connection. Match the product's colours, type, spacing and
-components; use real labels and real data; lay out for desktop and phone.
+Mermaid, write one page to `/tmp/show-me-<slug>.html` of a kind, and composed,
+as `~/.claude/spec/document-kinds.md` says. Match the product's colours, type,
+spacing and components; use real labels and real data.
 
 Then deliver it both ways, and tell the user the one-sentence version in chat.
 

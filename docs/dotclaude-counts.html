@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>~/.claude counts</title>
+<style>
+  :root { --ink:#111; --mute:#595959; --hair:#d8d8d8; --paper:#ffffff; --tile:#f6f6f6;
+          --link:#14459b; --ok:#1d6b3a; --short:#9a4a00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#e8e8e8; --mute:#a8a8a8; --hair:#3a3a3a; --paper:#161616; --tile:#202020;
+            --link:#8fb0f0; --ok:#7fcf9a; --short:#f0a860; }
+  }
+  body { margin: 0; padding: 2rem 1rem; background: var(--paper); color: var(--ink);
+         font: 16px/1.5 system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  main { max-width: 56rem; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 .3rem; }
+  .status { margin: 0 0 1.4rem; font-size: .88rem; color: var(--mute); }
+  a { color: var(--link); }
+  a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .88em; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .8rem; }
+  .tile { background: var(--tile); border: 1px solid var(--hair); border-radius: 6px; padding: .8rem 1rem; }
+  .tile h2 { font-size: .9rem; font-weight: 600; margin: 0; }
+  .num { font-size: 2.2rem; font-weight: 700; line-height: 1.2; margin: .3rem 0 .1rem;
+         font-variant-numeric: tabular-nums; }
+  .cmp { margin: 0; font-size: .88rem; color: var(--mute); }
+  .ok { color: var(--ok); font-weight: 600; }
+  .short { color: var(--short); font-weight: 600; text-decoration: underline dotted; cursor: help; }
+</style>
+</head>
+<body class="dashboard">
+<main>
+<h1>~/.claude counts</h1>
+<p class="status">Snapshot, not live · as of <time datetime="2026-09-13T17:48+09:00">2026-09-13 17:48 KST</time> ·
+tracked files at <a href="https://github.com/kalaluthien/dotclaude/tree/6ef7a4c"><code>6ef7a4c</code></a>,
+prior at <a href="https://github.com/kalaluthien/dotclaude/tree/598a23d"><code>598a23d</code></a>
+(<time datetime="2026-08-14">2026-08-14</time>) · memories from 6 pools under
+<a href="file:///Users/hyungmokim/.claude/projects/"><code>~/.claude/projects/</code></a></p>
+
+<div class="tiles">
+  <section class="tile">
+    <h2>Memories with an index line</h2>
+    <p class="num">72 <small>of 72</small></p>
+    <p class="cmp">target all · <span class="ok">on target</span></p>
+  </section>
+  <section class="tile">
+    <h2>Memories named with a known prefix</h2>
+    <p class="num">68 <small>of 72</small></p>
+    <p class="cmp">target all · <span class="short" tabindex="0"
+      title="-Users-hyungmokim-workspace-camera/history-automation-design.md&#10;-Users-hyungmokim-workspace-garden/history-releases.md&#10;-Users-hyungmokim-workspace-garden/history-spec-redteam.md&#10;-Users-hyungmokim-workspace-garden/history-species-decisions.md">4 short</span>
+      · <a href="../skills/filing/references/memory.md">prefixes</a></p>
+  </section>
+  <section class="tile">
+    <h2><code>CLAUDE.md</code> lines, loaded every session</h2>
+    <p class="num">138</p>
+    <p class="cmp">prior 240 · −102</p>
+  </section>
+  <section class="tile">
+    <h2>Skills tracked</h2>
+    <p class="num">5</p>
+    <p class="cmp">prior 0 · +5</p>
+  </section>
+  <section class="tile">
+    <h2>Hook scripts, tests excluded</h2>
+    <p class="num">5</p>
+    <p class="cmp">prior 5 · ±0</p>
+  </section>
+</div>
+</main>
+</body>
+</html>

@@ -27,7 +27,7 @@ mismatch.
 | a machine can decide it | a script or hook, with its failing case | [scripts](references/scripts.md) |
 | a delegate's role changes | `agents/<name>.md` | frontmatter as a skill's, [skills](references/skills.md) |
 | a product's norm changes | `spec/` markdown | the repository's own spec rules |
-| a reader needs a picture of it | `docs/` HTML | same, and neither inherits the other's rules |
+| a reader needs a picture of it | a `view` under `docs/` | `~/.claude/spec/document-kinds.md` |
 | git does not track the change, or an option lost | a decision page under `docs/` | `~/.claude/spec/decision-pages.md` |
 | how to write or explain changes | the `show-me` skill | its own body |
 

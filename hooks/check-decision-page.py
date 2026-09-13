@@ -21,9 +21,9 @@ therefore loud, not preventive, and `spec/decision-pages.md` says so too.
 
 A page declares itself a decision page with `class="decision-page"` on its
 `<body>`, and only a declared page is held to the entry rules. `docs/` holds
-views of every kind, and an ordinary explanation's `<h2>First section</h2>` is
+pages of every kind, and an ordinary explanation's `<h2>First section</h2>` is
 not a malformed decision -- judging every page here would refuse an ordinary
-view on every write.
+page on every write.
 
 Every path outside this checkout's `docs/` and its links is skipped, and the
 skip says so: a hook registered machine-wide sees every write on the machine,
@@ -194,7 +194,7 @@ def verdict(path):
     # let a binary file under `docs/` skip a check it had already failed.
     if under(path, DOCS) and base.endswith(".md") and base != INDEX:
         return False, (
-            "%s is markdown under %s, and only `%s` may be. A view is HTML and "
+            "%s is markdown under %s, and only `%s` may be. A page there is HTML and "
             "`spec/` is where normative markdown lives, so this is misfiled, "
             "not temporary." % (path, DOCS, INDEX)
         )
@@ -207,16 +207,16 @@ def verdict(path):
         if base == INDEX:
             return True, "%s: ok, the docs index" % path
         if not base.endswith(".html"):
-            # A stylesheet, a font, a rendered PNG. `docs/` holds what a view
+            # A stylesheet, a font, a rendered PNG. `docs/` holds what a page
             # needs, and only its markdown is misfiled.
-            return True, "%s: skipped, not a view" % path
+            return True, "%s: skipped, not a page" % path
         faults = link_faults(path, text)
         if not declared(text):
-            # A `docs/` tree holds views of every kind. Without the marker
+            # A `docs/` tree holds pages of every kind. Without the marker
             # the entry rules do not apply, and only the links are read.
             if faults:
                 return False, "%s %s" % (path, "; also ".join(faults))
-            return True, ("%s: ok, a view, not declared a decision page; links only"
+            return True, ("%s: ok, a page, not declared a decision page; links only"
                           % path)
         faults = page_faults(text) + faults
         if faults:

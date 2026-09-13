@@ -7,8 +7,8 @@ memory is untracked and dies with a rename.
 
 ## What a decision page is
 
-A view under `docs/`, one page per **subject**, holding that subject's decisions
-in dated entries. It is an explanation page: the provenance block, the title and
+A page under `docs/`, one page per **subject**, holding that subject's decisions
+in dated entries. It is a `doc` (`spec/document-kinds.md`), an explanation: the provenance block, the title and
 the prose rules were the `writing` skill's, retired in `f94ce33`, and this spec
 adds nothing to them and restates none of them.
 
@@ -23,7 +23,7 @@ Anything the tree already states belongs in the tree.
 ## Where it lives, and how it is addressed
 
 - `docs/<slug>.html`, the slug being the subject in kebab-case, and its
-  `<body>` carries `class="decision-page"`. `docs/` holds views of every kind,
+  `<body>` carries `class="doc decision-page"`. `docs/` holds pages of every kind,
   and only a page that declares itself is held to the
   rules below — an ordinary explanation's `<h2>First section</h2>` is not a
   malformed decision. A page that omits the marker is checked for nothing but
@@ -69,7 +69,7 @@ is not in the page.
 
 | refused | why |
 |---|---|
-| markdown under `docs/` other than `INDEX.md` | a view is HTML, and `spec/` is where normative markdown lives. Judged by the name, before the file is read, so a `.md` that is not even text is caught. A stylesheet, a font or a rendered PNG is what a view needs and is not refused |
+| markdown under `docs/` other than `INDEX.md` | a page under `docs/` is HTML, and `spec/` is where normative markdown lives. Judged by the name, before the file is read, so a `.md` that is not even text is caught. A stylesheet, a font or a rendered PNG is what a page needs and is not refused |
 | an `<h2>` with no `id` | an entry with no address cannot be linked, so it cannot be cited |
 | an `<h2>` whose text does not open with `YYYY-MM-DD` | undated, the entry cannot be ordered or superseded |
 | two `<h2>` elements sharing an `id` | the link resolves to whichever the browser reaches first |
@@ -82,7 +82,7 @@ contract with no checker until one is written.
 
 ## The option that lost
 
-**One page per decision, as a `proposal` view.** It would have bought the
+**One page per decision, as a `proposal` page.** It would have bought the
 strongest fit with the `writing` skill's own conventions: `Status: Accepted
 YYYY-MM-DD` is already a decision record, and "one idea per proposal" is already
 the rule. It cost the move itself — the two live `history-*` files hold roughly
