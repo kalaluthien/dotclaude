@@ -1,0 +1,72 @@
+<title>{{question}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The `comparison` template, the artifact medium: doctype.md § Doctypes (in
+     the show-me skill) gives the parts, § Page and § Figures the rules.
+     Replace every {{...}}; one row per option, one column per criterion; mark
+     a cell only where options differ, and leave a tie plain. -->
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fbfaf7; --fg: #1d1d1f; --muted: #5b5f66; --line: #cfccc4;
+    --box: #ffffff; --accent: #2458c6; --mark: #fff1b8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
+      --box: #222427; --accent: #8fb4ff; --mark: #5a4a12;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
+    --box: #222427; --accent: #8fb4ff; --mark: #5a4a12;
+  }
+  body { background: var(--bg); color: var(--fg); margin: 0;
+         font: 16px/1.5 system-ui, sans-serif; padding-block: 24px; padding-inline: 16px; }
+  main { max-width: 56rem; margin: 0 auto; }
+  h1 { font-size: 1.4rem; margin: 0 0 1rem; }
+  h2 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; min-width: 100%; background: var(--box); }
+  th, td { border: 1px solid var(--line); padding: .5rem .65rem; text-align: start; vertical-align: top; }
+  thead th { background: var(--bg); }
+  mark { background: var(--mark); color: inherit; padding: 0 .15em; }
+  .pick { border-inline-start: 3px solid var(--accent); padding-inline-start: .75rem; }
+  footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<main>
+  <h1>{{question}}</h1>
+
+  <section aria-labelledby="yardstick">
+    <h2 id="yardstick">Yardstick</h2>
+    <ol>
+      <li><strong>{{criterion 1}}</strong>: {{how it is measured}}</li>
+      <li><strong>{{criterion 2}}</strong>: {{how it is measured}}</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="options">
+    <h2 id="options">Options</h2>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th scope="col">Option</th><th scope="col">{{criterion 1}}</th><th scope="col">{{criterion 2}}</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">{{option A}}</th><td>{{value}}</td><td><mark>{{differing value}}</mark></td></tr>
+          <tr><th scope="row">{{option B}}</th><td>{{value}}</td><td><mark>{{differing value}}</mark></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="pick" class="pick">
+    <h2 id="pick">Pick: {{option}}</h2>
+    <p>{{why, in the yardstick's terms}}</p>
+    <p>Would change if: {{the fact that would flip it}}</p>
+  </section>
+
+  <footer>Sources: <a href="{{url}}">{{source}}</a></footer>
+</main>

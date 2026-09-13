@@ -1,95 +1,84 @@
-# Doctypes, and what each owes its reader
+# Doctypes and media
 
-A review fails a page on a bullet, cited as `doctype.md § <section>: <name>`.
-`~/.claude/CLAUDE.md` § Visual encoding binds every HTML page too.
+The doctype is what a document explains, the medium where it is read; any
+skill may cite either. A review fails a page on a bullet, cited as
+`doctype.md § <section>: <name>`. `~/.claude/CLAUDE.md` § Visual encoding
+binds every artifact too.
 
 ## Doctypes
 
-| doctype | the reader | form |
+| doctype | explains | its parts, in order |
 | --- | --- | --- |
-| `doc` | follows an argument, or looks a thing up | markdown |
-| `view` | reads one relationship or structure off a figure | a form in chat, or one HTML page |
-| `dashboard` | monitors, to decide | one HTML page |
-| `ui` | acts, and the page changes | one HTML page |
+| `diagram` | one structure or concept | the title; the figure; its key; the one thing to read off it; the source |
+| `narrative` | a repository, a PR or a scenario | a one-line thesis; a map of the whole; chapters, one question each with its evidence, in the order understanding builds, never file or commit order; a reason the source omits, called absent; the source at a sha |
+| `comparison` | options, measurements or a change | the question; the yardstick, fixed first; each option against it, differences marked, ties plain; the pick and what would change it |
 
-- **The doctype test**: what the reader does with it. A `ui` offers an action
-  that changes state; a `dashboard` only reads. What keeps its value with
-  behaviour removed is a `doc` or a `view` (Balkan).
-- **Agent reader**: an agent gets the same content as markdown, never HTML.
+- **Template**: one HTML file per doctype, owned by its emitting skill;
+  in markdown, the parts become headings.
 
-## Markdown
+## Media
 
-- **Conclusion first**: the answer opens, then prose runs in order; a heading
-  says what is under it; one idea per paragraph (Nielsen).
-- **One form**: a tutorial, a how-to, a reference or an explanation, never a
-  mix (Procida).
-- **Built in order**: sections follow how understanding builds, never file or
-  commit order; a reason the source omits is called absent, never invented
-  (code-story).
-- **Portable syntax**: CommonMark and GFM; a callout as `> [!NOTE]`; a
-  `mermaid` fence only where the host renders it.
+- **`markdown`**: GitHub, chat, and always an agent; no rules.
+- **`artifact`**: one HTML page for a person, JS allowed; § Page, § Figures.
+- **Mermaid**: only where it renders: an artifact's `<pre class="mermaid">`
+  or a GitHub body; never in chat.
 
-## HTML
+### Page
 
-Settle the reader's task and data, then audience, register, fidelity and
+Settle task and data, then audience, register, fidelity and
 interaction, before code (Munzner).
 
-- **One file**: CSS and JS inline; opens from `file://`; a library inlined or
-  pinned from a CDN the artifact allows; under 16 MiB.
+- **One file**: CSS and JS inline, opens from `file://`, libraries inlined or
+  pinned from a CDN the artifact allows, under 16 MiB.
 - **Data first**: content drafted as JSON or markdown, HTML built from it.
-- **The product's look**: its colours, type, spacing and components; real labels
+- **The product's look**: its colours, type, spacing, components, real labels
   and data.
 - **Themes**: colour tokens on `:root`, redefined under
   `prefers-color-scheme: dark` and `[data-theme]`.
-- **Phone width**: a viewport meta without `user-scalable=no`; no sideways page
-  scroll at 320 px; a 16 px gutter; only tables, diagrams and code scroll, each
-  in its own box.
+- **Phone width**: a viewport meta without `user-scalable=no`; no sideways
+  scroll at 320 px; a 16 px gutter; only tables, diagrams and code scroll, in
+  their own box; [probe.md](probe.md) checks it.
 - **Semantic markup**: `main`, `nav`, `section`, `figure`, headings in order;
   native elements before ARIA.
-- **Accessible**: contrast 4.5:1, visible focus, every control operable by
-  keyboard (WCAG 2.2).
-- **Works without JS**: content reads with scripts off; JS enhances it, never
-  gates it.
-- **Actions on the page**: a `ui`'s next actions are controls it offers, never a
+- **Accessible**: contrast 4.5:1, visible focus, every control keyboard-operable
+  (WCAG 2.2).
+- **Works without JS**: content reads with scripts off; JS enhances, never
+  gates.
+- **Actions on the page**: a page's next actions are its own controls, never a
   fixed URI or an out-of-band instruction (Fielding).
 - **Priority order**: reading order is priority order; secondary work
   collapsed; two disclosure levels at most (Nielsen).
 - **Sourced**: every claim one click from its source.
-- **SVG first**: inline SVG or CSS before a library; an artifact renders
-  `<pre class="mermaid">` with none.
+- **SVG first**: inline SVG or CSS before a library.
 - **Motion**: a subtler animation under `prefers-reduced-motion: reduce`.
-- **Used, not viewed**: a `ui` is checked by using each action it offers,
-  never from a screenshot.
+- **Used, not viewed**: a page's controls are checked by using each, never
+  from a screenshot.
 
-## Visualisation
+### Figures
 
-- **Earns its place**: a figure only where it teaches more than a paragraph,
-  one judgment each; one whose removal keeps the meaning is cut
-  (diagram-design, Ian).
-- **Overview first**: the whole set, then zoom and filter, then details on
+- **Earns its place**: drawn only where it teaches more than a paragraph, one
+  judgment each, cut if removing it loses nothing; no decoration, non-data
+  ink just visible (diagram-design, Ian, Tufte).
+- **Overview first**: the whole first, then zoom and filter, then details on
   demand (Shneiderman).
-- **Status**: what is shown, as of when, whether still loading; an error names
-  the way out (Nielsen).
-- **Lie factor**: the shown effect over the data effect within 0.95–1.05; a
-  bar axis starts at zero (Tufte).
-- **Channel**: the compared quantity on the highest available channel: position,
-  length, angle, area, hue; no pie where a bar would do (Cleveland & McGill).
+- **Status**: what is shown, as of when, whether loading; an error names the
+  way out (Nielsen).
+- **Lie factor**: shown effect over data effect within 0.95–1.05; a bar axis
+  starts at zero (Tufte).
+- **Channel**: a compared quantity on the highest channel: position, length,
+  angle, area, hue; no pie where a bar would do (Cleveland & McGill).
 - **Colour**: hue for category, one hue's intensity for quantity, colour only
-  for meaning, no red–green pair; on a change, colour marks only new,
-  changed, gone (Few, pr-lens).
-- **Ink**: no decoration; non-data ink just visible (Tufte).
-- **Shared axes**: compared series side by side on shared axes (Tufte).
+  for meaning, no red–green pair; on a change, colour marks only new, changed,
+  gone (Few, pr-lens).
+- **Shared axes**: compared series side by side, one scale (Tufte).
 - **Table or graph**: a table to look a value up, a graph to see a pattern
   (Few).
-- **Dashboard**: one screen, no scrolling; every number beside its target or
-  prior; not a page of links (Few).
 - **Title and key**: a title naming type and scope; a key for every colour,
   shape and line style; every element named and typed; every line one-way,
   labelled with intent (C4).
-- **Nothing hidden**: shows every boundary partner, dependency direction,
-  protocol and box level; names its source; holds one concern (arc42,
-  Kruchten).
-- **Symbols**: one symbol per concept, few symbol types, each suggesting its
+- **Nothing hidden**: every boundary partner, dependency direction, protocol
+  and box level shown; its source named; one concern (arc42, Kruchten).
+- **Symbols**: one symbol per concept, few types, each suggesting its
   meaning (Moody).
-- **Locality**: a relational diagram only where adjacency shows the relation;
+- **Locality**: a relational diagram only where adjacency shows the relation,
   else a list (Larkin & Simon).
