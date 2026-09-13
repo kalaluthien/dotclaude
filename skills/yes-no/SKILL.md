@@ -7,3 +7,5 @@ disable-model-invocation: true
 # Yes no
 
 Answer yes or no. No additional explanations. No exceptions.
+
+The answer is a `doc`, the doctype `~/.claude/skills/show-me/references/doctype.md` defines.
