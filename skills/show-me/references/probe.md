@@ -9,7 +9,7 @@ media queries included. Run this before any delivery of an HTML page.
 
 ```sh
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-mkdir -p /tmp/show-me-shot          # Chrome exits 0 and writes nothing without it
+mkdir -p /tmp/show-me-shot          # the redirect below fails without it
 cat >| /tmp/show-me-shot/frame.html <<'EOF'
 <iframe id=f src="file://<page>" style="width:320px;height:800px;border:0"></iframe>
 <script>f.onload=function(){var d=f.contentDocument.documentElement;document.body.dataset.r=d.scrollWidth+'/'+d.clientWidth}</script>
