@@ -82,7 +82,7 @@ contract with no checker until one is written.
 
 ## The option that lost
 
-**One page per decision, as a `proposal` view.** It would have bought the
+**One page per decision, as a `proposal` page.** It would have bought the
 strongest fit with the `writing` skill's own conventions: `Status: Accepted
 YYYY-MM-DD` is already a decision record, and "one idea per proposal" is already
 the rule. It cost the move itself — the two live `history-*` files hold roughly

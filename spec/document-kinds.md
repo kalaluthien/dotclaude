@@ -77,8 +77,9 @@ A `doc` in markdown.
   `all` · 3.1
 - **V2** Status shows: what is shown, as of when, whether it is loading; an
   error names the way out. `dashboard` · 3.1
-- **V3** One screen, no scroll; every number beside its target or prior; a
-  page of links is not a dashboard. `dashboard` · 1.2, 3.2
+- **V3** One screen with no scroll at desktop width, its tiles stacking on a
+  phone (C7); every number beside its target or prior; a page of links is not
+  a dashboard. `dashboard` · 1.2, 3.2
 - **V4** Lie factor within 0.95-1.05: a bar's axis starts at zero.
   `chart` · 3.2
 - **V5** The compared quantity takes the strongest channel free -- position,
