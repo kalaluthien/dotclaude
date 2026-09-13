@@ -45,7 +45,7 @@ def decision(inner):
     return '<html><body class="decision-page"><h1>T</h1>%s</body></html>' % inner
 
 
-def view(inner):
+def plain(inner):
     """A page under `docs/` that is some other doctype."""
     return '<html><body><h1>T</h1>%s</body></html>' % inner
 
@@ -200,9 +200,9 @@ def allow_cases(t):
     expect("an unparseable payload is not an error", done.returncode,
            done.stdout + done.stderr, 0)
 
-    t.write("docs/explainer.html", view('<h2>First section</h2>'))
+    t.write("docs/explainer.html", plain('<h2>First section</h2>'))
     code, out = t.run(os.path.join(t.root, "docs", "explainer.html"))
-    expect("an undeclared view keeps its own h2 rules", code, out, 0,
+    expect("an undeclared page keeps its own h2 rules", code, out, 0,
            says=["not declared a decision page"],
            absent=["carries no id", "does not open with a YYYY-MM-DD date"])
 
@@ -222,7 +222,7 @@ def allow_cases(t):
     t.write("docs/style.css", "body { margin: 0 }")
     code, out = t.run(os.path.join(t.root, "docs", "style.css"))
     expect("a stylesheet under docs/ is not markdown and is not refused",
-           code, out, 0, says=["skipped, not a view"], absent=["misfiled"])
+           code, out, 0, says=["skipped, not a page"], absent=["misfiled"])
 
     t.write("docs/diagram.png", b"\x89PNG\r\n\x1a\n\xff", binary=True)
     code, out = t.run(os.path.join(t.root, "docs", "diagram.png"))
@@ -312,10 +312,10 @@ def refuse_cases(t):
     expect("the marker is found among other classes", code, out, 2,
            says=["carries no id"])
 
-    t.write("docs/plain-view.html",
-            view('<h2>First section</h2><p><a href="gone.html#nope">x</a></p>'))
-    code, out = t.run(os.path.join(t.root, "docs", "plain-view.html"))
-    expect("an undeclared view still has its links checked", code, out, 2,
+    t.write("docs/plain-page.html",
+            plain('<h2>First section</h2><p><a href="gone.html#nope">x</a></p>'))
+    code, out = t.run(os.path.join(t.root, "docs", "plain-page.html"))
+    expect("an undeclared page still has its links checked", code, out, 2,
            says=["holds no such page"], absent=["carries no id"])
 
     code, out = t.hook(os.path.join(t.root, "docs", "no-id.html"))
