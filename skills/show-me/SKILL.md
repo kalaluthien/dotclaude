@@ -1,23 +1,23 @@
 ---
 name: show-me
-description: Explains a structure, concept, repository, PR or scenario as a diagram or a narrative. Use when the user asks to have a model, lifecycle, flow, repository or PR explained or shown - 설명해줘, 보여줘, 그림으로, 구조화해서, 시각화 - or types /show-me. Not for rewording the last reply, a status list, or weighing options (grill-me).
+description: Explains a structure, concept, repository, PR, scenario or set of options as a diagram, a narrative or a comparison. Use when the user asks to have a model, lifecycle, flow, repository, PR or result explained, shown or compared - 설명해줘, 보여줘, 그림으로, 구조화해서, 시각화, 비교해줘 - or types /show-me. Not for rewording the last reply, a status list, or reaching a decision by interview (grill-me).
 ---
 
 # show-me
 
-Show the topic instead of describing it. If no topic is named, show whatever
-the conversation is currently about. Before drafting prose beside a figure,
-read `references/prose.md`; a new rule on writing or drawing is filed in
+Show the topic instead of describing it: the one named, else whatever the
+conversation is about. A new rule on writing or drawing is filed in
 `references/`.
 
 ## The steps
 
-1. **Doctype**: a `diagram` or a `narrative`, from
-   [doctype](references/doctype.md) § Doctypes; build its parts in that order.
+1. **Doctype**: the question the ask puts picks a `diagram`, a `narrative`
+   or a `comparison`, [doctype](references/doctype.md) § Doctypes; build its
+   parts in that order.
 2. **Medium**: `markdown`, in the chat forms below, unless the figure needs a
-   page -- a layout, a state comparison, a map too dense for text. An
-   artifact starts from `assets/diagram.html` or `assets/narrative.html`.
-   Either medium is held to doctype.md § Media.
+   page -- a layout, a table too wide for chat, a map too dense for text. An
+   artifact starts from `assets/<doctype>.html`. Either medium is held to
+   doctype.md § Media.
 3. **Ending**: [delivery](references/delivery.md).
 
 ## The chat forms
@@ -64,6 +64,9 @@ src/
 └── transport/      # sends API requests
 ```
 
+**A table** for a comparison: a row per option, a column per criterion,
+bold on the cells that differ, and a line under it saying so.
+
 **A diff** when the point is what changes and the surrounding shape already
 exists. The diff takes the shape of whichever form above fits the topic:
 
@@ -80,5 +83,3 @@ exists. The diff takes the shape of whichever form above fits the topic:
 
 **The whole block** when most of it is new, when omitted context would hide
 ownership or order, or when the user needs a copyable target shape.
-
-Topic: $ARGUMENTS

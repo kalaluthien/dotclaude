@@ -1,5 +1,4 @@
 <title>{{subject}}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The `narrative` template, the artifact medium: doctype.md § Doctypes gives
      the parts, § Page and § Figures the rules. Replace every {{...}}; repeat a
      chapter per question; a part with nothing to say is removed. The new,
@@ -30,7 +29,7 @@
   .thesis { font-size: 1.15rem; margin: 0 0 1.5rem; }
   h2 { font-size: 1.15rem; margin: 2rem 0 .5rem; }
   figure { margin: 0; overflow-x: auto; }
-  svg { display: block; max-width: 100%; height: auto; }
+  svg { display: block; }
   svg .box { fill: var(--box); stroke: var(--fg); }
   svg text { fill: var(--fg); font: 13px system-ui, sans-serif; }
   svg .new { stroke: var(--new); stroke-width: 2; }
@@ -56,7 +55,7 @@
   <section aria-labelledby="map">
     <h2 id="map">Map</h2>
     <figure>
-      <svg viewBox="0 0 560 120" role="img" aria-label="{{map of the whole}}">
+      <svg width="560" height="120" viewBox="0 0 560 120" role="img" aria-label="{{map of the whole}}">
         <rect class="box" x="10" y="30" width="125" height="56" rx="6"/>
         <text x="72" y="63" text-anchor="middle">{{part 1}}</text>
         <rect class="box changed" x="145" y="30" width="125" height="56" rx="6"/>

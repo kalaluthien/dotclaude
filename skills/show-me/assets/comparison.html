@@ -1,7 +1,6 @@
 <title>{{question}}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- The `comparison` template, the artifact medium: doctype.md § Doctypes (in
-     the show-me skill) gives the parts, § Page and § Figures the rules.
+<!-- The `comparison` template, the artifact medium: doctype.md § Doctypes
+     gives the parts, § Page and § Figures the rules.
      Replace every {{...}}; one row per option, one column per criterion; mark
      a cell only where options differ, and leave a tie plain. -->
 <style>
@@ -30,6 +29,7 @@
   th, td { border: 1px solid var(--line); padding: .5rem .65rem; text-align: start; vertical-align: top; }
   thead th { background: var(--bg); }
   mark { background: var(--mark); color: inherit; padding: 0 .15em; }
+  .key { color: var(--muted); font-size: .9rem; }
   .pick { border-inline-start: 3px solid var(--accent); padding-inline-start: .75rem; }
   footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
   a { color: var(--accent); }
@@ -60,10 +60,11 @@
         </tbody>
       </table>
     </div>
+    <p class="key"><mark>Marked</mark>: differs between options; plain: the same.</p>
   </section>
 
   <section aria-labelledby="pick" class="pick">
-    <h2 id="pick">Pick: {{option}}</h2>
+    <h2 id="pick">{{Pick: the option, or what the difference means}}</h2>
     <p>{{why, in the yardstick's terms}}</p>
     <p>Would change if: {{the fact that would flip it}}</p>
   </section>

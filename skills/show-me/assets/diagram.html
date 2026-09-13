@@ -1,5 +1,4 @@
 <title>{{type}}: {{scope}}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The `diagram` template, the artifact medium: doctype.md § Doctypes gives
      the parts, § Page and § Figures the rules. Replace every {{...}}; a part
      with nothing to say is removed, never left as a placeholder. -->
@@ -24,7 +23,7 @@
   main { max-width: 60rem; margin: 0 auto; }
   h1 { font-size: 1.4rem; margin: 0 0 1rem; }
   figure { margin: 0; overflow-x: auto; }
-  svg { display: block; max-width: 100%; height: auto; }
+  svg { display: block; }
   svg .box { fill: var(--box); stroke: var(--fg); }
   svg .edge { stroke: var(--accent); fill: none; }
   svg text { fill: var(--fg); font: 14px system-ui, sans-serif; }
@@ -42,7 +41,7 @@
   <h1>{{type}}: {{scope}}</h1>
 
   <figure aria-labelledby="fig-caption">
-    <svg viewBox="0 0 520 160" role="img" aria-labelledby="fig-caption">
+    <svg width="520" height="160" viewBox="0 0 520 160" role="img" aria-labelledby="fig-caption">
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
           <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
