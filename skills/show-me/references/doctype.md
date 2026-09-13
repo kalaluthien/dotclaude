@@ -23,24 +23,27 @@ A review fails a page on a bullet, cited as `doctype.md § <section>: <name>`.
   says what is under it; one idea per paragraph (Nielsen).
 - **One form**: a tutorial, a how-to, a reference or an explanation, never a
   mix (Procida).
+- **Built in order**: sections follow how understanding builds, never file or
+  commit order; a reason the source omits is called absent, never invented
+  (code-story).
 - **Portable syntax**: CommonMark and GFM; a callout as `> [!NOTE]`; a
   `mermaid` fence only where the host renders it.
 
 ## HTML
 
-Settle the reader's task and the data, then audience, register, fidelity and
-interaction, before any code (Munzner).
+Settle the reader's task and data, then audience, register, fidelity and
+interaction, before code (Munzner).
 
 - **One file**: CSS and JS inline; opens from `file://`; a library inlined or
-  pinned from a CDN the artifact allows; under 16 MiB.
+  pinned from an allowed CDN; under 16 MiB.
 - **Data first**: content drafted as JSON or markdown, HTML built from it.
 - **The product's look**: its colours, type, spacing and components; real labels
   and real data.
 - **Themes**: colour tokens on `:root`, redefined under
   `prefers-color-scheme: dark` and `[data-theme]`.
 - **Phone width**: a viewport meta without `user-scalable=no`; no sideways page
-  scroll at 320 px; a 16 px gutter; only tables, diagrams and code scroll, each
-  in its own box.
+  scroll at 320 px; a 16 px gutter; only tables, diagrams and code scroll, in
+  their own box.
 - **Semantic markup**: `main`, `nav`, `section`, `figure`, headings in order;
   native elements before ARIA.
 - **Accessible**: contrast 4.5:1, visible focus, every control operable by
@@ -60,16 +63,20 @@ interaction, before any code (Munzner).
 
 ## Visualisation
 
+- **Earns its place**: a figure only where it teaches more than a paragraph,
+  one judgment each; one whose removal keeps the meaning is cut
+  (diagram-design, Ian).
 - **Overview first**: the whole set, then zoom and filter, then details on
   demand (Shneiderman).
 - **Status**: what is shown, as of when, whether still loading; an error names
   the way out (Nielsen).
-- **Lie factor**: shown over actual effect within 0.95–1.05; a bar axis starts
-  at zero (Tufte).
+- **Lie factor**: shown over actual effect within 0.95–1.05, checked by
+  measurement, never by eye; a bar axis starts at zero (Tufte, diagram-design).
 - **Channel**: the compared quantity on the highest available channel: position,
   length, angle, area, hue; no pie where a bar would do (Cleveland & McGill).
 - **Colour**: hue for category, one hue's intensity for quantity, colour only
-  for meaning, never red against green (Few).
+  for meaning, no red–green pair; on a change, colour marks only new,
+  changed, gone (Few, pr-lens).
 - **Ink**: no decoration; non-data ink just visible (Tufte).
 - **Shared axes**: compared series side by side on shared axes (Tufte).
 - **Table or graph**: a table to look a value up, a graph to see a pattern
@@ -82,7 +89,7 @@ interaction, before any code (Munzner).
 - **Nothing hidden**: shows every boundary partner, dependency direction,
   protocol and box level; names its source; holds one concern (arc42,
   Kruchten).
-- **Symbols**: one symbol per concept, few symbol types, each looking like what
-  it means (Moody).
+- **Symbols**: one symbol per concept, few symbol types, each suggesting its
+  meaning (Moody).
 - **Locality**: a diagram only where adjacency shows the relation; else a list
   (Larkin & Simon).
