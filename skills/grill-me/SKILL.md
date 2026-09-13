@@ -13,7 +13,7 @@ target the ask does not name is a proposal.
 | target | its blanks | the result |
 | --- | --- | --- |
 | a campaign issue, a sub-issue | the repository's own template, found through its `AGENTS.md` and read now, never copied | its markdown body |
-| a proposal, a single idea being one weighed against leaving things as they are | a `comparison`'s parts, show-me's [doctype](../show-me/references/doctype.md) § Doctypes | markdown |
+| a proposal, a single idea being one weighed against leaving things as they are | a `comparison`'s parts, [doctype](../../types/doctype.md) § Doctypes | markdown |
 | a decision | a numbered veto table: `#`, ruling, reason, one line each | markdown |
 
 A repository's template or rule decides the rest of a document -- a title, a

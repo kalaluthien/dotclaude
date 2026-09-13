@@ -6,13 +6,13 @@ description: Explains a structure, concept, repository, PR, scenario or set of o
 # show-me
 
 Show the topic instead of describing it: the one named, else whatever the
-conversation is about. A new rule on writing or drawing is filed in
-`references/`.
+conversation is about. A new rule on drawing is filed in
+`~/.claude/types/doctype.md`, one on writing in `references/`.
 
 ## The steps
 
 1. **Doctype**: the question the ask puts picks a `diagram`, a `narrative`
-   or a `comparison`, [doctype](references/doctype.md) § Doctypes; build its
+   or a `comparison`, [doctype](../../types/doctype.md) § Doctypes; build its
    parts in that order.
 2. **Medium**: doctype.md § Media picks it. Markdown takes the chat forms
    below; an artifact starts from `assets/<doctype>.html`.

@@ -1,7 +1,7 @@
 # Doctypes and media
 
 The doctype is how a document explains, the medium where it is read.
-[prose.md](prose.md) binds the sentences in both, `~/.claude/CLAUDE.md`
+[prose.md](../skills/show-me/references/prose.md) binds the sentences in both, `~/.claude/CLAUDE.md`
 § Visual encoding every artifact.
 
 ## Doctypes
@@ -50,7 +50,7 @@ The doctype is how a document explains, the medium where it is read.
   collapsed; two disclosure levels at most (Nielsen).
 - **SVG first**: inline SVG or CSS before a library.
 - **Motion**: subtler under `prefers-reduced-motion: reduce`.
-- **Used, not viewed**: [probe.md](probe.md) clicks every control and checks
+- **Used, not viewed**: [probe.md](../skills/show-me/references/probe.md) clicks every control and checks
   width and legibility; a screenshot shows none of them.
 
 ### Figures

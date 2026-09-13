@@ -2,7 +2,7 @@
 """Prove the narrowed pool check refuses what Filing refuses and allows the rest,
 through the script settings.json actually runs.
 
-Every case copies the shipped `check-memtype.py` and the shipped memory reference
+Every case copies the shipped `check-memtype.py` and the shipped `types/memtype.md`
 into a temporary tree and runs the copy, so what is under test is the file that
 gets installed and the prefix list a reader would actually read. The allow half is
 the load-bearing one: this hook is registered machine-wide on every `Write` and
@@ -28,7 +28,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 HOOK = HERE / "check-memtype.py"
-DOCUMENT = HERE.parent / "skills" / "filing" / "references" / "memory.md"
+DOCUMENT = HERE.parent / "types" / "memtype.md"
 
 ran, fails = [], []
 
@@ -44,7 +44,7 @@ def tree(root, document=None):
     root = Path(root)
     (root / "hooks").mkdir()
     shutil.copy(HOOK, root / "hooks" / "check-memtype.py")
-    doc = root / "skills" / "filing" / "references" / "memory.md"
+    doc = root / "types" / "memtype.md"
     doc.parent.mkdir(parents=True)
     doc.write_text(
         DOCUMENT.read_text(encoding="utf-8") if document is None else document,
@@ -70,7 +70,7 @@ def memory(pool, name, body="", type_=None, index=True, title=None):
 
 
 def target_prefixes():
-    """The prefixes § Filing declares, read out of the document independently.
+    """The prefixes types/memtype.md declares, read out of the document independently.
 
     Deliberately not the hook's own parser: this reads the bullets the way a
     person does, so a hook that quietly stopped seeing one of them, or saw one
@@ -134,7 +134,7 @@ def main():
         # above is generated FROM the list -- delete the bullet and that loop
         # quietly runs one case fewer, while this one fails and says which.
         r = posttooluse(hook, memory(pool, "archive-writing-skill"))
-        check("allowed: 'archive-writing-skill' -- § Filing declares "
+        check("allowed: 'archive-writing-skill' -- types/memtype.md declares "
               "`archive-<subject>` and the hook honours it",
               "archive-" in prefixes and r.returncode == 0
               and not said(r).strip(),
@@ -619,7 +619,7 @@ def main():
               "exit %d: %s" % (r.returncode, said(r)[:300]))
     with tempfile.TemporaryDirectory() as d:
         hook, pool = tree(d)
-        (Path(d) / "skills" / "filing" / "references" / "memory.md").write_bytes(b"# CLAUDE\n\n\xff\xfe\n")
+        (Path(d) / "types" / "memtype.md").write_bytes(b"# CLAUDE\n\n\xff\xfe\n")
         path = memory(pool, "topic-alloy")
         r = posttooluse(hook, path)
         check("refused: a document that is not valid UTF-8, with exit 2",
