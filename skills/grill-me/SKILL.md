@@ -47,4 +47,5 @@ first line, a ceiling -- and is read at run time, never restated here.
 - At the end, unless the ask already says, ask once where the document goes:
   a GitHub issue, an artifact, or chat. When it is obvious, do not ask. A
   GitHub issue is filed by the repository's own procedure where it has one,
-  else `gh issue create`.
+  else `gh issue create`; an artifact is held to doctype.md § Media, its
+  probe included.

@@ -9,19 +9,19 @@ binds every artifact too.
 
 | doctype | explains | its parts, in order |
 | --- | --- | --- |
-| `diagram` | one structure or concept | the title and key; the figure; the one thing to read off it; the source |
+| `diagram` | one structure or concept | the title; the figure; its key; the one thing to read off it; the source |
 | `narrative` | a repository, a PR or a scenario | a one-line thesis; a map of the whole; chapters, one question each with its evidence, in the order understanding builds, never file or commit order; a reason the source omits, called absent; the source at a sha |
 | `comparison` | options, measurements or a change | the question; the yardstick, fixed first; each option against it, differences marked, ties plain; the pick and what would change it |
 
-- **Template**: one HTML file per doctype, owned by the skill that emits it;
+- **Template**: one HTML file per doctype, owned by its emitting skill;
   in markdown, the parts become headings.
 
 ## Media
 
-- **`markdown`**: agents, GitHub, chat; no rules.
+- **`markdown`**: GitHub, chat, and always an agent; no rules.
 - **`artifact`**: one HTML page for a person, JS allowed; § Page, § Figures.
-- **Mermaid**: only where it renders: an artifact's `<pre class="mermaid">`,
-  needing no library, or a GitHub body; never in chat.
+- **Mermaid**: only where it renders: an artifact's `<pre class="mermaid">`
+  or a GitHub body; never in chat.
 
 ### Page
 
@@ -37,7 +37,7 @@ interaction, before code (Munzner).
   `prefers-color-scheme: dark` and `[data-theme]`.
 - **Phone width**: a viewport meta without `user-scalable=no`; no sideways
   scroll at 320 px; a 16 px gutter; only tables, diagrams and code scroll, in
-  their own box.
+  their own box; [probe.md](probe.md) checks it.
 - **Semantic markup**: `main`, `nav`, `section`, `figure`, headings in order;
   native elements before ARIA.
 - **Accessible**: contrast 4.5:1, visible focus, every control keyboard-operable

@@ -12,13 +12,12 @@ read `references/prose.md`; a new rule on writing or drawing is filed in
 
 ## The steps
 
-1. **Doctype**: a `diagram` for one structure or concept, a `narrative` for a
-   repository, a PR or a scenario, as [doctype](references/doctype.md)
-   § Doctypes defines them; build its parts in that order.
+1. **Doctype**: a `diagram` or a `narrative`, from
+   [doctype](references/doctype.md) § Doctypes; build its parts in that order.
 2. **Medium**: `markdown`, in the chat forms below, unless the figure needs a
    page -- a layout, a state comparison, a map too dense for text. An
-   artifact starts from `assets/diagram.html` or `assets/narrative.html` and
-   is held to doctype.md § Media.
+   artifact starts from `assets/diagram.html` or `assets/narrative.html`.
+   Either medium is held to doctype.md § Media.
 3. **Ending**: [delivery](references/delivery.md).
 
 ## The chat forms
@@ -26,7 +25,6 @@ read `references/prose.md`; a new rule on writing or drawing is filed in
 Pick the smallest form that makes the point, place it next to the short text
 it supports, and keep only the calls, files, props, states and boundaries the
 current question needs. Use one form, sometimes several, never all of them.
-No Mermaid in chat: it renders there as source.
 
 **Pseudocode** for logic or an algorithm:
 

@@ -9,19 +9,19 @@
     color-scheme: light dark;
     --bg: #fbfaf7; --fg: #1d1d1f; --muted: #5b5f66; --line: #cfccc4;
     --box: #ffffff; --accent: #2458c6;
-    --new: #1d7a45; --changed: #9a5b00; --gone: #b3261e;
+    --new: #0b7285; --changed: #9a5b00; --gone: #b3261e;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
       --box: #222427; --accent: #8fb4ff;
-      --new: #6fd39a; --changed: #e7ad55; --gone: #f28b82;
+      --new: #66d9e8; --changed: #e7ad55; --gone: #f28b82;
     }
   }
   :root[data-theme="dark"] {
     --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
     --box: #222427; --accent: #8fb4ff;
-    --new: #6fd39a; --changed: #e7ad55; --gone: #f28b82;
+    --new: #66d9e8; --changed: #e7ad55; --gone: #f28b82;
   }
   body { background: var(--bg); color: var(--fg); margin: 0;
          font: 16px/1.55 system-ui, sans-serif; padding-block: 24px; padding-inline: 16px; }
@@ -34,7 +34,7 @@
   svg .box { fill: var(--box); stroke: var(--fg); }
   svg text { fill: var(--fg); font: 13px system-ui, sans-serif; }
   svg .new { stroke: var(--new); stroke-width: 2; }
-  svg .changed { stroke: var(--changed); stroke-width: 2; }
+  svg .changed { stroke: var(--changed); stroke-width: 2; stroke-dasharray: 1 3; stroke-linecap: round; }
   svg .gone { stroke: var(--gone); stroke-dasharray: 4 3; }
   nav ol { padding-inline-start: 1.25rem; }
   pre { overflow-x: auto; background: var(--box); border: 1px solid var(--line);
@@ -64,7 +64,7 @@
         <rect class="box new" x="390" y="30" width="160" height="56" rx="6"/>
         <text x="470" y="63" text-anchor="middle">{{part 3}}</text>
       </svg>
-      <figcaption class="key">{{key: box = ..., for a PR: green new, amber changed, dashed red gone}}</figcaption>
+      <figcaption class="key">{{key: box = ...; for a PR: solid teal = new, dotted amber = changed, dashed red = gone}}</figcaption>
     </figure>
     <nav aria-label="Chapters">
       <ol>

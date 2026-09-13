@@ -6,17 +6,17 @@
 <style>
   :root {
     color-scheme: light dark;
-    --bg: #fbfaf7; --fg: #1d1d1f; --muted: #5b5f66; --line: #cfccc4;
+    --bg: #fbfaf7; --fg: #1d1d1f; --muted: #5b5f66;
     --box: #ffffff; --accent: #2458c6;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
+      --bg: #17181a; --fg: #ececec; --muted: #a3a7ae;
       --box: #222427; --accent: #8fb4ff;
     }
   }
   :root[data-theme="dark"] {
-    --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
+    --bg: #17181a; --fg: #ececec; --muted: #a3a7ae;
     --box: #222427; --accent: #8fb4ff;
   }
   body { background: var(--bg); color: var(--fg); margin: 0;
