@@ -49,6 +49,8 @@ The doctype is how a document explains, the medium where it is read.
 - **Motion**: subtler under `prefers-reduced-motion: reduce`.
 - **Used, not viewed**: every control clicked, never judged from a
   screenshot.
+- **Footer sha**: a page inside the repository it describes pins the
+  source's last commit before the page, since no commit names itself.
 
 ### Figures
 

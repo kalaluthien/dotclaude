@@ -34,13 +34,13 @@
   .read { font-size: 1.1rem; border-inline-start: 3px solid var(--accent); padding-inline-start: .75rem; }
   footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
   a { color: var(--accent); }
-  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  a:focus-visible, figure:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </style>
 
 <main>
   <h1>{{type}}: {{scope}}</h1>
 
-  <figure>
+  <figure tabindex="0" aria-labelledby="fig-title">
     <svg width="520" height="160" viewBox="0 0 520 160" role="img" aria-labelledby="fig-title" aria-describedby="fig-desc">
       <title id="fig-title">{{type}}: {{scope}}</title>
       <desc id="fig-desc">{{the figure in one sentence: its elements and how they connect}}</desc>
