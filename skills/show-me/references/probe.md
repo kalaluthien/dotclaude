@@ -43,7 +43,8 @@ It prints one line per page: the page, then `<scroll>/<client> <smallest>px
   `FLOOR` at the checkout's copy there.
 - **Controls**: the dead count is 0: every button and summary, clicked once,
   changed the page, and every figure that scrolls sideways has a `tabindex`
-  and a focus ring. Chrome focuses a scroller without one; Safari does not.
+  and no `outline: none` when focused. Chrome focuses a scroller without a
+  `tabindex`; Safari does not.
 
 A page the frame cannot read -- a wrong path, or no
 `--allow-file-access-from-files` -- prints `no reading FAIL`.
