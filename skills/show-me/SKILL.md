@@ -14,16 +14,21 @@ in `references/`.
 ## The kind
 
 Name the kind first: test `~/.claude/spec/document-kinds.md` § Kinds row by
-row, and the first match is the kind. The result then meets every rule there
-tagged `all` or that kind, and `chart` or `diagram` for a figure it holds.
-Cite a rule by its ID; the spec is where it is stated.
+row, and the first match is the kind. The result then meets the rules that
+fit its form: an HTML page every rule of § Composition, a markdown `doc` M1
+with the C8 and C9 it carries, and any result the § Visualisation
+rules tagged `all` or its kind, and `chart` or `diagram` for a figure it
+holds. Cite a rule by its ID; the spec is where it is stated.
 
-| kind | make | deliver |
-| --- | --- | --- |
-| `doc` | markdown (M1) | [delivery](references/delivery.md) |
-| `view` | one of the forms below, or one HTML page | [delivery](references/delivery.md) |
-| `dashboard` | one HTML page (V2, V3) | [delivery](references/delivery.md) |
-| `ui` | one HTML page (C5) | [delivery](references/delivery.md) |
+| kind | make |
+| --- | --- |
+| `ui` | one HTML page (C5) |
+| `dashboard` | one HTML page (V2, V3) |
+| `view` | one of the forms below, or one HTML page |
+| `doc` | markdown (M1) |
+
+Where each kind is built and how it reaches the reader is
+[delivery](references/delivery.md).
 
 ## The forms
 
@@ -107,6 +112,7 @@ comparison — and for every `dashboard` and `ui`: one page, composed as the
 spec's § Composition says. Match the
 product's colours, type, spacing and components; use real labels and real
 data. Where it is written and how it is delivered is
-[delivery](references/delivery.md).
+[delivery](references/delivery.md); how it is rendered to PNG and probed at
+320 px is [to-png](references/to-png.md).
 
 Topic: $ARGUMENTS
