@@ -35,15 +35,15 @@ Settle the reader's task and data, then audience, register, fidelity and
 interaction, before code (Munzner).
 
 - **One file**: CSS and JS inline; opens from `file://`; a library inlined or
-  pinned from an allowed CDN; under 16 MiB.
+  pinned from a CDN the artifact allows; under 16 MiB.
 - **Data first**: content drafted as JSON or markdown, HTML built from it.
 - **The product's look**: its colours, type, spacing and components; real labels
-  and real data.
+  and data.
 - **Themes**: colour tokens on `:root`, redefined under
   `prefers-color-scheme: dark` and `[data-theme]`.
 - **Phone width**: a viewport meta without `user-scalable=no`; no sideways page
-  scroll at 320 px; a 16 px gutter; only tables, diagrams and code scroll, in
-  their own box.
+  scroll at 320 px; a 16 px gutter; only tables, diagrams and code scroll, each
+  in its own box.
 - **Semantic markup**: `main`, `nav`, `section`, `figure`, headings in order;
   native elements before ARIA.
 - **Accessible**: contrast 4.5:1, visible focus, every control operable by
@@ -58,8 +58,8 @@ interaction, before code (Munzner).
 - **SVG first**: inline SVG or CSS before a library; an artifact renders
   `<pre class="mermaid">` with none.
 - **Motion**: a subtler animation under `prefers-reduced-motion: reduce`.
-- **Used, not viewed**: a `ui` is checked by using each action, never from a
-  screenshot.
+- **Used, not viewed**: a `ui` is checked by using each action it offers,
+  never from a screenshot.
 
 ## Visualisation
 
@@ -70,8 +70,8 @@ interaction, before code (Munzner).
   demand (Shneiderman).
 - **Status**: what is shown, as of when, whether still loading; an error names
   the way out (Nielsen).
-- **Lie factor**: shown over actual effect within 0.95–1.05, checked by
-  measurement, never by eye; a bar axis starts at zero (Tufte, diagram-design).
+- **Lie factor**: the shown effect over the data effect within 0.95–1.05; a
+  bar axis starts at zero (Tufte).
 - **Channel**: the compared quantity on the highest available channel: position,
   length, angle, area, hue; no pie where a bar would do (Cleveland & McGill).
 - **Colour**: hue for category, one hue's intensity for quantity, colour only
@@ -91,5 +91,5 @@ interaction, before code (Munzner).
   Kruchten).
 - **Symbols**: one symbol per concept, few symbol types, each suggesting its
   meaning (Moody).
-- **Locality**: a diagram only where adjacency shows the relation; else a list
-  (Larkin & Simon).
+- **Locality**: a relational diagram only where adjacency shows the relation;
+  else a list (Larkin & Simon).
