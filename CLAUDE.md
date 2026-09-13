@@ -131,6 +131,6 @@ Ordering: fold the missing signal into the one rank, never a second order or a s
 
 ## Filing
 
-A durable takeaway, and any script, hook, skill or agent you write, goes through the `filing` skill, `~/.claude/skills/filing/`: its table routes by *what would make it wrong*, and its references hold each destination's shape. `hooks/check-memtype.py` reads the memory prefixes from that skill's memory reference, so the declaration lives there once. A page a person reads takes one of the kinds `~/.claude/spec/document-kinds.md` defines, and follows its rules.
+A durable takeaway, and any script, hook, skill or agent you write, goes through the `filing` skill, `~/.claude/skills/filing/`: its table routes by *what would make it wrong*, and its references hold each destination's shape. `hooks/check-memtype.py` reads the memory prefixes from that skill's memory reference, so the declaration lives there once.
 
 @RTK.md
