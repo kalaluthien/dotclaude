@@ -51,6 +51,7 @@
   .provenance dd { margin: 0; }
   figure { margin: 2.2rem 0; }
   figure svg { display: block; width: 100%; height: auto; }
+  figure svg text { fill: currentColor; }
   figure pre { margin: 0; }
   figure.pan { overflow-x: auto; }
   figcaption { margin-top: .7rem; font-size: .85rem; color: var(--mute); line-height: 1.5; }
@@ -125,7 +126,7 @@ under the heading Filing. The pool's <code>setup-</code> convention starts here.
 
 <p>A pool is untracked, so a move inside it leaves no diff. The taxonomy half of this
 change is in git, and the file move is not.
-<span class="src">CLAUDE.md:193 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/CLAUDE.md#L193">CLAUDE.md:193 @ 0eb2813</a></p>
 
 <h2 id="2026-08-04-mece-audit">2026-08-04 — Exclusive memtype prefixes</h2>
 
@@ -135,11 +136,11 @@ prefix now names one reason a file would go wrong. Nothing falsifies an
 <span class="chip">semantic</span> file states the current truth of one subject, so a
 <code>topic-</code> file is updated in place. A <span class="chip">procedural</span>
 file says how to act, so a <code>feedback-</code> file is deleted when its fact is gone.
-<span class="src">CLAUDE.md:189-193 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/CLAUDE.md#L189-L193">CLAUDE.md:189-193 @ 0eb2813</a></p>
 
 <p><code>hooks/check-memtype.py</code> compiles that table out of <code>CLAUDE.md</code>
 and refuses a file name that matches no row. The rule and its reader stay one statement.
-<span class="src">hooks/check-memtype.py:19-32 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/hooks/check-memtype.py#L19-L32">hooks/check-memtype.py:19-32 @ 0eb2813</a></p>
 
 <h2 id="2026-08-12-backlog-deleted">2026-08-12 — Backlog file deletion</h2>
 
@@ -159,7 +160,7 @@ text-spacing question above, filed on 2026-08-11 by two document-writer sessions
 on the ticket. The clearance rule the ticket asks about is
 <code>skills/writing/references/svg-rules.md</code>, which sets label clearance at
 8 units from every other mark.
-<span class="src">skills/writing/references/svg-rules.md:93 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/skills/writing/references/svg-rules.md#L93">skills/writing/references/svg-rules.md:93 @ 0eb2813</a></p>
 
 <h2 id="2026-08-12-agentmemory-rejected">2026-08-12 — Pool store</h2>
 
@@ -337,7 +338,7 @@ recommended a delegate self-report, which is the failure mode that file names. <
 <code>~/.claude/CLAUDE.md</code> under Verification, and deleted here. This task was that
 rule's second, independent confirmation: removing sections from that file left prose
 references a path grep never reaches.
-<span class="src">CLAUDE.md:129 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/CLAUDE.md#L129">CLAUDE.md:129 @ 0eb2813</a></p>
 
 <h2 id="2026-09-06-reader-named-prefixes">2026-09-06 — Reader-named prefixes</h2>
 
@@ -360,7 +361,7 @@ campaign-base pool and two in the global pool. <code>metadata.type</code> stoppe
 required. The hook now refuses a pool file the pool's <code>MEMORY.md</code> does not link
 to, so the index line is enforced rather than asked for. The per-file move tables are on
 <code>kalaluthien/campaign-base#219</code>.
-<span class="src">hooks/check-memtype.py:5-9 @ 0eb2813</span></p>
+<a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/hooks/check-memtype.py#L5-L9">hooks/check-memtype.py:5-9 @ 0eb2813</a></p>
 
 <p>The curation probe ran over <span class="ct">45&times; feedback file</span> in two
 sessions. One session wrote a scenario per file with the answer withheld, and a second sonnet
@@ -378,7 +379,7 @@ almost none, missing every named tier, model, assertion and default.
   <li>No rule was promoted into <code>~/.claude/CLAUDE.md</code>.</li>
   <li>The memtype table keeps <code>setup-</code>, because two project pools each hold one
   such file: <code>setup-android-emulator</code> and <code>setup-chirpy-post-url</code>.
-  Nothing new takes the prefix. <span class="src">CLAUDE.md:193 @ 0eb2813</span></li>
+  Nothing new takes the prefix. <a class="src" href="https://github.com/kalaluthien/dotclaude/blob/0eb2813/CLAUDE.md#L193">CLAUDE.md:193 @ 0eb2813</a></li>
   <li>The taxonomy's home did not move. <code>CLAUDE.md</code> holds the table, and
   <code>hooks/check-memtype.py</code> compiles it.</li>
 </ul>
