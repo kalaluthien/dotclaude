@@ -40,8 +40,10 @@
 <main>
   <h1>{{type}}: {{scope}}</h1>
 
-  <figure aria-labelledby="fig-caption">
-    <svg width="520" height="160" viewBox="0 0 520 160" role="img" aria-labelledby="fig-caption">
+  <figure>
+    <svg width="520" height="160" viewBox="0 0 520 160" role="img" aria-labelledby="fig-title" aria-describedby="fig-desc">
+      <title id="fig-title">{{type}}: {{scope}}</title>
+      <desc id="fig-desc">{{the figure in one sentence: its elements and how they connect}}</desc>
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
           <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
@@ -56,7 +58,7 @@
       <path class="edge" d="M170,80 H348" marker-end="url(#arrow)" style="color: var(--accent)"/>
       <text class="label" x="260" y="70" text-anchor="middle">{{intent, protocol}}</text>
     </svg>
-    <figcaption id="fig-caption">
+    <figcaption>
       <dl class="key">
         <dt>box</dt><dd>{{what a box is}}</dd>
         <dt>arrow</dt><dd>{{what a line means, read in its direction}}</dd>

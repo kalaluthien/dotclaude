@@ -31,8 +31,10 @@ the verdict, as `320/320 12.0px 0/1 floor 11 pass`. `pass` needs all three:
 - **Width**: the two numbers are equal; a figure wider than the frame, left
   outside its own scroll box, reads more on the left.
 - **Legibility**: the smallest text, its font size times the scale of the SVG
-  it sits in, is at least the floor, read from `~/.claude/types/doctype.md` § Page: Legible;
-  `floor NaN` means that line was not found, and fails.
+  it sits in, is at least the floor, read from `~/.claude/types/doctype.md`
+  § Page: Legible; `floor NaN` means that line was not found, and fails, as it
+  does from a checkout whose `types/` the install does not have yet: point
+  `FLOOR` at the checkout's copy there.
 - **Controls**: the dead count is 0: every button and summary, clicked once,
   changed the page.
 

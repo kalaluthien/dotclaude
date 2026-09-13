@@ -27,7 +27,7 @@ mismatch.
 | a machine can decide it | a script or hook, with its failing case | [scripts](references/scripts.md) |
 | a delegate's role changes | `agents/<name>.md` | frontmatter as a skill's, [skills](references/skills.md) |
 | a product's norm changes | `spec/` markdown | the repository's own spec rules |
-| how to write, draw or explain changes | the `show-me` skill | its own body |
+| how to write, draw or explain changes | the `show-me` skill | where its body files it |
 
 The rule goes to the general file and the evidence stays with the subject:
 instruction and rationale only, no repository names and no war stories. Merge a

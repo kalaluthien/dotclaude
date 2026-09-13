@@ -1,13 +1,14 @@
 ---
 name: show-me
-description: Explains a structure, concept, repository, PR, scenario or set of options as a diagram, a narrative or a comparison. Use when the user asks to have a model, lifecycle, flow, repository, PR or result explained, shown or compared - 설명해줘, 보여줘, 그림으로, 구조화해서, 시각화, 비교해줘 - or types /show-me. Not for rewording the last reply, a status list, or a decision the user still has to make (grill-me).
+description: Explains a structure, concept, repository, PR, scenario or a difference the facts settle as a diagram, a narrative or a comparison. Use when the user asks to have a model, lifecycle, flow, repository, PR or measured result explained, shown or set side by side - 설명해줘, 보여줘, 그림으로, 구조화해서, 시각화, 비교해줘 - or types /show-me. Not for rewording the last reply, a status list, or a decision the user still has to make (grill-me).
 ---
 
 # show-me
 
 Show the topic instead of describing it: the one named, else whatever the
-conversation is about. A new rule on drawing is filed in
-`~/.claude/types/doctype.md`, one on writing in `references/`.
+conversation is about. The sentences beside a figure follow
+[prose](references/prose.md) in either medium. A new rule on drawing is filed
+in `~/.claude/types/doctype.md`, one on writing in `references/`.
 
 ## The steps
 

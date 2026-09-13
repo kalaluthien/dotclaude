@@ -41,17 +41,23 @@ first line, a ceiling -- and is read at run time, never restated here.
 | the round | where |
 | --- | --- |
 | four questions or fewer | `AskUserQuestion`, its limit |
-| more, with the `Artifact` tool in the session | `assets/form.html` through that tool once it passes show-me's [probe](../show-me/references/probe.md): one fieldset per question, its recommendation prefilled |
+| more, with the `Artifact` tool in the session | `assets/form.html` through that tool: one fieldset per question, its recommendation prefilled |
 | more, without it | numbered text in chat |
 
-The form writes nowhere; it builds one block the user pastes back. Its first
-line is `grill-me: <target>, round <n>`: read the block against that round, or
-say it matches none. Each `Qn:` line opens that question's answer, the lines
+The form writes nowhere; it builds one block the user pastes back, opening
+`grill-me: <target>, round <n>`: read it against that round, or say it matches
+none. Each `Qn:` line opens that question's answer, the lines
 under it indented two spaces are the answer verbatim, an answer equal to its
 recommendation accepts it, and an empty one leaves the question open. The
 attacks follow in chat.
 
+Before publishing it, load it in a 320 px iframe in headless Chrome: no
+sideways scroll, no text under the Legible floor of
+`~/.claude/types/doctype.md`, and the button fills the block.
+
 ## The ending
 
-As show-me's [delivery](../show-me/references/delivery.md), with the filled
-document as the result; an artifact is show-me's to render, invoked with it.
+Unless the ask says, ask once with `AskUserQuestion`: a GitHub issue, an
+artifact, or chat; not when it is obvious. An issue follows the repository's
+filing procedure, else `gh issue create`; an artifact is show-me's, invoked
+with the document; chat gets markdown.

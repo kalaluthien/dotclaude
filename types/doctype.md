@@ -1,8 +1,7 @@
 # Doctypes and media
 
 The doctype is how a document explains, the medium where it is read.
-[prose.md](../skills/show-me/references/prose.md) binds the sentences in both, `~/.claude/CLAUDE.md`
-§ Visual encoding every artifact.
+`~/.claude/CLAUDE.md` § Visual encoding binds every artifact.
 
 ## Doctypes
 
@@ -16,13 +15,11 @@ The doctype is how a document explains, the medium where it is read.
   diagram, what a PR changed a comparison, why a design is so a narrative.
 - **Two questions**: a narrative, the diagram its map, the comparison a
   chapter.
-- **Template**: show-me's `assets/<doctype>.html`; in markdown the parts are
-  headings.
+- **Markdown**: the parts are headings.
 
 ## Media
 
-- **`markdown`**: GitHub, chat, and always an agent; drawn in show-me's chat
-  forms. Mermaid only in a GitHub body: an artifact's breaks Works without JS.
+- **`markdown`**: GitHub, chat, and always an agent. Mermaid only in a GitHub body: an artifact's breaks Works without JS.
 - **`artifact`**: one HTML page for a person, where a layout, a wide table or
   a dense map outgrows markdown; held to § Figures and to § Page, or to the
   § Page bullets its header names.
@@ -35,8 +32,8 @@ The doctype is how a document explains, the medium where it is read.
   tokens on `:root` redefined under each or by system colours.
 - **Phone width**: no sideways scroll at 320 px; a 16 px gutter; only tables,
   diagrams and code scroll, in their own box.
-- **Legible**: no text under 11 px at 320 px, Apple's smallest, read here by
-  the probe; an SVG keeps its viewBox width and scrolls.
+- **Legible**: no text under 11 px at 320 px, Apple's smallest; an SVG keeps
+  its viewBox width and scrolls.
 - **Semantic markup**: `main`, `nav`, `section`, `figure`, headings in order;
   native elements before ARIA.
 - **Accessible**: contrast 4.5:1, visible focus, every control
@@ -50,8 +47,8 @@ The doctype is how a document explains, the medium where it is read.
   collapsed; two disclosure levels at most (Nielsen).
 - **SVG first**: inline SVG or CSS before a library.
 - **Motion**: subtler under `prefers-reduced-motion: reduce`.
-- **Used, not viewed**: [probe.md](../skills/show-me/references/probe.md) clicks every control and checks
-  width and legibility; a screenshot shows none of them.
+- **Used, not viewed**: every control clicked, never judged from a
+  screenshot.
 
 ### Figures
 
