@@ -1,9 +1,9 @@
-# Delivery by kind
+# Delivery by doctype
 
-Where a show-me result is built and how it reaches the reader, once its kind
+Where a show-me result is built and how it reaches the reader, once its doctype
 is named.
 
-| kind | built at | reaches desktop and phone | asked |
+| doctype | built at | reaches desktop and phone | asked |
 | --- | --- | --- | --- |
 | `ui` | `/tmp/show-me-<slug>.html`, or an artifact | `open` on desktop; the artifact on a phone | file or artifact |
 | `dashboard` | one path rebuilt in place: when the numbers are one repository's, one file in that repository, named by its subject; else an artifact republished from one file so its URL holds | `open`, then PNG slices; the artifact | file or artifact, when both fit |
