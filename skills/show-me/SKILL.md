@@ -6,7 +6,7 @@ description: Explains a structure, concept, repository, PR, scenario or a differ
 # show-me
 
 Show the topic instead of describing it: the one named, else whatever the
-conversation is about. The sentences beside a figure follow
+conversation is about. Its sentences beside code, a figure or a spec follow
 [prose](references/prose.md) in either medium. A new rule on drawing is filed
 in `~/.claude/types/doctype.md`, one on writing in `references/`.
 

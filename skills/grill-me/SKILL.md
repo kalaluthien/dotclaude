@@ -29,8 +29,8 @@ first line, a ceiling -- and is read at run time, never restated here.
 - Finding facts is yours: look them up, by a subagent where it takes a
   search, and put only decisions to the user. A pending lookup holds back
   only the blanks under it.
-- Attack each answer before writing it: a counterexample or an edge-case
-  scenario, a check that can fail, a term the repository uses otherwise, or
+- Attack each answer before writing it: a counterexample or an edge case, a
+  check that can fail, a term the repository uses otherwise, or
   code that says otherwise. Write it once it survives, or once the user
   restates it knowing the attack.
 - Done when every blank is filled and the user confirms the document; act on
@@ -44,16 +44,15 @@ first line, a ceiling -- and is read at run time, never restated here.
 | more, with the `Artifact` tool in the session | `assets/form.html` through that tool: one fieldset per question, its recommendation prefilled |
 | more, without it | numbered text in chat |
 
-The form writes nowhere; it builds one block the user pastes back, opening
-`grill-me: <target>, round <n>`: read it against that round, or say it matches
-none. Each `Qn:` line opens that question's answer, the lines
-under it indented two spaces are the answer verbatim, an answer equal to its
-recommendation accepts it, and an empty one leaves the question open. The
-attacks follow in chat.
+The form writes nowhere; it builds one block the user pastes back, whose first
+line is `grill-me: <target>, round <n>`: read it against that round, or say it
+matches none. Under each `Qn:` line, indented two spaces, is that answer
+verbatim; one equal to its recommendation accepts it, an empty one leaves the
+question open. The attacks follow in chat.
 
-Before publishing it, load it in a 320 px iframe in headless Chrome: no
-sideways scroll, no text under the Legible floor of
-`~/.claude/types/doctype.md`, and the button fills the block.
+Before publishing, load it in a 320 px iframe in headless Chrome: no sideways
+scroll, no text under the Legible floor of `~/.claude/types/doctype.md`, or the
+checkout's copy while the install lacks it, and the button fills the block.
 
 ## The ending
 
