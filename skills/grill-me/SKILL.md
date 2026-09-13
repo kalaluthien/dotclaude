@@ -1,6 +1,6 @@
 ---
 name: grill-me
-description: Interviews the user until a target document is filled - a campaign issue, a sub-issue, a proposal or a decision - each blank a question and each answer attacked before it is written. Use when the user wants an idea or plan stress-tested or a document drafted by interview - 검토해줘 이 아이디어, 둘 다 어찌하면 좋을까, grill me. Not for reviewing code (code-review) or explaining or comparing without a decision (show-me).
+description: Interviews the user until a target document is filled - a campaign issue, a sub-issue, a proposal or a decision - each blank a question and each answer attacked before it is written. Use when the user wants an idea or plan stress-tested or a document drafted by interview - 검토해줘 이 아이디어, 둘 다 어찌하면 좋을까, grill me. Not for reviewing code (code-review) or explaining or comparing what the facts already settle (show-me).
 ---
 
 # grill-me
@@ -41,7 +41,7 @@ first line, a ceiling -- and is read at run time, never restated here.
 | the round | where |
 | --- | --- |
 | four questions or fewer | `AskUserQuestion`, its limit |
-| more, with the `Artifact` tool in the session | `assets/form.html` through that tool: one fieldset per question, its recommendation prefilled |
+| more, with the `Artifact` tool in the session | `assets/form.html` through that tool once it passes show-me's [probe](../show-me/references/probe.md): one fieldset per question, its recommendation prefilled |
 | more, without it | numbered text in chat |
 
 The form writes nowhere; it builds one block the user pastes back. Its first
@@ -53,7 +53,5 @@ attacks follow in chat.
 
 ## The ending
 
-Unless the ask already says, ask once where the document goes: a GitHub
-issue, an artifact, or chat. When it is obvious, do not ask. A GitHub issue is
-filed by the repository's own procedure where it has one, else `gh issue
-create`; an artifact is show-me's, invoked with the filled document.
+As show-me's [delivery](../show-me/references/delivery.md), with the filled
+document as the result; an artifact is show-me's to render, invoked with it.

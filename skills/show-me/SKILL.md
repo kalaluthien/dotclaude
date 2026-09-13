@@ -1,6 +1,6 @@
 ---
 name: show-me
-description: Explains a structure, concept, repository, PR, scenario or set of options as a diagram, a narrative or a comparison. Use when the user asks to have a model, lifecycle, flow, repository, PR or result explained, shown or compared - 설명해줘, 보여줘, 그림으로, 구조화해서, 시각화, 비교해줘 - or types /show-me. Not for rewording the last reply, a status list, or reaching a decision by interview (grill-me).
+description: Explains a structure, concept, repository, PR, scenario or set of options as a diagram, a narrative or a comparison. Use when the user asks to have a model, lifecycle, flow, repository, PR or result explained, shown or compared - 설명해줘, 보여줘, 그림으로, 구조화해서, 시각화, 비교해줘 - or types /show-me. Not for rewording the last reply, a status list, or a decision the user still has to make (grill-me).
 ---
 
 # show-me
@@ -14,10 +14,8 @@ conversation is about. A new rule on writing or drawing is filed in
 1. **Doctype**: the question the ask puts picks a `diagram`, a `narrative`
    or a `comparison`, [doctype](references/doctype.md) § Doctypes; build its
    parts in that order.
-2. **Medium**: `markdown`, in the chat forms below, unless the figure needs a
-   page -- a layout, a table too wide for chat, a map too dense for text. An
-   artifact starts from `assets/<doctype>.html`. Either medium is held to
-   doctype.md § Media.
+2. **Medium**: doctype.md § Media picks it. Markdown takes the chat forms
+   below; an artifact starts from `assets/<doctype>.html`.
 3. **Ending**: [delivery](references/delivery.md).
 
 ## The chat forms
