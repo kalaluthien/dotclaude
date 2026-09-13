@@ -1,9 +1,9 @@
-# Delivery by kind
+# Delivery by doctype
 
-Where a show-me result is built and how it reaches the reader, once its kind
+Where a show-me result is built and how it reaches the reader, once its doctype
 is named.
 
-| kind | built at | reaches desktop and phone | asked |
+| doctype | built at | reaches desktop and phone | asked |
 | --- | --- | --- | --- |
 | `ui` | `/tmp/show-me-<slug>.html`, or an artifact | `open` on desktop; the artifact on a phone | file or artifact |
 | `dashboard` | one path rebuilt in place: when the numbers are one repository's, one file in that repository, named by its subject; else an artifact republished from one file so its URL holds | `open`, then PNG slices; the artifact | file or artifact, when both fit |
@@ -15,8 +15,10 @@ is named.
   only through an artifact.
 - A `dashboard` is never built at a run-named or `/tmp` path.
 - Every HTML page passes the 320 px probe ([to-png](to-png.md)) before it is
-  delivered, which checks for a sideways page scroll and nothing else; a
-  `dashboard` also passes its desktop-width run.
+  delivered; it tests the sideways-scroll clause of `doctype.md § HTML: Phone
+  width` and nothing else. A `dashboard` also passes the same probe at
+  1280 px, which tests the one-screen clause of `doctype.md § Visualisation:
+  Dashboard` and nothing else.
 - Reading the `.html` back is not a delivery: it renders as source text.
 - Tell the user the one-sentence version in chat, whatever the delivery.
 
