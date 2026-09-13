@@ -1,6 +1,6 @@
 ---
 name: filing
-description: Files a durable takeaway where it belongs and shapes what it lands in - a memory, a rule in CLAUDE.md or AGENTS.md, a skill, a script or hook, an agent, a spec, a doc, a decision page. Use when the stop check asks for a takeaway, when something learned must outlive the session, or when writing or editing a SKILL.md, a file under scripts/ or hooks/, a PreToolUse or PostToolUse hook, or a file under agents/. Not for settings.json permissions or env (update-config), and not for explaining a topic (show-me).
+description: Files a durable takeaway where it belongs and shapes what it lands in - a memory, a rule in CLAUDE.md or AGENTS.md, a skill, a script or hook, an agent, a spec. Use when the stop check asks for a takeaway, when something learned must outlive the session, or when writing or editing a SKILL.md, a file under scripts/ or hooks/, a PreToolUse or PostToolUse hook, or a file under agents/. Not for settings.json permissions or env (update-config), and not for explaining a topic (show-me).
 ---
 
 # Filing
@@ -27,8 +27,6 @@ mismatch.
 | a machine can decide it | a script or hook, with its failing case | [scripts](references/scripts.md) |
 | a delegate's role changes | `agents/<name>.md` | frontmatter as a skill's, [skills](references/skills.md) |
 | a product's norm changes | `spec/` markdown | the repository's own spec rules |
-| a reader needs a picture of it | a `view` under `docs/` | `~/.claude/spec/document-kinds.md` |
-| git does not track the change, or an option lost | a decision page under `docs/` | `~/.claude/spec/decision-pages.md` |
 | how to write or explain changes | the `show-me` skill | its own body |
 
 The rule goes to the general file and the evidence stays with the subject:

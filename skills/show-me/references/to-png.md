@@ -5,8 +5,7 @@ memory.
 
 ## The 320 px probe
 
-C7 is failed by a sideways page scroll at 320 px, and a screenshot cannot show
-one: headless Chrome here lays a page out at no less than 500 px whatever
+A screenshot cannot show a sideways page scroll at 320 px: headless Chrome here lays a page out at no less than 500 px whatever
 `--window-size` says, then crops the PNG. An iframe is a true 320 px viewport,
 media queries included. Run this before any delivery of an HTML page.
 
@@ -26,7 +25,7 @@ takes 15). A wide figure left outside its own scroll box reads `592/305`.
 Without `--allow-file-access-from-files` the frame is unreadable and nothing
 is printed, which is not a pass.
 
-For a dashboard's V3, run the same frame at `width:1280px;height:800px` and
+For a dashboard, run the same frame at `width:1280px;height:800px` and
 read `d.scrollHeight+'/'+d.clientHeight`: equal numbers are one screen.
 
 ## The PNG for a phone

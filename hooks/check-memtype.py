@@ -15,9 +15,8 @@ fact looked up, `pitfall-` for a trap read when stuck, `feedback-` for a rule
 the owner gave, `archive-` for what a deleted thing knew -- because the type it
 used to be named after predicted nothing about whether the file was ever read
 and the prefix did. `setup-`, `pitfalls`, `backlog` and `history-` are the
-names that scheme retired; the refusal names each one's successor, and
-`history-`'s is a decision page under `docs/` rather than anything in the pool
-(`spec/decision-pages.md`).
+names that scheme retired, and the refusal names the successor of each that
+has one.
 
 `metadata.type` is the third and the smallest edit: nothing re-read it after it
 was written, four files in one pool had drifted to the harness default before
@@ -316,8 +315,7 @@ def violation(path, names):
         return (
             "'%s' opens with none of the memory prefixes (%s). A memory is "
             "named after its reader, so `setup-` is `topic-`, `pitfalls` is one "
-            "`pitfall-<subject>` per subject, and `history-` is a decision page "
-            "under `docs/` -- see `spec/decision-pages.md`. A genuinely new "
+            "`pitfall-<subject>` per subject. A genuinely new "
             "prefix is added to the list in the same change that first uses it."
             % (name, ", ".join("'%s'" % prefix for prefix in names))
         )

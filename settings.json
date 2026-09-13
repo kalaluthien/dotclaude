@@ -40,14 +40,6 @@
           {
             "type": "command",
             "command": "/usr/bin/python3 \"$HOME/.claude/hooks/check-memtype.py\""
-          },
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 \"$HOME/.claude/hooks/check-decision-page.py\""
-          },
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 \"$HOME/.claude/hooks/check-document-kind.py\""
           }
         ]
       }

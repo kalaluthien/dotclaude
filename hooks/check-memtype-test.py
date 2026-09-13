@@ -152,12 +152,6 @@ def main():
                   and "opens with none of the memory prefixes" in said(r)
                   and "named after its reader" in said(r),
                   "exit %d: %s" % (r.returncode, said(r)[:300]))
-        # `history-` is the one with nowhere in the pool to go, so its reason
-        # has to name where it went instead.
-        r = posttooluse(hook, pool / "history-shape.md")
-        check("the refusal sends a `history-` file to the decision page",
-              "decision page" in said(r) and "spec/decision-pages.md" in said(r),
-              said(r)[:300])
 
     # ---- refuse: any `metadata.type`, not merely a contradicting one. Nothing
     # re-read the key after it was written, and the prefix now carries what it
