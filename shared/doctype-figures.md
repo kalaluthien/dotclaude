@@ -6,7 +6,8 @@ What a figure on an `artifact` page must be, [doctype](doctype.md) § Media.
   judgment each, cut if removing it loses nothing; non-data ink just visible
   (diagram-design, Ian, Tufte).
 - **Lie factor**: shown effect over data effect within 0.95–1.05; a bar axis
-  starts at zero (Tufte).
+  starts at zero; an average shows its spread, a change its noise, unequal
+  groups as rates (Tufte, Cairo).
 - **Channel**: a compared quantity on the highest channel: position, length,
   angle, area, hue; no pie where a bar would do (Cleveland & McGill).
 - **Colour**: six at most, ground included; hue for category, one hue's
