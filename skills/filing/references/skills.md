@@ -11,12 +11,12 @@ frontmatter rules; its body is the system prompt of the delegate.
 - `name`: lowercase, hyphens, identical to the directory name. A model-loaded
   skill takes the gerund form, verb plus object (`updating-wiki-pages`); a
   user-typed one takes the voice of its pool.
-- `description`: one sentence of what the skill does, then a `Use when …`
-  clause naming the situations and the words a person would actually type,
-  third person, no angle brackets. Put the routing words in the first line:
-  the listing truncates long entries and drops the least-used first. Add a
-  `Not for …` clause when a sibling can claim the same request; negative scope
-  stops over-triggering, more positive description does not.
+- `description`: one `Use when …` sentence that classifies the situation --
+  is this skill's work called for -- without restating what the body does,
+  third person, no list of typed words, no angle brackets: the listing
+  truncates long entries and drops the least-used first. A `Not for …` or
+  `not when …` clause names the sibling that could claim the same request;
+  negative scope stops over-triggering, more positive description does not.
 - `disable-model-invocation: true` hides a skill only a person types, because
   a command is an order given, not an operation offered.
 - `context: fork` runs the skill in a subagent with no conversation history;
