@@ -4,10 +4,11 @@
      `article` per question; a part with nothing to say is removed.
      - The nav and each chapter's "N of M" are derived from `main article`
        by the script at the end; never write them.
-     - Evidence: one `mark` per note, in the same order; the numbers are a
-       CSS counter, never typed.
+     - Evidence: the code plain, then one note per token, `token`: what it
+       shows, as an issue writes it.
      - Figures follow the layout rules in `diagram.html`'s comment. -->
 <style>
+  /* skin: ~/.claude/shared/doctype-skin.css, carried verbatim by every page template down to "skin end"; the probe compares */
   :root {
     color-scheme: light dark;
     --bg: #fbfaf7; --fg: #1d1d1f; --muted: #5b5f66; --line: #cfccc4;
@@ -19,35 +20,36 @@
       --box: #222427; --accent: #8fb4ff;
     }
   }
+  :root[data-theme="light"] { color-scheme: light; }
   :root[data-theme="dark"] {
+    color-scheme: dark;
     --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
     --box: #222427; --accent: #8fb4ff;
   }
   body { background: var(--bg); color: var(--fg); margin: 0;
-         font: 16px/1.55 system-ui, sans-serif; padding-block: 24px; padding-inline: 16px; }
+         font: 16px/1.5 system-ui, sans-serif; padding-block: 24px; padding-inline: 16px; }
   main { max-width: 48rem; margin: 0 auto; }
-  h1 { font-size: 1.5rem; margin: 0 0 .5rem; }
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.15rem; }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  svg text { fill: var(--fg); font: 14px system-ui, sans-serif; }
+  svg .label { fill: var(--muted); font-size: 12px; }
+  /* skin end */
+  h1 { margin: 0 0 .5rem; }
   .thesis { font-size: 1.15rem; margin: 0 0 1.5rem; }
-  h2 { font-size: 1.15rem; margin: 2rem 0 .5rem; }
+  h2 { margin: 2rem 0 .5rem; }
   figure { margin: 0; overflow-x: auto; }
   svg { display: block; }
   svg .box { fill: var(--box); stroke: var(--fg); }
-  svg text { fill: var(--fg); font: 13px system-ui, sans-serif; }
   nav ol { padding-inline-start: 1.25rem; }
-  nav:not(:has(li)) { display: none; }
   .n { color: var(--muted); font-size: .9rem; margin: 0 0 .5rem; }
   pre { overflow-x: auto; background: var(--box); border: 1px solid var(--line);
         padding: .75rem; font: 13px/1.45 ui-monospace, monospace; }
-  details { margin-top: .5rem; counter-reset: e; }
-  mark { counter-increment: e; background: none; color: inherit;
-         border-bottom: 2px solid var(--accent); }
-  mark::after { content: counter(e); font-size: 11px; vertical-align: super; color: var(--accent); }
-  mark:target { outline: 2px solid var(--accent); }
+  details { margin-top: .5rem; }
   .key { color: var(--muted); font-size: .9rem; }
   .absent { color: var(--muted); }
   footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
-  a { color: var(--accent); }
-  a:focus-visible, summary:focus-visible, figure:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </style>
 
 <main>
@@ -81,8 +83,8 @@
     <p>{{the answer, in plain words}}</p>
     <details>
       <summary>Evidence: <code>{{path:line}}</code></summary>
-      <pre><code>{{code before}}<mark id="ch1-e1">{{the token the note is about}}</mark>{{code after}}</code></pre>
-      <ol class="notes"><li><a href="#ch1-e1">{{what that token shows}}</a></li></ol>
+      <pre tabindex="0" role="region" aria-label="{{path:line}}"><code>{{the code}}</code></pre>
+      <ol><li><code>{{token}}</code>: {{what it shows}}</li></ol>
     </details>
   </article>
 

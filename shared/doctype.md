@@ -9,7 +9,7 @@ The doctype is how a document explains, the medium where it is read.
 | --- | --- | --- | --- |
 | `diagram` | in one picture | what it is made of, how its parts connect | the title; the figure; its key; the one thing to read off it; the source |
 | `narrative` | in the order understanding builds | how it works, why it is so | a one-line thesis; a map of the whole; chapters, one question each with its evidence, never in file or commit order; a reason the source omits, called absent; the source at a sha |
-| `comparison` | under one yardstick | which one, or what differs | the question; the yardstick, fixed first; each option against it, differences marked and keyed, ties plain; the verdict and what would change it |
+| `comparison` | under one yardstick | which one, or what differs | the question; the yardstick, fixed first; each option against it, differences in bold and keyed, ties plain; the verdict and what would change it |
 
 - **The question picks, not the subject**: a repository's structure is a
   diagram, what a PR changed a comparison, why a design is so a narrative.
@@ -19,19 +19,19 @@ The doctype is how a document explains, the medium where it is read.
 
 ## Media
 
-- **`markdown`**: GitHub, chat, and always an agent. Mermaid only in a GitHub body: an artifact's breaks Works without JS.
+- **`markdown`**: GitHub, chat, and always an agent. Mermaid only in a GitHub body: an artifact would fetch its library.
 - **`artifact`**: one HTML page for a person, where a layout, a wide table or
   a dense map outgrows markdown; held to § Figures and to § Page, or to the
   § Page bullets its header names.
 
 ### Page
 
-- **One file**: CSS, JS, images and icons inline; opens from `file://`;
-  libraries pinned from a CDN the artifact allows; under 16 MiB (bencho).
+- **One file**: its own JS, SVG, CSS, fonts and images inline, nothing
+  fetched; opens from `file://`; under 16 MiB (bencho).
 - **Themes**: `prefers-color-scheme` and `[data-theme]` both followed, by
-  tokens on `:root` redefined under each or by system colours.
+  the tokens of `doctype-skin.css`, which every page carries verbatim.
 - **Phone width**: no sideways scroll at 320 px; a 16 px gutter; only tables,
-  diagrams and code scroll, in their own box.
+  diagrams and code scroll, in their own focusable, labelled box.
 - **Legible**: no text under 11 px at 320 px, Apple's smallest, and no Hangul
   or Han under 12 px (diagram-design); an SVG keeps its viewBox width and
   scrolls.
@@ -39,7 +39,6 @@ The doctype is how a document explains, the medium where it is read.
   native elements before ARIA.
 - **Accessible**: contrast 4.5:1, visible focus, every control
   keyboard-operable (WCAG 2.2).
-- **Works without JS**: content reads with scripts off; JS never gates.
 - **Actions on the page**: next actions are the page's own controls, never a
   fixed URI or an out-of-band instruction (Fielding).
 - **One batch**: collected input goes back as one batch, each item keyed to

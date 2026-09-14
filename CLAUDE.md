@@ -25,7 +25,7 @@ A project's instructions live in `PROJECT/AGENTS.md`, and `PROJECT/CLAUDE.md` im
 
 A skill only a person types hides from the model with `disable-model-invocation: true`, because a command is an order given, not an operation offered. How to name and shape either kind, and the scripts under them, is the `filing` skill.
 
-A rule more than one skill or hook reads lives in `~/.claude/shared/`, and a skill cites it by path, so it is declared once.
+A file more than one skill or hook reads lives in `~/.claude/shared/`, and a skill cites it by path, so it is declared once.
 
 Pick the model by task depth: Fable when the approach is not yet clear, Opus to carry out an approach that is, Sonnet to retrieve or condense.
 

@@ -50,13 +50,10 @@ matches none. Under each `Qn:` line, indented two spaces, is that answer
 verbatim; one equal to its recommendation accepts it, an empty one leaves the
 question open. The attacks follow in chat.
 
-Before publishing, load it in a 320 px iframe in headless Chrome: no sideways
-scroll, no text under the Legible floor of `~/.claude/shared/doctype.md`, or the
-checkout's copy while the install lacks it, and the button fills the block.
+Before publishing, it passes the [probe](../../shared/doctype-probe.md), whose
+controls count includes the button.
 
 ## The ending
 
-Unless the ask says, ask once with `AskUserQuestion`: a GitHub issue, an
-artifact, or chat; not when it is obvious. An issue follows the repository's
-filing procedure, else `gh issue create`; an artifact is show-me's, invoked
-with the document; chat gets markdown.
+[delivery](../../shared/doctype-delivery.md); an artifact or a repository
+page is show-me's, invoked with the document.
