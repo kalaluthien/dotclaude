@@ -7,7 +7,8 @@ What an `artifact` page must be, [doctype](doctype.md) § Media.
 - **Themes**: `prefers-color-scheme` and `[data-theme]` both followed, by
   the tokens of `doctype-skin.css`, which every page carries verbatim.
 - **Phone width**: no sideways scroll at 320 px; a 16 px gutter; only tables,
-  diagrams and code scroll, in their own focusable, labelled box.
+  diagrams and code scroll, in their own focusable, labelled box, cutting
+  its last item at the edge.
 - **Legible**: no text under 11 px at 320 px, Apple's smallest, and no Hangul
   or Han under 12 px (diagram-design); an SVG keeps its viewBox width and
   scrolls.
