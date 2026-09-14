@@ -1,7 +1,19 @@
 <title>{{type}}: {{scope}}</title>
 <!-- The `diagram` template, the artifact medium: `~/.claude/types/doctype.md` § Doctypes gives
      the parts, § Page and § Figures the rules. Replace every {{...}}; a part
-     with nothing to say is removed, never left as a placeholder. -->
+     with nothing to say is removed, never left as a placeholder.
+     Layout, the one home of these rules for every show-me SVG:
+     - every coordinate and size divisible by 4;
+     - at most 9 boxes and 12 arrows, accent on 2 of them; over that, an
+       overview and a detail;
+     - boxes grouped by how the reader thinks of the system, never by the
+       folder tree;
+     - arrows orthogonal, bending on r=8 elbows; a label 8 px off its line,
+       on a mask of the background;
+     - one arrow carries a concrete example value, a changed flow its before
+       and after;
+     - ids prefixed per figure, `{{slug}}-title`: inline SVGs share one id
+       space. -->
 <style>
   :root {
     color-scheme: light dark;
@@ -25,7 +37,9 @@
   figure { margin: 0; overflow-x: auto; }
   svg { display: block; }
   svg .box { fill: var(--box); stroke: var(--fg); }
-  svg .edge { stroke: var(--accent); fill: none; }
+  svg .edge { stroke: var(--muted); fill: none; }
+  svg .edge.hero { stroke: var(--accent); }
+  svg .mask { fill: var(--bg); }
   svg text { fill: var(--fg); font: 14px system-ui, sans-serif; }
   svg .label { fill: var(--muted); font-size: 12px; }
   dl.key { display: grid; grid-template-columns: auto 1fr; gap: .25rem .75rem; margin: 1rem 0; }
@@ -40,28 +54,31 @@
 <main>
   <h1>{{type}}: {{scope}}</h1>
 
-  <figure tabindex="0" aria-labelledby="fig-title">
-    <svg width="520" height="160" viewBox="0 0 520 160" role="img" aria-labelledby="fig-title" aria-describedby="fig-desc">
-      <title id="fig-title">{{type}}: {{scope}}</title>
-      <desc id="fig-desc">{{the figure in one sentence: its elements and how they connect}}</desc>
+  <figure tabindex="0" aria-labelledby="{{slug}}-title">
+    <svg width="520" height="192" viewBox="0 0 520 192" role="img" aria-labelledby="{{slug}}-title" aria-describedby="{{slug}}-desc">
+      <title id="{{slug}}-title">{{type}}: {{scope}}</title>
+      <desc id="{{slug}}-desc">{{the figure in one sentence: its elements and how they connect}}</desc>
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
           <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
         </marker>
       </defs>
-      <rect class="box" x="10" y="50" width="160" height="60" rx="6"/>
-      <text x="90" y="78" text-anchor="middle">{{element A}}</text>
-      <text class="label" x="90" y="96" text-anchor="middle">{{level, technology}}</text>
-      <rect class="box" x="350" y="50" width="160" height="60" rx="6"/>
-      <text x="430" y="78" text-anchor="middle">{{element B}}</text>
-      <text class="label" x="430" y="96" text-anchor="middle">{{level, technology}}</text>
-      <path class="edge" d="M170,80 H348" marker-end="url(#arrow)" style="color: var(--accent)"/>
-      <text class="label" x="260" y="70" text-anchor="middle">{{intent, protocol}}</text>
+      <rect class="box" x="8" y="16" width="160" height="64" rx="8"/>
+      <text x="88" y="44" text-anchor="middle">{{element A}}</text>
+      <text class="label" x="88" y="64" text-anchor="middle">{{level, technology}}</text>
+      <rect class="box" x="352" y="112" width="160" height="64" rx="8"/>
+      <text x="432" y="140" text-anchor="middle">{{element B}}</text>
+      <text class="label" x="432" y="160" text-anchor="middle">{{level, technology}}</text>
+      <path class="edge hero" d="M168,48 H252 Q260,48 260,56 V136 Q260,144 268,144 H348" marker-end="url(#arrow)" style="color: var(--accent)"/>
+      <rect class="mask" x="264" y="72" width="136" height="32"/>
+      <text class="label" x="268" y="84">{{intent, protocol}}</text>
+      <text class="label" x="268" y="100">{{example value}}</text>
     </svg>
     <figcaption>
       <dl class="key">
         <dt>box</dt><dd>{{what a box is}}</dd>
         <dt>arrow</dt><dd>{{what a line means, read in its direction}}</dd>
+        <dt>not drawn</dt><dd>{{what was merged, collapsed or dropped}}</dd>
       </dl>
     </figcaption>
   </figure>

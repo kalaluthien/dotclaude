@@ -1,7 +1,12 @@
 <title>{{subject}}</title>
 <!-- The `narrative` template, the artifact medium: `~/.claude/types/doctype.md` § Doctypes gives
-     the parts, § Page and § Figures the rules. Replace every {{...}}; repeat a
-     chapter per question; a part with nothing to say is removed. -->
+     the parts, § Page and § Figures the rules. Replace every {{...}}; repeat an
+     `article` per question; a part with nothing to say is removed.
+     - The nav and each chapter's "N of M" are derived from `main article`
+       by the script at the end; never write them.
+     - Evidence: one `mark` per note, in the same order; the numbers are a
+       CSS counter, never typed.
+     - Figures follow the layout rules in `diagram.html`'s comment. -->
 <style>
   :root {
     color-scheme: light dark;
@@ -29,9 +34,16 @@
   svg .box { fill: var(--box); stroke: var(--fg); }
   svg text { fill: var(--fg); font: 13px system-ui, sans-serif; }
   nav ol { padding-inline-start: 1.25rem; }
+  nav:not(:has(li)) { display: none; }
+  .n { color: var(--muted); font-size: .9rem; margin: 2rem 0 0; }
+  .n + h2 { margin-top: 0; }
   pre { overflow-x: auto; background: var(--box); border: 1px solid var(--line);
         padding: .75rem; font: 13px/1.45 ui-monospace, monospace; }
-  details { margin-top: .5rem; }
+  details { margin-top: .5rem; counter-reset: e; }
+  mark { counter-increment: e; background: none; color: inherit;
+         border-bottom: 2px solid var(--accent); }
+  mark::after { content: counter(e); font-size: 11px; vertical-align: super; color: var(--accent); }
+  mark:target { outline: 2px solid var(--accent); }
   .key { color: var(--muted); font-size: .9rem; }
   .absent { color: var(--muted); }
   footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
@@ -47,36 +59,33 @@
 
   <section aria-labelledby="map">
     <h2 id="map">Map</h2>
-    <figure tabindex="0" aria-labelledby="map-title">
-      <svg width="560" height="120" viewBox="0 0 560 120" role="img" aria-labelledby="map-title" aria-describedby="map-desc">
-        <title id="map-title">{{map of the whole}}</title>
-        <desc id="map-desc">{{the map in one sentence: its parts and how they connect}}</desc>
-        <rect class="box" x="10" y="30" width="125" height="56" rx="6"/>
-        <text x="72" y="63" text-anchor="middle">{{part 1}}</text>
-        <rect class="box" x="145" y="30" width="125" height="56" rx="6"/>
-        <text x="207" y="63" text-anchor="middle">{{part 2}}</text>
-        <rect class="box" x="280" y="30" width="125" height="56" rx="6"/>
-        <text x="342" y="63" text-anchor="middle">{{part 3}}</text>
-        <rect class="box" x="415" y="30" width="125" height="56" rx="6"/>
-        <text x="477" y="63" text-anchor="middle">{{part 4}}</text>
+    <figure tabindex="0" aria-labelledby="{{slug}}-title">
+      <svg width="560" height="120" viewBox="0 0 560 120" role="img" aria-labelledby="{{slug}}-title" aria-describedby="{{slug}}-desc">
+        <title id="{{slug}}-title">{{map of the whole}}</title>
+        <desc id="{{slug}}-desc">{{the map in one sentence: its parts and how they connect}}</desc>
+        <rect class="box" x="8" y="32" width="128" height="56" rx="8"/>
+        <text x="72" y="64" text-anchor="middle">{{part 1}}</text>
+        <rect class="box" x="144" y="32" width="128" height="56" rx="8"/>
+        <text x="208" y="64" text-anchor="middle">{{part 2}}</text>
+        <rect class="box" x="280" y="32" width="128" height="56" rx="8"/>
+        <text x="344" y="64" text-anchor="middle">{{part 3}}</text>
+        <rect class="box" x="416" y="32" width="128" height="56" rx="8"/>
+        <text x="480" y="64" text-anchor="middle">{{part 4}}</text>
       </svg>
-      <figcaption class="key">{{key: what a box is}}</figcaption>
+      <figcaption class="key">{{key: what a box is}}<br>Not drawn: {{what was merged, collapsed or dropped}}</figcaption>
     </figure>
-    <nav aria-label="Chapters">
-      <ol>
-        <li><a href="#ch1">{{question 1}}</a></li>
-      </ol>
-    </nav>
+    <nav aria-label="Chapters"><ol></ol></nav>
   </section>
 
-  <section aria-labelledby="ch1">
+  <article aria-labelledby="ch1">
     <h2 id="ch1">{{question 1}}</h2>
     <p>{{the answer, in plain words}}</p>
     <details>
       <summary>Evidence: <code>{{path:line}}</code></summary>
-      <pre><code>{{code slice or diff}}</code></pre>
+      <pre><code>{{code before}}<mark id="ch1-e1">{{the token the note is about}}</mark>{{code after}}</code></pre>
+      <ol class="notes"><li><a href="#ch1-e1">{{what that token shows}}</a></li></ol>
     </details>
-  </section>
+  </article>
 
   <section aria-labelledby="absent">
     <h2 id="absent">Not stated in the source</h2>
@@ -85,3 +94,11 @@
 
   <footer>Source: <a href="{{url}}">{{repository or PR}}</a> at <code>{{sha}}</code></footer>
 </main>
+<script>
+  var chapters = document.querySelectorAll('main article'), list = document.querySelector('nav ol');
+  chapters.forEach(function (c, i) {
+    var h = c.querySelector('h2'), li = document.createElement('li'), a = document.createElement('a'), n = document.createElement('p');
+    a.href = '#' + h.id; a.textContent = h.textContent; li.append(a); list.append(li);
+    n.className = 'n'; n.textContent = (i + 1) + ' of ' + chapters.length; h.before(n);
+  });
+</script>
