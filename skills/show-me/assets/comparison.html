@@ -3,7 +3,9 @@
      gives the parts, `doctype-page.md` and `doctype-figures.md` the rules.
      Replace every {{...}}; one row per option, one column per criterion; bold
      only the cells the verdict turns on, as an issue's table does; where
-     every cell differs, bold marks none of them. -->
+     every cell differs, bold marks none of them. Rows part by white space and a
+     faint rule under each, no column rules; a column of numbers, its header
+     included, is `class="num"`, right-aligned. -->
 <style>
   /* skin: ~/.claude/shared/doctype-skin.css, carried verbatim by every page template down to "skin end"; the probe compares */
   :root {
@@ -37,7 +39,8 @@
   h2 { margin: 1.75rem 0 .5rem; }
   .scroll { overflow-x: auto; }
   table { border-collapse: collapse; min-width: 100%; background: var(--box); }
-  th, td { border: 1px solid var(--line); padding: .5rem .65rem; text-align: start; vertical-align: top; }
+  th, td { border-bottom: 1px solid var(--line); padding: .5rem .65rem; text-align: start; vertical-align: top; }
+  .num { text-align: end; font-variant-numeric: tabular-nums; }
   thead th { background: var(--bg); }
   tbody th { font-weight: normal; }
   .key { color: var(--muted); font-size: .9rem; }
