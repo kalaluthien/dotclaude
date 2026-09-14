@@ -18,7 +18,7 @@ mkdir -p <dir>/doctype-probe        # the redirects below fail without it
 tr -d '\r' < "$SKIN" | sed 's/^[[:space:]]*//' >| <dir>/doctype-probe/skin.css   # empty when SKIN is missing
 cat >| <dir>/doctype-probe/frame.html <<'EOF'
 <iframe id=f style="width:320px;height:800px;border:0"></iframe>
-<script>f.onload=function(){var w=f.contentWindow,d=w.document,e=d.documentElement,t=d.createTreeWalker(d.body,4),X=d.createElement('canvas').getContext('2d'),A=location.search.slice(1).split(';'),K=A[0],F=(A[1]||'').split(','),c=d.querySelectorAll('button,summary'),Z=function(){return d.getAnimations().filter(function(a){return a.playState=='running'&&a.effect&&a.effect.getComputedTiming().activeDuration>16}).length+d.querySelectorAll('animate,animateMotion,animateTransform,set').length},N=Z(),U={},n,p,m,z,s=[1/0,1/0],x=0,v=0,i=0,q=0,y=c.length;
+<script>f.onload=function(){var w=f.contentWindow,d=w.document,e=d.documentElement,t=d.createTreeWalker(d.body,4),X=d.createElement('canvas').getContext('2d'),A=location.search.slice(1).split(';'),K=A[0],F=(A[1]||'').split(','),c=d.querySelectorAll('button,summary'),Z=function(){return d.getAnimations().filter(function(a){return a.playState=='running'&&a.effect&&!(a.effect.getComputedTiming().activeDuration<=16)}).length+[].filter.call(d.querySelectorAll('animate,animateMotion,animateTransform'),function(a){try{return a.getSimpleDuration()>.016}catch(_){}}).length},N=Z(),U={},n,p,m,z,s=[1/0,1/0],x=0,v=0,i=0,q=0,y=c.length;
 c.forEach(function(b){var h=e.outerHTML;b.click();if(e.outerHTML==h)x++});
 d.querySelectorAll('details').forEach(function(g){g.open=true});
 while(n=t.nextNode()){p=n.parentElement;if(!n.data.trim()||/^(script|style|title)$/i.test(p.tagName))continue;m=p.getScreenCTM&&p.getScreenCTM();z=/[\p{sc=Hangul}\p{sc=Han}]/u.test(n.data)?1:0;s[z]=Math.min(s[z],parseFloat(w.getComputedStyle(p).fontSize)*(m?Math.hypot(m.a,m.b):1))}
@@ -90,15 +90,16 @@ opened, and only then is the rest read, the second motion reading last.
   content, a `meta` refresh, a URL a script builds, a nested frame's own
   fetches.
 - **Motion**: 0, the larger of the two readings, each the page's
-  `getAnimations()` -- CSS animations, CSS transitions and script animations
-  -- still running and longer than one frame, 16 ms, so a finished fill or a
-  `.01ms` reset is still, plus its SVG `animate`, `animateMotion`,
-  `animateTransform` and `set`, all under `--force-prefers-reduced-motion`
-  (`doctype-page.md`: Motion). Not read: motion under `no-preference` alone;
-  a transition on `:hover`, `:active`, `:checked`, `:target`, typing, or
-  `:focus` of anything but a scroll box; an animation a script starts other
-  than from a click; `scroll-behavior: smooth`; a GIF, a video, a canvas, a
-  style a script moves on a timer.
+  `getAnimations()` -- CSS animations, CSS transitions and script animations,
+  scroll-driven ones included -- still running and not over within one frame,
+  16 ms, plus its SVG `animate`, `animateMotion` and `animateTransform` whose
+  duration is over 16 ms, all under `--force-prefers-reduced-motion`
+  (`doctype-page.md`: Motion). So a finished fill, a one-iteration `.01ms`
+  reset and an SVG `set` are still. Not read: motion under `no-preference`
+  alone; a transition on `:hover`, `:active`, `:checked`, `:target`, typing,
+  or `:focus` of anything but a scroll box; an animation a script starts on a
+  timer, or from a click on anything but a `button` or `summary`;
+  `scroll-behavior: smooth`; a GIF, a video, a canvas.
 - **Skin**: `same`: the page carries `doctype-skin.css` verbatim, from its
   first `skin:` line to the `skin end` line after it, indentation and CR
   aside.
