@@ -35,8 +35,7 @@
   svg text { fill: var(--fg); font: 13px system-ui, sans-serif; }
   nav ol { padding-inline-start: 1.25rem; }
   nav:not(:has(li)) { display: none; }
-  .n { color: var(--muted); font-size: .9rem; margin: 2rem 0 0; }
-  .n + h2 { margin-top: 0; }
+  .n { color: var(--muted); font-size: .9rem; margin: 0 0 .5rem; }
   pre { overflow-x: auto; background: var(--box); border: 1px solid var(--line);
         padding: .75rem; font: 13px/1.45 ui-monospace, monospace; }
   details { margin-top: .5rem; counter-reset: e; }
@@ -99,6 +98,6 @@
   chapters.forEach(function (c, i) {
     var h = c.querySelector('h2'), li = document.createElement('li'), a = document.createElement('a'), n = document.createElement('p');
     a.href = '#' + h.id; a.textContent = h.textContent; li.append(a); list.append(li);
-    n.className = 'n'; n.textContent = (i + 1) + ' of ' + chapters.length; h.before(n);
+    n.className = 'n'; n.textContent = (i + 1) + ' of ' + chapters.length; h.after(n);
   });
 </script>
