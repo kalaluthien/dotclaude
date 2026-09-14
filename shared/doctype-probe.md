@@ -93,16 +93,16 @@ opened, and only then is the rest read, the second motion reading last.
   animations and CSS transitions on the document timeline still running under
   `--force-prefers-reduced-motion`, over 16 ms, on an element
   `checkVisibility()` finds drawn, opacity and visibility included
-  (`doctype-page.md`: Motion). A finished fill and a one-iteration `.01ms`
-  reset read 0. Over-read: keyframes redefined to change nothing under reduce
-  still count. Not read: motion under `no-preference` alone; a transition on
-  `:hover`, `:active`, `:checked`, `:target`, typing, or `:focus` of anything
-  but a scroll box; a script animation (`animate()`), or a style a script
-  moves on a timer or per frame (`setInterval`, `requestAnimationFrame`);
-  SMIL (`set`, `animate`, `animateMotion`, `animateTransform`); scroll-driven
-  and view-timeline animations; a view transition; `scroll-behavior: smooth`;
-  an animation in a shadow root; a `marquee`; an animated image of any
-  format, a video, a canvas.
+  (`doctype-page.md`: Motion). A finished fill and a one-iteration `.01ms` reset
+  read 0. Over-read: keyframes redefined to change nothing under reduce, and an
+  invisible `::before` or `::after` on a drawn element, still count. Not read:
+  motion under `no-preference` alone; a transition on `:hover`, `:active`,
+  `:checked`, `:target`, typing, or `:focus` of anything but a scroll box; a
+  script animation (`animate()`), or a style a script moves on a timer or per
+  frame (`setInterval`, `requestAnimationFrame`); SMIL (`set`, `animate`,
+  `animateMotion`, `animateTransform`); scroll-driven and view-timeline
+  animations; a view transition; `scroll-behavior: smooth`; an animation in a
+  shadow root; a `marquee`; an animated image of any format, a video, a canvas.
 - **Skin**: `same`: the page carries `doctype-skin.css` verbatim, from its
   first `skin:` line to the `skin end` line after it, indentation and CR
   aside.
