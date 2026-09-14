@@ -7,9 +7,9 @@ description: Use when the answer is settled and must be shown; not when it is st
 
 Show the topic instead of describing it: the one named, else whatever the
 conversation is about. Its sentences beside code, a figure or a spec follow
-[prose](references/prose.md) in either medium. A new rule on drawing is filed
-in `~/.claude/shared/doctype-figures.md`, one on an SVG's layout in
-`assets/diagram.html`, one on writing in `references/`.
+[prose](../../shared/doctype-prose.md) in either medium. A new rule on drawing
+is filed in `~/.claude/shared/doctype-figures.md`, one on an SVG's layout in
+`assets/diagram.html`, one on writing in `~/.claude/shared/doctype-prose.md`.
 
 ## The steps
 
