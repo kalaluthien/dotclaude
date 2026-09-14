@@ -19,15 +19,15 @@ The doctype is how a document explains, the medium where it is read.
 
 ## Media
 
-- **`markdown`**: GitHub, chat, and always an agent. Mermaid only in a GitHub body: an artifact's breaks Works without JS.
+- **`markdown`**: GitHub, chat, and always an agent. Mermaid only in a GitHub body: an artifact would fetch its library.
 - **`artifact`**: one HTML page for a person, where a layout, a wide table or
   a dense map outgrows markdown; held to § Figures and to § Page, or to the
   § Page bullets its header names.
 
 ### Page
 
-- **One file**: CSS, JS, images and icons inline; opens from `file://`;
-  libraries pinned from a CDN the artifact allows; under 16 MiB (bencho).
+- **One file**: its own JS, SVG, CSS, fonts and images inline, nothing
+  fetched; opens from `file://`; under 16 MiB (bencho).
 - **Themes**: `prefers-color-scheme` and `[data-theme]` both followed, by
   tokens on `:root` redefined under each or by system colours.
 - **Phone width**: no sideways scroll at 320 px; a 16 px gutter; only tables,
@@ -39,7 +39,6 @@ The doctype is how a document explains, the medium where it is read.
   native elements before ARIA.
 - **Accessible**: contrast 4.5:1, visible focus, every control
   keyboard-operable (WCAG 2.2).
-- **Works without JS**: content reads with scripts off; JS never gates.
 - **Actions on the page**: next actions are the page's own controls, never a
   fixed URI or an out-of-band instruction (Fielding).
 - **One batch**: collected input goes back as one batch, each item keyed to
