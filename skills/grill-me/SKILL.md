@@ -6,7 +6,8 @@ description: Use when the answer is still the user's to make; not when the facts
 # grill-me
 
 The document to produce decides the questions: each blank in it is one. A
-target the ask does not name is a proposal.
+target the ask does not name is a proposal. Its sentences follow
+[prose](../../shared/doctype-prose.md).
 
 ## The targets
 

@@ -1,7 +1,8 @@
 <title>{{subject}}</title>
 <!-- The `narrative` template, the artifact medium: `~/.claude/shared/doctype.md` § Doctypes gives
-     the parts, § Page and § Figures the rules. Replace every {{...}}; repeat an
-     `article` per question; a part with nothing to say is removed.
+     the parts, `doctype-page.md` and `doctype-figures.md` the rules. Replace
+     every {{...}}; repeat an `article` per question; a part with nothing to
+     say is removed.
      - The nav and each chapter's "N of M" are derived from `main article`
        by the script at the end; never write them.
      - Evidence: the code plain, then one note per token, `token`: what it
@@ -79,8 +80,8 @@
   </section>
 
   <article aria-labelledby="ch1">
-    <h2 id="ch1">{{question 1}}</h2>
-    <p>{{the answer, in plain words}}</p>
+    <h2 id="ch1">{{the answer to question 1, as a sentence}}</h2>
+    <p>{{the question it answers, then why, in plain words}}</p>
     <details>
       <summary>Evidence: <code>{{path:line}}</code></summary>
       <pre tabindex="0" role="region" aria-label="{{path:line}}"><code>{{the code}}</code></pre>

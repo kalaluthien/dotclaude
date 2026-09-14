@@ -35,8 +35,10 @@ Good: "The guard reads the session's role before a write"
 
 ## Write for a smart twelve-year-old
 
-Short words, one idea per sentence. A term the reader has not met is defined
-where it first appears, or cut. Intelligence is assumed, context is not.
+Short words, one idea per sentence, in the active voice. A term the reader
+has not met is defined where it first appears, or cut. Intelligence is
+assumed, context is not. No word that sells: say what a thing does, never
+that it is powerful, seamless or robust.
 
 Bad: "The claim is atomic via create-ref semantics."
 Good: "Two sessions cannot take one sub-issue: GitHub refuses the second

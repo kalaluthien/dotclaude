@@ -12,13 +12,13 @@ included.
 
 ```sh
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-FLOOR=$(grep -o 'under [0-9]* px' ~/.claude/shared/doctype.md | tr -dc '0-9\n' | paste -sd, -)
+FLOOR=$(grep -o 'under [0-9]* px' ~/.claude/shared/doctype-page.md | tr -dc '0-9\n' | paste -sd, -)
 SKIN=~/.claude/shared/doctype-skin.css
 mkdir -p <dir>/doctype-probe        # the redirects below fail without it
 tr -d '\r' < "$SKIN" | sed 's/^[[:space:]]*//' >| <dir>/doctype-probe/skin.css   # empty when SKIN is missing
 cat >| <dir>/doctype-probe/frame.html <<'EOF'
 <iframe id=f style="width:320px;height:800px;border:0"></iframe>
-<script>f.onload=function(){var w=f.contentWindow,d=w.document,e=d.documentElement,t=d.createTreeWalker(d.body,4),X=d.createElement('canvas').getContext('2d'),A=location.search.slice(1).split(';'),K=A[0],F=(A[1]||'').split(','),c=d.querySelectorAll('button,summary'),U={},n,p,m,z,s=[1/0,1/0],x=0,v=0,i=0,q=0,y=c.length;
+<script>f.onload=function(){var w=f.contentWindow,d=w.document,e=d.documentElement,t=d.createTreeWalker(d.body,4),X=d.createElement('canvas').getContext('2d'),A=location.search.slice(1).split(';'),K=A[0],F=(A[1]||'').split(','),c=d.querySelectorAll('button,summary'),Z=function(){return d.getAnimations().filter(function(a){var e=a.effect,g=e&&e.target;return(a instanceof w.CSSAnimation||a instanceof w.CSSTransition)&&a.timeline==d.timeline&&a.playState=='running'&&e.getComputedTiming().activeDuration>16&&g&&g.checkVisibility({opacityProperty:true,visibilityProperty:true})}).length},N=Z(),U={},n,p,m,z,s=[1/0,1/0],x=0,v=0,i=0,q=0,y=c.length;
 c.forEach(function(b){var h=e.outerHTML;b.click();if(e.outerHTML==h)x++});
 d.querySelectorAll('details').forEach(function(g){g.open=true});
 while(n=t.nextNode()){p=n.parentElement;if(!n.data.trim()||/^(script|style|title)$/i.test(p.tagName))continue;m=p.getScreenCTM&&p.getScreenCTM();z=/[\p{sc=Hangul}\p{sc=Han}]/u.test(n.data)?1:0;s[z]=Math.min(s[z],parseFloat(w.getComputedStyle(p).fontSize)*(m?Math.hypot(m.a,m.b):1))}
@@ -30,13 +30,13 @@ var r=e.scrollWidth+'/'+e.clientWidth+' '+s.map(function(u){return u<1/0?u.toFix
 d.querySelectorAll('body *').forEach(function(g){if(/auto|scroll/.test(w.getComputedStyle(g).overflowX)&&g.scrollWidth>g.clientWidth){y++;g.focus();if(g.tabIndex<0||w.getComputedStyle(g).outlineStyle=='none')x++}});
 d.querySelectorAll('svg').forEach(function(g){var o=g.getBoundingClientRect(),u=0;g.querySelectorAll('rect,circle,ellipse,line,polyline,polygon,path,text,image,use').forEach(function(q){var b=q.getBoundingClientRect(),a=0,j=0,M,h;if(q.closest('defs,marker,clipPath,mask,symbol,pattern')||!b.width&&!b.height)return;
 if(q.tagName=='text'){X.font=w.getComputedStyle(q).font;M=X.measureText(q.textContent);h=b.height/(M.fontBoundingBoxAscent+M.fontBoundingBoxDescent);a=(M.fontBoundingBoxAscent-M.actualBoundingBoxAscent)*h;j=(M.fontBoundingBoxDescent-M.actualBoundingBoxDescent)*h}
-if(b.left<o.left-.5||b.right>o.right+.5||b.top+a<o.top-.5||b.bottom-j>o.bottom+.5)u=1});v+=u});document.body.dataset.r=r+' '+x+'/'+y+' clip '+v+' id '+i+' ext '+q+' skin '+K+' floor '+F+(k&&!x&&!v?' pass':' FAIL')};f.src=location.hash.slice(1)</script>
+if(b.left<o.left-.5||b.right>o.right+.5||b.top+a<o.top-.5||b.bottom-j>o.bottom+.5)u=1});v+=u});N=Math.max(N,Z());document.body.dataset.r=r+' '+x+'/'+y+' clip '+v+' id '+i+' ext '+q+' motion '+N+' skin '+K+' floor '+F+(k&&!x&&!v&&!N?' pass':' FAIL')};f.src=location.hash.slice(1)</script>
 EOF
 for P in <page>...; do
   K=differs
   tr -d '\r' < "$P" | sed -n '/\/\* skin:/,/\/\* skin end \*\//{s/^[[:space:]]*//;p;/\/\* skin end \*\//q;}' |
     cmp -s - <dir>/doctype-probe/skin.css && [ -s <dir>/doctype-probe/skin.css ] && K=same
-  R=$("$CHROME" --headless --disable-gpu --allow-file-access-from-files --dump-dom \
+  R=$("$CHROME" --headless --disable-gpu --allow-file-access-from-files --dump-dom --force-prefers-reduced-motion \
     --virtual-time-budget=3000 "file://<dir>/doctype-probe/frame.html?$K;$FLOOR#file://$P" 2>/dev/null |
     sed -n 's/.*data-r="\([^"]*\)".*/\1/p')
   echo "$P ${R:-no reading FAIL}"
@@ -44,11 +44,12 @@ done
 ```
 
 It prints one line per page: the page, then `<scroll>/<client> <smallest>px
-<smallest Hangul or Han>px <dead>/<controls> clip <n> id <n> ext <n> skin
-<same|differs> floor <px>,<px>` and the verdict, as
-`/abs/page.html 320/320 12.0px 13.0px 0/1 clip 0 id 0 ext 0 skin same floor 11,12 pass`;
-`-` stands where a page has no text of that kind. Every button and summary
-is clicked first, then every `details` opened, and only then is the rest read.
+<smallest Hangul or Han>px <dead>/<controls> clip <n> id <n> ext <n> motion
+<n> skin <same|differs> floor <px>,<px>` and the verdict, as
+`/abs/page.html 320/320 12.0px 13.0px 0/1 clip 0 id 0 ext 0 motion 0 skin same floor 11,12 pass`;
+`-` stands where a page has no text of that kind. The first motion reading is
+taken on load; then every button and summary is clicked, every `details`
+opened, and only then is the rest read, the second motion reading last.
 `pass` needs each of these:
 
 - **Width**: the two numbers are equal; a figure wider than the frame, left
@@ -56,7 +57,7 @@ is clicked first, then every `details` opened, and only then is the rest read.
 - **Legibility**: the smallest text, its font size times the scale of the SVG
   it sits in, is at least its script's floor: a text node holding Hangul or
   Han the second, every other the first, both read from
-  `~/.claude/shared/doctype.md` § Page: Legible. A floor of other than two
+  `~/.claude/shared/doctype-page.md`: Legible. A floor of other than two
   numbers means a line was not found or was added, and fails; a missing
   `doctype-skin.css` reads `differs`. Both happen from a checkout whose
   `shared/` the install does not have yet: point `FLOOR` and `SKIN` at the
@@ -82,11 +83,26 @@ is clicked first, then every `details` opened, and only then is the rest read.
   `@namespace` aside); and what the page fetched before `load` (Resource
   Timing, which lists no `file://` fetch). The exemptions and the empty-value
   skip test the text as JS `trim()` leaves it, not the URL the browser parses;
-  a URL that does not parse counts. § Page: One file fetches nothing. Any
-  other shape is not read: an `xlink:href`, an `feImage` `href`, a legacy
-  `background` attribute, a `link` `imagesrcset`, an SVG presentation
-  attribute's `url()`, an SVG `script` `href`, a shadow root's content, a
-  `meta` refresh, a URL a script builds, a nested frame's own fetches.
+  a URL that does not parse counts. `doctype-page.md`: One file fetches
+  nothing. Any other shape is not read: an `xlink:href`, an `feImage` `href`,
+  a legacy `background` attribute, a `link` `imagesrcset`, an SVG
+  presentation attribute's `url()`, an SVG `script` `href`, a shadow root's
+  content, a `meta` refresh, a URL a script builds, a nested frame's own
+  fetches.
+- **Motion**: 0, the larger of the two readings, each the count of CSS
+  animations and CSS transitions on the document timeline still running under
+  `--force-prefers-reduced-motion`, over 16 ms, on an element
+  `checkVisibility()` finds drawn, opacity and visibility included
+  (`doctype-page.md`: Motion). A finished fill and a one-iteration `.01ms` reset
+  read 0. Over-read: keyframes redefined to change nothing under reduce, and an
+  invisible `::before` or `::after` on a drawn element, still count. Not read:
+  motion under `no-preference` alone; a transition on `:hover`, `:active`,
+  `:checked`, `:target`, typing, or `:focus` of anything but a scroll box; a
+  script animation (`animate()`), or a style a script moves on a timer or per
+  frame (`setInterval`, `requestAnimationFrame`); SMIL (`set`, `animate`,
+  `animateMotion`, `animateTransform`); scroll-driven and view-timeline
+  animations; a view transition; `scroll-behavior: smooth`; an animation in a
+  shadow root; a `marquee`; an animated image of any format, a video, a canvas.
 - **Skin**: `same`: the page carries `doctype-skin.css` verbatim, from its
   first `skin:` line to the `skin end` line after it, indentation and CR
   aside.
