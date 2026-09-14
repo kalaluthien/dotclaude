@@ -83,3 +83,9 @@ watch the named check fail, restore by undoing that one edit. Break each
 branch separately and assert on what the break changes, never on a neighbour
 it leaves alone, and never on an exit status alone: a crash and a refusal
 share one.
+
+Every refusal branch ships with named ALLOW cases for the ordinary shapes
+beside it — the neighbouring directory, the read-only verb, the quoted
+string that merely mentions the guarded phrase — and a guard change replays a
+corpus of real allowed commands, because a suite named only for refusals stays
+green while the guard refuses too much.

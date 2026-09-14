@@ -31,6 +31,11 @@ description: Running the Alloy Analyzer headless; read before invoking the jar.
 The index line: `- [Title](file.md) — hook`, where the hook says when to read
 it.
 
+Once a rule is promoted into a tree the session loads, the memory keeps only
+what the tree does not state -- the owner's words with their date, the concrete
+case, a number's derivation -- and carries no pointer back to the tree, because
+a pointer is a second reader that drifts and the tree is loaded anyway.
+
 ## What is refused
 
 `~/.claude/hooks/check-memtype.py` runs on every `Write` or `Edit` into a pool
