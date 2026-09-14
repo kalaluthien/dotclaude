@@ -32,8 +32,9 @@ The doctype is how a document explains, the medium where it is read.
   tokens on `:root` redefined under each or by system colours.
 - **Phone width**: no sideways scroll at 320 px; a 16 px gutter; only tables,
   diagrams and code scroll, in their own box.
-- **Legible**: no text under 11 px at 320 px, Apple's smallest; an SVG keeps
-  its viewBox width and scrolls.
+- **Legible**: no text under 11 px at 320 px, Apple's smallest, and no Hangul
+  or Han under 12 px (diagram-design); an SVG keeps its viewBox width and
+  scrolls.
 - **Semantic markup**: `main`, `nav`, `section`, `figure`, headings in order;
   native elements before ARIA.
 - **Accessible**: contrast 4.5:1, visible focus, every control
@@ -72,5 +73,3 @@ The doctype is how a document explains, the medium where it is read.
   box levels shown; the source named; one concern (arc42, Kruchten).
 - **Symbols**: one per concept, few types, each suggesting its meaning
   (Moody).
-- **Locality**: a relational diagram only where adjacency shows the relation,
-  else a list (Larkin & Simon).
