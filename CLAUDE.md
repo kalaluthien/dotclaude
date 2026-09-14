@@ -123,7 +123,7 @@ A "new discovery" is a false positive until it clears intended implementation, m
 
 Controls: a control rides on the heading or the element it acts on, never a row of its own; a refresh is a heading-aligned icon with its own loading state, replacing the cached reading only when the new one arrives.
 
-State: a state change moves nothing. The verdict travels in colour, an icon or a word; what exactly failed goes to the tooltip; one fact takes one form in every context.
+State: a state change moves nothing. The verdict travels in colour, an icon or a word; what exactly failed is one tap away; one fact takes one form in every context.
 
 Content: labels, values, empty states and errors, no prose about how the surface behaves. A glyph earns its place only when nothing beside it says the same, and a short message takes no box.
 
