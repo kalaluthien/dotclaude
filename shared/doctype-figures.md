@@ -9,9 +9,10 @@ What a figure on an `artifact` page must be, [doctype](doctype.md) § Media.
   starts at zero (Tufte).
 - **Channel**: a compared quantity on the highest channel: position, length,
   angle, area, hue; no pie where a bar would do (Cleveland & McGill).
-- **Colour**: hue for category, one hue's intensity for quantity, colour only
-  for meaning, no red–green pair; on a change, only new, changed, gone
-  (Few, pr-lens).
+- **Colour**: six at most, ground included; hue for category, one hue's
+  intensity for quantity, colour only for meaning, the accent for links and
+  focus alone; emphasis differs in lightness too, so greyscale keeps it; on a
+  change, only new, changed, gone (Bertin, Ware, Few, pr-lens).
 - **Shared axes**: compared series side by side, one scale (Tufte).
 - **Title and key**: a title naming type and scope; a key for every colour,
   mark, shape and line style; every element named and typed; every line

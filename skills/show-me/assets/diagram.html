@@ -4,7 +4,7 @@
      with nothing to say is removed, never left as a placeholder.
      Layout, the one home of these rules for every show-me SVG:
      - every coordinate, width and height divisible by 4;
-     - at most 9 boxes and 12 arrows, accent on 2 of them; over that, an
+     - at most 9 boxes and 12 arrows, emphasis on 2 of them; over that, an
        overview and a detail;
      - boxes grouped by how the reader thinks of the system, never by the
        folder tree;
@@ -50,14 +50,14 @@
   svg { display: block; }
   svg .box { fill: var(--box); stroke: var(--fg); }
   svg .edge { stroke: var(--muted); fill: none; }
-  svg .edge.hero { stroke: var(--accent); }
+  svg .edge.hero { stroke: var(--fg); stroke-width: 2; }
   svg .tip { fill: var(--muted); }
-  svg .tip.hero { fill: var(--accent); }
+  svg .tip.hero { fill: var(--fg); }
   svg .mask { fill: var(--bg); }
   dl.key { display: grid; grid-template-columns: auto 1fr; gap: .25rem .75rem; margin: 1rem 0; }
   dl.key dt { font-weight: 600; }
   dl.key dd { margin: 0; }
-  .read { font-size: 1.1rem; border-inline-start: 3px solid var(--accent); padding-inline-start: .75rem; }
+  .read { font-size: 1.1rem; border-inline-start: 3px solid var(--fg); padding-inline-start: .75rem; }
   footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
 </style>
 
@@ -74,7 +74,7 @@
         <marker id="{{slug}}-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
           <path class="tip" d="M0,0 L10,5 L0,10 z"/>
         </marker>
-        <marker id="{{slug}}-arrow-hero" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+        <marker id="{{slug}}-arrow-hero" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
           <path class="tip hero" d="M0,0 L10,5 L0,10 z"/>
         </marker>
       </defs>
