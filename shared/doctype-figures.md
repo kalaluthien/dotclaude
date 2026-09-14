@@ -9,7 +9,8 @@ What a figure on an `artifact` page must be, [doctype](doctype.md) § Media.
   starts at zero; an average shows its spread, a change its noise, unequal
   groups as rates (Tufte, Cairo).
 - **Channel**: a compared quantity on the highest channel: position, length,
-  angle, area, hue; no pie where a bar would do (Cleveland & McGill).
+  angle, area, hue; parts compared on one common scale, never stacked or a pie; a
+  gap plotted as the gap (Cleveland & McGill).
 - **Colour**: six at most, ground included; hue for category, one hue's
   intensity for quantity, colour only for meaning, the accent for links and
   focus alone; emphasis differs in lightness too, so greyscale keeps it; on a
