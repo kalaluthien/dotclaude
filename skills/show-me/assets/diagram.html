@@ -14,6 +14,8 @@
        and after;
      - a key row naming what the figure left out: merged, collapsed or
        dropped;
+     - a line inferred rather than read from the source is `edge inferred`,
+       dashed, with its key row;
      - ids prefixed per figure, `{{slug}}-title`: inline SVGs share one id
        space. -->
 <style>
@@ -51,6 +53,7 @@
   svg .box { fill: var(--box); stroke: var(--fg); }
   svg .edge { stroke: var(--muted); fill: none; }
   svg .edge.hero { stroke: var(--fg); stroke-width: 2; }
+  svg .edge.inferred { stroke-dasharray: 4 4; }
   svg .tip { fill: var(--muted); }
   svg .tip.hero { fill: var(--fg); }
   svg .mask { fill: var(--bg); }
@@ -93,6 +96,7 @@
       <dl class="key">
         <dt>box</dt><dd>{{what a box is}}</dd>
         <dt>arrow</dt><dd>{{what a line means, read in its direction}}</dd>
+        <dt>dashed</dt><dd>{{a line inferred, not read from the source}}</dd>
         <dt>not drawn</dt><dd>{{what was merged, collapsed or dropped}}</dd>
       </dl>
     </figcaption>

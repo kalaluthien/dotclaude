@@ -14,9 +14,10 @@ What a figure on an `artifact` page must be, [doctype](doctype.md) § Media.
   focus alone; emphasis differs in lightness too, so greyscale keeps it; on a
   change, only new, changed, gone (Bertin, Ware, Few, pr-lens).
 - **Shared axes**: compared series side by side, one scale (Tufte).
-- **Title and key**: a title naming type and scope; a key for every colour,
-  mark, shape and line style; every element named and typed; every line
-  one-way, labelled with intent (C4).
+- **Title and key**: a title naming type and scope; a label on or beside each
+  mark, a key only for what cannot be labelled; a unit on every scale; every
+  element named and typed; every line one-way, labelled with intent, dashed
+  where inferred rather than read (C4, Few, Tufte).
 - **Nothing hidden**: boundary partners, dependency directions, protocols and
   box levels shown; the source named; one concern (arc42, Kruchten).
 - **Symbols**: one per concept, few types, each suggesting its meaning
