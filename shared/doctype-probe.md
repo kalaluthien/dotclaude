@@ -12,7 +12,7 @@ included.
 
 ```sh
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-FLOOR=$(grep -o 'under [0-9]* px' ~/.claude/shared/doctype.md | tr -dc '0-9\n' | paste -sd, -)
+FLOOR=$(grep -o 'under [0-9]* px' ~/.claude/shared/doctype-page.md | tr -dc '0-9\n' | paste -sd, -)
 SKIN=~/.claude/shared/doctype-skin.css
 mkdir -p <dir>/doctype-probe        # the redirects below fail without it
 tr -d '\r' < "$SKIN" | sed 's/^[[:space:]]*//' >| <dir>/doctype-probe/skin.css   # empty when SKIN is missing
@@ -56,7 +56,7 @@ is clicked first, then every `details` opened, and only then is the rest read.
 - **Legibility**: the smallest text, its font size times the scale of the SVG
   it sits in, is at least its script's floor: a text node holding Hangul or
   Han the second, every other the first, both read from
-  `~/.claude/shared/doctype.md` § Page: Legible. A floor of other than two
+  `~/.claude/shared/doctype-page.md`: Legible. A floor of other than two
   numbers means a line was not found or was added, and fails; a missing
   `doctype-skin.css` reads `differs`. Both happen from a checkout whose
   `shared/` the install does not have yet: point `FLOOR` and `SKIN` at the
@@ -82,7 +82,7 @@ is clicked first, then every `details` opened, and only then is the rest read.
   `@namespace` aside); and what the page fetched before `load` (Resource
   Timing, which lists no `file://` fetch). The exemptions and the empty-value
   skip test the text as JS `trim()` leaves it, not the URL the browser parses;
-  a URL that does not parse counts. § Page: One file fetches nothing. Any
+  a URL that does not parse counts. `doctype-page.md`: One file fetches nothing. Any
   other shape is not read: an `xlink:href`, an `feImage` `href`, a legacy
   `background` attribute, a `link` `imagesrcset`, an SVG presentation
   attribute's `url()`, an SVG `script` `href`, a shadow root's content, a
