@@ -48,6 +48,12 @@
 <main>
   <h1>{{question}}</h1>
 
+  <section aria-labelledby="pick" class="pick">
+    <h2 id="pick">{{Pick: the option, or what the difference means}}</h2>
+    <p>{{why, in the yardstick's terms}}</p>
+    <p>Would change if: {{the fact that would flip it}}</p>
+  </section>
+
   <section aria-labelledby="yardstick">
     <h2 id="yardstick">Yardstick</h2>
     <ol>
@@ -70,12 +76,6 @@
       </table>
     </div>
     <p class="key"><strong>Bold</strong>: differs between options; plain: the same.</p>
-  </section>
-
-  <section aria-labelledby="pick" class="pick">
-    <h2 id="pick">{{Pick: the option, or what the difference means}}</h2>
-    <p>{{why, in the yardstick's terms}}</p>
-    <p>Would change if: {{the fact that would flip it}}</p>
   </section>
 
   <footer>Sources: <a href="{{url}}">{{source}}</a></footer>

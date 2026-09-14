@@ -64,6 +64,8 @@
 <main>
   <h1>{{type}}: {{scope}}</h1>
 
+  <p class="read">{{the one thing to read off it}}</p>
+
   <figure tabindex="0" aria-labelledby="{{slug}}-title">
     <svg width="520" height="192" viewBox="0 0 520 192" role="img" aria-labelledby="{{slug}}-title" aria-describedby="{{slug}}-desc">
       <title id="{{slug}}-title">{{type}}: {{scope}}</title>
@@ -95,8 +97,6 @@
       </dl>
     </figcaption>
   </figure>
-
-  <p class="read">{{the one thing to read off it}}</p>
 
   <footer>Source: <a href="{{url}}">{{path}}</a> at <code>{{sha}}</code></footer>
 </main>
