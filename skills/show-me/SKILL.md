@@ -1,6 +1,6 @@
 ---
 name: show-me
-description: Explains a structure, concept, repository, PR, scenario or a difference the facts settle as a diagram, a narrative or a comparison. Use when the user asks to have a model, lifecycle, flow, repository, PR or measured result explained, shown or set side by side - 설명해줘, 보여줘, 그림으로, 구조화해서, 시각화, 비교해줘 - or types /show-me. Not for rewording the last reply, a status list, or a decision the user still has to make (grill-me).
+description: Use when the answer is settled and must be shown; not when it is still the user's to make (grill-me).
 ---
 
 # show-me

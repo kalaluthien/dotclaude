@@ -1,6 +1,6 @@
 ---
 name: grill-me
-description: Interviews the user until a target document is filled - a campaign issue, a sub-issue, a proposal or a decision - each blank a question and each answer attacked before it is written. Use when the user wants an idea or plan stress-tested or a document drafted by interview - 검토해줘 이 아이디어, 둘 다 어찌하면 좋을까, grill me. Not for reviewing code (code-review) or explaining or comparing what the facts already settle (show-me).
+description: Use when the answer is still the user's to make; not when the facts settle it (show-me) or the code is under review (code-review).
 ---
 
 # grill-me
