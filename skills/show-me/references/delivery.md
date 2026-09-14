@@ -9,7 +9,7 @@ Where a show-me result goes once its doctype and medium are settled.
 - **GitHub issue**: markdown as an issue body or comment, filed by the
   repository's own procedure where it has one, else `gh issue create`.
 - **Artifact**: the page is written to `show-me-<slug>.html` in the
-  [probe](probe.md)'s `<dir>`, passes the probe, then goes to the `Artifact`
+  [probe](../../../shared/doctype-probe.md)'s `<dir>`, passes the probe, then goes to the `Artifact`
   tool and follows that tool's rules. When the tool is absent from the
   session, say so and `open` the file.
 - **Repository page**: the page is written in place, where the repository
