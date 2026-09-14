@@ -24,3 +24,21 @@ paragraph then enumerates. Delete the numeral, keep the enumeration.
 Where a count genuinely is the point — a measurement, a budget, a limit — put
 it where something consumes it (a constant a check reads, a test's expected
 value) and let the prose point at that, so the number has exactly one home.
+
+## A heading on a change says what is true only after it
+
+A heading that could have been true before the change names the subject, not
+the change: the reader learns nothing from it they did not know.
+
+Bad: "The session guard"
+Good: "The guard reads the session's role before a write"
+
+## Write for a smart twelve-year-old
+
+Short words and one idea per sentence; a term the reader has not met is
+defined where it first appears, or cut. Intelligence is assumed, context is
+not.
+
+Bad: "The claim is atomic via create-ref semantics."
+Good: "Two sessions cannot take one sub-issue: GitHub refuses the second
+branch."

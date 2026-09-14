@@ -8,7 +8,8 @@ description: Explains a structure, concept, repository, PR, scenario or a differ
 Show the topic instead of describing it: the one named, else whatever the
 conversation is about. Its sentences beside code, a figure or a spec follow
 [prose](references/prose.md) in either medium. A new rule on drawing is filed
-in `~/.claude/types/doctype.md`, one on writing in `references/`.
+in `~/.claude/types/doctype.md`, one on an SVG's layout in
+`assets/diagram.html`, one on writing in `references/`.
 
 ## The steps
 
@@ -17,7 +18,10 @@ in `~/.claude/types/doctype.md`, one on writing in `references/`.
    parts in that order.
 2. **Medium**: doctype.md § Media picks it. Markdown takes the chat forms
    below; an artifact starts from `assets/<doctype>.html`.
-3. **Ending**: [delivery](references/delivery.md).
+3. **Plan**: state in one line the doctype, each figure and the paragraph
+   beside it, and what the budget in `assets/diagram.html` forces out; then
+   write.
+4. **Ending**: [delivery](references/delivery.md).
 
 ## The chat forms
 
