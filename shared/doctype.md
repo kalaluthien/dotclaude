@@ -29,7 +29,7 @@ The doctype is how a document explains, the medium where it is read.
 - **One file**: its own JS, SVG, CSS, fonts and images inline, nothing
   fetched; opens from `file://`; under 16 MiB (bencho).
 - **Themes**: `prefers-color-scheme` and `[data-theme]` both followed, by
-  tokens on `:root` redefined under each or by system colours.
+  the tokens of `doctype-skin.css`, which every page carries verbatim.
 - **Phone width**: no sideways scroll at 320 px; a 16 px gutter; only tables,
   diagrams and code scroll, in their own box.
 - **Legible**: no text under 11 px at 320 px, Apple's smallest, and no Hangul

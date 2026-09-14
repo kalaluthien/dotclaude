@@ -8,6 +8,7 @@
        shows, as an issue writes it.
      - Figures follow the layout rules in `diagram.html`'s comment. -->
 <style>
+  /* skin: ~/.claude/shared/doctype-skin.css, carried verbatim by every page template down to "skin end"; the probe compares */
   :root {
     color-scheme: light dark;
     --bg: #fbfaf7; --fg: #1d1d1f; --muted: #5b5f66; --line: #cfccc4;
@@ -19,16 +20,23 @@
       --box: #222427; --accent: #8fb4ff;
     }
   }
+  :root[data-theme="light"] { color-scheme: light; }
   :root[data-theme="dark"] {
+    color-scheme: dark;
     --bg: #17181a; --fg: #ececec; --muted: #a3a7ae; --line: #45484d;
     --box: #222427; --accent: #8fb4ff;
   }
   body { background: var(--bg); color: var(--fg); margin: 0;
-         font: 16px/1.55 system-ui, sans-serif; padding-block: 24px; padding-inline: 16px; }
+         font: 16px/1.5 system-ui, sans-serif; padding-block: 24px; padding-inline: 16px; }
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.15rem; }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* skin end */
   main { max-width: 48rem; margin: 0 auto; }
-  h1 { font-size: 1.5rem; margin: 0 0 .5rem; }
+  h1 { margin: 0 0 .5rem; }
   .thesis { font-size: 1.15rem; margin: 0 0 1.5rem; }
-  h2 { font-size: 1.15rem; margin: 2rem 0 .5rem; }
+  h2 { margin: 2rem 0 .5rem; }
   figure { margin: 0; overflow-x: auto; }
   svg { display: block; }
   svg .box { fill: var(--box); stroke: var(--fg); }
@@ -41,8 +49,6 @@
   .key { color: var(--muted); font-size: .9rem; }
   .absent { color: var(--muted); }
   footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
-  a { color: var(--accent); }
-  a:focus-visible, summary:focus-visible, figure:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </style>
 
 <main>
