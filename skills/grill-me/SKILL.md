@@ -13,7 +13,7 @@ target the ask does not name is a proposal.
 | target | its blanks | the result |
 | --- | --- | --- |
 | a campaign issue, a sub-issue | the repository's own template, found through its `AGENTS.md` and read now, never copied | its markdown body |
-| a proposal, a single idea being one weighed against leaving things as they are | a `comparison`'s parts, [doctype](../../types/doctype.md) § Doctypes | markdown |
+| a proposal, a single idea being one weighed against leaving things as they are | a `comparison`'s parts, [doctype](../../shared/doctype.md) § Doctypes | markdown |
 | a decision | a numbered veto table: `#`, ruling, reason, one line each | markdown |
 
 A repository's template or rule decides the rest of a document -- a title, a
@@ -51,7 +51,7 @@ verbatim; one equal to its recommendation accepts it, an empty one leaves the
 question open. The attacks follow in chat.
 
 Before publishing, load it in a 320 px iframe in headless Chrome: no sideways
-scroll, no text under the Legible floor of `~/.claude/types/doctype.md`, or the
+scroll, no text under the Legible floor of `~/.claude/shared/doctype.md`, or the
 checkout's copy while the install lacks it, and the button fills the block.
 
 ## The ending

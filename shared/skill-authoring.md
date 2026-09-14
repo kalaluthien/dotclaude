@@ -36,7 +36,8 @@ applies, shaped to their material:
 | distinct situations | a catalogue: the situation in one column, the action it selects in the next |
 
 A catalogue row that selects a whole mode links a file in `references/`
-holding that mode; the row keeps the selector, the reference keeps the body. A
+holding that mode, or in `~/.claude/shared/` when another skill or hook reads
+it; the row keeps the selector, the reference keeps the body. A
 reference no row names is never read, and one over 100 lines opens with a
 summary.
 

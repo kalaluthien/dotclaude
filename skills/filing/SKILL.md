@@ -23,9 +23,9 @@ mismatch.
 | a deleted thing is rebuilt | `archive-<subject>` memory | [memory](references/memory.md) |
 | the practice changes, on any repository | `~/.claude/CLAUDE.md`, the section naming the work | one instruction plus one clause of reason |
 | a repository's build or test changes | its `AGENTS.md` | same |
-| a procedure changes | a skill | [skills](references/skills.md) |
-| a machine can decide it | a script or hook, with its failing case | [scripts](references/scripts.md) |
-| a delegate's role changes | `agents/<name>.md` | frontmatter as a skill's, [skills](references/skills.md) |
+| a procedure changes | a skill | [skill-authoring](../../shared/skill-authoring.md) |
+| a machine can decide it | a script or hook, with its failing case | [hook-authoring](../../shared/hook-authoring.md) |
+| a delegate's role changes | `agents/<name>.md` | frontmatter as a skill's, [skill-authoring](../../shared/skill-authoring.md) |
 | a product's norm changes | `spec/` markdown | the repository's own spec rules |
 | how to write, draw or explain changes | the `show-me` skill | where its body files it |
 
