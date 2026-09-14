@@ -80,12 +80,13 @@ is clicked first, then every `details` opened, and only then is the rest read.
   the style sheets, imported ones included, and in `style` attributes, read as
   the browser parsed them (`cssText`: no comments, strings skipped,
   `@namespace` aside); and what the page fetched before `load` (Resource
-  Timing, which lists no `file://` fetch). An empty value is skipped; a URL
-  that does not parse counts. § Page: One file fetches nothing. Any other
-  shape is not read: an `xlink:href`, an `feImage` `href`, a legacy
+  Timing, which lists no `file://` fetch). The exemptions and the empty-value
+  skip test the text as JS `trim()` leaves it, not the URL the browser parses;
+  a URL that does not parse counts. § Page: One file fetches nothing. Any
+  other shape is not read: an `xlink:href`, an `feImage` `href`, a legacy
   `background` attribute, a `link` `imagesrcset`, an SVG presentation
-  attribute's `url()`, an SVG `script` `href`, a shadow root's content, a URL
-  a script builds, a nested frame's own fetches.
+  attribute's `url()`, an SVG `script` `href`, a shadow root's content, a
+  `meta` refresh, a URL a script builds, a nested frame's own fetches.
 - **Skin**: `same`: the page carries `doctype-skin.css` verbatim, from its
   first `skin:` line to the `skin end` line after it, indentation and CR
   aside.
