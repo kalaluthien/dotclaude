@@ -2,8 +2,8 @@
 <!-- The `comparison` template, the artifact medium: `~/.claude/shared/doctype.md` § Doctypes
      gives the parts, `doctype-page.md` and `doctype-figures.md` the rules.
      Replace every {{...}}; one row per option, one column per criterion; bold
-     a cell only where options differ, and leave a tie plain, as an issue's
-     table does. -->
+     only the cells the verdict turns on, as an issue's table does; where
+     every cell differs, bold marks none of them. -->
 <style>
   /* skin: ~/.claude/shared/doctype-skin.css, carried verbatim by every page template down to "skin end"; the probe compares */
   :root {
@@ -70,12 +70,12 @@
           <tr><th scope="col">Option</th><th scope="col">{{criterion 1}}</th><th scope="col">{{criterion 2}}</th></tr>
         </thead>
         <tbody>
-          <tr><th scope="row">{{option A}}</th><td>{{value}}</td><td><strong>{{differing value}}</strong></td></tr>
-          <tr><th scope="row">{{option B}}</th><td>{{value}}</td><td><strong>{{differing value}}</strong></td></tr>
+          <tr><th scope="row">{{option A}}</th><td>{{value}}</td><td><strong>{{value the verdict turns on}}</strong></td></tr>
+          <tr><th scope="row">{{option B}}</th><td>{{value}}</td><td><strong>{{value the verdict turns on}}</strong></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="key"><strong>Bold</strong>: differs between options; plain: the same.</p>
+    <p class="key"><strong>Bold</strong>: the verdict turns on it.</p>
   </section>
 
   <footer>Sources: <a href="{{url}}">{{source}}</a></footer>

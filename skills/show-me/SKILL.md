@@ -68,7 +68,7 @@ src/
 ```
 
 **A table** for a comparison: a row per option, a column per criterion,
-bold on the cells that differ, and a line under it saying so.
+bold only on the cells the verdict turns on, and a line under it saying so.
 
 **A diff** when the point is what changes and the surrounding shape already
 exists. The diff takes the shape of whichever form above fits the topic:
