@@ -4,8 +4,8 @@
      `article` per question; a part with nothing to say is removed.
      - The nav and each chapter's "N of M" are derived from `main article`
        by the script at the end; never write them.
-     - Evidence: one `mark` per note, in the same order; the numbers are a
-       CSS counter, never typed.
+     - Evidence: the code plain, then one note per token, `token`: what it
+       shows, as an issue writes it.
      - Figures follow the layout rules in `diagram.html`'s comment. -->
 <style>
   :root {
@@ -37,11 +37,7 @@
   .n { color: var(--muted); font-size: .9rem; margin: 0 0 .5rem; }
   pre { overflow-x: auto; background: var(--box); border: 1px solid var(--line);
         padding: .75rem; font: 13px/1.45 ui-monospace, monospace; }
-  details { margin-top: .5rem; counter-reset: e; }
-  mark { counter-increment: e; background: none; color: inherit;
-         border-bottom: 2px solid var(--accent); }
-  mark::after { content: counter(e); font-size: 11px; vertical-align: super; color: var(--accent); }
-  mark:target { outline: 2px solid var(--accent); }
+  details { margin-top: .5rem; }
   .key { color: var(--muted); font-size: .9rem; }
   .absent { color: var(--muted); }
   footer { color: var(--muted); font-size: .9rem; margin-top: 2rem; }
@@ -80,8 +76,8 @@
     <p>{{the answer, in plain words}}</p>
     <details>
       <summary>Evidence: <code>{{path:line}}</code></summary>
-      <pre><code>{{code before}}<mark id="ch1-e1">{{the token the note is about}}</mark>{{code after}}</code></pre>
-      <ol class="notes"><li><a href="#ch1-e1">{{what that token shows}}</a></li></ol>
+      <pre><code>{{the code}}</code></pre>
+      <ol><li><code>{{token}}</code>: {{what it shows}}</li></ol>
     </details>
   </article>
 

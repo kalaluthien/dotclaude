@@ -9,7 +9,7 @@ The doctype is how a document explains, the medium where it is read.
 | --- | --- | --- | --- |
 | `diagram` | in one picture | what it is made of, how its parts connect | the title; the figure; its key; the one thing to read off it; the source |
 | `narrative` | in the order understanding builds | how it works, why it is so | a one-line thesis; a map of the whole; chapters, one question each with its evidence, never in file or commit order; a reason the source omits, called absent; the source at a sha |
-| `comparison` | under one yardstick | which one, or what differs | the question; the yardstick, fixed first; each option against it, differences marked and keyed, ties plain; the verdict and what would change it |
+| `comparison` | under one yardstick | which one, or what differs | the question; the yardstick, fixed first; each option against it, differences in bold and keyed, ties plain; the verdict and what would change it |
 
 - **The question picks, not the subject**: a repository's structure is a
   diagram, what a PR changed a comparison, why a design is so a narrative.
