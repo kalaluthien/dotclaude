@@ -21,7 +21,7 @@ in `~/.claude/shared/doctype.md`, one on an SVG's layout in
 3. **Plan**: state in one line the doctype, each figure and the paragraph
    beside it, and what the budget in `assets/diagram.html` forces out; then
    write.
-4. **Ending**: [delivery](references/delivery.md).
+4. **Ending**: [delivery](../../shared/doctype-delivery.md).
 
 ## The chat forms
 

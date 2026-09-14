@@ -55,7 +55,5 @@ controls count includes the button.
 
 ## The ending
 
-Unless the ask says, ask once with `AskUserQuestion`: a GitHub issue, an
-artifact, or chat; not when it is obvious. An issue follows the repository's
-filing procedure, else `gh issue create`; an artifact is show-me's, invoked
-with the document; chat gets markdown.
+[delivery](../../shared/doctype-delivery.md); an artifact or a repository
+page is show-me's, invoked with the document.
