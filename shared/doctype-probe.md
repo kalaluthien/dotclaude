@@ -25,7 +25,7 @@ while(n=t.nextNode()){p=n.parentElement;if(!n.data.trim()||/^(script|style|title
 d.querySelectorAll('[aria-labelledby],[aria-describedby]').forEach(function(g){((g.getAttribute('aria-labelledby')||'')+' '+(g.getAttribute('aria-describedby')||'')).trim().split(/\s+/).forEach(function(k){if(d.querySelectorAll('[id="'+k+'"]').length!=1)i++})});
 var H=function(u){u=(u||'').trim();if(!u||u[0]=='#'||/^(data|about|blob):/i.test(u))return;try{u=new URL(u,d.baseURI).href}catch(_){}U[u]=1},C=function(t){t.replace(/url\(\s*(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|([^)\s]*))\s*\)|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/gi,function(o,a,b,c){if(/^url/i.test(o))H((a||b||c||'').replace(/\\(.)/g,'$1'))})},R=function(l){[].forEach.call(l,function(u){if(u.type==10)return;if(u.type==3){H(u.href);try{R(u.styleSheet.cssRules)}catch(_){}}C(u.cssText);if(u.cssRules)R(u.cssRules)})};
 w.performance.getEntriesByType('resource').forEach(function(u){H(u.name)});[].forEach.call(d.styleSheets,function(g){try{R(g.cssRules)}catch(_){}});
-d.querySelectorAll('[src],[srcset],[poster],object[data],link[href],image[href],use[href],[style]').forEach(function(g){H(g.getAttribute('src'));H(g.getAttribute('poster'));if(/^(link|image|use)$/i.test(g.tagName))H(g.getAttribute('href'));if(g.tagName=='OBJECT')H(g.getAttribute('data'));(g.getAttribute('srcset')||'').replace(/[\s,]*(\S+)[^,]*/g,function(o,u){H(u.replace(/,+$/,''))});C(g.getAttribute('style')||'')});q=Object.keys(U).length;
+d.querySelectorAll('[src],[srcset],[poster],object[data],link[href],image[href],use[href],[style]').forEach(function(g){H(g.getAttribute('src'));H(g.getAttribute('poster'));if(/^(link|image|use)$/i.test(g.tagName))H(g.getAttribute('href'));if(g.tagName=='OBJECT')H(g.getAttribute('data'));(g.getAttribute('srcset')||'').replace(/[\s,]*(\S*[^\s,])(?:,+|[^,]*)/g,function(o,u){H(u)});if(g.style)C(g.style.cssText)});q=Object.keys(U).length;
 var r=e.scrollWidth+'/'+e.clientWidth+' '+s.map(function(u){return u<1/0?u.toFixed(1)+'px':'-'}).join(' '),k=e.scrollWidth==e.clientWidth&&F.length==2&&s[0]>=F[0]&&s[1]>=F[1]&&!i&&!q&&K=='same';
 d.querySelectorAll('body *').forEach(function(g){if(/auto|scroll/.test(w.getComputedStyle(g).overflowX)&&g.scrollWidth>g.clientWidth){y++;g.focus();if(g.tabIndex<0||w.getComputedStyle(g).outlineStyle=='none')x++}});
 d.querySelectorAll('svg').forEach(function(g){var o=g.getBoundingClientRect(),u=0;g.querySelectorAll('rect,circle,ellipse,line,polyline,polygon,path,text,image,use').forEach(function(q){var b=q.getBoundingClientRect(),a=0,j=0,M,h;if(q.closest('defs,marker,clipPath,mask,symbol,pattern')||!b.width&&!b.height)return;
@@ -74,13 +74,18 @@ is clicked first, then every `details` opened, and only then is the rest read.
 - **Id**: 0 `aria-labelledby` or `aria-describedby` ids naming anything but
   exactly one element; two inline SVGs share one id space.
 - **Ext**: 0 URLs, other than `data:`, `about:`, `blob:` or a `#` fragment,
-  among: every `src`, `srcset`, `poster` and `object` `data`; the `href` of
-  every `link` and every SVG `image` and `use`; every `url()` and `@import`
-  in the style sheets, imported ones included, and in `style` attributes,
-  strings aside; and what the page fetched before `load` (Resource Timing,
-  which lists no `file://` fetch). A URL that does not parse counts. § Page:
-  One file fetches nothing. Any other shape is not read: an `xlink:href`, an
-  `feImage` `href`, a URL a script builds, a nested frame's own fetches.
+  among: every `src`, `poster` and `object` `data`; every `srcset`
+  candidate, split as the spec splits it; the `href` of every `link` and
+  every SVG `image` and `use`; every `url()` and `@import` in the style
+  sheets, imported ones included, and in `style` attributes, read as the
+  browser parsed them (`cssText`: no comments, strings skipped, `@namespace`
+  aside); and what the page fetched before `load` (Resource Timing, which
+  lists no `file://` fetch). An empty value is skipped; a URL that does not
+  parse counts. § Page: One file fetches nothing. Any other shape is not
+  read: an `xlink:href`, an `feImage` `href`, a legacy `background`
+  attribute, a `link` `imagesrcset`, an SVG presentation attribute's
+  `url()`, an SVG `script` `href`, a shadow root's content, a URL a script
+  builds, a nested frame's own fetches.
 - **Skin**: `same`: the page carries `doctype-skin.css` verbatim, from its
   first `skin:` line to the `skin end` line after it, indentation and CR
   aside.
