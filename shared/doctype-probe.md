@@ -23,8 +23,8 @@ d.querySelectorAll('[aria-labelledby],[aria-describedby]').forEach(function(q){(
 d.querySelectorAll('[src],link[rel~=stylesheet]').forEach(function(u){if(!/^data:/i.test(u.getAttribute('src')||u.getAttribute('href')||''))q++});
 var F=location.search.slice(1).split(','),c=d.querySelectorAll('button,summary'),r=e.scrollWidth+'/'+e.clientWidth+' '+s.map(function(u){return u<1/0?u.toFixed(1)+'px':'-'}).join(' '),k=e.scrollWidth==e.clientWidth&&s[0]>=F[0]&&s[1]>=F[1]&&!i&&!q&&F[2]=='same';
 c.forEach(function(b){var h=e.outerHTML;b.click();if(e.outerHTML==h)x++});var y=c.length;
-d.querySelectorAll('figure').forEach(function(g){if(g.scrollWidth>g.clientWidth){y++;g.focus();if(g.tabIndex<0||w.getComputedStyle(g).outlineStyle=='none')x++}});
 d.querySelectorAll('details').forEach(function(q){q.open=true});
+d.querySelectorAll('body *').forEach(function(g){if(/auto|scroll/.test(w.getComputedStyle(g).overflowX)&&g.scrollWidth>g.clientWidth){y++;g.focus();if(g.tabIndex<0||w.getComputedStyle(g).outlineStyle=='none')x++}});
 d.querySelectorAll('svg').forEach(function(g){var o=g.getBoundingClientRect(),u=0;g.querySelectorAll('rect,circle,ellipse,line,polyline,polygon,path,text,image,use').forEach(function(q){var b=q.getBoundingClientRect(),a=0,j=0,M,h;if(q.closest('defs,marker,clipPath,mask,symbol,pattern')||!b.width&&!b.height)return;
 if(q.tagName=='text'){X.font=w.getComputedStyle(q).font;M=X.measureText(q.textContent);h=b.height/(M.fontBoundingBoxAscent+M.fontBoundingBoxDescent);a=(M.fontBoundingBoxAscent-M.actualBoundingBoxAscent)*h;j=(M.fontBoundingBoxDescent-M.actualBoundingBoxDescent)*h}
 if(b.left<o.left-.5||b.right>o.right+.5||b.top+a<o.top-.5||b.bottom-j>o.bottom+.5)u=1});v+=u});document.body.dataset.r=r+' '+x+'/'+y+' clip '+v+' id '+i+' ext '+q+' skin '+F[2]+' floor '+F.slice(0,2)+(k&&!x&&!v?' pass':' FAIL')};f.src=location.hash.slice(1)</script>
@@ -55,8 +55,9 @@ It prints one line per page: the page, then `<scroll>/<client> <smallest>px
   `shared/` the install does not have yet: point `FLOOR` and `SKIN` at the
   checkout's copies there.
 - **Controls**: the dead count is 0: every button and summary, clicked once,
-  changed the page, and every figure that scrolls sideways has a `tabindex`
-  and no `outline: none` when focused. Chrome focuses a scroller without a
+  changed the page, and every box that scrolls sideways -- a figure, a
+  table's box, a `pre` -- has a `tabindex` and no `outline: none` when
+  focused, read with every `details` open. Chrome focuses a scroller without a
   `tabindex`; Safari does not.
 - **Clip**: 0 SVGs with a shape or a text past the SVG's own box on screen,
   which is what it shows whatever its `viewBox` says; every `details` is
