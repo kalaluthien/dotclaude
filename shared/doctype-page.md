@@ -14,7 +14,7 @@ What an `artifact` page must be, [doctype](doctype.md) § Media.
 - **Semantic markup**: `main`, `nav`, `section`, `figure`, headings in order;
   native elements before ARIA.
 - **Accessible**: contrast 4.5:1, visible focus, every control
-  keyboard-operable (WCAG 2.2).
+  keyboard-operable and 24 px or spaced so (WCAG 2.2).
 - **Actions on the page**: next actions are the page's own controls, never a
   fixed URI or an out-of-band instruction (Fielding).
 - **One batch**: collected input goes back as one batch, each item keyed to
