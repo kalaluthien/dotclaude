@@ -8,13 +8,13 @@ description: Use when the answer is settled and must be shown; not when it is st
 Show the topic instead of describing it: the one named, else whatever the
 conversation is about. Its sentences beside code, a figure or a spec follow
 [prose](references/prose.md) in either medium. A new rule on drawing is filed
-in `~/.claude/types/doctype.md`, one on an SVG's layout in
+in `~/.claude/shared/doctype.md`, one on an SVG's layout in
 `assets/diagram.html`, one on writing in `references/`.
 
 ## The steps
 
 1. **Doctype**: the question the ask puts picks a `diagram`, a `narrative`
-   or a `comparison`, [doctype](../../types/doctype.md) § Doctypes; build its
+   or a `comparison`, [doctype](../../shared/doctype.md) § Doctypes; build its
    parts in that order.
 2. **Medium**: doctype.md § Media picks it. Markdown takes the chat forms
    below; an artifact starts from `assets/<doctype>.html`.

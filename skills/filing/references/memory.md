@@ -11,7 +11,7 @@ replacement over a fresh read.
 ## Name
 
 Name it `<prefix>-<subject>`, the prefix one of
-[`~/.claude/types/memtype.md`](../../../types/memtype.md)'s, with no date and no
+[`~/.claude/shared/memtype.md`](../../../shared/memtype.md)'s, with no date and no
 project name. A file holds one *subject*, as `##` sections of one file, and
 never repeats a fact another pool holds; link with `[[name]]` instead.
 

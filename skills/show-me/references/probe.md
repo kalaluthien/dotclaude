@@ -12,7 +12,7 @@ included.
 
 ```sh
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-FLOOR=$(grep -o 'under [0-9]* px' ~/.claude/types/doctype.md | tr -dc '0-9\n' | paste -sd, -)
+FLOOR=$(grep -o 'under [0-9]* px' ~/.claude/shared/doctype.md | tr -dc '0-9\n' | paste -sd, -)
 mkdir -p <dir>/show-me-probe        # the redirect below fails without it
 cat >| <dir>/show-me-probe/frame.html <<'EOF'
 <iframe id=f style="width:320px;height:800px;border:0"></iframe>
@@ -46,9 +46,9 @@ and the verdict, as
 - **Legibility**: the smallest text, its font size times the scale of the SVG
   it sits in, is at least its script's floor: a text node holding Hangul or
   Han the second, every other the first, both read from
-  `~/.claude/types/doctype.md` § Page: Legible. A floor with one number or
+  `~/.claude/shared/doctype.md` § Page: Legible. A floor with one number or
   none means a line was not found, and fails, as it does from a checkout whose
-  `types/` the install does not have yet: point `FLOOR` at the checkout's copy
+  `shared/` the install does not have yet: point `FLOOR` at the checkout's copy
   there.
 - **Controls**: the dead count is 0: every button and summary, clicked once,
   changed the page, and every figure that scrolls sideways has a `tabindex`

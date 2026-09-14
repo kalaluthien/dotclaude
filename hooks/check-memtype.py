@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a memory pool file against ~/.claude/types/memtype.md and the pool shape.
+"""Check a memory pool file against ~/.claude/shared/memtype.md and the pool shape.
 
 A file is refused when its name opens with none of the memory prefixes, when
 its pool's `MEMORY.md` carries no line linking to it, or when it still declares
@@ -24,7 +24,7 @@ anyone counted, and the prefix now carries what it claimed. `name` and
 `description` are the whole frontmatter.
 
 The prefix list is not this file's. It is declared once, in
-~/.claude/types/memtype.md, as the bullets under "memory prefixes are:".
+~/.claude/shared/memtype.md, as the bullets under "memory prefixes are:".
 This hook parses them out of the document; a copy kept here would drift exactly
 the way the files did, and a document that declares none refuses every write
 rather than falling back on one.
@@ -59,7 +59,7 @@ import sys
 
 CONTRACT_DOCUMENT = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "types", "memtype.md",
+    "shared", "memtype.md",
 )
 # The pool shape. A pool is `projects/*/memory/*.md`, so its files sit in a
 # `memory` directory and end in `.md`; `MEMORY.md` is the index, not a memory.

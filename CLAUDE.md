@@ -25,7 +25,7 @@ A project's instructions live in `PROJECT/AGENTS.md`, and `PROJECT/CLAUDE.md` im
 
 A skill only a person types hides from the model with `disable-model-invocation: true`, because a command is an order given, not an operation offered. How to name and shape either kind, and the scripts under them, is the `filing` skill.
 
-A vocabulary more than one skill or hook reads lives in `~/.claude/types/`, and a skill cites it by path, so it is declared once.
+A rule more than one skill or hook reads lives in `~/.claude/shared/`, and a skill cites it by path, so it is declared once.
 
 Pick the model by task depth: Fable when the approach is not yet clear, Opus to carry out an approach that is, Sonnet to retrieve or condense.
 
@@ -133,6 +133,6 @@ Ordering: fold the missing signal into the one rank, never a second order or a s
 
 ## Filing
 
-A durable takeaway, and any script, hook, skill or agent you write, goes through the `filing` skill, `~/.claude/skills/filing/`: its table routes by *what would make it wrong*, and its references hold each destination's shape. `hooks/check-memtype.py` reads the memory prefixes from `types/memtype.md`.
+A durable takeaway, and any script, hook, skill or agent you write, goes through the `filing` skill, `~/.claude/skills/filing/`: its table routes by *what would make it wrong* and links each destination's shape. `hooks/check-memtype.py` reads the memory prefixes from `shared/memtype.md`.
 
 @RTK.md
