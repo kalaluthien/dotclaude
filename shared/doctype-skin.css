@@ -18,6 +18,7 @@
 }
 body { background: var(--bg); color: var(--fg); margin: 0;
        font: 16px/1.5 system-ui, sans-serif; padding-block: 24px; padding-inline: 16px; }
+main { max-width: 48rem; margin: 0 auto; }
 h1 { font-size: 1.4rem; }
 h2 { font-size: 1.15rem; }
 a { color: var(--accent); }
