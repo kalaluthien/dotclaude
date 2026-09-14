@@ -22,7 +22,10 @@ What an `artifact` page must be, [doctype](doctype.md) § Media.
 - **Priority order**: reading order is priority order; secondary work
   collapsed; two disclosure levels at most (Nielsen).
 - **SVG first**: inline SVG or CSS before a library.
-- **Motion**: subtler under `prefers-reduced-motion: reduce`.
+- **Motion**: none on its own; a transition answers a reader's action, only
+  under `prefers-reduced-motion: no-preference`; the end state alone carries
+  every fact; change over time as small multiples, never played (Robertson,
+  Tversky).
 - **Used, not viewed**: every control clicked, never judged from a
   screenshot.
 - **Footer sha**: a page inside the repository it describes pins the
