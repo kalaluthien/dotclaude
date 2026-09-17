@@ -67,7 +67,7 @@ No script writes a question inline: a question written twice is tuned once.
 
 Count calls against distinct states in the log. Four logs here ran 3.5 to 9.5
 calls a state, 14.8k calls in all, by asking one claim, one wording or one run
-at a time (cb logs, 2026-09-17). Where a line below does not fit, skip it.
+at a time (cb logs). Where a line below does not fit, skip it.
 
 - One call a state holds every claim, both wordings, the reversed option
   order and any mirror question. Questions cannot see each other, the price is

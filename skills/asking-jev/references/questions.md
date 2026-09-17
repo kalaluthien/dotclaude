@@ -1,6 +1,6 @@
 # Writing the question and the state
 
-What holds for any question, measured on `jev-1.13.0`. Each line ends with
+What holds for any question, measured rather than assumed. Each line ends with
 where its evidence is; `cb` is `kalaluthien/campaign-base`.
 
 ## The question

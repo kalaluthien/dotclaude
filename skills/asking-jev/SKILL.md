@@ -56,7 +56,9 @@ that must fetch evidence or build the next options.
   over the user's own cases, including one that fits no option, gated by the
   cost of acting wrongly; a cookbook's numbers are examples.
 
-## Beyond one call
+## What to read next
+
+### In this skill
 
 | the situation | read |
 | --- | --- |
@@ -64,7 +66,7 @@ that must fetch evidence or build the next options.
 | sorting a pile of items into classes, one or several each | [classifying](references/classifying.md) |
 | an agent's or a script's judgment is to become a standing Jev call: where the question lives, how it is measured, what calls cost, how it is adopted by tier and how its cases grow | [playbook](references/playbook.md) |
 
-## The live docs
+### The live docs
 
 The docs hold the contracts and move faster than this file. Read the index,
 <https://docs.typesafe.ai/llms.txt>, then only the pages the task needs; any
