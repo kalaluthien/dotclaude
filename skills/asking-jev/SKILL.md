@@ -55,6 +55,12 @@ that must fetch evidence or build the next options.
   over the user's own cases, including one that fits no option, gated by the
   cost of acting wrongly; a cookbook's numbers are examples.
 
+## Replacing a judgment in a running system
+
+| the situation | read |
+| --- | --- |
+| an agent's or a script's judgment is to become a standing Jev call: where the question lives, how it is asked, measured, adopted by tier, and how its cases grow | [playbook](references/playbook.md) |
+
 ## The live docs
 
 The docs hold the contracts and move faster than this file. Read the index,
