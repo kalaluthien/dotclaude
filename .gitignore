@@ -11,3 +11,6 @@
 !/hooks/
 !/spec/
 !/shared/
+
+# Account skills the harness syncs down; a cache, not source
+/skills/synced/

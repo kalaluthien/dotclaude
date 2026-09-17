@@ -30,7 +30,16 @@
             "command": "python3 \"/Users/hyungmokim/campaign-base/scripts/check-campaign-claim.py\""
           }
         ],
-        "matcher": "Edit|Write|NotebookEdit|Bash|Agent|Skill"
+        "matcher": "Edit|Write|NotebookEdit|Bash|Agent|Skill|Glob|Grep"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/campaign-base/scripts/check-read-range.py\""
+          }
+        ],
+        "matcher": "Read"
       }
     ],
     "PostToolUse": [
