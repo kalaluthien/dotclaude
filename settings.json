@@ -71,7 +71,7 @@
           },
           {
             "type": "command",
-            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/driving-herdr/scripts/herdr-session-link.py\""
+            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/using-herdr/scripts/herdr-session-link.py\""
           }
         ]
       }
@@ -105,7 +105,27 @@
           },
           {
             "type": "command",
-            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/driving-herdr/scripts/herdr-session-link.py\""
+            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/using-herdr/scripts/herdr-session-link.py\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/assuming-role/scripts/campaign-push.py\""
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/assuming-role/scripts/campaign-push.py\""
           }
         ]
       }

@@ -1,9 +1,9 @@
 ---
-name: delegating-to-aside
+name: using-aside
 description: Use when a task reads or acts on a web page only the signed-in owner can reach and no CLI or API here covers - account settings, mail, chat, a bank, a cloud console - or needs what Aside remembers about them; not for a localhost or development page, its console, network or pixels (claude-in-chrome).
 ---
 
-# Delegating to Aside
+# Using Aside
 
 Aside is the owner's AI browser, holding their sign-ins, history and a memory
 of who they are. Its own agent carries a task out; hand it the goal and the
