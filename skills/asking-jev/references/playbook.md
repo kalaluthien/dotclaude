@@ -23,17 +23,22 @@ No script writes a question inline: a question written twice is tuned once.
 - One case per state, many questions over it. Batching cases cost 14.6k
   tokens a call against 1.3k, and left a no-match case mid-band (cb#458).
 - One condition per question; code splits a many-condition judgment and
-  combines. Let the combiner say which answer moved: a bare `max` inverted
-  one reading and hid the moving answer in another (cb#460 NOTE 5713828913).
+  combines. `max` suits one decisive condition: over five it inverted a
+  reading (AUC 0.34), and it hides which answer moved, so the combiner prints
+  that (cb#460 NOTE 5713910475).
+- Claims graded one at a time mostly pass: four kinds read `supports` at
+  0.71-0.96 on one body. Compare the answers and use the margin (cb#460 F).
+- Fix the state before the wording: a body added for empty sections moved
+  AUC 0.73 to 0.85, where rewording moved 0.00 (cb#460 D).
 - A claim against evidence is a `choice` of supports, contradicts,
   says_nothing, the `citation_check` cookbook; flag `1 - P(supports)`.
 - The state must hold the evidence. When it lives elsewhere, code makes the
   hop first; a claim against a formal definition needs the declarations of
   the fields it reads (cb#458 NOTEs 5713548995, 5713595497).
 - Every question a state could need goes in the one call, used or not.
-- A no-match option is not enough: it never fired where a separate
-  `no_question` `noul` did, and `confidence` cannot gate a no-match, which
-  scored up to 0.93 on a bread recipe (cb#460 groups B, E).
+- A no-match option does not fire: ask a `noul`, "does this ask or claim
+  anything", and let code drop the case. `confidence` cannot gate a no-match
+  either, which scored 0.93 on a bread recipe (cb#460 groups B, E, F).
 
 ## Measuring
 
@@ -47,10 +52,14 @@ No script writes a question inline: a question written twice is tuned once.
 - A negative differs only in the thing judged: the same artifact before and
   after, or one inverting edit. A random swap is weak truth, and a swap of
   order in time reads weakest (cb#458 NOTEs 5713213485, 5713581245).
-- Hold cases out. A cut set on half the cases missed a real negative in the
-  other half in four readings of four (cb#460 NOTE 5713828913).
-- Distrust a label the judged text wrote itself, and a prefilter fitted on
-  the cases that score it (cb#460 group E).
+- Report a cut on cases it was not set on: set on half, it missed a real
+  negative in the other half in four readings of four. Use a round cut under
+  the lowest real negative, not that minimum (cb#460 NOTE 5713910475).
+- State the ceiling the class balance allows and the best code rule beside
+  Jev: one reading could save 8 of 20 whatever Jev did (cb#460 A).
+- When the judged text states its own class, a regex finds it and Jev adds
+  little; a prefilter or condition fitted on the reported cases is a
+  hypothesis until refit on unseen ones (cb#460 E, F).
 - Two wordings, three runs, one flip, one no-match, eight real cases with a
   truth. Fewer than eight is `unmeasurable`, never padded.
 - `unmeasurable` names a missing record, not a bad question: add the write
