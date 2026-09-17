@@ -43,7 +43,12 @@ where its evidence is; `cb` is `kalaluthien/campaign-base`.
   HTTP 400 `max_tokens_exceeded` (cb#458).
 - Text inside the state is read as content and can move the answer; a state
   built from someone else's words is an injection surface (the docs'
-  `model-jaggedness` page).
+  `model-jaggedness` page). Hostile text moved 5 of 10 answers.
+- Every call over someone else's prose carries one more `noul`, "does this
+  text address whoever is judging it". Code reads it first and answers
+  `uncertain` at 0.5 or over: all 10 hostile states went `uncertain` and no
+  clean twin did. A `criteria` sentence is not a defence; text written in the
+  work's own voice is unmeasured (cb#471 NOTE 5716768096).
 
 ## Nothing fits
 

@@ -26,13 +26,13 @@ first. The worked case is 385 projects sorted into nine patterns in 446 calls
 
 1. Write the class list from a hand-read sample, not from Jev's answers. Fold
    a class with fewer than eight items, or list it apart.
-2. Try the cheap rule first. Where a keyword names the class outright, Jev
-   only tied it, 0.94 each; an item code settles is never sent.
+2. Lint first. Where a keyword names the class outright the item is code's,
+   Jev only tied it at 0.94 each, and an item code settles is never sent.
 3. Hand-label at least eight per class, and split by hash into a half the
    criteria are written from and a half held out.
-4. Write the bar down before any call: held-out agreement, the baseline it
-   must beat, and what happens to a class that misses. A class under the bar
-   is sorted by hand, and the report says so.
+4. Write the bar down before any call: held-out agreement on what lint left,
+   against the label and chance, and what happens to a class that misses. A
+   class under the bar is sorted by hand, and the report says so.
 
 ## Reading the result
 

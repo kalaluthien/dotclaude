@@ -18,11 +18,16 @@ No script writes a question inline: a question written twice is tuned once.
 
 ## Measuring
 
-- Jev is a filter, not the judge. Score a reading by the share of cases no
-  agent has to read at the cut that misses no real negative.
-- Code first: a prefilter settles what it can, and a cheap code ranker runs
-  beside token overlap as the baseline. Overlap sat near chance (AUC
-  0.48-0.69), and plain size once beat Jev (cb#460, cb#458 NOTE 5713231532).
+- Code is the lint and Jev the judge, in series and never rivals: code
+  settles what a rule can see, and Jev is scored only on what is left,
+  against the label and against chance (owner, html-doc#462 DECISION
+  5716755047). A code rule's score on the same pile is not Jev's bar.
+- Score a reading by what it clears over what can be cleared at the cut that
+  misses no real negative. A share of all cases hid a reading that cleared
+  most of what it could (cb#471 NOTE 5716875903).
+- What code can rank it ranks first: token overlap sat near chance (AUC
+  0.48-0.69) and plain size ordered one pile better than Jev, so that pile
+  was lint's (cb#460, cb#458 NOTE 5713231532).
 - Mask the judged name before trusting a band: AUC 0.94 fell to 0.34-0.58
   masked, because the score read the spelling (cb#458 NOTE 5713150753).
 - A negative differs only in the thing judged: the same artifact before and
@@ -31,8 +36,8 @@ No script writes a question inline: a question written twice is tuned once.
 - Report a cut on cases it was not set on: set on half, it missed a real
   negative in the other half in four readings of four. Use a round cut under
   the lowest real negative, not that minimum (cb#460 NOTE 5713910475).
-- State the ceiling the class balance allows and the best code rule beside
-  Jev: one reading could save 8 of 20 whatever Jev did (cb#460 A).
+- State the ceiling the class balance allows: one reading could save 8 of 20
+  whatever Jev did (cb#460 A).
 - When the judged text states its own class, a regex finds it and Jev adds
   little; a prefilter or condition fitted on the reported cases is a
   hypothesis until refit on unseen ones (cb#460 E, F).
@@ -49,7 +54,12 @@ No script writes a question inline: a question written twice is tuned once.
 - When history lacks negatives, make them by one meaning-flipping edit, marked
   as made: they read `contradicts` 0.88-1.00 against 0.00-0.07 (cb#458 NOTE
   5713581245).
-- Write the bar and what a miss means before the first call.
+- Write the bar and what a miss means before the first call, and with it the
+  rule that names the headline design. Picked after the run, the headline was
+  not the design that missed none and cleared 15 of 26 (cb#471 NOTE
+  5716842004).
+- A cut read on all cases overstates: two readings "kept" that way went back
+  to `shadow` on a held-out split (cb#471 DECISION 5716742190).
 - A reject needs two designs tried, another state slice and another split,
   with both sets of numbers, and names what would reopen it.
 
@@ -63,6 +73,8 @@ at a time (cb logs, 2026-09-17). Where a line below does not fit, skip it.
   order and any mirror question. Questions cannot see each other, the price is
   per input token, and 13 in one call gave the same answers 12x cheaper (the
   `parallel_questions` cookbook). This is not batching cases, which stays out.
+  The reversed order asked in the same call read as well as a second request,
+  and one call ran 4 to 8 times faster (cb#471 DECISION 5716742190).
 - Only a repeat run needs a second call. Repeat a sample, plus the rows that
   land inside or near the band; a row far from both edges does not flip on a
   few hundredths of noise.
