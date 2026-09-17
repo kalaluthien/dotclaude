@@ -67,6 +67,26 @@ No script writes a question inline: a question written twice is tuned once.
 - A reject needs two designs tried, another state slice and another split,
   with both sets of numbers, and names what would reopen it.
 
+## Spending calls
+
+Count calls against distinct states in the log. Four logs here ran 3.5 to 9.5
+calls a state, 14.8k calls in all, by asking one claim, one wording or one run
+at a time (cb logs, 2026-09-17). Where a line below does not fit, skip it.
+
+- One call a state holds every claim, both wordings, the reversed option
+  order and any mirror question. Questions cannot see each other, the price is
+  per input token, and 13 in one call gave the same answers 12x cheaper (the
+  `parallel_questions` cookbook). This is not batching cases, which stays out.
+- Only a repeat run needs a second call. Repeat a sample, plus the rows that
+  land inside or near the band; a row far from both edges does not flip on a
+  few hundredths of noise.
+- Keep the raw probabilities and replay them: moving a cut, a band or a
+  combiner asks nothing. Key a stored answer by state hash, wording hash and
+  pinned `model`; a hit is not a call, and a changed wording misses by itself.
+- What the prefilter settles is never sent.
+- A second call is right when it needs the first one's answer, to fetch
+  evidence or build options. A reader already at one call a state is done.
+
 ## Adopting
 
 - The aim is replacement: Jev makes the decision at its moment and the agent
