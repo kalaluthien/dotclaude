@@ -109,6 +109,26 @@
           }
         ]
       }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/assuming-role/scripts/campaign-push.py\""
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/assuming-role/scripts/campaign-push.py\""
+          }
+        ]
+      }
     ]
   },
   "worktree": {
