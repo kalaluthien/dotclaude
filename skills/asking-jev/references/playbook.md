@@ -1,7 +1,8 @@
 # Putting Jev into a system
 
 What holds for any reading, learned by replacing an agent's judgments with
-Jev calls. A lesson true of one reading alone stays with that reading's data
+Jev calls. How a question and its state are written is
+[questions](questions.md); sorting a pile is [classifying](classifying.md). A lesson true of one reading alone stays with that reading's data
 and cases, never here. Each line ends with where its evidence is; `cb` is
 `kalaluthien/campaign-base`.
 
@@ -14,31 +15,6 @@ and cases, never here. Each line ends with where its evidence is; `cb` is
 | what is true of one reading: its cases, a change with before and after numbers | beside its case file | names and values |
 
 No script writes a question inline: a question written twice is tuned once.
-
-## Asking
-
-- `criteria` on every question; a `noul`'s `true` and `false` each get a
-  definition and one example, and an option says what it does not cover.
-  Adding them narrowed a no band from 0.04-0.74 to 0.05-0.42 (cb pr#459).
-- One case per state, many questions over it. Batching cases cost 14.6k
-  tokens a call against 1.3k, and left a no-match case mid-band (cb#458).
-- One condition per question; code splits a many-condition judgment and
-  combines. `max` suits one decisive condition: over five it inverted a
-  reading (AUC 0.34), and it hides which answer moved, so the combiner prints
-  that (cb#460 NOTE 5713910475).
-- Claims graded one at a time mostly pass: four kinds read `supports` at
-  0.71-0.96 on one body. Compare the answers and use the margin (cb#460 F).
-- Fix the state before the wording: a body added for empty sections moved
-  AUC 0.73 to 0.85, where rewording moved 0.00 (cb#460 D).
-- A claim against evidence is a `choice` of supports, contradicts,
-  says_nothing, the `citation_check` cookbook; flag `1 - P(supports)`.
-- The state must hold the evidence. When it lives elsewhere, code makes the
-  hop first; a claim against a formal definition needs the declarations of
-  the fields it reads (cb#458 NOTEs 5713548995, 5713595497).
-- Every question a state could need goes in the one call, used or not.
-- A no-match option does not fire: ask a `noul`, "does this ask or claim
-  anything", and let code drop the case. `confidence` cannot gate a no-match
-  either, which scored 0.93 on a bread recipe (cb#460 groups B, E, F).
 
 ## Measuring
 
@@ -64,6 +40,16 @@ No script writes a question inline: a question written twice is tuned once.
   truth. Fewer than eight is `unmeasurable`, never padded.
 - `unmeasurable` names a missing record, not a bad question: add the write
   that records what then happened, and collect cases at `shadow` meanwhile.
+- A band from one run is luck: a declared yes floor of 0.80 became 0.55 over
+  four runs. Set a cut after three, off any value observed, and prefer a band
+  with an `uncertain` middle to one cut (cb pr#465).
+- Compare the lowest positive with the highest negative before calling a band
+  separate: a pooled AUC hid an overlap that was the same two cases in four
+  runs of four (cb#458).
+- When history lacks negatives, make them by one meaning-flipping edit, marked
+  as made: they read `contradicts` 0.88-1.00 against 0.00-0.07 (cb#458 NOTE
+  5713581245).
+- Write the bar and what a miss means before the first call.
 - A reject needs two designs tried, another state slice and another split,
   with both sets of numbers, and names what would reopen it.
 
@@ -101,5 +87,13 @@ at a time (cb logs, 2026-09-17). Where a line below does not fit, skip it.
   join cannot compound; say so before building it.
 - Something must show what is waiting without being asked: rows unjoined,
   cases unlabelled, readings short of evidence, drift outside a declared band.
+- Code decides first and last: a deterministic layer settles what it can, and
+  a flag fires only where a Jev answer and a code fact agree. Jev reads
+  "claims it is done"; a script says whether a check ran after the last edit
+  (pi-quiet-ask and pi-jev-auto-mode, read first-hand; cb#471 NOTE
+  5716409117).
+- A test that stubs the endpoint stubs the log too, and joined cases are
+  counted by distinct state before they are committed: one suite wrote 70
+  copies of a stub title into a corpus (cb pr#472).
 - Pin the answering `model` and hash the wording, so drift and a rewording
   are told apart.
