@@ -3,6 +3,7 @@
     "defaultMode": "auto"
   },
   "model": "claude-fable-5-1[1m]",
+  "syncClaudeAiSkills": false,
   "skillOverrides": {
     "dataviz": "off",
     "run": "off",
