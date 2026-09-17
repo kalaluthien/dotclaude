@@ -39,7 +39,8 @@ that must fetch evidence or build the next options.
 ## Silent failures
 
 - A `choice` with no fitting option still picks one with high `confidence`:
-  an off-topic message scored 0.96. Add a no-match option; `confidence`
+  an off-topic message scored 0.96. Add a no-match option, which alone still
+  misses ([questions](references/questions.md) § Nothing fits); `confidence`
   measures how concentrated the distribution is, not whether the set fits.
 - A `noul` near 0.5 means yes and no are equally likely, not a medium degree.
   Degree is a `score`.
@@ -55,7 +56,17 @@ that must fetch evidence or build the next options.
   over the user's own cases, including one that fits no option, gated by the
   cost of acting wrongly; a cookbook's numbers are examples.
 
-## The live docs
+## What to read next
+
+### In this skill
+
+| the situation | read |
+| --- | --- |
+| writing a question or choosing what goes in the state, for any use | [questions](references/questions.md) |
+| sorting a pile of items into classes, one or several each | [classifying](references/classifying.md) |
+| an agent's or a script's judgment is to become a standing Jev call: where the question lives, how it is measured, what calls cost, how it is adopted by tier and how its cases grow | [playbook](references/playbook.md) |
+
+### The live docs
 
 The docs hold the contracts and move faster than this file. Read the index,
 <https://docs.typesafe.ai/llms.txt>, then only the pages the task needs; any
