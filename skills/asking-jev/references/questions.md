@@ -62,3 +62,18 @@ where its evidence is; `cb` is `kalaluthien/campaign-base`.
   project call Jev" said no on 55 real uses whose README showed no call. Put
   the evidence of presence in the state, or do not ask (cb#471 NOTE
   5716409117).
+- A locate over sections reads the heading's word, not the sense: "which
+  section answers item i in the ask's sense" picked the same-named section
+  on all 4 items the owner called misread (`none` <= 0.06), and "which
+  section lacks a figure" flagged every page at 0.97+. Quoting the owner's
+  own bad terms in `criteria` still read that text 0.49 (cb#462 NOTE
+  5723896818).
+- **A cut that silently drops options feeds the no-match option**, so a band
+  declared on it is fitted on the cut's blind spot. Reading a suite's cases as
+  top-level functions took only a bare-name `CASES` value: 73 of 158 cases
+  invisible in one suite, all 14 and all 26 in two more, which then logged "its
+  cases are declarative" -- false. A case the cut cannot name can only come
+  back `noMatch`, the very option the band read (cb#458 pr#496 F1). **Count
+  what the cut dropped, log it as its own skip reason, and before declaring a
+  band on a no-match option run the cut over every real source and check the
+  counts against the file.**

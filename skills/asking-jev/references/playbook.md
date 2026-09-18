@@ -38,6 +38,36 @@ No script writes a question inline: a question written twice is tuned once.
   the lowest real negative, not that minimum (cb#460 NOTE 5713910475).
 - State the ceiling the class balance allows: one reading could save 8 of 20
   whatever Jev did (cb#460 A).
+- Count the population before designing the state: how many real items carry
+  the field the brief cuts on, and how many can ever be labelled. A brief says
+  "cut by the entity the Plan names" and 133 of 138 real Plans name none
+  (cb#458 S7); a claim set looked askable and 6 of 36 had a real positive
+  (cb#458 S5). Measure both on the whole corpus first -- the answer often kills
+  the narrowing rather than the reading, since every scenario fits the budget
+  at 22 KB and the entity was never needed.
+- Ask whether the later fact names what already existed or what the work MADE.
+  A join reading "which scenario does the closing diff witness" labels the
+  scenario that work CREATED, not one that covered the Plan beforehand -- the
+  inverse of the question -- and the base-sha check separating them left 8
+  positives, of which 57 of 69 sub-issues had no such line at all (cb#458 S7).
+  Date the label against the state, not against the merge.
+- RELABELLING THE CORPUS INVALIDATES EVERY NUMBER DERIVED FROM THE OLD
+  LABELS, not the one you happen to remember. List them before you re-derive:
+  each class's AUC, every baseline you compare against, each selection-hit
+  count, each diagnostic's class split. Two rounds in a row shipped a false
+  claim to this -- a baseline left at its old-label value so word overlap read
+  as level when it beat the reading, then a hit count read off the runner's
+  own cached field, whose one hit was a case the new labels exclude (cb#458
+  S7, both found by review). A scorer that reads truth from anywhere but the
+  committed corpus will do it again.
+- A flag that fires on everything is not a flag, and "flags every negative"
+  hides it: read the positives the same cut takes. 28 of 28 negatives AND 7 of
+  8 positives answered `noMatch` (cb#458 S7).
+- Before reporting a reading that failed, kill the two cheap explanations with
+  one edit each -- narrow the option field so the right answer is certainly on
+  offer, and give each option richer text. Neither moved it there, 0 of 6 both
+  ways, which is what makes "the question fails" a finding rather than a
+  guess.
 - When the judged text states its own class, a regex finds it and Jev adds
   little; a prefilter or condition fitted on the reported cases is a
   hypothesis until refit on unseen ones (cb#460 E, F).
@@ -97,6 +127,17 @@ at a time (cb logs). Where a line below does not fit, skip it.
   named by the reading labels it later from what then happened, and the case
   becomes a regression case and the threshold's source. A reading with no
   join cannot compound; say so before building it.
+- Build a measuring corpus by RUNNING the declared join, never by re-deriving
+  its rule beside it: the second copy drifts and a later `corpus join` writes
+  the opposite class over your cases. One builder re-derived it and disagreed
+  twice -- it labelled a state by the key its command wears today where the
+  join says no-match, and took the lowest-numbered key where the join takes
+  the first the evidence names (cb#458 S7, found by review). Labels a
+  construction made true -- a negative built by one edit -- are the exception,
+  and say so in the case.
+- A corpus row carries no evidence, so no test can re-run a join over it. The
+  half a test holds is that a row names no other entry's join; the half that
+  matters is structural, in the builder.
 - Something must show what is waiting without being asked: rows unjoined,
   cases unlabelled, readings short of evidence, drift outside a declared band.
 - Code decides first and last: a deterministic layer settles what it can, and
