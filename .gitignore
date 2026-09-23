@@ -7,7 +7,6 @@
 !/settings.json
 !/skills/
 !/git-hooks/
-!/hooks/
 
 # Account skills the harness syncs down; a cache, not source
 /skills/synced/
