@@ -1,9 +1,9 @@
 {
+  "syncClaudeAiSkills": false,
   "permissions": {
     "defaultMode": "auto"
   },
   "model": "opus[1m]",
-  "syncClaudeAiSkills": false,
   "skillOverrides": {
     "dataviz": "off",
     "run": "off",
@@ -44,11 +44,13 @@
   "enableArtifact": true,
   "enableWorkflows": false,
   "workflowKeywordTriggerEnabled": false,
-  "enabledPlugins": {
-    "communication@agent-plugins": true,
-    "orchestration@agent-plugins": true,
-    "verification@agent-plugins": true,
-    "learning@agent-plugins": true
+  "extraKnownMarketplaces": {
+    "mumu-claude-plugin": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/hyungmokim/workspace/plugins"
+      }
+    }
   },
   "outputStyle": "Concise",
   "feedbackDrafts": "quiet",
@@ -76,13 +78,5 @@
   "autoScrollEnabled": true,
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
-  "extraKnownMarketplaces": {
-    "agent-plugins": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/hyungmokim/workspace/plugins/agent-plugins"
-      }
-    }
-  }
+  "agentPushNotifEnabled": true
 }
