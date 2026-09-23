@@ -4,9 +4,6 @@
 # ...except these
 !/.gitignore
 !/CLAUDE.md
-!/.claude/
-/.claude/*
-!/.claude/settings.json
 !/settings.json
 !/skills/
 !/git-hooks/
