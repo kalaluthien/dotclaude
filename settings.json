@@ -43,26 +43,7 @@
         "matcher": "Read"
       }
     ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 \"$HOME/.claude/hooks/check-memtype.py\""
-          }
-        ]
-      }
-    ],
     "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo 'Reply in plain everyday words, extremely concise, in a structured shape: headers, tables, lists. No jargon, no pleasantries, no mannered prose.'"
-          }
-        ]
-      },
       {
         "hooks": [
           {
@@ -72,16 +53,6 @@
           {
             "type": "command",
             "command": "python3 \"/Users/hyungmokim/campaign-base/.claude/skills/using-herdr/scripts/herdr-session-link.py\""
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 \"$HOME/.claude/hooks/stop-takeaway-check.py\""
           }
         ]
       }
@@ -137,7 +108,12 @@
   "enableArtifact": true,
   "enableWorkflows": false,
   "workflowKeywordTriggerEnabled": false,
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "communication@agent-plugins": true,
+    "orchestration@agent-plugins": true,
+    "verification@agent-plugins": true,
+    "learning@agent-plugins": true
+  },
   "outputStyle": "Concise",
   "feedbackDrafts": "quiet",
   "effortLevel": "high",
@@ -164,5 +140,13 @@
   "autoScrollEnabled": true,
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "extraKnownMarketplaces": {
+    "agent-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/hyungmokim/workspace/plugins/agent-plugins"
+      }
+    }
+  }
 }
