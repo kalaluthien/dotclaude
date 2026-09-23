@@ -21,6 +21,8 @@ English for every file: documents, source, scripts, comments, git logs, configur
 
 Korean is always written in the polite register (`-yo` or `-nida` endings, never plain speech) and in easy, everyday words, because the reader should never have to decode it.
 
+A script file carries its language extension (`.sh`, `.py`), because the name then says how to read and run it; the one exception is a name a tool fixes, such as a git hook or `gradlew`.
+
 # Principles
 
 ## Simplicity first
