@@ -1,6 +1,18 @@
 {
+  "autoCompactWindow": 250000,
   "syncClaudeAiSkills": false,
   "permissions": {
+    "allow": [
+      "Bash(merge.py https://github.com/*)",
+      "Bash(worker-close.py *)",
+      "Bash(tab-sweep.py *)",
+      "Bash(git worktree remove .claude/worktrees/*)",
+      "Bash(git -C * worktree remove *)",
+      "Bash(git branch -D *)",
+      "Bash(git -C * branch -D *)",
+      "Bash(git push origin --delete *)",
+      "Bash(git -C * push origin --delete *)"
+    ],
     "defaultMode": "auto"
   },
   "model": "opus[1m]",
@@ -25,18 +37,7 @@
         ]
       }
     ],
-    "SessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/hyungmokim/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
+    "SessionStart": [{"matcher":"^(startup|resume|clear|compact|fork)$","hooks":[{"type":"command","command":"bash '/Users/hyungmokim/.claude/hooks/herdr-agent-state.sh' session","timeout":10}]}]
   },
   "worktree": {
     "baseRef": "fresh"
