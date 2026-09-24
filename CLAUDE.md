@@ -35,6 +35,8 @@ Defensive coding: no handling for cases that cannot happen; validate at boundari
 
 Pick the cheapest correct instrument: the grep and edit tools for a plain search or a fixed edit, a shell command for awkward string work, Python for data, statistics and arithmetic. Do not calculate in your head; write the script, and keep it when the access path repeats.
 
+In zsh write `>|` to overwrite and `${=var}` to split, because `noclobber` is on and an unquoted variable stays one word.
+
 ## Hill climbing
 
 Turn a task into objectively verifiable criteria, then loop until they are met without hacks: the criteria verify the solution, they do not define it, so a hardcoded pass is a failure.
