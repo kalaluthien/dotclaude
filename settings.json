@@ -7,11 +7,8 @@
       "Bash(worker-close.py *)",
       "Bash(tab-sweep.py *)",
       "Bash(git worktree remove .claude/worktrees/*)",
-      "Bash(git -C * worktree remove *)",
       "Bash(git branch -D *)",
-      "Bash(git -C * branch -D *)",
-      "Bash(git push origin --delete *)",
-      "Bash(git -C * push origin --delete *)"
+      "Bash(git push origin --delete *)"
     ],
     "defaultMode": "auto"
   },
