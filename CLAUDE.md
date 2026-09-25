@@ -17,11 +17,9 @@ Ordered by impact, then urgency; the higher rule wins a conflict with a lower on
 
 ## Language
 
-English for every file: documents, source, scripts, comments, git logs, configuration. Korean only in `.html` documents for demonstration, and in responses to the user.
+English for every file (documents, source, scripts, comments, git logs, configuration) and for every message between agents.
 
-Korean is always written in the polite register (`-yo` or `-nida` endings, never plain speech) and in easy, everyday words, because the reader should never have to decode it.
-
-A script file carries its language extension (`.sh`, `.py`), because the name then says how to read and run it; the one exception is a name a tool fixes, such as a git hook or `gradlew`.
+Korean in every response to the user, and in `.html` documents made to show them: always the polite register (`-yo` or `-nida` endings, never plain speech), in easy, everyday words, because the reader should never have to decode it.
 
 # Principles
 
@@ -62,6 +60,8 @@ Classify logic as data, calculation, or action, and push business logic into cal
 Reset a reusable resource when you claim it, not when you release it: only the claim path knows what clean means for the work about to start.
 
 Name a resource generic against change — no state, verdict or measurement — and specific about scope; a rename costs every inbound reference.
+
+A script file carries its language extension (`.sh`, `.py`), because the name then says how to read and run it; the one exception is a name a tool fixes, such as a git hook or `gradlew`.
 
 ## Verification
 
