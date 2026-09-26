@@ -26,7 +26,8 @@ question still open in this round belongs to a later round.
 - Choose each next round from the answers so far: recompute the frontier,
   drop questions an answer made moot, and ask the next four the same way.
 - Before each round after the first, write one line of what the last round
-  settled: `Settled: …`, in the user's language.
+  settled, starting with the English label `Settled:` in every language;
+  only the text after it is in the user's language.
 - A free-text answer is not settled as typed: restate it as a concrete
   proposal in the next round ("I read your last answer as: …") and settle it
   when the user confirms that.
