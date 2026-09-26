@@ -42,9 +42,9 @@ rival plans, a hostile judge, and rounds until the result scores 80 of 100.
 
 - A grafted plan is unjudged: it competes in the next round against the 3
   planners' new plans, their briefs now carrying the judge's findings.
-- Stop when the winner's weighted total is at least 80. Stop earlier when the scores across
-  rounds have flattened with little gain and no new way out, and say so with
-  the best score reached. There is no fixed round cap.
+- Stop when the winner's weighted total is at least 80. Stop earlier when the
+  scores across rounds have flattened with little gain and no new way out,
+  and say so with the best score reached. There is no fixed round cap.
 
 ## Output
 
