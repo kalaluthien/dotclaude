@@ -1,6 +1,6 @@
 ---
 name: grill-me
-description: Use when the answer is still the user's to make - a decision, a proposal or a plan with open choices to settle by asking them; not when the facts settle it (show-me) or code is under review.
+description: Use when the answer is still the user's to make - a decision, a proposal or a plan with open choices to settle by asking them; not when the facts settle it or code is under review.
 ---
 
 # grill-me
@@ -13,33 +13,22 @@ this as a **design tree**: every decision branches into the decisions that hang
 off it. A blank another skill hands you is one decision in it.
 
 Work the tree in **rounds**. The **frontier** is every decision whose
-prerequisites are already settled. Ask the whole frontier in one round: number
-each question `Q1`, `Q2`, and give your recommended answer. Then wait. A
-question whose answer depends on another question still open in this round
-belongs to a later round.
+prerequisites are already settled. A question whose answer depends on another
+question still open in this round belongs to a later round.
 
 ## Asking a round
 
-- **Four questions or fewer:** `AskUserQuestion`, one question each, your
-  recommended answer as the first option, labelled `(Recommended)`.
-- **More than four:** publish a plain page with the Artifact tool. Plain means
-  plain: no design system, no stylesheet, no `style` attribute, only browser
-  defaults, so skip the design pass. The page holds the target and round
-  number, then per question its `Qn` title and body and one `textarea`
-  prefilled with your recommended answer, and one button. The button builds
-  this block into a read-only `textarea` and copies it to the clipboard:
-
-  ```text
-  grill-me: <target>, round <n>
-  Q1:
-    <answer, every line indented two spaces>
-  Q2:
-    <answer>
-  ```
-
-  Give the user the page url and ask them to paste the block back. Read a
-  pasted block as the answers of that round: each `Qn:` takes the indented
-  lines under it.
+- Every round is one `AskUserQuestion` call of at most four questions, and
+  nothing else: no numbered text, no pasted-back block. Then wait.
+- Pick the four from the frontier by impact first - the answer that changes
+  the most of the tree - then by conceptual order, a concept before the
+  choices built on it. The rest of the frontier waits.
+- Choose each next round from the answers so far: recompute the frontier,
+  drop questions an answer made moot, and ask the next four the same way.
+- Make each question answerable without reading a file: its text says the
+  current state, why the choice matters, and what it decides downstream; each
+  option's description gives its trade-off. Your recommended answer is the
+  first option, labelled `(Recommended)`.
 
 ## Settling
 
@@ -54,5 +43,4 @@ belongs to a later round.
 ## Output
 
 The settled answers only: each decision and its answer, no transcript of the
-rounds. Hand them by name to `mumu-document:writing-documents` when that skill
-is available, else to `show-me`.
+rounds and no document. Hand them back to the caller as they are.
