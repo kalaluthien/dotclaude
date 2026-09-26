@@ -23,15 +23,9 @@ Korean in every response to the user, and in `.html` documents made to show them
 
 # Principles
 
-## Simplicity first
-
-Elements: solve the stated problem with fewer elements; avoid coupling and duplication. Scope: a bug fix does not need the surrounding code cleaned up; a simple feature does not need extra configurability.
-
-Defensive coding: no handling for cases that cannot happen; validate at boundaries only. Abstractions: none for a one-time operation, none for a hypothetical requirement.
-
 ## Compute with code
 
-Pick the cheapest correct instrument: the grep and edit tools for a plain search or a fixed edit, a shell command for awkward string work, Python for data, statistics and arithmetic. Do not calculate in your head; write the script, and keep it when the access path repeats.
+Pick the cheapest correct instrument: a shell command for awkward string work, Python for data, statistics and arithmetic. Do not calculate in your head; write the script, and keep it when the access path repeats.
 
 In zsh write `>|` to overwrite and `${=var}` to split, because `noclobber` is on and an unquoted variable stays one word; bound a slow command with the Bash tool's timeout, since macOS has no `timeout`. On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
@@ -49,9 +43,9 @@ When two readings of a request lead to materially different work, present both i
 
 Red-team whatever you evaluate: 2-3 named options through 2-3 distinct lenses, handed over with their trade-offs and one recommendation; told to "decide all other details", decide and hand the decisions back as a numbered veto table.
 
-Scope a destructive action to the noun that was approved, and list the target's contents before removing it.
-
 ## Design
+
+Solve the stated problem with fewer elements; avoid coupling and duplication.
 
 Judge a module by the ratio of interface to implementation: a deep module hides substantial behaviour behind a small surface. (Ousterhout)
 
