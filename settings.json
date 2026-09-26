@@ -16,6 +16,8 @@
   "model": "opus[1m]",
   "skillOverrides": {
     "dataviz": "off",
+    "asking-jev": "off",
+    "using-aside": "off",
     "run": "off",
     "claude-api": "name-only",
     "keybindings-help": "user-invocable-only",
