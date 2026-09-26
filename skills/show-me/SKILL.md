@@ -1,18 +1,17 @@
 ---
 name: show-me
-description: Use when the answer is settled and must be shown in chat - explain, draw, map, walk through or compare something as a markdown answer; not when the answer is still the user's to make (grill-me), nor for a page, Artifact, HTML, issue body, PR body or repository doc (mumu-document:writing-documents).
+description: Use when the answer is settled and must be shown - explain, draw, map, walk through or compare something as a markdown answer; not when the answer is still the user's to make (grill-me).
 ---
 
 # show-me
 
-Show the topic, the one named or else the conversation's, in chat. Skip the
-preamble, keep prose brief, and pick the smallest widget that makes the point.
-A blank is not shown: hand it to `grill-me`.
+Show the topic, the one named or else the conversation's. Skip the preamble,
+keep prose brief, and pick the smallest widget that makes the point. A blank
+is not shown: hand it to `grill-me`.
 
-Answer in chat only, as markdown that reads the same in a terminal and in web
-chat. An ask for a page, Artifact, HTML, issue body, PR body or repository doc
-is not this skill's: hand it to `mumu-document:writing-documents` by that name,
-and when that skill is not available, answer in chat and say so.
+The answer goes to chat by default, and into a document as well when one is
+asked for. Write it as markdown that reads the same in a terminal and in
+web chat.
 
 ## Widgets
 
