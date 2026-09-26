@@ -3,6 +3,17 @@
   "syncClaudeAiSkills": false,
   "permissions": {
     "allow": [
+      "Bash(gh *)",
+      "Bash(grep *)",
+      "Bash(git status *)",
+      "Bash(git branch --show-current)",
+      "Bash(herdr agent prompt *)",
+      "Bash(herdr agent rename *)",
+      "Bash(herdr agent read *)",
+      "Bash(herdr tab rename *)",
+      "Bash(worker-start.py *)",
+      "Bash(lead-start.py *)",
+      "Agent(mumu-team:reviewer)",
       "Bash(merge.py https://github.com/*)",
       "Bash(worker-close.py *)",
       "Bash(tab-sweep.py *)",
