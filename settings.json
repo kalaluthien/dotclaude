@@ -20,7 +20,9 @@
       "Bash(git worktree remove .claude/worktrees/*)",
       "Bash(git branch -D *)",
       "Bash(git push origin --delete *)",
-      "Bash(herdr agent send-keys *)"
+      "Bash(herdr agent send-keys *)",
+      "Bash(rm */.git/hooks/pre-commit)",
+      "Bash(rm */.git/hooks/pre-push)"
     ],
     "defaultMode": "auto"
   },
