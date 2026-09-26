@@ -57,8 +57,8 @@ Example (the user wrote in Korean; this is its English):
 > Current: `repo.md:14` names a branch `<topic>-<n>`. A reopened issue keeps
 > its number, so its new branch takes the name of the merged pull request's
 > branch, and `stop.py` then reads "this branch's pull request is merged" and
-> ends the worker at once (#84 duplicated #67 this way). The worker, tab and
-> worktree names follow the branch name.
+> ends the worker at once. The worker, tab and worktree names follow the
+> branch name.
 > Recommended:
 > - `<topic>-<n>-<k>`, `k` counting openings, for every issue
 >
