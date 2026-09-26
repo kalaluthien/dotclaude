@@ -3,6 +3,7 @@
   "syncClaudeAiSkills": false,
   "permissions": {
     "allow": [
+      "Bash(gh *)",
       "Bash(merge.py https://github.com/*)",
       "Bash(worker-close.py *)",
       "Bash(tab-sweep.py *)",
