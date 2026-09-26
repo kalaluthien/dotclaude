@@ -33,7 +33,7 @@ Defensive coding: no handling for cases that cannot happen; validate at boundari
 
 Pick the cheapest correct instrument: the grep and edit tools for a plain search or a fixed edit, a shell command for awkward string work, Python for data, statistics and arithmetic. Do not calculate in your head; write the script, and keep it when the access path repeats.
 
-In zsh write `>|` to overwrite and `${=var}` to split, because `noclobber` is on and an unquoted variable stays one word.
+In zsh write `>|` to overwrite and `${=var}` to split, because `noclobber` is on and an unquoted variable stays one word; bound a slow command with the Bash tool's timeout, since macOS has no `timeout`. On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
 ## Hill climbing
 
