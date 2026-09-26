@@ -78,4 +78,7 @@ the user confirms a summary of the settled answers. Act on nothing before that.
 ## Output
 
 The settled answers only: each decision and its answer, no transcript of the
-rounds and no document. Hand them back to the caller as they are.
+rounds. Hand them back to the caller as they are.
+
+The answer goes to chat by default, and into a document as well when one is
+asked for.
