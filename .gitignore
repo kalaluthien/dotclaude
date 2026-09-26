@@ -6,9 +6,13 @@
 !/CLAUDE.md
 !/settings.json
 !/skills/
+!/hooks/
 
 # Account skills the harness syncs down; a cache, not source
 /skills/synced/
 
 # Where the harness moves a synced skill it drops
 /skills/.trash/
+
+# Bytecode a hook's import leaves
+/hooks/__pycache__/
