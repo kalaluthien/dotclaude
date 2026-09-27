@@ -39,7 +39,11 @@ Require named failures from delegated work instead of silent compliance, and wri
 
 ## Deciding
 
-When two readings of a request lead to materially different work, present both instead of picking one silently.
+When two readings of a request lead to materially different work and the conversation, code and history cannot settle which, present both instead of picking one silently.
+
+Before building options, question the premise they share, and weigh first the option that removes, merges or narrows; the recommended option still comes first.
+
+State each option's cost as a number (files, lines, runs), and never ask what a lookup, research or your own decision settles.
 
 Red-team whatever you evaluate: 2-3 named options through 2-3 distinct lenses, handed over with their trade-offs and one recommendation; told to "decide all other details", decide and hand the decisions back as a numbered veto table.
 

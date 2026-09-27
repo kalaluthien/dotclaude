@@ -49,8 +49,8 @@ Each question is answerable without opening a file. Its body carries:
   where one exists;
 - the recommended model, as bullets.
 
-Each option's description names its downside. The recommended option is the
-first, labelled `(Recommended)`.
+Each option's description names its cost as a number (files, lines, runs) and
+its downside. The recommended option is the first, labelled `(Recommended)`.
 
 Example (the user wrote in Korean; this is its English):
 
@@ -64,11 +64,12 @@ Example (the user wrote in Korean; this is its English):
 > - `<topic>-<n>-<k>`, `k` counting openings, for every issue
 >
 > Options:
-> 1. `<topic>-<n>-<k>` (Recommended) - one shape for every name; downside: a
->    little longer
-> 2. `<topic>-<n>` first, `-r2` only when reopened - downside: two shapes
-> 3. keep the name, change the check - downside: `gh pr view <branch>` may
->    pick the old pull request
+> 1. `<topic>-<n>-<k>` (Recommended) - 3 files; one shape for every name;
+>    downside: 2 more characters per name
+> 2. `<topic>-<n>` first, `-r2` only when reopened - 4 files; downside: two
+>    shapes
+> 3. keep the name, change the check - 1 file; downside: `gh pr view <branch>`
+>    may pick the old pull request
 
 ## Settling
 

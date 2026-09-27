@@ -99,7 +99,7 @@ item, one column per attribute, the verdict last.
 
 | option | cost | risk | verdict |
 | --- | --- | --- | --- |
-| cache  | low  | stale reads | use |
+| cache  | 1 file, 20 lines | stale reads | use |
 
 ## Guidance
 
