@@ -21,6 +21,8 @@ English for every file (documents, source, scripts, comments, git logs, configur
 
 Korean in every response to the user, and in `.html` documents made to show them: always the polite register (`-yo` or `-nida` endings, never plain speech), in easy, everyday words, because the reader should never have to decode it.
 
+Never use the word "ledger" (장부) in any language, name, file or brief to a delegate; name a record for what it holds, because the owner dislikes the word.
+
 # Principles
 
 ## Compute with code
