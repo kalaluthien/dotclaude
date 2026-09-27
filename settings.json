@@ -18,11 +18,21 @@
       "Bash(worker-close.py *)",
       "Bash(tab-sweep.py *)",
       "Bash(git worktree remove .claude/worktrees/*)",
+      "Bash(git worktree remove --force .claude/worktrees/*)",
+      "Bash(git worktree remove --force --force .claude/worktrees/*)",
+      "Bash(git worktree unlock .claude/worktrees/*)",
+      "Bash(git worktree prune)",
       "Bash(git branch -D *)",
       "Bash(git push origin --delete *)",
+      "Bash(git pull --ff-only)",
+      "Bash(git pull --ff-only -q)",
+      "Bash(rm -rf .claude/worktrees/*)",
       "Bash(herdr agent send-keys *)",
       "Bash(rm */.git/hooks/pre-commit)",
       "Bash(rm */.git/hooks/pre-push)"
+    ],
+    "deny": [
+      "Bash(rm -rf .claude/worktrees/*..*)"
     ],
     "defaultMode": "auto"
   },
