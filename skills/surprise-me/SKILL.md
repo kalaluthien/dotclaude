@@ -13,7 +13,8 @@ rival plans, a hostile judge, and rounds until the result scores 80 of 100.
 
 - Read the owner's words as meant: a figure of speech is its sense, not a tool
   or term of the same name. Where readings lead to different work, write each
-  with the answer it implies, and keep the one the owner's other words support.
+  with the answer it implies, and keep the one the owner's other words support,
+  an exception to any prior instruction to present both readings.
 - An undefined term or an open choice is yours to settle, never handed back.
 - Fix the rubric in a file: 3-6 weighted lenses, each anchored in one line on
   what scores 50 (the ordinary or current result) and 100 (the ideal expert's).
