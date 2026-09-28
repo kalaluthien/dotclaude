@@ -33,6 +33,8 @@ Pick the cheapest correct instrument: a shell command for awkward string work, P
 
 In zsh write `>|` to overwrite and `${=var}` to split, because `noclobber` is on and an unquoted variable stays one word; bound a slow command with the Bash tool's timeout, since macOS has no `timeout`; call `/usr/bin/log`, since zsh's `log` builtin shadows it. On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
+Drive a real, signed-in browser (claude-in-chrome or `aside`) only in Aside, never the owner's Google Chrome, because the owner uses Chrome themselves; a test that launches its own headless Chrome, such as Playwright's, is exempt.
+
 ## Hill climbing
 
 Turn a task into objectively verifiable criteria, then loop until they are met without hacks: the criteria verify the solution, they do not define it, so a hardcoded pass is a failure.
