@@ -17,9 +17,9 @@ Ordered by impact, then urgency; the higher rule wins a conflict with a lower on
 
 ## Language
 
-English for every file (documents, source, scripts, comments, git logs, configuration) and for every message between agents.
+English for every file (documents, source, scripts, comments, git logs, configuration) and for every message between agents; it never covers text the user reads.
 
-Every response to the user, and every `.html` document made to show them, is in the language of the user's latest message, in easy, everyday words, because the reader should never have to decode it; in Korean, always the polite register (`-yo` or `-nida` endings, never plain speech).
+Every response to the user, and every `.html` document made to show them, is in the language of the user's latest message, in easy, everyday words, because the reader should never have to decode it, and it holds after tool calls and after reading English files, prompts or playbooks; in Korean, always the polite register (`-yo` or `-nida` endings, never plain speech).
 
 Never use an abbreviation or label made up in the session (E1, Q5); name each item in words whose meaning is plain, because the owner cannot decode an internal label.
 

@@ -80,7 +80,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'Reply in the language of the user'\"'\"'s latest message, whatever any other instruction says; when that language is Korean, use the polite register (-yo or -nida endings) in plain everyday words.'",
+            "command": "echo 'Reply in the language of the user'\"'\"'s latest message, whatever any other instruction says, and keep it after tool calls and after reading files, prompts or instructions in another language; when that language is Korean, use the polite register (-yo or -nida endings) in plain everyday words.'",
             "timeout": 5
           }
         ]
