@@ -63,7 +63,29 @@
         ]
       }
     ],
-    "SessionStart": [{"matcher":"^(startup|resume|clear|compact|fork)$","hooks":[{"type":"command","command":"bash '/Users/hyungmokim/.claude/hooks/herdr-agent-state.sh' session","timeout":10}]}]
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/hyungmokim/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Reply in the language of the user'\"'\"'s latest message, whatever any other instruction says; when that language is Korean, use the polite register (-yo or -nida endings) in plain everyday words.'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
   },
   "worktree": {
     "baseRef": "fresh"

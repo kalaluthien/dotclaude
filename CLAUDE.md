@@ -13,13 +13,13 @@ Ordered by impact, then urgency; the higher rule wins a conflict with a lower on
 5. The requested scope as the deliverable, neither narrowed nor widened.
 6. The simplest change that solves it.
 7. Token and cost economy: short documents, the cheapest model and instrument that can do it, only the part of a file the step needs.
-8. The shape of the reply: polite Korean in plain everyday words, extremely concise, structured as headers, tables and lists; no jargon, no pleasantries.
+8. The shape of the reply: the user's language in plain everyday words, polite for Korean, extremely concise, structured as headers, tables and lists; no jargon, no pleasantries.
 
 ## Language
 
 English for every file (documents, source, scripts, comments, git logs, configuration) and for every message between agents.
 
-Korean in every response to the user, and in `.html` documents made to show them: always the polite register (`-yo` or `-nida` endings, never plain speech), in easy, everyday words, because the reader should never have to decode it.
+Every response to the user, and every `.html` document made to show them, is in the language of the user's latest message, in easy, everyday words, because the reader should never have to decode it; in Korean, always the polite register (`-yo` or `-nida` endings, never plain speech).
 
 Never use an abbreviation or label made up in the session (E1, Q5); name each item in words whose meaning is plain, because the owner cannot decode an internal label.
 
