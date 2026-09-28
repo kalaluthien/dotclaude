@@ -31,9 +31,7 @@ Never use the word "ledger" (장부) in any language, name, file or brief to a d
 
 Pick the cheapest correct instrument: a shell command for awkward string work, Python for data, statistics and arithmetic. Do not calculate in your head; write the script, and keep it when the access path repeats.
 
-In zsh write `>|` to overwrite and `${=var}` to split, because `noclobber` is on and an unquoted variable stays one word; bound a slow command with the Bash tool's timeout, since macOS has no `timeout`; call `/usr/bin/log`, since zsh's `log` builtin shadows it. On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
-
-Drive a real, signed-in browser (claude-in-chrome or `aside`) only in Aside, never the owner's Google Chrome, because the owner uses Chrome themselves; a test that launches its own headless Chrome, such as Playwright's, is exempt.
+On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
 ## Hill climbing
 
