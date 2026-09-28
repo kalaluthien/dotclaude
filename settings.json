@@ -54,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "rtk hook claude"
+            "command": "[ -x '/Users/hyungmokim/workspace/projects/homeops/subjects/gate/hook.sh' ] && exec '/Users/hyungmokim/workspace/projects/homeops/subjects/gate/hook.sh' --rtk; exec rtk hook claude"
           },
           {
             "type": "command",

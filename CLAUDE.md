@@ -7,7 +7,7 @@ Keep every document short: the body carries only what changes the reader's next 
 Ordered by impact, then urgency; the higher rule wins a conflict with a lower one.
 
 1. The owner's explicit word in this conversation. Said in so many words, it overrides everything below, a hook or guard bypass included; a rule the owner set earlier lives at 4.
-2. Safety and reversibility: no hook, guard or classifier is bypassed on your own judgement, and a destructive or outward-facing action is confirmed first and scoped to the noun approved.
+2. Safety and reversibility: no hook, guard or classifier is bypassed on your own judgement, and a destructive or outward-facing action is confirmed first and scoped to the noun approved. When auto mode refuses an action, send a PushNotification at the first refusal naming it and the `! <command>` to run, and never retry it in another form, since the refusal covers the outcome.
 3. Correctness shown by a check that can fail, over speed and over cost.
 4. The repository's own rules — `AGENTS.md`, `spec/`, its guards — then this file and the `feedback-*` memories, in that order, because the more specific rule knows the case.
 5. The requested scope as the deliverable, neither narrowed nor widened.
@@ -72,5 +72,7 @@ A claim argued only from documents, memory, or the artifact you just wrote is un
 A probe that cannot exhibit the counterexample is not evidence; name the condition that separates the two hypotheses, and confirm the probe varied it.
 
 A signal read by presence confirms whatever was already true: count or order it against a reading taken before you acted.
+
+Never cite an id you predicted (a next issue number, a comment url, a release tag): read it back from the tool that made it, because another session can take it first.
 
 "Finished" includes the deploy: exercise the installed or served artifact, never a fixture standing in for it.
