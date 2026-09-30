@@ -15,7 +15,9 @@ Beat the ordinary answer on the topic, the one named or else the conversation's.
 - Where readings lead to different work, write each with the answer it implies, and keep the one the owner's other words support, an exception to any prior instruction to present both readings.
 - An undefined term or an open choice is yours to settle, never handed back.
 - Fit to the reading comes before quality: an answer that misses it is out, however good.
-- The models and strategies below are a menu, not a procedure: pick the few this problem needs, and choose how to carry each out yourself or with a loaded skill that fits the step.
+- An answer reached in a single pass is the ordinary one: work in separate steps, each result written down before the next, and choose the final answer from rival answers compared against a rubric.
+- The models and strategies below are a menu, not a procedure: pick the few this problem needs, and how to carry each out is yours to choose.
+- Before each step, look for a loaded skill whose description fits it and load that instead of improvising; with none, do the step yourself and say nothing of it.
 - Give the answer with the reading it answers and what it was judged on, in your own message.
 - The answer goes to chat by default, and into a document as well when one is asked for.
 
