@@ -43,11 +43,13 @@ The one-sentence test, before you render: describe each direction in one sentenc
 
 State which one you are producing before you build it.
 
-## Render step
+## Where the result goes
 
-- Load `paperwork:rendering` when the paperwork plugin is loaded, since it holds the page design.
-- Read `references/html.md` for the page rules and the PICK board.
-- Publish every page with the `Artifact` tool and give the link; never open a local file in a browser, since the owner's browser is theirs.
+- Chat widgets, below, when the answer needs no page.
+- A temporary HTML page, for a look in this session such as a PICK board: make it yourself by `references/html.md` and send it with `SendUserFile`.
+- An Artifact, for a page to keep, share or come back to: load `paperwork:rendering` when the paperwork plugin is loaded, since it holds the page design, then publish with the `Artifact` tool and give the link.
+- Between a temporary page and an Artifact, ask the owner with `AskUserQuestion`, each option saying when it fits, since only they know whether the page outlives this session.
+- Never open a local file in a browser, since the owner's browser is theirs.
 
 ## What you say around it
 

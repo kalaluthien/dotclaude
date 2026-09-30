@@ -1,12 +1,12 @@
 # HTML page rules
 
-Read at the render step. Publish the page with the `Artifact` tool; never open a local file in a browser.
+Read when making a temporary page. Write the file in the scratchpad and send it with `SendUserFile`; never open it in a browser.
 
 ## Page
 
 - Write one complete, self-contained HTML file: inline CSS, no external requests, no CDN links, no web fonts, so it renders with the network off.
 - Include `<meta charset="utf-8">`, or every apostrophe turns to gibberish.
-- Look at the published page yourself before you describe it.
+- Read the file back yourself before you describe it.
 - No background grid or texture on anything text-heavy, since it makes a dense document hard to read.
 
 ## The PICK board
@@ -53,4 +53,4 @@ Plain on purpose, so the options carry all the visual weight; each card's button
 
 ## Seen
 
-A command that exits 0 proves it ran, not that they saw it: after publishing, check the `Artifact` result gives a link, and hand the link over.
+A command that exits 0 proves it ran, not that they saw it: after `SendUserFile`, check it reports the file sent.
