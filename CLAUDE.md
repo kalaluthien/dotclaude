@@ -39,6 +39,8 @@ Turn a task into objectively verifiable criteria, then loop until they are met w
 
 Require named failures from delegated work instead of silent compliance, and write criteria the honest empty outcome can pass — "remove X, or report with evidence that no X exists".
 
+Before and during work, cut every step or criterion that proves nothing another already proves, and spend the effort on what is left, because the owner asked for full effort on necessary work only (2026-09-30).
+
 # Craft
 
 ## Deciding
