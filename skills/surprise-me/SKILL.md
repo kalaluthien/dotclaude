@@ -15,9 +15,9 @@ Beat the ordinary answer on the topic, the one named or else the conversation's.
 - Where readings lead to different work, write each with the answer it implies, and keep the one the owner's other words support, an exception to any prior instruction to present both readings.
 - An undefined term or an open choice is yours to settle, never handed back.
 - Fit to the reading comes before quality: an answer that misses it is out, however good.
-- An answer reached in a single pass is the ordinary one: work in separate steps, each result written down before the next, and choose the final answer from rival answers compared against a rubric.
+- An answer reached in a single pass is the ordinary one, so expect the work to take several, and the final answer to show what it beat.
 - The models and strategies below are a menu, not a procedure: pick the few this problem needs, and how to carry each out is yours to choose.
-- Before each step, look for a loaded skill whose description fits it and load that instead of improvising; with none, do the step yourself and say nothing of it.
+- Each step a strategy asks for is real work, judging the rival answers above all: before it, look for a loaded skill whose description fits the step and load that instead of improvising; with none, do the step yourself and say nothing of it.
 - Give the answer with the reading it answers and what it was judged on, in your own message.
 - The answer goes to chat by default, and into a document as well when one is asked for.
 
@@ -36,7 +36,7 @@ Ways to see the problem, each with when it helps.
 Ways to reach a better answer, each with when it helps.
 
 - Fix the bar first: when good is a matter of taste, write down what ordinary and ideal look like on each thing that matters before any answer exists, so no answer sets its own bar.
-- Rival answers: when the first idea would anchor you, make several answers that differ in mechanism, not just in stance, then compare them against the rubric and pick the best.
-- Independent judge: when you wrote the answers, have them judged by one who wrote none and checks each claim against the facts, and total the scores by calculation, not by impression.
+- Rival answers: when the first idea would anchor you, since a lone answer has nothing to be better than, make several that differ in mechanism, not just in stance, and keep the best.
+- Outside judgement: when you wrote the answers, since an author rates their own work kindly, let them be compared and the best picked by a view that did not write them.
 - Refine on criticism: when the best answer has named faults, fix those and judge it again as new, stopping when the gains flatten.
 - Work backwards: when the end is clear and the path is not, start from the finished result and ask what must be true just before it.
