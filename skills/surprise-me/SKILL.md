@@ -1,58 +1,40 @@
 ---
 name: surprise-me
-description: Use when the owner wants a result well above ordinary - rival plans compete in rounds, scored by a hostile judge on a rubric fixed first, until one scores 80 of 100; not when one plain answer will do.
+description: Use when the owner wants a result well above ordinary - reads their words as meant, then sees the problem through mental models and reaches past the plain answer with problem-solving strategies; not when one plain answer will do.
 disable-model-invocation: true
 ---
 
 # surprise-me
 
-Beat the ordinary answer on the topic, the one named or else the conversation's:
-rival plans, a hostile judge, and rounds until the result scores 80 of 100.
+Beat the ordinary answer on the topic, the one named or else the conversation's.
 
-## Before any plan
+## The situation
 
-- Read the owner's words as meant: a figure of speech is its sense, not a tool
-  or term of the same name. Where readings lead to different work, write each
-  with the answer it implies, and keep the one the owner's other words support,
-  an exception to any prior instruction to present both readings.
+- The owner wants a result well above ordinary, so the first answer that comes to mind is the one to beat, not the one to give.
+- Read the owner's words as meant: a figure of speech is its sense, not a tool or term of the same name.
+- Where readings lead to different work, write each with the answer it implies, and keep the one the owner's other words support, an exception to any prior instruction to present both readings.
 - An undefined term or an open choice is yours to settle, never handed back.
-- Fix the rubric in a file: 3-6 weighted lenses, each anchored in one line on
-  what scores 50 (the ordinary or current result) and 100 (the ideal expert's).
-- Fit to the reading is a gate, not a lens: a plan that misses it is out.
+- Fit to the reading comes before quality: an answer that misses it is out, however good.
+- The models and strategies below are a menu, not a procedure: pick the few this problem needs, and choose how to carry each out yourself or with a loaded skill that fits the step.
+- Give the answer with the reading it answers and what it was judged on, in your own message.
+- The answer goes to chat by default, and into a document as well when one is asked for.
 
-## A round
+## Mental models
 
-- Brief 3 read-only planner subagents alike: the reading, the context files,
-  the open questions, a 60-line cap. Each builds a different mechanism, not
-  just a different stance, and ends with the 3 strongest attacks on its plan.
-- Planners never see the rubric, so they solve the problem, not the test.
-- Write the plans into one file with a file tool, labelled in shuffled order,
-  and hand the judge its path.
-- The judge is one more subagent, neither a planner nor you, and hostile. It
-  checks every claim against the files, citing `path:line`, and uses the
-  planners' attacks as its red team. A wrong claim costs points, and so does a
-  criterion that cannot fail or that the honest empty outcome cannot pass;
-  length earns nothing. It applies the gate, then scores each lens with a
-  one-line reason. It never sees an earlier round's scores.
-- It grafts at most 3 ideas from the losers that lower none of the winner's
-  heaviest lenses, each credited by name, and writes the grafted plan as
-  answers to the same questions.
-- Recompute the weighted totals with a script, never the judge's arithmetic.
+Ways to see the problem, each with when it helps.
 
-## Rounds
+- Delight, not more of the same: when the ask is fully specified, since doing the expected better only avoids complaint, look for what the owner would prize yet never thought to ask.
+- Outside view: when you cannot tell how good ordinary is, look at how similar work actually turned out and set the bar from that, not from this case's details.
+- Inversion: when the goal is vague, ask what would make the result certain to fail and design those causes out.
+- Constraint: when many things could be improved, find the single limit that holds the whole result back, since effort elsewhere changes nothing.
+- Analogy: when every answer in the field looks alike, borrow the structure of a problem already solved in another field.
 
-- A grafted plan is unjudged: it competes in the next round against the 3
-  planners' new plans, their briefs now carrying the judge's findings.
-- Stop when the winner's weighted total is at least 80. Stop earlier when the
-  scores across rounds have flattened with little gain and no new way out,
-  and say so with the best score reached. There is no fixed round cap.
+## Problem-solving strategies
 
-## Output
+Ways to reach a better answer, each with when it helps.
 
-- Spend one cheap check on the judge's key findings first.
-- Give the winning plan, its score per lens, the reading it answers and the
-  credited grafts, in your own message, never left in a subagent's scratch.
-- Post any artifact from a file written with a file tool (`--body-file
-  <path>`), never a shell heredoc, which a guard may refuse whole.
-- The answer goes to chat by default, and into a document as well when one is
-  asked for.
+- Fix the bar first: when good is a matter of taste, write down what ordinary and ideal look like on each thing that matters before any answer exists, so no answer sets its own bar.
+- Rival answers: when the first idea would anchor you, make several answers that differ in mechanism, not just in stance, then compare them against the rubric and pick the best.
+- Independent judge: when you wrote the answers, have them judged by one who wrote none and checks each claim against the facts, and total the scores by calculation, not by impression.
+- Refine on criticism: when the best answer has named faults, fix those and judge it again as new, stopping when the gains flatten.
+- Work backwards: when the end is clear and the path is not, start from the finished result and ask what must be true just before it.
