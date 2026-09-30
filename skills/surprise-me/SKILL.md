@@ -1,6 +1,6 @@
 ---
 name: surprise-me
-description: Use when the owner wants a result well above ordinary - reads their words as meant, then sees the problem through mental models and reaches past the plain answer with problem-solving strategies; not when one plain answer will do.
+description: Use when the owner wants a result well above ordinary - it settles what their words mean, then picks mental models and problem-solving strategies to beat the first answer; not when one plain answer will do, the answer is still the user's to make (grill-me), or it is settled and only needs showing (show-me).
 disable-model-invocation: true
 ---
 
