@@ -3,10 +3,13 @@
 "file exists" and leave the old file in place; `>|`, `>>`, a descriptor copy such as `2>&1`, and a new file run."""
 import json
 import os
+import re
 import sys
 
 SUBST = "\0subst\0"  # stands for a `$(...)` or backtick substitution; NUL never survives in a real command
 METACHARS = set(" \t\n;&|()<>")
+ASSIGN = re.compile(r"(?:^|[;&|(\n{]|\b(?:export|local|typeset)\s)\s*([A-Za-z_]\w*)=")
+VAR = re.compile(r"\$(?:([A-Za-z_]\w*)|\{([A-Za-z_]\w*)\})")
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 kill_guard = __import__("kill-guard")  # the heredoc and substitution readers are shared, not copied
@@ -48,7 +51,7 @@ def word(text, i):
 
 
 def targets(text):
-    """Yield the target word of each plain `>` or `&>` redirect outside quotes and comments."""
+    """Yield the target word and its index of each plain `>` or `&>` redirect outside quotes and comments."""
     i, quote = 0, None
     while i < len(text):
         c = text[i]
@@ -79,9 +82,30 @@ def targets(text):
                 j += 1
             target, i = word(text, j)
             if target:
-                yield target
+                yield target, j
             continue
         i += 1
+
+
+def expand(target, at, text):
+    """target with each `$NAME` or `${NAME}` replaced by its last assignment before index at in text, else the
+    environment's; None when a name stays unset or its value is not plain text."""
+    values = {}
+    for m in ASSIGN.finditer(text, 0, at):
+        value, _ = word(text, m.end())
+        values[m.group(1)] = value
+    bad = False
+
+    def sub(m):
+        nonlocal bad
+        name = m.group(1) or m.group(2)
+        value = values.get(name, os.environ.get(name))
+        if value is None or "$" in value or SUBST in value:
+            bad = True
+            return ""
+        return value
+    out = VAR.sub(sub, target)
+    return None if bad or "$" in out else out
 
 
 def clobbers(command, cwd):
@@ -91,12 +115,17 @@ def clobbers(command, cwd):
         found = clobbers(body, cwd)
         if found:
             return found
-    for target in targets(text):
-        if SUBST in target or "$" in target:
+    for target, at in targets(text):
+        if SUBST in target:
             continue  # its value is unknown until the shell expands it
+        shown = target
+        if "$" in target:
+            target = expand(target, at, text)
+            if target is None:
+                continue  # unset, or not plain text: the shell decides
         path = os.path.join(cwd, os.path.expanduser(target))
         if os.path.isfile(path):  # noclobber spares devices such as /dev/null
-            return target
+            return shown
     return None
 
 

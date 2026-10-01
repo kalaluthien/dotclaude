@@ -27,6 +27,11 @@ REFUSE = [
     "echo \"$(echo hi > old.txt)\"",
     "(echo hi > old.txt)",
     "echo '>' x; echo hi > old.txt",
+    "L=old.txt; echo hi > $L",
+    "L=old.txt; echo hi > \"$L\"",
+    "L=old.txt; echo hi > ${L}",
+    "L=old.txt; while true; do ls > $L 2>&1; c=$?; [ $c -ne 75 ] && break; sleep 30; done",
+    "echo hi > $OLDFILE",
 ]
 ALLOW = [
     "echo hi >| old.txt",
@@ -52,14 +57,17 @@ ALLOW = [
     "diff <(ls) old.txt",
     "tee >(cat) < old.txt",
     "echo hi > $FILE",
+    "L=new.txt; echo hi > $L",
+    "echo hi > $UNSET_VAR_X",
+    "L=old.txt; echo hi >| $L",
     "ls",
 ]
 
 
-def run(command, cwd):
+def run(command, cwd, env=None):
     payload = {"hook_event_name": "PreToolUse", "tool_name": "Bash", "cwd": cwd, "tool_input": {"command": command}}
     # the hook runs from elsewhere, so only the input's cwd can make old.txt resolve
-    return subprocess.run([sys.executable, SCRIPT], input=json.dumps(payload), capture_output=True, text=True, cwd="/")
+    return subprocess.run([sys.executable, SCRIPT], input=json.dumps(payload), capture_output=True, text=True, cwd="/", env=env)
 
 
 class RedirectGuard(unittest.TestCase):
@@ -70,6 +78,9 @@ class RedirectGuard(unittest.TestCase):
         os.mkdir(os.path.join(cls.cwd, "sub"))
         with open(os.path.join(cls.cwd, "old.txt"), "w") as f:
             f.write("old\n")
+        cls.env = {**os.environ, "OLDFILE": os.path.join(cls.cwd, "old.txt")}
+        cls.env.pop("UNSET_VAR_X", None)
+        cls.env.pop("FILE", None)
 
     @classmethod
     def tearDownClass(cls):
@@ -78,7 +89,7 @@ class RedirectGuard(unittest.TestCase):
     def test_refuse(self):
         for command in REFUSE:
             with self.subTest(command=command):
-                result = run(command, self.cwd)
+                result = run(command, self.cwd, self.env)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 out = json.loads(result.stdout)["hookSpecificOutput"]
                 self.assertEqual(out["permissionDecision"], "deny")
@@ -87,7 +98,7 @@ class RedirectGuard(unittest.TestCase):
     def test_allow(self):
         for command in ALLOW:
             with self.subTest(command=command):
-                result = run(command, self.cwd)
+                result = run(command, self.cwd, self.env)
                 self.assertEqual((result.returncode, result.stdout, result.stderr), (0, "", ""))
 
 
