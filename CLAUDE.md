@@ -33,6 +33,8 @@ Pick the cheapest correct instrument: a shell command for awkward string work, P
 
 On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
+Keep what a long job needs past a reboot outside `/private/tmp`, the session scratchpad included, because a reboot empties it.
+
 ## Hill climbing
 
 Turn a task into objectively verifiable criteria, then loop until they are met without hacks: the criteria verify the solution, they do not define it, so a hardcoded pass is a failure.
