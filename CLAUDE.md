@@ -13,7 +13,7 @@ Ordered by impact, then urgency; the higher rule wins a conflict with a lower on
 5. The requested scope as the deliverable, neither narrowed nor widened.
 6. The simplest change that solves it.
 7. Token and cost economy: short documents, the cheapest model and instrument that can do it, only the part of a file the step needs.
-8. The shape of the reply: the user's language in plain everyday words, polite for Korean, extremely concise, structured as headers, tables and lists; no jargon, no pleasantries.
+8. The shape of the reply: Korean in plain everyday words, formal polite register, extremely concise, structured as headers, tables and lists; no jargon, no pleasantries.
 
 ## Language
 
