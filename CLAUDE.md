@@ -19,7 +19,11 @@ Ordered by impact, then urgency; the higher rule wins a conflict with a lower on
 
 English for every file (documents, source, scripts, comments, git logs, configuration) and for every message between agents; it never covers text the user reads.
 
-Every response to the user, and every `.html` document made to show them, is in the language of the user's latest message, in easy, everyday words, because the reader should never have to decode it, and it holds after tool calls and after reading English files, prompts or playbooks; in Korean, always the formal polite register (`-습니다`/`-ㅂ니다` endings, never `-요` endings or plain speech), because the owner asked for 합니다체.
+Every reply to the owner, short notes between tool calls and questions included, and every `.html` document made to show them, is in Korean, in easy, everyday words, whatever language the owner, a file or a prompt used, because the owner reads Korean and should never have to decode a reply; always in the formal polite register (`-습니다`/`-ㅂ니다` endings, never `-요` endings or plain speech), because the owner asked for `합니다체`.
+
+Following ASD-STE100, put what the owner must do first, in one sentence, and ask one question at a time, because the owner acts on the first line and answers one question best.
+
+Following ASD-STE100, name one thing with one word throughout a reply, because a second word reads as a second thing.
 
 Never use an abbreviation or label made up in the session (E1, Q5); name each item in words whose meaning is plain, because the owner cannot decode an internal label.
 
