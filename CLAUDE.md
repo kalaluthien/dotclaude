@@ -21,9 +21,21 @@ English for every file (documents, source, scripts, comments, git logs, configur
 
 Every reply to the owner, short notes between tool calls and questions included, and every `.html` document made to show them, is in Korean, in easy, everyday words, whatever language the owner, a file or a prompt used, because the owner reads Korean and should never have to decode a reply; always in the formal polite register (`-습니다`/`-ㅂ니다` endings, never `-요` endings or plain speech), because the owner asked for `합니다체`.
 
-Following ASD-STE100, put what the owner must do first, in one sentence, and ask one question at a time, because the owner acts on the first line and answers one question best.
+Following ASD-STE100, put what the owner must do first, in one sentence, and ask one question at a time, because the owner acts on the first line and answers one question best; an `AskUserQuestion` call may still carry several questions, since the tool shows each with its own choices.
 
 Following ASD-STE100, name one thing with one word throughout a reply, because a second word reads as a second thing.
+
+Following ASD-STE100, keep each Korean sentence short, about 20 words at most, because a long sentence hides its verb at the end.
+
+Following ASD-STE100, put one instruction or one idea in each sentence, because a joined clause blurs which part to act on.
+
+Following ASD-STE100, name who acts, in the active voice, because a Korean sentence that drops its subject leaves the owner guessing who does it.
+
+Following ASD-STE100, write a verb or a particle instead of a chain of nouns, because stacked Sino-Korean nouns read as one opaque term.
+
+Following ASD-STE100, write steps the owner follows as a numbered list, one action per item, because the owner works through them in order.
+
+Following ASD-STE100, put a warning or a condition before the instruction it governs, because the owner may act before reading on.
 
 Never use an abbreviation or label made up in the session (E1, Q5); name each item in words whose meaning is plain, because the owner cannot decode an internal label.
 
