@@ -133,12 +133,18 @@
     "allow": [
       "$defaults",
       "Bash(herdr:*) routine in kalaluthien/mumu-claude-plugin — high-frequency project-local coordination CLI (1097 uses observed)",
-      "Teamwork worktree cleanup: running /Users/hyungmokim/workspace/plugins/teamwork/skills/kick-off/scripts/remove-worktree.py <name>... to remove a finished worker's worktree under .claude/worktrees/ and its local branch, then fast-forward the checkout, is allowed.",
-      "Teamwork pull request merge: a teamwork worker running `gh pr merge <n> --squash --delete-branch` (optionally with -R) on its own pull request in a kalaluthien/* repository, after its judge approved, is allowed; the branch protection and required checks still gate it.",
-      "Teamwork worker file edits: a teamwork worker editing, deleting or `git rm`-ing files, including hooks/ and settings.json, inside its own worktree under .claude/worktrees/ of a kalaluthien/* repository, on its own branch for a reviewed pull request, is allowed; the judge's approval and the branch protection still gate the merge.",
+      "Teamwork worktree cleanup: running /Users/hyungmokim/workspace/plugins/teamwork/skills/kick-off/scripts/remove-worktree.py <name>... to remove a finished worker's worktree under .claude/worktrees/ and its local branch, then fast-forward the checkout, is allowed; so are that script's own git steps run by hand on the same worktree and branch: `git worktree remove .claude/worktrees/<name>`, `git branch -D <name>`, `git push origin --delete <name>`, `git pull --ff-only`.",
+      "Teamwork pull request merge: a teamwork worker running `gh pr merge <n> --squash --delete-branch` (optionally with -R and --match-head-commit <sha>), or teamwork's `pr-merge.py <pr url>`, on its own pull request in a kalaluthien/* repository, after its judge approved, is allowed; the branch protection and required checks still gate it.",
+      "Teamwork worker file edits: a teamwork worker editing, deleting or `git rm`-ing files, including hooks/ and settings.json, inside its own worktree under .claude/worktrees/ of a kalaluthien/* repository, on its own branch for a reviewed pull request, is allowed, as is `git apply` of a patch from the session scratchpad there; the judge's approval and the branch protection still gate the merge.",
       "Bash(herdr:*) routine in kalaluthien/homeops — project-local coordination CLI observed repeatedly in this repo's transcripts",
       "Teamwork own issue comment edit: a teamwork session running `gh issue comment <url> --edit-last` or `gh api -X PATCH repos/kalaluthien/<repo>/issues/comments/<id>` on a comment it wrote in a kalaluthien/* repository, to correct its own report, is allowed.",
-      "homeops watch install: running `just watch-install` (subjects/watch/watch.sh install, which boots out, bootstraps and rewrites only homeops.* launch agents under ~/Library/LaunchAgents) from ~/workspace/projects/homeops is allowed."
+      "homeops watch install: running `just watch-install` (subjects/watch/watch.sh install, which boots out, bootstraps and rewrites only homeops.* launch agents under ~/Library/LaunchAgents) from ~/workspace/projects/homeops is allowed.",
+      "Teamwork read-only checks: `gh pr view`, `gh issue view`, `gh api` GET, `git fetch`, `git ls-remote`, `git rev-list`, and read-only validation of a file (`jq`, `python3 -m json.tool`, `zsh -n`, `git apply --check`), including of settings.json or a scratchpad script, are allowed, alone or chained with `sleep`, `echo` and `&&`.",
+      "Teamwork messages: a teamwork session using SendMessage to a named session or agent from ListAgents, to report finished work or answer its question, is allowed.",
+      "Teamwork branch push: a teamwork worker running `git push -u origin <its own branch>` for its own non-default branch in a kalaluthien/* repository, optionally after `git fetch origin` and a `git ls-remote` check that the branch is free, is allowed.",
+      "Teamwork own-session prompt: a teamwork session running `herdr agent prompt $HERDR_PANE_ID \"<slash command>\"` on its own pane, such as /rename, /compact or a skill the owner asked for, is allowed.",
+      "Memory index pointer: appending one `- [Title](file.md) — hook` line to MEMORY.md in the session's own ~/.claude/projects/*/memory/ directory, after writing that memory file, is allowed.",
+      "homeops sweep qos: running `just sweep-up qos` (subjects/sweep/sweep.sh up qos, the same code path the daily homeops.sweep agent runs) from ~/workspace/projects/homeops is allowed."
     ],
     "environment": [
       "### Org-wide",
@@ -164,6 +170,7 @@
       "**Default / protected branches**: `main` is the default branch on kalaluthien/homeops; rulesets not queryable here and no classic protected branches listed — do not assume unprotected",
       "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine (this Mac mini) with open internet",
       "**Source control**: The trusted repo kalaluthien/homeops (github.com) and its origin remote only — private, so confidential project material is fine here but secrets/personal data are never cleared by visibility",
+      "**Source control**: The trusted repo kalaluthien/dotclaude (github.com), the repo of `~/.claude`, and its origin remote — a teamwork worker's branch, pull request and merge there are this repo's own work",
       "### User-specific",
       "**Primary use of Claude Code**: software development, including multi-agent/worker-based team workflows (herdr, decision-post, worker-start, session-close, worker-close, decide, lead-start, mumu-team tooling) scoped to this repo",
       "**Trusted repo**: kalaluthien/mumu-claude-plugin (github.com), the working directory's origin remote — public; only this repo's own work belongs in it",
