@@ -166,8 +166,6 @@
     "allow": [
       "$defaults",
       "Bash(herdr:*) routine in kalaluthien/mumu-claude-plugin — high-frequency project-local coordination CLI (1097 uses observed)",
-      "Bash(decision-post:*) routine in kalaluthien/mumu-claude-plugin — frequent project-local workflow CLI (104 uses observed)",
-      "Bash(worker-start:*) routine in kalaluthien/mumu-claude-plugin — frequent project-local workflow CLI (77 uses observed)",
       "Teamwork worktree cleanup: running /Users/hyungmokim/workspace/plugins/teamwork/skills/kick-off/scripts/remove-worktree.py <name>... to remove a finished worker's worktree under .claude/worktrees/ and its local branch, then fast-forward the checkout, is allowed.",
       "Teamwork pull request merge: a teamwork worker running `gh pr merge <n> --squash --delete-branch` (optionally with -R) on its own pull request in a kalaluthien/* repository, after its judge approved, is allowed; the branch protection and required checks still gate it."
     ]
