@@ -49,6 +49,8 @@ Pick the cheapest correct instrument: a shell command for awkward string work, P
 
 On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
+The Bash tool's shell is zsh: test a bash script under `bash`, never by pasting its lines, since zsh matches an unquoted `$var` in a `case` pattern literally.
+
 Keep what a long job needs past a reboot outside `/private/tmp`, the session scratchpad included, because a reboot empties it.
 
 ## Hill climbing
