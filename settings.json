@@ -1,5 +1,4 @@
 {
-  "autoCompactWindow": 250000,
   "syncClaudeAiSkills": false,
   "permissions": {
     "allow": [
@@ -120,6 +119,7 @@
       "effortLevel": "medium"
     }
   },
+  "autoCompactWindow": 250000,
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
   "askUserQuestionTimeout": "never",
@@ -132,5 +132,44 @@
   "autoScrollEnabled": true,
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: PUBLIC — kalaluthien/mumu-claude-plugin (github.com). Any push or commit here is a publication.",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: `main` is the default branch and is protected via ruleset `mumu-default-branch` (active) on kalaluthien/mumu-claude-plugin",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine with open internet",
+      "**Source control**: The trusted repo kalaluthien/mumu-claude-plugin (github.com) and its origin remote only — public visibility, so only this repo's own work belongs in commits/pushes here",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (hyphen/underscore/dot-delimited — e.g. matches `prod-db`, not `producer`)",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development, including multi-agent/worker-based team workflows (herdr, decision-post, worker-start, session-close, worker-close, decide, lead-start, mumu-team tooling) scoped to this repo",
+      "**Trusted repo**: kalaluthien/mumu-claude-plugin (github.com), the working directory's origin remote — public; only this repo's own work belongs in it",
+      "**Org-specific CLIs**: None configured — herdr, decision-post, worker-start, session-close, worker-close, decide, lead-start, mumu-team, root, cmp, pr-merge, lead-name, gate-scope, review-model, teamwork are project-local multi-agent workflow tools observed heavily in this repo's transcripts, not confirmed org infrastructure",
+      "routine under kalaluthien/mumu-claude-plugin prefix: git and build/test operations scoped to this repo's working tree"
+    ],
+    "allow": [
+      "$defaults",
+      "Bash(herdr:*) routine in kalaluthien/mumu-claude-plugin — high-frequency project-local coordination CLI (1097 uses observed)",
+      "Bash(decision-post:*) routine in kalaluthien/mumu-claude-plugin — frequent project-local workflow CLI (104 uses observed)",
+      "Bash(worker-start:*) routine in kalaluthien/mumu-claude-plugin — frequent project-local workflow CLI (77 uses observed)",
+      "Teamwork worktree cleanup: running /Users/hyungmokim/workspace/plugins/teamwork/skills/kick-off/scripts/remove-worktree.py <name>... to remove a finished worker's worktree under .claude/worktrees/ and its local branch, then fast-forward the checkout, is allowed.",
+      "Teamwork pull request merge: a teamwork worker running `gh pr merge <n> --squash --delete-branch` (optionally with -R) on its own pull request in a kalaluthien/* repository, after its judge approved, is allowed; the branch protection and required checks still gate it."
+    ]
+  }
 }
