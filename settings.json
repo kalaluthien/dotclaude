@@ -48,10 +48,6 @@
           {
             "type": "command",
             "command": "python3 \"$HOME/.claude/hooks/kill-guard.py\""
-          },
-          {
-            "type": "command",
-            "command": "python3 \"$HOME/.claude/hooks/redirect-guard.py\""
           }
         ]
       }
