@@ -134,6 +134,15 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(herdr:*) routine in kalaluthien/mumu-claude-plugin — high-frequency project-local coordination CLI (1097 uses observed)",
+      "Teamwork worktree cleanup: running /Users/hyungmokim/workspace/plugins/teamwork/skills/kick-off/scripts/remove-worktree.py <name>... to remove a finished worker's worktree under .claude/worktrees/ and its local branch, then fast-forward the checkout, is allowed.",
+      "Teamwork pull request merge: a teamwork worker running `gh pr merge <n> --squash --delete-branch` (optionally with -R) on its own pull request in a kalaluthien/* repository, after its judge approved, is allowed; the branch protection and required checks still gate it.",
+      "Bash(herdr:*) routine in kalaluthien/homeops — project-local coordination CLI observed repeatedly in this repo's transcripts",
+      "Teamwork own issue comment edit: a teamwork session running `gh issue comment <url> --edit-last` or `gh api -X PATCH repos/kalaluthien/<repo>/issues/comments/<id>` on a comment it wrote in a kalaluthien/* repository, to correct its own report, is allowed.",
+      "homeops watch install: running `just watch-install` (subjects/watch/watch.sh install, which boots out, bootstraps and rewrites only homeops.* launch agents under ~/Library/LaunchAgents) from ~/workspace/projects/homeops is allowed."
+    ],
     "environment": [
       "### Org-wide",
       "**Organization**: None configured",
@@ -144,7 +153,6 @@
       "**Default / protected branches**: `main` is the default branch and is protected via ruleset `mumu-default-branch` (active) on kalaluthien/mumu-claude-plugin",
       "**CI/CD deploy targets**: None configured",
       "**Network posture**: None configured",
-      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine with open internet",
       "**Source control**: The trusted repo kalaluthien/mumu-claude-plugin (github.com) and its origin remote only — public visibility, so only this repo's own work belongs in commits/pushes here",
       "**Trusted internal domains**: None configured",
       "**Trusted cloud buckets**: None configured",
@@ -152,22 +160,22 @@
       "**Internal package registry**: None configured",
       "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar",
       "**Data retention / declassification**: None configured",
-      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
       "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
       "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
-      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
       "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (hyphen/underscore/dot-delimited — e.g. matches `prod-db`, not `producer`)",
+      "**Repository visibility**: private — kalaluthien/homeops (github.com)",
+      "**Default / protected branches**: `main` is the default branch on kalaluthien/homeops; rulesets not queryable here and no classic protected branches listed — do not assume unprotected",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine (this Mac mini) with open internet",
+      "**Source control**: The trusted repo kalaluthien/homeops (github.com) and its origin remote only — private, so confidential project material is fine here but secrets/personal data are never cleared by visibility",
       "### User-specific",
       "**Primary use of Claude Code**: software development, including multi-agent/worker-based team workflows (herdr, decision-post, worker-start, session-close, worker-close, decide, lead-start, mumu-team tooling) scoped to this repo",
       "**Trusted repo**: kalaluthien/mumu-claude-plugin (github.com), the working directory's origin remote — public; only this repo's own work belongs in it",
       "**Org-specific CLIs**: None configured — herdr, decision-post, worker-start, session-close, worker-close, decide, lead-start, mumu-team, root, cmp, pr-merge, lead-name, gate-scope, review-model, teamwork are project-local multi-agent workflow tools observed heavily in this repo's transcripts, not confirmed org infrastructure",
-      "routine under kalaluthien/mumu-claude-plugin prefix: git and build/test operations scoped to this repo's working tree"
-    ],
-    "allow": [
-      "$defaults",
-      "Bash(herdr:*) routine in kalaluthien/mumu-claude-plugin — high-frequency project-local coordination CLI (1097 uses observed)",
-      "Teamwork worktree cleanup: running /Users/hyungmokim/workspace/plugins/teamwork/skills/kick-off/scripts/remove-worktree.py <name>... to remove a finished worker's worktree under .claude/worktrees/ and its local branch, then fast-forward the checkout, is allowed.",
-      "Teamwork pull request merge: a teamwork worker running `gh pr merge <n> --squash --delete-branch` (optionally with -R) on its own pull request in a kalaluthien/* repository, after its judge approved, is allowed; the branch protection and required checks still gate it."
+      "routine under kalaluthien/mumu-claude-plugin prefix: git and build/test operations scoped to this repo's working tree",
+      "**Primary use of Claude Code**: software development — maintaining this homeops Mac mini repo (host bootstrap/fill scripts, just recipes, launch agents, Tailscale/adb-based host checks)",
+      "**Trusted repo**: kalaluthien/homeops (github.com), the working directory's origin remote — private",
+      "**Org-specific CLIs**: None configured — herdr, decision-post, session-close, worker-start, pr-merge, check-scope, cmp, gate-scope, lead-name, lead-start are project-local multi-agent workflow tools observed in this repo's transcripts, not confirmed org infrastructure",
+      "routine under kalaluthien/homeops prefix: git, just recipes, and host-fill/host-check operations scoped to this repo's working tree"
     ]
   }
 }
