@@ -97,7 +97,7 @@ Never cite an id you predicted (a next issue number, a comment url, a release ta
 
 # Conventions
 
-Keep each work repository at `~/workspace/projects/<repo>` and the plugin marketplace at `~/workspace/plugins`; `~/workspace` is a plain folder, not a repository.
+Keep each work repository at `~/workspace/projects/<repo>` and the plugin marketplace at `~/workspace/plugins`.
 
 Give a new checkout its plugins by hand in its git-ignored `.claude/settings.local.json`, copied from a sibling, since none is enabled at user scope and no repository commits `enabledPlugins`.
 
