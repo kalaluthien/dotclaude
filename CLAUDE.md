@@ -49,10 +49,6 @@ Pick the cheapest correct instrument: a shell command for awkward string work, P
 
 On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
-The Bash tool's shell is zsh: test a bash script under `bash`, never by pasting its lines, since zsh matches an unquoted `$var` in a `case` pattern literally.
-
-Keep what a long job needs past a reboot outside `/private/tmp`, the session scratchpad included, because a reboot empties it.
-
 ## Hill climbing
 
 Turn a task into objectively verifiable criteria, then loop until they are met without hacks: the criteria verify the solution, they do not define it, so a hardcoded pass is a failure.
@@ -98,3 +94,11 @@ A signal read by presence confirms whatever was already true: count or order it 
 Never cite an id you predicted (a next issue number, a comment url, a release tag): read it back from the tool that made it, because another session can take it first.
 
 "Finished" includes the deploy: exercise the installed or served artifact, never a fixture standing in for it.
+
+# Conventions
+
+Keep each work repository at `~/workspace/projects/<repo>` and the plugin marketplace at `~/workspace/plugins`.
+
+Give a new checkout its plugins by hand in its git-ignored `.claude/settings.local.json`, copied from a sibling, since none is enabled at user scope and no repository commits `enabledPlugins`.
+
+Put a note that holds only on this machine in `~/.claude/rules/machine.md`, never here, because this file is shared across machines and that one is loaded in every session but never committed.
