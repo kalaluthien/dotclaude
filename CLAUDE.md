@@ -103,7 +103,7 @@ Never cite an id you predicted (a next issue number, a comment url, a release ta
 
 - Keep each work repository at `~/workspace/projects/<repo>` and the plugin marketplace at `~/workspace/plugins`; `~/workspace` is a plain folder, not a repository, so nothing lists or syncs the checkouts.
 - Give a new checkout its plugins by hand in its git-ignored `.claude/settings.local.json`, copied from a sibling, since none is enabled at user scope.
-- In zsh write `>|` to overwrite and `${=var}` to split, because the dotfiles set `noclobber` and an unquoted variable stays one word.
+- In zsh write `${=var}` to split, because an unquoted variable stays one word.
 - Bound a slow command with the Bash tool's timeout, since macOS has no `timeout`; call `/usr/bin/log`, since zsh's `log` builtin shadows it.
 - Drive a signed-in browser only in Aside, never the owner's Google Chrome; a test launching its own headless Chrome is exempt. Aside reaches claude-in-chrome through Chrome's bridge file copied to `~/Library/Application Support/Aside/NativeMessagingHosts/`.
 - Aside CLI: read `aside guide` first; `aside memory search "<q>" --json` answers what the owner prefers; an `exec` that sends, posts, pays, deletes or changes a setting is confirmed first.
