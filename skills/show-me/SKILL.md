@@ -1,6 +1,6 @@
 ---
 name: show-me
-description: Use when the user asks to see, show, explain, map, brief, compare or draw something - a system, structure, change, status, data, process or choice - as a diagram, table, chart, map, mockup, page, html or artifact (보여줘, 설명해줘, 그려줘, 표로, 정리해, 아티팩트로). Invoke it first, before reading any file, since it says how to read the source and pick the representation. Not for a single fact, a yes/no or capability question, or a command to run.
+description: Use when the user asks to see, show, explain, map, brief, compare or draw something - a system, structure, change, status, data, process or choice - as a diagram, table, chart, map, mockup, page, html or artifact. Invoke it first, before reading any file, since it says how to read the source and pick the representation. Not for a single fact, a yes/no or capability question, or a command to run.
 ---
 
 # show-me
