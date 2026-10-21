@@ -89,17 +89,6 @@
           }
         ]
       }
-    ],
-    "SubagentStart": [
-      {
-        "matcher": "tldraw-offline",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/skills/tldraw-offline/inject-server-context.mjs\" SubagentStart"
-          }
-        ]
-      }
     ]
   },
   "worktree": {
