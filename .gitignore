@@ -16,3 +16,6 @@
 
 # Bytecode a hook's import leaves
 /hooks/__pycache__/
+
+# Installed per machine, not shared
+/skills/tldraw-offline/
