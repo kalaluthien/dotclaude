@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
+Open the tree with the **ambition questions**, in the first round: the goal beyond the goal (what the user wants to happen after this work); what a top professional would do here, from what rawest material, with what methods and tools; and which other fields' work applies. Ask them as options that widen the plan, with the plan as asked recommended, since only the user widens their intent.
+
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask a round as one `AskUserQuestion` call of at most four questions from the frontier, picked by impact first (the answer that changes the most of the tree), then by concept order (a concept before the choices built on it); the rest of the frontier waits. Then wait for the user's answers before the next round.
 
 Shape each question so it is answerable without opening a file:
