@@ -130,6 +130,9 @@
     },
     "claude-sonnet-5": {
       "effortLevel": "medium"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
     }
   },
   "autoCompactWindow": 250000,
@@ -161,7 +164,8 @@
       "Teamwork branch push: a teamwork worker running `git push -u origin <its own branch>` for its own non-default branch in a kalaluthien/* repository, optionally after `git fetch origin` and a `git ls-remote` check that the branch is free, is allowed.",
       "Teamwork own-session prompt: a teamwork session running `herdr agent prompt $HERDR_PANE_ID \"<slash command>\"` on its own pane, such as /rename, /compact or a skill the owner asked for, is allowed.",
       "Memory index pointer: appending one `- [Title](file.md) — hook` line to MEMORY.md in the session's own ~/.claude/projects/*/memory/ directory, after writing that memory file, is allowed.",
-      "homeops sweep qos: running `just sweep-up qos` (subjects/sweep/sweep.sh up qos, the same code path the daily homeops.sweep agent runs) from ~/workspace/projects/homeops is allowed."
+      "homeops sweep qos: running `just sweep-up qos` (subjects/sweep/sweep.sh up qos, the same code path the daily homeops.sweep agent runs) from ~/workspace/projects/homeops is allowed.",
+      "Bash(herdr:*) routine in kalaluthien/mumu-claude-plugin — high-frequency project-local coordination CLI (636 uses observed)"
     ],
     "environment": [
       "### Org-wide",
