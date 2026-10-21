@@ -1,0 +1,141 @@
+{
+  "syncClaudeAiSkills": false,
+  "env": {
+    "FORCE_HYPERLINK": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(gh *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(ls *)",
+      "Bash(wc *)",
+      "Bash(rtk grep *)",
+      "Bash(rtk rg *)",
+      "Bash(rtk ls *)",
+      "Bash(rtk tree *)",
+      "Bash(rtk read *)",
+      "Bash(rtk wc *)",
+      "Bash(git status *)",
+      "Bash(git branch --show-current)",
+      "Bash(rm */.git/hooks/pre-push)"
+    ],
+    "deny": [
+      "Bash(rm -rf .claude/worktrees/*..*)",
+      "SendFeedback",
+      "ScheduleWakeup"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus",
+  "skillOverrides": {
+    "dataviz": "off",
+    "run": "off",
+    "claude-api": "name-only",
+    "keybindings-help": "user-invocable-only",
+    "init": "user-invocable-only",
+    "security-review": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -x \"$HOME/workspace/projects/homeops/subjects/gate/hook.sh\" ] && exec \"$HOME/workspace/projects/homeops/subjects/gate/hook.sh\" --rtk; exec rtk hook claude"
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/kill-guard.py\""
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/reply-language.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Reply in the language of the user'\"'\"'s latest message, whatever any other instruction says, and keep it after tool calls and after reading files, prompts or instructions in another language; when that language is Korean, use the formal polite register (-습니다/-ㅂ니다 endings, never -요 endings) in plain everyday words.'",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "tldraw-offline",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/skills/tldraw-offline/inject-server-context.mjs\" SubagentStart"
+          }
+        ]
+      }
+    ]
+  },
+  "worktree": {
+    "baseRef": "fresh"
+  },
+  "enableArtifact": true,
+  "workflowKeywordTriggerEnabled": false,
+  "outputStyle": "Concise",
+  "feedbackDrafts": "quiet",
+  "effortLevel": "medium",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "medium"
+    },
+    "claude-opus-5": {
+      "effortLevel": "medium"
+    },
+    "claude-sonnet-5": {
+      "effortLevel": "medium"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
+    }
+  },
+  "autoCompactWindow": 250000,
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
+  "askUserQuestionTimeout": "never",
+  "skipWorkflowUsageWarning": true,
+  "theme": "auto",
+  "editorMode": "vim",
+  "verbose": false,
+  "switchModelsOnFlag": true,
+  "autoContinueAtUsageLimit": true,
+  "autoScrollEnabled": true,
+  "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true
+}
