@@ -4,7 +4,7 @@
 # ...except these
 !/.gitignore
 !/CLAUDE.md
-!/settings.json
+!/settings.json.example
 !/skills/
 !/hooks/
 
