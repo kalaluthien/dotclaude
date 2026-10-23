@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Merge settings.json.example into settings.json: the example wins on shared keys, local-only keys stay, hooks are
-concatenated per event, and the old file is backed up first. A local hook group the previous example held is dropped,
+concatenated per event, permission lists are unioned, and the old file is backed up first. A local hook group the previous example held is dropped,
 so an edited example hook replaces its old copy. Rerun after every pull that touches the example."""
 import json
 import shutil
@@ -13,6 +13,12 @@ LAST = ROOT / "backups" / "settings.json.example.last"
 PER_MACHINE = ("theme", "feedbackDrafts")
 
 
+def same(a, b):
+    """True when two hook groups differ only by `$HOME` against its expansion."""
+    home = str(Path.home())
+    return json.dumps(a, sort_keys=True).replace(home, "$HOME") == json.dumps(b, sort_keys=True).replace(home, "$HOME")
+
+
 def merge(example, local, last):
     merged = json.loads(json.dumps(example))
     for key, value in local.items():
@@ -20,10 +26,12 @@ def merge(example, local, last):
             for event, groups in value.items():
                 target = merged.setdefault("hooks", {}).setdefault(event, [])
                 old = last.get("hooks", {}).get(event, [])
-                target.extend(g for g in groups if g not in target and g not in old)
+                target.extend(g for g in groups if not any(same(g, t) for t in target + old))
         elif key == "permissions":
             for sub, sub_value in value.items():
-                merged.setdefault("permissions", {}).setdefault(sub, sub_value)
+                have = merged.setdefault("permissions", {}).setdefault(sub, sub_value)
+                if isinstance(have, list) and isinstance(sub_value, list):
+                    have.extend(v for v in sub_value if v not in have)
         elif key in PER_MACHINE:
             merged[key] = value
         else:
