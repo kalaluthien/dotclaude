@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Merge settings.json.example into settings.json: the example wins on shared keys, local-only keys stay, hooks are
-concatenated per event, permission lists are unioned, and the old file is backed up first. A local hook group the previous example held is dropped,
-so an edited example hook replaces its old copy. Rerun after every pull that touches the example."""
+concatenated per event, permission lists are unioned, and the old file is backed up first. A local hook group the
+previous example held is dropped, so an edited example hook replaces its old copy. Rerun after every pull that
+touches the example."""
 import json
 import shutil
 import time
@@ -14,9 +15,11 @@ PER_MACHINE = ("theme", "feedbackDrafts")
 
 
 def same(a, b):
-    """True when two hook groups differ only by `$HOME` against its expansion."""
-    home = str(Path.home())
-    return json.dumps(a, sort_keys=True).replace(home, "$HOME") == json.dumps(b, sort_keys=True).replace(home, "$HOME")
+    """True when two hook groups differ only by `$HOME` against its expansion or by the quote style of a path."""
+    def flat(group):
+        text = json.dumps(group, sort_keys=True).replace(str(Path.home()), "$HOME")
+        return text.replace('\\"', "").replace("'", "")
+    return flat(a) == flat(b)
 
 
 def merge(example, local, last):
