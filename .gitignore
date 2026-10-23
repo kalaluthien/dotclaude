@@ -4,18 +4,16 @@
 # ...except these
 !/.gitignore
 !/CLAUDE.md
+!/README.md
 !/settings.json.example
-!/skills/
 !/hooks/
+!/scripts/
+!/skills/
 
-# Account skills the harness syncs down; a cache, not source
-/skills/synced/
-
-# Where the harness moves a synced skill it drops
-/skills/.trash/
+# Skills are installed by plugins, the harness and by hand; track only ours
+/skills/*
+!/skills/grill-me/
+!/skills/show-me/
 
 # Bytecode a hook's import leaves
 /hooks/__pycache__/
-
-# Installed per machine, not shared
-/skills/tldraw-offline/

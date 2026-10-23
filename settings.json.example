@@ -47,7 +47,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -x \"$HOME/workspace/projects/homeops/subjects/gate/hook.sh\" ] && exec \"$HOME/workspace/projects/homeops/subjects/gate/hook.sh\" --rtk; exec rtk hook claude"
+            "command": "[ -x \"$HOME/workspace/projects/homeops/subjects/gate/hook.sh\" ] && exec \"$HOME/workspace/projects/homeops/subjects/gate/hook.sh\" --rtk; command -v rtk >/dev/null && exec rtk hook claude; exit 0"
           },
           {
             "type": "command",
