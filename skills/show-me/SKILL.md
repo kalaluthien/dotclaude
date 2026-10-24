@@ -14,7 +14,7 @@ Show the user what they want to understand, built from the thing itself.
 3. **Pick by matching.** Find the case below whose question and data shape match, and use its representation; the smallest that answers wins. One representation per question.
 4. **Show it.** Open with the one-sentence answer, then the representation, then what the reader can do next. Something that fits one screen goes in chat: a table, a tree, a short list, a fenced diagram. A rich page (several parts, controls, styling) is an Artifact prompt's job: hand it the picked representations, the facts and their sources, and let it build the page.
 
-Render each diagram with pele, Mermaid to SVG, when it is available (the `pele` package or a pele tool); the links below are its examples.
+Draw each diagram, never paste Mermaid, since chat shows it as raw text: where `mmdc` is on `PATH` or `npx -y @mermaid-js/mermaid-cli` runs, render each to PNG and send it by `SendUserFile`; where neither runs, use a table, a tree list or an ASCII drawing, and hand the user `! npx -y @mermaid-js/mermaid-cli --version`. The links below are example drawings.
 
 ## Question types and data shapes
 
