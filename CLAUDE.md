@@ -49,6 +49,8 @@ Pick the cheapest correct instrument: a shell command for awkward string work, P
 
 On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
+To put a backtick or single quote inside a command you write, use printf's octal `\140` or `\047`, never a `\u0060` or `\u0027` escape, since the tool input turns a `\u` escape into the raw character before the shell sees it.
+
 To stop a process, run `pgrep -fl <pattern>` in its own call, then `kill <pid>`; never `pkill -f` or `pkill` without `-x`, since the kill-guard hook refuses it and the call is lost.
 
 ## Hill climbing
