@@ -49,6 +49,8 @@ Pick the cheapest correct instrument: a shell command for awkward string work, P
 
 On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since `--allowedTools A B "prompt"` eats the prompt.
 
+To stop a process, run `pgrep -fl <pattern>` in its own call, then `kill <pid>`; never `pkill -f` or `pkill` without `-x`, since the kill-guard hook refuses it and the call is lost.
+
 ## Hill climbing
 
 Turn a task into objectively verifiable criteria, then loop until they are met without hacks: the criteria verify the solution, they do not define it, so a hardcoded pass is a failure.
