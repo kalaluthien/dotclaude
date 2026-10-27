@@ -15,6 +15,9 @@ HINTS = [
      "The tool shell's `diff` is a broken zsh autoload stub: call `/usr/bin/diff` instead."),
     (re.compile(r"^\(eval\):\d+: parse error near `\(\)'", re.M),
      "zsh refuses `name() { … }` when `name` is an alias: define the function as `function name { … }`."),
+    (re.compile(r"^open \S.*: no such file or directory$", re.M),
+     "A file the command names was never written, often because the call meant to write it was denied or failed, "
+     "so nothing in it ran: write the file in its own step, check it exists, then rerun."),
 ]
 
 
