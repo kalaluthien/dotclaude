@@ -12,9 +12,14 @@ Show the user what they want to understand, built from the thing itself.
 1. **Name the core question.** Before anything else, write in one line what the user really wants to understand and what it is about, as one of the question types below. An ask with several questions gets one line each.
 2. **Read the original.** Open the source itself: the file, log, diff, data, page or transcript. Never a summary of it, a memory, or an earlier answer. Quote what you show with its `path:line` or URL.
 3. **Pick by matching.** Find the case below whose question and data shape match, and use its representation; the smallest that answers wins. One representation per question.
-4. **Show it.** Open with the one-sentence answer, then the representation, then what the reader can do next. Something that fits one screen goes in chat: a table, a tree, a short list, a fenced diagram. A rich page (several parts, controls, styling) is an Artifact prompt's job: hand it the picked representations, the facts and their sources, and let it build the page.
+4. **Show it.** Write the result as one self-contained HTML file, never a chat table, tree, fenced diagram, PNG or ASCII drawing, since the owner asked for HTML only. Chat holds the one-sentence answer, the file's full path and the next step. The page opens with that sentence, then the representation, then what the reader can do next.
 
-Draw each diagram, never paste Mermaid, since chat shows it as raw text: where `mmdc` is on `PATH` or `npx -y @mermaid-js/mermaid-cli` runs, render each to PNG, print its full path in the reply, since a terminal tab shows no `SendUserFile` file, and never run `open`; send it by `SendUserFile` too for a remote viewer (phone, Remote Control, desktop app); where neither runs, use a table, a tree list or an ASCII drawing, and hand the user `! npx -y @mermaid-js/mermaid-cli --version`. The links below are example drawings.
+## The page
+
+- **Make it polished**: the owner asked for a page that is visually well considered, so load `artifact-design` (and `artifact-diagramming` for a drawing) when listed, and follow them for type, spacing, colour, both themes and a narrow screen.
+- **One file**: inline CSS and SVG, no external fetch, no build step, a few lines of script only for a live control. Draw each diagram as inline SVG, never Mermaid or an image.
+- **Write it** to a new file under the scratchpad, or `~/Documents/show-me/` when no scratchpad exists, named for its subject (`retry-rule.html`). Print its full path in the reply, since a terminal tab shows no `SendUserFile` file, and never run `open`; send it by `SendUserFile` too for a remote viewer (phone, Remote Control, desktop app).
+- **Check it**: read the file back and confirm it holds each quoted `path:line`, then fix a broken tag or an overflow before you report it.
 
 ## Question types and data shapes
 
@@ -70,4 +75,4 @@ Each entry: when to pick it, then a tiny example.
 ### What if
 
 - **Scenario table**: one choice or value varied, each setting against what it causes. *Retries 1 / 3 / 5 → success rate and wait time.*
-- **Live control page**: a value judged by seeing or feeling it, such as a colour, a timing or a layout, or a large graph or data set the reader explores by filtering, hovering and selecting; a rich page, so an Artifact prompt. *A slider for the animation easing, with the box moving.*
+- **Live control page**: a value judged by seeing or feeling it, such as a colour, a timing or a layout, or a large graph or data set the reader explores by filtering, hovering and selecting; a small script on the page. *A slider for the animation easing, with the box moving.*
