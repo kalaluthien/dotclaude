@@ -16,10 +16,10 @@ Show the user what they want to understand, built from the thing itself.
 
 ## The page
 
-- **Make it polished**: the owner asked for a page that is visually well considered, so load `artifact-design` (and `artifact-diagramming` for a drawing) when listed, and follow them for type, spacing, colour, both themes and a narrow screen.
+- **Make it polished**: the owner asked for a page that is visually well considered, so load `artifact-design` (and `artifact-diagramming` for a drawing) when listed, else apply the same care yourself, and follow them for type, spacing, colour, both themes and a narrow screen.
 - **One file**: inline CSS and SVG, no external fetch, no build step, a few lines of script only for a live control. Draw each diagram as inline SVG, never Mermaid or an image.
 - **Write it** to a new file under the scratchpad, or `~/Documents/show-me/` when no scratchpad exists, named for its subject (`retry-rule.html`). Print its full path in the reply, since a terminal tab shows no `SendUserFile` file, and never run `open`; send it by `SendUserFile` too for a remote viewer (phone, Remote Control, desktop app).
-- **Check it**: read the file back and confirm it holds each quoted `path:line`, then fix a broken tag or an overflow before you report it.
+- **Check it**: read the file back and confirm it holds each quoted `path:line`; where a headless browser of your own runs (never the owner's Chrome), screenshot it at 390 px and look for overflow or a broken layout, and fix what you see before you report it.
 
 ## Question types and data shapes
 
@@ -28,7 +28,7 @@ Show the user what they want to understand, built from the thing itself.
 
 ## Representations
 
-Each entry: when to pick it, then a tiny example.
+Each entry: when to pick it, then a tiny example. Every pick is drawn on the page, and a pele.run link only shows its shape, to be redrawn as inline SVG.
 
 ### What is it
 
