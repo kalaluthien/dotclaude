@@ -117,4 +117,4 @@ Keep each work repository at `~/workspace/projects/<repo>` and the plugin market
 
 Give a new checkout its plugins by hand in its git-ignored `.claude/settings.local.json`, copied from a sibling, since none is enabled at user scope and no repository commits `enabledPlugins`.
 
-Put a note that holds only on this machine in `~/.claude/rules/machine.md`, never here, because this file is shared across machines and that one is loaded in every session but never committed.
+Put a note that holds only on this machine in `~/.claude/memory/`, never here, because this file is shared across machines and that folder is never committed; only a rule an agent must know before its situation arises goes in `~/.claude/rules/machine.md`, which loads whole in every session.
