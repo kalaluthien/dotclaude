@@ -15,6 +15,7 @@
 !/skills/break-me/
 !/skills/grill-me/
 !/skills/show-me/
+!/skills/surprise-me/
 
 # Bytecode a hook's import leaves
 /hooks/__pycache__/
