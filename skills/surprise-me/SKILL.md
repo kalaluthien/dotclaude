@@ -74,8 +74,8 @@ Round 1 maps the area with one task per axis, in parallel. After each round, do 
 
 Agents stop too early, so the stop is counted, by tasks that never see your reasoning:
 
-- **Probe**: one task sees only the direction and the checklist, never the claims, rivals or queries. It takes the next unused route and returns ten atomic findings that bear on the direction, at most two per source and three per checklist item. Every probe counts, so never rerun one. Under five findings gives no reading: take the next route. After a Repeat round, skip the probe and carry the last reading, since routes run out.
-- **Audit**: one task sees only `claims.md`, `probe-N.md` and the cited sources. It marks a finding `known` only by quoting the row that states it, with the same population and conditions, else `new`. It marks a must-answer item settled only by quoting the sentence of a source that answers it, or that says no one knows, and not while rows conflict or the support is graded low. Merge the `new` findings into `claims.md` after the count.
+- **Probe**: one task sees only the direction and the checklist, never the claims, rivals or queries. It takes the next unused route and returns ten atomic findings that bear on the direction, at most two per source and three per checklist item. Every probe counts, so never rerun one. A route that runs dry sends the same probe down the next unused one until it has ten, never back to a used one, whose sources are known by design; under five with no route left gives no reading. After a Repeat round, skip the probe and carry the last reading, since routes run out.
+- **Audit**: one task sees only `claims.md`, `probe-N.md`, the cited sources and the last audit's quotes. It marks a finding `known` only by quoting the row that states it, with the same population and conditions, else `new`. It marks a must-answer item settled only by quoting the sentence of a source that answers it, or that says no one knows, and not while rows conflict or the support is graded low. An item stays settled unless a newer row contradicts its quote, so the count moves with the evidence and not with the reader. A finding past a cap does not count, taken in the order the probe lists them. Merge the `new` findings into `claims.md` after the count.
 - **Settled**: settled must-answer items over all must-answer items. An item listed as open counts 0.
 - **Recapture**: `known` findings over all the probe's findings.
 - **Convergence**: the lower of the two, so neither can make up for the other.
@@ -85,7 +85,7 @@ Agents stop too early, so the stop is counted, by tasks that never see your reas
 | Below 0.9, Recapture the lower | **Widen**: one task per group of `new` findings, plus the jumps |
 | Below 0.9, Settled the lower or equal | **Repeat**: one dive per unsettled must-answer item; two failed reformulations close an item as open |
 | Convergence 0.9 or more once | **Confirm**: only the next probe and audit |
-| Convergence 0.9 or more on two probes in a row | **Stop**, once a dive has run, the last diff left the top rival in place and one small final task, aimed where the explanation is most likely wrong, only refined it; else Repeat |
+| Convergence 0.9 or more on two probes in a row | **Stop**, once a dive has run, the last diff left the top rival in place and one small final task, aimed where the explanation is most likely wrong, only refined it. Run whichever of these is missing. A finding from them that does more than refine reopens the must-answer item it touches, which lowers Settled so this table picks again; if it touches none, name it under open questions and Stop |
 
 One clean probe proves little: ten of ten known still leaves about a quarter unseen. Set no maximum round count. The user's budget or running out of routes also ends the run, and so does a Repeat with only closed items left. When you stop before converging, say so, give the last Convergence and name what the next round would target.
 
