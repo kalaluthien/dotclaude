@@ -7,7 +7,7 @@ Shared Claude Code setup for `~/.claude`: four skills, four hooks, a settings te
 | Part | What it does |
 | --- | --- |
 | `skills/grill-me` | Interviews you on a plan until every open choice is settled. |
-| `skills/break-me` | Tests a conclusion you hold with a check that could prove it wrong. |
+| `skills/fix-me` | Tests a conclusion you hold with a check that could prove it wrong. |
 | `skills/show-me` | Shows a system, change or choice as a diagram, table or HTML page. |
 | `skills/surprise-me` | Researches an area in depth and explains it in a structure. |
 | `hooks/kill-guard.py` | Refuses a broad process kill such as `pkill -f cat`. |
@@ -42,7 +42,7 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 
 ## Use it
 
-1. Type `/grill-me`, `/break-me`, `/show-me` or `/surprise-me` in a session, then your topic; the four skills run only when you type them.
+1. Type `/grill-me`, `/fix-me`, `/show-me` or `/surprise-me` in a session, then your topic; the four skills run only when you type them.
 2. Read `settings.json.example` once: `permissions`, `hooks` and `outputStyle` are the keys most worth changing.
 3. Hooks need no action; they run on each Bash call, reply or session start.
 4. To change a part, edit it under `~/.claude`, then open a pull request against your own fork.

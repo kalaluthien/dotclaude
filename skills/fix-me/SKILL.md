@@ -1,5 +1,5 @@
 ---
-name: break-me
+name: fix-me
 description: Use when the user holds a conclusion, or relies on an existing system, and wants it tested before acting on it, by a check that could prove it wrong. Not for an open plan or decision, nor for brainstorming.
 disable-model-invocation: true
 ---
@@ -27,6 +27,8 @@ Rank every attack by how much its verdict could move that act, then by how cheap
 Then design the check, and think hard about it. Among the checks open to you, choose the one that would pass if the claim is true and would most probably fail if it is false; cost only breaks a tie. Before you run it, say what result would refute the claim, where the expected answer comes from apart from the thing under test, and what wrong version of the claim would also pass. Prefer a check whose results split the claim from its rival. Show it can fail on a known-bad case when a harmless one exists, else say it was not shown. With no independent answer, compare two sources, or test a relation that must hold between two outputs. Run it yourself when Read, Grep or a command can. On a live system, run only a read-only probe, and ask before any step that changes or loads it. Otherwise ask the user for that one result, naming where to look; never settle for a weaker check without saying so.
 
 Give the verdict from the check alone; a doubt no check settled stays out of it. `holds`: the user acts, and no doubt is kept. `bent`: restate the narrower claim the evidence supports, and the user confirms. `broken`: show the failing result, then do not stop at the symptom: dig it to its root cause, asking why up to five times, each why a claim settled by a check, never only argued, and dig each branch where causes split.
+
+When the verdict found something, ask one last question: should I fix what was found, that way? Change nothing without that yes.
 
 Settled rate: of the attacks that could move the act, the share a check you ran decided; an attack only argued does not count.
 

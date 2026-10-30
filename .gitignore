@@ -13,7 +13,7 @@
 
 # Skills are installed by plugins, the harness and by hand; track only ours
 /skills/*
-!/skills/break-me/
+!/skills/fix-me/
 !/skills/grill-me/
 !/skills/show-me/
 !/skills/surprise-me/
