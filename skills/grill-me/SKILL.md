@@ -4,9 +4,11 @@ description: Use when the user wants to stress-test a plan, decision, or idea by
 disable-model-invocation: true
 ---
 
-Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
+Interview the user relentlessly until you reach a shared understanding. The whole interview is a **grilling session**, a session is made of **phases**, and a phase of **rounds**. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
-Grill in two stages, every step a question the user only answers. **Stage 1** finds the real goal, one Socratic question per round, never mixed with stage 2 questions: the goal beyond the goal (what the user wants to happen after this work), then depth (what a top professional would do, from what rawest material, with what methods and tools), then range (which other fields' work applies). Each offers concrete widened goals, from facts you looked up, beside the plan as asked; recommend the option the facts support, the plan as asked only when they favour it, since only the user widens their intent. Stage 1 is done when the user confirms the goal; then **stage 2** refines the plan toward it as follows.
+A question is a request that shrinks the **hypothesis space**: the candidate answers not yet ruled out and how plausible each is. Ask only about a **gap**, what the next action needs and no one knows yet: list the actions open, group the candidates that lead to the same action, and add any likely candidate that is missing, since a question only moves weight among listed candidates. Ask first what rules out the most plausibility even on its likelier answer, so a near-even split; let each answer pick the next question; skip one whose answer changes no action or costs more than the better decision it buys.
+
+Grill in two phases, every step a question the user only answers. The **goal phase** finds the real goal, one Socratic question per round, never mixed with plan phase questions: the goal beyond the goal (what the user wants to happen after this work), then depth (what a top professional would do, from what rawest material, with what methods and tools), then range (which other fields' work applies). Each offers concrete widened goals, from facts you looked up, beside the plan as asked; recommend the option the facts support, the plan as asked only when they favour it, since only the user widens their intent. The goal phase is done when the user confirms the goal; then the **plan phase** refines the plan toward it as follows.
 
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask a round as one `AskUserQuestion` call of at most four questions from the frontier, picked by impact first (the answer that changes the most of the tree), then by concept order (a concept before the choices built on it); the rest of the frontier waits. Then wait for the user's answers before the next round.
 
@@ -20,7 +22,7 @@ Word each question so "yes" accepts your recommended answer.
 
 Each round the user answers reshapes the tree: settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a _later_ round, not this one.
 
-Before each round after the first, write one line of what the last round settled, wholly in the user's language, its label included (`Settled: …`, `정한 것: …`). Then, in that round:
+After each answer, in either phase, revise the hypothesis space: drop what the answer ruled out, rescale what stays, and redraw how the candidates relate, which excludes, implies or depends on which. Before the next round, share its state briefly, wholly in the user's language, its label included: one line of what the last round settled (`Settled: …`, `정한 것: …`), then one line of what stays alive and how it relates (`Open: …`, `남은 가설: …`). Then, in that round:
 
 - a free-text answer is restated as a concrete proposal ("I read your last answer as: …") and settled once the user confirms it;
 - an objection to a settled answer, yours after attacking it once with a counterexample, an edge case or a check that can fail, is its own question, its header tagged `[objection]` in the user's language;
