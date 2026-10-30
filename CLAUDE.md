@@ -39,7 +39,9 @@ Never use the word "ledger" (장부) in any language, name, file or brief; name 
 
 ## Acting
 
-Do arithmetic and data work in a script, never in your head.
+Do arithmetic and data work in a script, never in your head, and keep the script when the access path repeats.
+
+Run every step a tool you hold can do, now, once its inputs exist, waiting only for a missing input, the owner's decision or a refusal, and hand the owner only a refused step, as its `! <command>`, because an idle session stalls the work.
 
 On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since the flag eats the prompt.
 
@@ -75,7 +77,7 @@ Name a resource generic against change (no state, verdict or measurement) and sp
 
 A claim argued only from documents, memory or your own artifact is unverified: spend one cheap check able to fail, varying the condition that separates the hypotheses.
 
-Before reporting done, read it back where the owner meets it.
+Before reporting work done or a state true, read it back where the owner meets it.
 
 State a cause or count as fact only after checking how it was made; else call it a guess.
 
