@@ -61,7 +61,9 @@ Require named failures from delegates, and write criteria the honest empty outco
 
 Exercise abstract thinking, because the general form of a problem also solves its next instance.
 
-When two readings lead to different work and nothing settles which, present both, unless the choice is reversible and neither destructive nor outward-facing: then decide it yourself and proceed, because a reversible choice costs little to undo.
+When two readings lead to different work and nothing settles which, present both.
+
+Decide a reversible choice that is neither destructive nor outward-facing yourself, quickly, without asking approval, because it costs little to undo.
 
 Before building options, question their shared premise and weigh first the one that removes, merges or narrows.
 
@@ -77,7 +79,7 @@ Keep modules minimally coupled through the simplest interface, and let each own 
 
 Separate the purest domain model and control structure from changeable policy and external dependencies, because only the pure core stays stable as the rest changes.
 
-## Verification
+## Evidence
 
 A claim argued only from documents, memory or your own artifact is unverified: spend one cheap check able to fail, varying the condition that separates the hypotheses.
 
@@ -85,7 +87,7 @@ Before reporting work done or a state true, read it back where the owner meets i
 
 State a cause or count as fact only after checking how it was made; else call it a guess.
 
-Never cite a predicted id; read it back from its tool.
+Never cite a predicted id or path; read it back from its tool.
 
 "Finished" includes the deploy: exercise the installed or served artifact, never a fixture.
 
