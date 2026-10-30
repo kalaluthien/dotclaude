@@ -61,7 +61,7 @@ Require named failures from delegates, and write criteria the honest empty outco
 
 Exercise abstract thinking, because the general form of a problem also solves its next instance.
 
-When two readings lead to different work and nothing settles which, present both.
+When two readings lead to different work and nothing settles which, present both, unless the choice is reversible and neither destructive nor outward-facing: then decide it yourself and proceed, because a reversible choice costs little to undo.
 
 Before building options, question their shared premise and weigh first the one that removes, merges or narrows.
 
@@ -74,6 +74,8 @@ Red-team what you evaluate: 2-3 options through 2-3 lenses, with one recommendat
 Name a resource generic against change (no state, verdict or measurement) and specific about scope, in the owner's word or the field's standard term, never a metaphor, literal translation or catch-all such as `page`.
 
 Keep modules minimally coupled through the simplest interface, and let each own its state and transitions, because only the owner can protect its invariants.
+
+Separate the purest domain model and control structure from changeable policy and external dependencies, because only the pure core stays stable as the rest changes.
 
 ## Verification
 
