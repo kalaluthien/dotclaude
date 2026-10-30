@@ -4,28 +4,28 @@ description: Use when the user asks to see, show, explain, map, brief, compare o
 disable-model-invocation: true
 ---
 
-# show-me
-
-Show the user what they want to understand, built from the thing itself.
-
 ## Steps
 
 1. **Name the core question.** Before anything else, write in one line what the user really wants to understand and what it is about, as one of the question types below. An ask with several questions gets one line each.
-2. **Read the original.** Open the source itself: the file, log, diff, data, page or transcript. Never a summary of it, a memory, or an earlier answer. Quote what you show with its `path:line` or URL.
-3. **Pick by matching.** Find the case below whose question and data shape match, and use its representation; the smallest that answers wins. One representation per question.
-4. **Show it.** Write the result as one self-contained HTML file, never a chat table, tree, fenced diagram, PNG or ASCII drawing, since the owner asked for HTML only. Chat holds the one-sentence answer, the file's full path and the next step. The page opens with that sentence, then the representation, then what the reader can do next.
+2. **Name what the answer is for.** The real point is what the user wants to get from the answer, not the question alone. Write one line for it: they want to **understand**, to **review** or to **decide**, or another aim in its own words. The aim sets what the page leads with: for understand, the idea built up from what the reader already knows; for review, the thing itself with each point to check; for decide, the options, their trade-offs and a recommendation.
+3. **Assume a reader new to the subject.** That the user asked at all means they may lack deep expertise here, may not remember the specifics, and may not know its terms. Say what each term means where it first appears, and spell out what an expert would skip.
+4. **Read the original.** Open the source itself: the file, log, diff, data, page or transcript. Never a summary of it, a memory, or an earlier answer. Quote what you show with its `path:line` or URL.
+5. **Pick by matching.** Find the case below whose question and data shape match, and use its representation; the smallest that answers wins. One representation per question.
+6. **Make the page.** Put the result in one HTML file, in this order: the answer in one sentence, the representation, what the reader can do next. Chat holds only that sentence, the file's full path and the next step: no table, tree, diagram, PNG or ASCII drawing, since the owner asked for HTML only.
 
 ## The page
 
-- **Make it polished**: the owner asked for a page that is visually well considered, so load `artifact-design` (and `artifact-diagramming` for a drawing) when listed, else apply the same care yourself, and follow them for type, spacing, colour, both themes and a narrow screen.
+- **Make it polished**: the owner asked for a page that is visually well considered, so load `artifact-design` (and `artifact-diagramming` for a drawing) when listed, else apply the same care yourself, and follow them for type, spacing, colour and both themes.
+- **Style it for the field**: draw it the way an expert of the subject's field expects to see it, such as a circuit as a schematic or a proof as numbered steps, and arrange it by UX/UI principles: a clear hierarchy, related things grouped, one thing to look at first.
+- **Make it responsive**: the reader may open it on a desktop or on a mobile, so the layout adapts to the width; a wide diagram or table reflows or scrolls inside its own box.
 - **One file**: inline CSS and SVG, no external fetch, no build step, a few lines of script only for a live control. Draw each diagram as inline SVG, never Mermaid or an image.
 - **Write it** to a new file under the scratchpad, or `~/Documents/show-me/` when no scratchpad exists, named for its subject (`retry-rule.html`). Print its full path in the reply, since a terminal tab shows no `SendUserFile` file, and never run `open`; send it by `SendUserFile` too for a remote viewer (phone, Remote Control, desktop app).
-- **Check it**: read the file back and confirm it holds each quoted `path:line`; where a headless browser of your own runs (never the owner's Chrome), screenshot it at 390 px and look for overflow or a broken layout, and fix what you see before you report it.
+- **Check it**: read the file back and confirm it holds each quoted `path:line`; where a headless browser of your own runs (never the owner's Chrome), screenshot it at a desktop and a mobile width and look for overflow or a broken layout, and fix what you see before you report it.
 
 ## Question types and data shapes
 
-- Questions: **what is it** (identity, value, meaning), **how is it built** (parts and how they connect), **how does it behave over time** (steps, states, messages, events), **how do parts compare** (size, rank, position, overlap), **what changed** (before and after, cause), **what if** (a value or choice varied).
-- Data shapes: **single value**, **category** (items with attributes), **sequence** (ordered in time or position), **network** (nodes and links), **hierarchy** (nesting), **space** (positions on axes or a layout), **flow** (quantities or work moving between nodes).
+- Questions: **what is it** (identity, value, meaning), **how is it built** (parts and how they connect), **how does it behave over time** (steps, states, messages, events), **how do parts compare** (size, rank, position, overlap), **what changed** (before and after, cause), **what if** (a value or choice varied), **why does it hold** (a concept or a line of reasoning).
+- Data shapes: **single value**, **category** (items with attributes), **sequence** (ordered in time or position), **network** (nodes and links), **hierarchy** (nesting), **space** (positions on axes or a layout), **flow** (quantities or work moving between nodes), **argument** (claims and the reasons that support them).
 
 ## Representations
 
@@ -77,3 +77,12 @@ Each entry: when to pick it, then a tiny example. Every pick is drawn on the pag
 
 - **Scenario table**: one choice or value varied, each setting against what it causes. *Retries 1 / 3 / 5 → success rate and wait time.*
 - **Live control page**: a value judged by seeing or feeling it, such as a colour, a timing or a layout, or a large graph or data set the reader explores by filtering, hovering and selecting; a small script on the page. *A slider for the animation easing, with the box moving.*
+- **Decision tree**: a choice that depends on several conditions, each answer leading to the next question and the leaves naming the outcome. *Over 1 GB? → yes: needs random access? → yes: database / no: object store; no: flat file.*
+
+### Why does it hold
+
+- **Proof walkthrough**: a claim reached from what is given, one numbered step per line, each naming the rule that allows it. *Given a > b and b > c; 1. a > c by transitivity.*
+- **5 Whys**: one symptom followed down a single chain of causes, each answer the next "why?", ending at the root cause. *Deploy failed ← disk full ← logs never rotated ← the cron job was removed.*
+- **MECE pyramid**: a conclusion on top, held up by groups of reasons that do not overlap and together leave nothing out, each group by its own evidence. *Revenue fell ← fewer buyers / fewer orders per buyer / lower price per order.*
+- **Venn diagram**: how concepts relate as sets, to show where one includes, overlaps or excludes another. *Every square is a rectangle, and rectangles and rhombuses overlap in the squares* ([venn](https://pele.run/examples/venn)).
+- **Causal loop diagram**: quantities that drive each other in a circle, each link marked + or −, each loop marked reinforcing or balancing. *More users → more load → slower pages → fewer users (balancing).*
