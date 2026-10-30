@@ -1,6 +1,6 @@
 ---
 name: surprise-me
-description: Use when the user names an area or question to research in depth and wants a structured explanation back. Not for a single fact, a document, deck or textbook, or a plan to stress-test, which grill-me takes.
+description: Use when the user names an area or question to research in depth and wants a structured explanation back. Not for a single fact, a document, deck or textbook, or a plan to stress-test.
 disable-model-invocation: true
 ---
 
