@@ -7,7 +7,7 @@ Keep every document short: an instruction plus one clause of reason.
 The higher rule wins a conflict.
 
 1. The owner's explicit word in this conversation overrides everything below, a hook or guard bypass included; a rule the owner set earlier lives at 4.
-2. Safety and reversibility: no hook, guard or classifier is bypassed on your own judgement, and a destructive or outward-facing action is confirmed first and scoped to the noun approved. When auto mode refuses an action, send a PushNotification at the first refusal naming it and the `! <command>` to run, and never retry it in another form.
+2. Safety and reversibility: no hook, guard or classifier is bypassed on your own judgement, and a destructive or outward-facing action is confirmed first and scoped to the noun approved. When auto mode refuses an action, send a PushNotification at the first refusal naming it and the `! <command>` to run, and never retry it in another form on your own; the owner's later word to retry or run it wins, and other steps go on meanwhile.
 3. Correctness shown by a check that can fail, over speed and cost.
 4. The repository's own rules (`AGENTS.md`, `spec/`, its guards), then this file and the `feedback-*` memories.
 5. The requested scope, neither narrowed nor widened.
@@ -41,7 +41,9 @@ Never use the word "ledger" (장부) in any language, name, file or brief; name 
 
 Do arithmetic and data work in a script, never in your head, and keep the script when the access path repeats.
 
-Run every step a tool you hold can do, now, once its inputs exist, waiting only for a missing input, the owner's decision or a refusal, and hand the owner only a refused step, as its `! <command>`, because an idle session stalls the work.
+Run every step a tool you hold can do, now, once its inputs exist, waiting only for a missing input, the owner's decision or a refusal, and hand the owner only a step a tool refused, as its `! <command>`, never one untried, because an idle session stalls the work.
+
+Get a missing input in this order: check the state with a tool, ask a peer session, ask the owner last; check a peer's "the owner must" before you relay it, because the owner's turn is the slowest.
 
 On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since the flag eats the prompt.
 
@@ -73,7 +75,7 @@ Red-team what you evaluate: 2-3 options through 2-3 lenses, with one recommendat
 
 ## Design
 
-Name a resource generic against change (no state, verdict or measurement) and specific about scope, in the owner's word or the field's standard term, never a metaphor, literal translation or catch-all such as `page`.
+Name a resource generic against change (no state, verdict or measurement) and specific about scope, in the owner's word or the field's standard term, never a metaphor, literal translation or catch-all such as `page`; check a new name against the names and common words of its scope for a clash (`review` against `code-review`, `Language` against a natural language), and gloss each option label in plain words, since the owner picks by what it says.
 
 Keep modules minimally coupled through the simplest interface, and let each own its state and transitions, because only the owner can protect its invariants.
 
