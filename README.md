@@ -1,5 +1,7 @@
 # dotclaude
 
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow)](https://buymeacoffee.com/kalaluthien)
+
 Shared Claude Code setup for `~/.claude`: four skills, four hooks, a settings template and a global `CLAUDE.md` of preferences.
 
 | Part | What it does |
@@ -22,8 +24,8 @@ Shared Claude Code setup for `~/.claude`: four skills, four hooks, a settings te
 Clone to a scratch folder, so nothing in `~/.claude` changes until you copy.
 
 1. `git clone --depth 1 https://github.com/kalaluthien/dotclaude /tmp/dotclaude`
-2. A skill: `cp -r /tmp/dotclaude/skills/grill-me ~/.claude/skills/`
-3. A hook: `cp /tmp/dotclaude/hooks/kill-guard.py ~/.claude/hooks/`, then copy its entry from `settings.json.example` (the command that names it, under its event) into your `settings.json`.
+2. A skill: `mkdir -p ~/.claude/skills && cp -r /tmp/dotclaude/skills/grill-me ~/.claude/skills/`
+3. A hook: `mkdir -p ~/.claude/hooks && cp /tmp/dotclaude/hooks/kill-guard.py ~/.claude/hooks/`, then copy its entry from `settings.json.example` (the command that names it, under its event) into your `settings.json`.
 4. Edit what you copied; the skills and hooks hold the author's habits, such as Korean replies.
 
 ### Everything
@@ -42,5 +44,5 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 
 1. Type `/grill-me`, `/break-me`, `/show-me` or `/surprise-me` in a session, then your topic; the four skills run only when you type them.
 2. Read `settings.json.example` once: `permissions`, `hooks` and `outputStyle` are the keys most worth changing.
-3. Hooks need no action; they run on each Bash call or reply.
+3. Hooks need no action; they run on each Bash call, reply or session start.
 4. To change a part, edit it under `~/.claude`, then open a pull request against your own fork.

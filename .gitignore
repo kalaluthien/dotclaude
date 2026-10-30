@@ -5,6 +5,7 @@
 !/.gitignore
 !/CLAUDE.md
 !/README.md
+!/.github/
 !/settings.json.example
 !/hooks/
 !/scripts/
