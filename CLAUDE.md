@@ -73,13 +73,15 @@ State each option's cost as a number.
 
 Red-team what you evaluate: 2-3 options through 2-3 lenses, with one recommendation; told to "decide all other details", hand the decisions back as a numbered veto table.
 
-## Design
+## System Architecture
 
 Name a resource generic against change (no state, verdict or measurement) and specific about scope, in the owner's word or the field's standard term, never a metaphor, literal translation or catch-all such as `page`; check a new name against the names and common words of its scope for a clash (`review` against `code-review`, `Language` against a natural language), and gloss each option label in plain words, since the owner picks by what it says.
 
 Keep modules minimally coupled through the simplest interface, and let each own its state and transitions, because only the owner can protect its invariants.
 
 Separate the purest domain model and control structure from changeable policy and external dependencies, because only the pure core stays stable as the rest changes.
+
+Design for deletion: draw each boundary so a module can be removed whole by the smallest change, because what is easy to delete stays easy to replace.
 
 ## Evidence
 
