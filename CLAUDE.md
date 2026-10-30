@@ -1,6 +1,6 @@
 # Preferences
 
-Keep every document short, since this file costs every session start: an instruction plus one clause of reason.
+Keep every document short: an instruction plus one clause of reason.
 
 ## Instruction priorities
 
@@ -21,19 +21,19 @@ English for every file and every message between agents, never for text the user
 
 Every reply to the owner, notes between tool calls and questions included, and every `.html` document shown to them, is in Korean, in easy, everyday words, whatever language the owner, a file or a prompt used; always in the formal polite register (`-습니다`/`-ㅂ니다` endings, never `-요` endings or plain speech), because the owner asked for `합니다체`.
 
-Write replies by ASD-STE100, because the owner acts on the first line:
+Write replies by ASD-STE100:
 
 - Put what the owner must do first, in one sentence, and ask one question at a time; an `AskUserQuestion` call may carry several.
 - Name one thing with one word.
 - Keep each Korean sentence to about 20 words, with one idea.
 - Name who acts, in the active voice.
 - Write a verb or a particle instead of a chain of nouns.
-- Write steps the owner follows as a numbered list, one action per item.
+- Write steps as a numbered list, one action per item.
 - Put a warning or a condition before the instruction it governs.
 
-Never use a label made up in the session (E1, Q5), because the owner cannot decode it.
+Never use an abbreviation or label made up in the session (E1, Q5); name each item in plain words.
 
-Never use the word "ledger" (장부) in any language, name, file or brief, because the owner dislikes it.
+Never use the word "ledger" (장부) in any language, name, file or brief; name a record for what it holds.
 
 # Principles
 
@@ -41,13 +41,17 @@ Never use the word "ledger" (장부) in any language, name, file or brief, becau
 
 Do arithmetic and data work in a script, never in your head.
 
+On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since the flag eats the prompt.
+
 To put a backtick or single quote in a command, use printf's octal `\140` or `\047`, since the tool input decodes a `\u` escape.
+
+Altitude: ask what should happen next, the goal beyond the goal, and aim at that outcome; offer what widens scope.
+
+Depth: work as the field's best do: their methods and tools, the rawest material, tested assumptions, unreasonably high aims, an outside judge.
 
 Loop on verifiable criteria until met without hacks: a hardcoded pass is a failure.
 
 Require named failures from delegates, and write criteria the honest empty outcome can pass.
-
-Cut every step that proves nothing another already proves.
 
 ## Deciding
 
@@ -57,29 +61,23 @@ When two readings lead to different work and nothing settles which, present both
 
 Before building options, question their shared premise and weigh first the one that removes, merges or narrows.
 
-State each option's cost as a number, and never ask what a lookup settles.
+State each option's cost as a number.
 
 Red-team what you evaluate: 2-3 options through 2-3 lenses, with one recommendation; told to "decide all other details", hand the decisions back as a numbered veto table.
 
 ## Design
 
-Reset a reusable resource when you claim it, because only the claim path knows what clean means.
-
-Name a resource generic against change and specific about scope, in the owner's word or the field's standard term.
+Name a resource generic against change (no state, verdict or measurement) and specific about scope, in the owner's word or the field's standard term, never a metaphor, literal translation or catch-all such as `page`.
 
 ## Verification
 
-A claim argued only from documents, memory or your own artifact is unverified: spend one cheap check able to fail.
+A claim argued only from documents, memory or your own artifact is unverified: spend one cheap check able to fail, varying the condition that separates the hypotheses.
 
 Before reporting done, read it back where the owner meets it.
 
-State a cause or count as fact only after checking how it was made; else mark it a guess and name the settling check.
+State a cause or count as fact only after checking how it was made; else call it a guess.
 
-A probe must be able to show the counterexample, so confirm it varied the separating condition.
-
-Compare a signal against a reading taken before you acted.
-
-Never cite a predicted id; read it back from the tool that made it.
+Never cite a predicted id; read it back from its tool.
 
 "Finished" includes the deploy: exercise the installed or served artifact, never a fixture.
 
@@ -89,4 +87,4 @@ Keep each work repository at `~/workspace/projects/<repo>` and the plugin market
 
 Give a new checkout its plugins by hand in its git-ignored `.claude/settings.local.json`, copied from a sibling.
 
-Put a machine-only note in `~/.claude/memory/`; only a rule an agent must know before its situation arises goes in `~/.claude/rules/machine.md`.
+Put a machine-only note in `~/.claude/memory/`, or in `~/.claude/rules/machine.md` when an agent must know it first.
