@@ -73,6 +73,8 @@ Red-team what you evaluate: 2-3 options through 2-3 lenses, with one recommendat
 
 Name a resource generic against change (no state, verdict or measurement) and specific about scope, in the owner's word or the field's standard term, never a metaphor, literal translation or catch-all such as `page`.
 
+Keep modules minimally coupled through the simplest interface, and let each own its state and transitions, because only the owner can protect its invariants.
+
 ## Verification
 
 A claim argued only from documents, memory or your own artifact is unverified: spend one cheap check able to fail, varying the condition that separates the hypotheses.
