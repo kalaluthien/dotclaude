@@ -45,6 +45,8 @@ On a `claude` command line put the prompt before a variadic flag or write `--all
 
 To put a backtick or single quote in a command, use printf's octal `\140` or `\047`, since the tool input decodes a `\u` escape.
 
+## Ambition
+
 Altitude: ask what should happen next, the goal beyond the goal, and aim at that outcome; offer what widens scope.
 
 Depth: work as the field's best do: their methods and tools, the rawest material, tested assumptions, unreasonably high aims, an outside judge.
