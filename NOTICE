@@ -1,0 +1,8 @@
+dotclaude
+Copyright 2026 kalaluthien
+Licensed under the Apache License, Version 2.0 (Apache-2.0); see LICENSE.
+
+This repository took from these works:
+
+- mattpocock/skills (https://github.com/mattpocock/skills), MIT: `skills/grill-me` follows its grilling skill.
+- herdr: `hooks/herdr-agent-state.sh` is the hook herdr installs and manages; its license is not reviewed here.

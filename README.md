@@ -46,3 +46,12 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 2. Read `settings.json.example` once: `permissions`, `hooks` and `outputStyle` are the keys most worth changing.
 3. Hooks need no action; they run on each Bash call, reply or session start.
 4. To change a part, edit it under `~/.claude`, then open a pull request against your own fork.
+
+## Contributions
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) says how to report a problem or ask a question; pull requests from outside are not accepted.
+- [CLAUDE.md](CLAUDE.md) holds the preferences every change follows.
+
+## License
+
+[Apache-2.0](LICENSE); works it took from are named in [NOTICE](NOTICE). This project is not affiliated with Anthropic.
