@@ -5,6 +5,10 @@
 !/.gitignore
 !/CLAUDE.md
 !/README.md
+!/LICENSE
+!/NOTICE
+!/CONTRIBUTING.md
+!/SECURITY.md
 !/.github/
 !/settings.json.example
 !/hooks/
