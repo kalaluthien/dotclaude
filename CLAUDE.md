@@ -31,11 +31,14 @@ The rules below apply only to that Korean; write it as a skilled native writer w
 - Name one thing with one word, and write like items in one form.
 - Write steps as a numbered list, one per item.
 - Put a warning or a condition before the instruction it governs.
+- Write a technical term as an established English abbreviation if one exists (OS, LLM), else an established Sino-Korean word (조건부 확률, 의존성 주입), else a transliteration with the English beside it (프롬프트(prompt)); write a fixed UI element, such as Contents or Dark mode, in English.
 - Reread before sending; fix only what reads awkward, generic, repetitive, stiff or ambiguous; keep every fact, term, qualification and degree of certainty.
 
 Never use an abbreviation or label made up in the session (E1, Q5); name each item in plain words.
 
 Never use the word "ledger" (장부) in any language, name, file or brief; name a record for what it holds.
+
+Write no meta narration in a document of any language, code comments included: no note on why it was written so, why not otherwise, the owner's intent quoted, a change from an earlier version or how to read it, because the reader needs the content, not its history.
 
 # Principles
 
