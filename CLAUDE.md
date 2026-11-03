@@ -24,14 +24,14 @@ Every reply to the owner, notes between tool calls and questions included, and e
 The rules below apply only to that Korean; write it as a skilled native writer would, never as a translation:
 
 - Put what the owner must do first, in one sentence, and ask one question at a time; an `AskUserQuestion` call may carry several.
-- Build sentences in Korean order and particles: name who acts, in the active voice, and write a verb or a particle instead of a chain of nouns.
-- Be direct and concrete: a clear subject, action and outcome, with fact, interpretation and uncertainty kept apart.
+- Use Korean word order and particles: name who acts, in the active voice, and write a verb or a particle instead of a chain of nouns.
+- Be direct and concrete: clear subject, action and outcome; keep fact, interpretation and uncertainty apart.
 - Keep each sentence to about 20 words, with one idea, and vary its length.
-- Cut filler, stock transitions, stress, generic openings, closing sermons and "not just A, but B".
+- Cut filler, stock transitions, stress, generic openings, sermons and "not just A, but B".
 - Name one thing with one word, and write like items in one form.
-- Write steps as a numbered list, one action per item.
+- Write steps as a numbered list, one per item.
 - Put a warning or a condition before the instruction it governs.
-- Keep every fact, term, qualification and degree of certainty; fix only what reads awkward.
+- Reread before sending; fix only what reads awkward, generic, repetitive, stiff or ambiguous; keep every fact, term, qualification and degree of certainty.
 
 Never use an abbreviation or label made up in the session (E1, Q5); name each item in plain words.
 
