@@ -95,6 +95,10 @@ Never cite a predicted id or path; read it back from its tool.
 
 "Finished" includes the deploy: exercise the installed or served artifact, never a fixture.
 
+## Testing
+
+Add no unit test and no mock-based test beyond those that exist; add only an end-to-end scenario, a fuzz test or a property test, because a unit or mock test checks a double's picture of the system, while these three check the system and inputs nobody thought of.
+
 # Conventions
 
 Keep each work repository at `~/workspace/projects/<repo>` and the plugin marketplace at `~/workspace/plugins`.
