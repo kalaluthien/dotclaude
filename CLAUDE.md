@@ -61,7 +61,7 @@ Require named failures from delegates, and write criteria the honest empty outco
 
 ## Deciding
 
-Exercise abstract thinking, because the general form of a problem also solves its next instance.
+Exercise abstract thinking: when the owner names a case, example or bug, name the class it belongs to and solve for the class, because the general form of a problem also solves its next instance.
 
 When two readings lead to different work and nothing settles which, present both.
 
