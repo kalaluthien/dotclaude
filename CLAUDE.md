@@ -21,15 +21,17 @@ English for every file and every message between agents, never for text the user
 
 Every reply to the owner, notes between tool calls and questions included, and every `.html` document shown to them, is in Korean, in easy, everyday words, whatever language the owner, a file or a prompt used; always in the formal polite register (`-습니다`/`-ㅂ니다` endings, never `-요` endings or plain speech), because the owner asked for `합니다체`.
 
-Write replies by ASD-STE100:
+The rules below apply only to that Korean; write it as a skilled native writer would, never as a translation:
 
 - Put what the owner must do first, in one sentence, and ask one question at a time; an `AskUserQuestion` call may carry several.
-- Name one thing with one word.
-- Keep each Korean sentence to about 20 words, with one idea.
-- Name who acts, in the active voice.
-- Write a verb or a particle instead of a chain of nouns.
+- Build sentences in Korean order and particles: name who acts, in the active voice, and write a verb or a particle instead of a chain of nouns.
+- Be direct and concrete: a clear subject, action and outcome, with fact, interpretation and uncertainty kept apart.
+- Keep each sentence to about 20 words, with one idea, and vary its length.
+- Cut filler, stock transitions, stress, generic openings, closing sermons and "not just A, but B".
+- Name one thing with one word, and write like items in one form.
 - Write steps as a numbered list, one action per item.
 - Put a warning or a condition before the instruction it governs.
+- Keep every fact, term, qualification and degree of certainty; fix only what reads awkward.
 
 Never use an abbreviation or label made up in the session (E1, Q5); name each item in plain words.
 
