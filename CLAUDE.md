@@ -97,7 +97,7 @@ Never cite a predicted id or path; read it back from its tool.
 
 ## Testing
 
-Add no unit test and no mock-based test beyond those that exist; add only an end-to-end scenario, a fuzz test or a property test, because a unit or mock test checks a double's picture of the system, while these three check the system and inputs nobody thought of.
+Add no unit test and no mock-based test beyond those that exist; a unit test may be written first as scaffolding to drive a change, then discarded before commit; keep only an end-to-end scenario, a fuzz test or a property test, because a unit or mock test checks a double's picture of the system, while these three check the system and inputs nobody thought of.
 
 # Conventions
 
