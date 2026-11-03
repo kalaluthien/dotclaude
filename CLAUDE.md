@@ -36,8 +36,6 @@ The rules below apply only to that Korean; write it as a skilled native writer w
 
 Never use an abbreviation or label made up in the session (E1, Q5); name each item in plain words.
 
-Never use the word "ledger" (장부) in any language, name, file or brief; name a record for what it holds.
-
 Write no meta narration in a document of any language, code comments included: no note on why it was written so, why not otherwise, the owner's intent quoted, a change from an earlier version or how to read it, because the reader needs the content, not its history.
 
 # Principles
