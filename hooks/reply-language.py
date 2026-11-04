@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Stop hook: block a reply to a user message written in Korean when it has no Hangul, ends a sentence in -요, or uses
-a banned word (ledger, 장부), naming each offending sentence and its fix, since the per-prompt instruction alone was
-ignored. Code, quotes and a message not in Korean pass. Any error, or a second stop (`stop_hook_active`), passes."""
+"""Stop hook: block a reply to a user message written in Korean when it has no Hangul or uses a banned word
+(ledger, 장부), naming each offending sentence and its fix, since the per-prompt instruction alone was ignored.
+Code, quotes and a message not in Korean pass. Any error, or a second stop (`stop_hook_active`), passes."""
 import json
 import re
 import sys
@@ -14,21 +14,11 @@ INJECTED = re.compile(
 )
 # text the rules do not govern: code, a blockquote, quoted words
 SKIP = re.compile(r"```.*?```|`[^`\n]*`|^>[^\n]*|\"[^\"\n]*\"|“[^”\n]*”|「[^」\n]*」", re.S | re.M)
-# a word ending in -요: the syllable before 요 is a verb or copula ending, so nouns such as 필요, 중요, 개요 pass
-YO = re.compile(r"[가-힣]*(?:[아어여해워와줘봐돼예에세네데게까나군래대구고든지]|[은인는]가)요(?![가-힣])|[가-힣]*죠(?![가-힣])")
 BANNED = re.compile(r"\bledger|(?<!대)장부(?!터)", re.I)
-YO_FIXES = [  # the formal form of the common endings; others get the general rule
-    (re.compile(r"아니에요$"), "아닙니다"),
-    (re.compile(r"(?:이에요|예요)$"), "입니다"),
-    (re.compile(r"해요$"), "합니다"),
-    (re.compile(r"세요$"), "십시오"),
-    (re.compile(r"([았었였겠했있없])어요$"), r"\1습니다"),
-]
 SENTENCE = re.compile(r"[^\n]+?(?:[.!?](?=\s|$)|$)", re.M)
 SHOWN = 3
 HEADER = "Your reply to a Korean message breaks the Korean reply rules:"
-FOOTER = ("Rewrite the whole reply in Korean, in the formal polite register (-습니다/-ㅂ니다 endings, no -요 endings), "
-          "with no banned word.")
+FOOTER = "Rewrite the whole reply in Korean, in the formal polite register (-습니다/-ㅂ니다 endings), with no banned word."
 
 
 def mask(text):
@@ -50,27 +40,12 @@ def sentence(text, start, end):
     return found
 
 
-def fix(word):
-    """The formal form of an -요 word, or None when no rule covers it."""
-    for pattern, formal in YO_FIXES:
-        if pattern.search(word):
-            return pattern.sub(formal, word)
-    return None
-
-
 def problems(reply):
     """One line per break of the reply rules in a reply to a Korean message, each naming the sentence and the fix."""
     found = []
     if not HANGUL.search(reply):
         found.append(f"No Korean in the reply, which begins “{reply.strip()[:60]}”: write it in Korean.")
     seen = mask(reply)
-    yo = list(YO.finditer(seen))
-    for m in yo[:SHOWN]:
-        formal = fix(m.group())
-        change = f"change “{m.group()}” to “{formal}”" if formal else f"end “{m.group()}” with -습니다/-ㅂ니다"
-        found.append(f"-요 ending in “{sentence(reply, m.start(), m.end())}”: {change}.")
-    if len(yo) > SHOWN:
-        found.append(f"{len(yo) - SHOWN} more -요 endings; fix every one.")
     for m in list(BANNED.finditer(seen))[:SHOWN]:
         found.append(f"Banned word “{m.group()}” in “{sentence(reply, m.start(), m.end())}”: "
                      "name the record by what it holds, such as 기록 or 목록.")

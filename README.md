@@ -12,7 +12,7 @@ Shared Claude Code setup for `~/.claude`: four skills, four hooks, a settings te
 | `skills/surprise-me` | Researches an area in depth and explains it in a structure. |
 | `hooks/kill-guard.py` | Refuses a broad process kill such as `pkill -f cat`. |
 | `hooks/failure-hint.py` | After a failed Bash call, adds the known fix for that failure. |
-| `hooks/reply-language.py` | Asks for a rewrite when a reply to a Korean message has no Korean, ends in -요 or uses a banned word. |
+| `hooks/reply-language.py` | Asks for a rewrite when a reply to a Korean message has no Korean or uses a banned word. |
 | `hooks/herdr-agent-state.sh` | Reports session state to herdr; does nothing outside herdr. |
 | `scripts/merge-settings.py` | Merges `settings.json.example` into your `settings.json`. |
 | `CLAUDE.md` | The author's global preferences; replace them with yours. |
