@@ -6,14 +6,21 @@ context: fork
 argument-hint: "<area or question to research> [decision it feeds] [scope: depth, source types, time window, language] [folder for work files]"
 ---
 
-Research what the user names, round by round. Each round chases the findings that broke the current picture. Stop when Convergence, a count no one can talk up, says little is left to find. Write the answer a domain expert would have given had the user asked them as a structured explanation in `explanation.md`, and return only the short message under Return.
+Research what the user names, round by round. Each round chases the findings that broke the current picture. Stop when Convergence, a count no one can talk up, says little is left to find. Write the answer a domain expert would have given had the user asked them as a structured explanation in `explanation.md`, and return only the short message under Return, never the explanation.
 
 ## Return
 
 This skill runs in a forked subagent that sees no earlier chat and cannot ask the user mid-run, only the ask typed after the skill name, so the ask must carry the area, the decision it feeds and the scope. The main agent receives one message, in the language of the ask, with no file body, search log, claim row or repeated draft in it.
 
 - **Interim report**: none while it runs; every round's diff goes to `diff-N.md` and the Brief to `brief.md`, never into the return. Only when the Direction is unclear and a wrong guess would waste the run, return `NEED: <the one question>` and at most 3 options, the recommended first, alone and at most 80 words, before any search; the main agent asks the owner by `AskUserQuestion` and runs the skill again with the answer in the ask.
-- **Final result**: at most 350 words. A first line `DONE <work folder>/explanation.md`, then `Direction:` in one line, `Answer:` in one to three sentences per must-answer item, the highest-stakes first, cut to fit the cap, `Convergence:` the last round's line of the diff, `Open:` at most 3 short bullets (a stop before converging says so here, with what the next round would target), then `Folder:` the work folder, which holds the claims, the rivals and every diff.
+- **Final result**: your whole last message, at most 250 words, in this shape and nothing before or after it. Count the words before sending; over the cap, cut `Answer:` first.
+  - `DONE <work folder>/explanation.md`
+  - `Direction:` one line
+  - `Answer:` the highest-stakes must-answer items, one sentence each, at most 120 words in all
+  - `Convergence:` the last round's line of the diff
+  - `Open:` at most 3 bullets of at most 15 words, naming a stop before converging and what the next round would target, and any tool refused, such as web search
+  - `Folder:` the work folder
+  - The full explanation, the rivals table and the sources stay in `explanation.md`, never in the message.
 
 Surprise here means compression progress (https://arxiv.org/html/0812.4360v2): a finding is surprising only when it reveals a regularity you had not seen, so the explanation gets shorter or more unified with respect to the user's direction. An unlikely finding triggers a step, but noise is unlikely and explains nothing, and the fully predictable teaches nothing, so neither keeps a lead.
 
