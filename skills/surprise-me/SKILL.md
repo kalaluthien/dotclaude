@@ -2,9 +2,18 @@
 name: surprise-me
 description: Use when the user names an area or question to research in depth and wants a structured explanation back. Not for a single fact, a document, deck or textbook, or a plan to stress-test.
 disable-model-invocation: true
+context: fork
+argument-hint: "<area or question to research> [decision it feeds] [scope: depth, source types, time window, language] [folder for work files]"
 ---
 
-Research what the user names, round by round. Each round chases the findings that broke the current picture. Stop when Convergence, a count no one can talk up, says little is left to find. Return the answer a domain expert would have given had the user asked them, as a structured explanation in chat; build no document unless asked.
+Research what the user names, round by round. Each round chases the findings that broke the current picture. Stop when Convergence, a count no one can talk up, says little is left to find. Write the answer a domain expert would have given had the user asked them as a structured explanation in `explanation.md`, and return only the short message under Return.
+
+## Return
+
+This skill runs in a forked subagent that sees no earlier chat and cannot ask the user mid-run, only the ask typed after the skill name, so the ask must carry the area, the decision it feeds and the scope. The main agent receives one message, in the language of the ask, with no file body, search log, claim row or repeated draft in it.
+
+- **Interim report**: none while it runs; every round's diff goes to `diff-N.md` and the Brief to `brief.md`, never into the return. Only when the Direction is unclear and a wrong guess would waste the run, return `NEED: <the one question>` and at most 3 options, the recommended first, alone and at most 80 words, before any search; the main agent asks the owner by `AskUserQuestion` and runs the skill again with the answer in the ask.
+- **Final result**: at most 350 words. A first line `DONE <work folder>/explanation.md`, then `Direction:` in one line, `Answer:` in one to three sentences per must-answer item, the highest-stakes first, cut to fit the cap, `Convergence:` the last round's line of the diff, `Open:` at most 3 short bullets (a stop before converging says so here, with what the next round would target), then `Folder:` the work folder, which holds the claims, the rivals and every diff.
 
 Surprise here means compression progress (https://arxiv.org/html/0812.4360v2): a finding is surprising only when it reveals a regularity you had not seen, so the explanation gets shorter or more unified with respect to the user's direction. An unlikely finding triggers a step, but noise is unlikely and explains nothing, and the fully predictable teaches nothing, so neither keeps a lead.
 
@@ -20,18 +29,19 @@ Work in one folder: a temporary folder by default, or the folder the user names 
 | `probe-N.md` | the blind probe's findings, marked by the audit |
 | `audit-N.md` | the marks, the settled quotes and any item the Stop row reopened, which you add |
 | `diff-N.md` | what each round changed, and its Convergence |
+| `explanation.md` | the written answer, drafted last |
 
 ## 1. Brief
 
 Start with a short scoping search for the one or two most recent reviews or meta-analyses. Every account they name becomes a rival candidate and an entry on the coverage list. Then write `brief.md`, and re-read it before every round and before writing, since dropped constraints are how research drifts.
 
-- **Direction**: what the user will decide or wants to know. If it is unclear and a wrong guess would waste the run, ask once by one `AskUserQuestion` call, the recommended option first with `(Recommended)` in its label; else infer it and state it in your first message.
+- **Direction**: what the user will decide or wants to know. If the ask leaves it unclear and a wrong guess would waste the run, return `NEED:` as Return says; else infer it and record it in `brief.md`.
 - **Checklist**: 5-15 items the explanation must answer, implied ones included, each tagged must-answer or useful. Freeze it; gaps found later go to open questions.
 - **Constraints**: scope, depth, source types, time window, language.
 - **Axes**: one per task, none overlapping, each with an out-of-scope line: 1-2 for a narrow question, 3-4 for a comparison, 5 for a broad area.
 - **Rivals**: per axis, two or more hypotheses plus "none of these", each with what it predicts that the others do not. Keep them in `rivals.md` as evidence lists, not scores; add more later with their predictions.
 - **Anchors**: 5-10 sources or cases from different authors, places and years.
-- **Routes**: 4-6 ways into the area that share no index, such as another source type, language, database or citing network. Freeze them with the checklist and show both to the user in your first message, since a probe down a route you chose late measures your choice. A route's named parts, such as its languages, may go to separate probes; a part no probe has read stays unused.
+- **Routes**: 4-6 ways into the area that share no index, such as another source type, language, database or citing network. Freeze them with the checklist and keep both in `brief.md`, since a probe down a route you chose late measures your choice. A route's named parts, such as its languages, may go to separate probes; a part no probe has read stays unused.
 
 ## 2. Rounds
 
@@ -49,7 +59,7 @@ Each report holds:
 Round 1 maps the area with one task per axis, in parallel. After each round, do these steps yourself, never trusting a task's own rating of its yield, since agents rate it too high:
 
 1. **Diff**: merge the claims and update `rivals.md`. In `diff-N.md`, record which checklist items gained or lost support, how the rivals' ranking moved, and which anomalies stay unexplained. Merging two rivals is progress only when the merged account predicts something neither did and the evidence bears it out.
-2. **Measure**: count Convergence as below and show the user `diff-N.md` in at most 12 lines, a diff of the explanation, never of the search:
+2. **Measure**: count Convergence as below and write `diff-N.md` in at most 12 lines, a diff of the explanation, never of the search:
 
    ```diff
    round 3  Convergence 0.6  Settled 6/10  Recapture 7/10  next: repeat
@@ -117,4 +127,4 @@ One writer drafts the whole explanation in one pass from `claims.md`, as the exp
 4. **Open questions**: what is unknown, which assumption would flip which conclusion, and, if the run stopped early, the next target.
 5. **Sources**.
 
-Explain the subject, never the search. The user's language and style rules override this skill's wording. Keep the explanation in chat unless a file was asked for, and offer in one line to save it if it runs long.
+Explain the subject, never the search. The user's language and style rules override this skill's wording. Save the explanation as `explanation.md` in the work folder; the return carries its path, not its text.

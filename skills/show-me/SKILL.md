@@ -2,16 +2,25 @@
 name: show-me
 description: Use when the user asks to see, show, explain, map, brief, compare or draw something - a system, structure, change, status, data, process or choice - as a diagram, table, chart, map, mockup, page, html or artifact. Not for a single fact, a yes/no or capability question, or a command to run.
 disable-model-invocation: true
+context: fork
+argument-hint: "<what to show: a system, change, data or choice> [aim: understand | review | decide] [source: file path, URL or diff]"
 ---
+
+## Return
+
+This skill runs in a forked subagent that sees no earlier chat, only the ask typed after the skill name, so the ask must carry the subject and its source, and the aim when it is not obvious. The main agent receives one message of at most 60 words in all, the path included, with no table, tree, diagram, HTML or file body in it, in the language of the ask:
+
+- **Interim report**: none; a fork shows nothing before it ends. When the ask names no subject or no source it needs, or points at what a fork cannot see ("this", "the above"), read nothing and return `NEED: <the one thing missing, with its choices if any>` alone; the main agent asks the owner and runs the skill again with the answer in the ask.
+- **Final result**: `DONE <full path of the HTML file>`, a second line with the answer in one sentence, a third `Next: <what the reader can do next>`.
 
 ## Steps
 
-1. **Name the core question.** Before anything else, write in one line what the user really wants to understand and what it is about, as one of the question types below. An ask with several questions gets one line each.
+1. **Name the core question.** From the ask, before anything else, write in one line what the user really wants to understand and what it is about, as one of the question types below. An ask with several questions gets one line each.
 2. **Name what the answer is for.** The real point is what the user wants to get from the answer, not the question alone. Write one line for it: they want to **understand**, to **review** or to **decide**, or another aim in its own words. The aim sets what the page leads with: for understand, the idea built up from what the reader already knows; for review, the thing itself with each point to check; for decide, the options, their trade-offs and a recommendation.
 3. **Assume a reader new to the subject.** That the user asked at all means they may lack deep expertise here, may not remember the specifics, and may not know its terms. Say what each term means where it first appears, and spell out what an expert would skip.
 4. **Read the original.** Open the source itself: the file, log, diff, data, page or transcript. Never a summary of it, a memory, or an earlier answer. Quote what you show with its `path:line` or URL.
 5. **Pick by matching.** Find the case below whose question and data shape match, and use its representation; the smallest that answers wins. One representation per question.
-6. **Make the page.** Put the result in one HTML file, in this order: the answer in one sentence, the representation, what the reader can do next. Chat holds only that sentence, the file's full path and the next step: no table, tree, diagram, PNG or ASCII drawing, since the owner asked for HTML only.
+6. **Make the page.** Put the result in one HTML file, in this order: the answer in one sentence, the representation, what the reader can do next. The return holds only that sentence, the file's full path and the next step: no table, tree, diagram, PNG or ASCII drawing, since the owner asked for HTML only.
 
 ## The page
 
@@ -19,7 +28,7 @@ disable-model-invocation: true
 - **Style it for the field**: draw it the way an expert of the subject's field expects to see it, such as a circuit as a schematic or a proof as numbered steps, and arrange it by UX/UI principles: a clear hierarchy, related things grouped, one thing to look at first.
 - **Make it responsive**: the reader may open it on a desktop or on a mobile, so the layout adapts to the width; a wide diagram or table reflows or scrolls inside its own box.
 - **One file**: inline CSS and SVG, no external fetch, no build step, a few lines of script only for a live control. Draw each diagram as inline SVG, never Mermaid or an image.
-- **Write it** to a new file under the scratchpad, or `~/Documents/show-me/` when no scratchpad exists, named for its subject (`retry-rule.html`). Print its full path in the reply, since a terminal tab shows no `SendUserFile` file, and never run `open`; send it by `SendUserFile` too for a remote viewer (phone, Remote Control, desktop app).
+- **Write it** to a new file under the scratchpad, or `~/Documents/show-me/` when no scratchpad exists, named for its subject (`retry-rule.html`). Put its full path in the return, since a terminal tab shows no `SendUserFile` file, and never run `open`; where `SendUserFile` is available, send it too for a remote viewer (phone, Remote Control, desktop app).
 - **Check it**: read the file back and confirm it holds each quoted `path:line`; where a headless browser of your own runs (never the owner's Chrome), screenshot it at a desktop and a mobile width and look for overflow or a broken layout, and fix what you see before you report it.
 
 ## Question types and data shapes
