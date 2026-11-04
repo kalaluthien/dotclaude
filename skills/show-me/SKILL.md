@@ -13,7 +13,7 @@ argument-hint: "<what to show: a system, change, data or choice> [aim: understan
 This skill runs in a forked subagent that sees no earlier chat, only the ask typed after the skill name, so the ask must carry the subject and its source, and the aim when it is not obvious. The main agent receives one message of at most 60 words in all, the path included, with no table, tree, diagram, HTML or file body in it, in the language of the ask:
 
 - **Interim report**: none; a fork shows nothing before it ends. When the ask names no subject or no source it needs, or points at what a fork cannot see ("this", "the above"), read nothing and return `NEED: <the one thing missing, with its choices if any>` alone, at most 60 words; the main agent asks the owner and runs the skill again with the answer in the ask.
-- **Final result**: `DONE <full path of the HTML file>`, a second line with the answer in one sentence, a third `Next: <what the reader can do next>`.
+- **Final result**: `DONE <full path of the HTML file>`, a second line with the answer in one sentence of at most 25 words that names the finding and restates no values, a third `Next: <what the reader can do next>` of at most 12 words.
 
 ## Steps
 
