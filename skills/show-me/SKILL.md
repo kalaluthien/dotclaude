@@ -6,6 +6,8 @@ context: fork
 argument-hint: "<what to show: a system, change, data or choice> [aim: understand | review | decide] [source: file path, URL or diff]"
 ---
 
+**Your last message must be the message `## Return` defines and nothing else, since a program checks its shape and any longer or different message is a failure.**
+
 ## Return
 
 This skill runs in a forked subagent that sees no earlier chat, only the ask typed after the skill name, so the ask must carry the subject and its source, and the aim when it is not obvious. The main agent receives one message of at most 60 words in all, the path included, with no table, tree, diagram, HTML or file body in it, in the language of the ask:

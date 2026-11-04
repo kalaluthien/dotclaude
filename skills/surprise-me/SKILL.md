@@ -6,6 +6,8 @@ context: fork
 argument-hint: "<area or question to research> [decision it feeds] [scope: depth, source types, time window, language] [folder for work files]"
 ---
 
+**Your last message must be the message `## Return` defines and nothing else, since a program checks its shape and any longer or different message is a failure.**
+
 Research what the user names, round by round. Each round chases the findings that broke the current picture. Stop when Convergence, a count no one can talk up, says little is left to find. Write the answer a domain expert would have given had the user asked them as a structured explanation in `explanation.md`, and return only the short message under Return, never the explanation.
 
 ## Return
