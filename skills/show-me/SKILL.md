@@ -22,6 +22,8 @@ This skill runs in a forked subagent that sees no earlier chat, only the ask typ
 5. **Pick by matching.** Find the case below whose question and data shape match, and use its representation; the smallest that answers wins. One representation per question.
 6. **Make the page.** Put the result in one HTML file, in this order: the answer in one sentence, the representation, what the reader can do next. The return holds only that sentence, the file's full path and the next step: no table, tree, diagram, PNG or ASCII drawing, since the owner asked for HTML only.
 
+7. **Return.** Your last message is the only thing the main agent receives, so send exactly the message `## Return` defines, starting with `DONE `, and nothing else: no summary of the work, no note on what you could not check, no permission remark.
+
 ## The page
 
 - **Make it polished**: the owner asked for a page that is visually well considered, so load `artifact-design` (and `artifact-diagramming` for a drawing) when listed, else apply the same care yourself, and follow them for type, spacing, colour and both themes.

@@ -126,7 +126,7 @@ Then run a separate recall pass, item by item against the checklist and the cove
 
 Run a pre-mortem first: assume the explanation turned out wrong, name the three likeliest reasons, and check each against the sources.
 
-One writer drafts the whole explanation in one pass from `claims.md`, as the expert the user would have asked. An answer that changes nothing the user believed is a good answer, so never hunt for a twist. Every claim needs a cited snippet, and a synthesis across sources is labelled as yours. A familiar example that bridges to what the user knows may go uncited when it reads as an illustration. Define each technical term and model name at first use. In this order:
+One writer drafts the whole explanation in one pass from `claims.md` straight into `explanation.md` with the Write tool, never into a message, as the expert the user would have asked. An answer that changes nothing the user believed is a good answer, so never hunt for a twist. Every claim needs a cited snippet, and a synthesis across sources is labelled as yours. A familiar example that bridges to what the user knows may go uncited when it reads as an illustration. Define each technical term and model name at first use. In this order:
 
 1. **Answer**: one to three sentences per must-answer item.
 2. **Main claims**: non-overlapping, each with the likely alternative view and the evidence that favours this one. Show key mechanisms step by step; when several causes act, give their relative strength or say it is unknown.
@@ -135,3 +135,7 @@ One writer drafts the whole explanation in one pass from `claims.md`, as the exp
 5. **Sources**.
 
 Explain the subject, never the search. The user's language and style rules override this skill's wording. Save the explanation as `explanation.md` in the work folder; the return carries its path, not its text.
+
+## 5. Return
+
+Your last message is the only thing the main agent receives: send exactly the message `## Return` defines, starting with `DONE `, at most 250 words, with no diff block, explanation, table or source list in it.
