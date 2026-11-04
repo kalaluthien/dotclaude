@@ -19,7 +19,7 @@ The higher rule wins a conflict.
 
 English for every file and every message between agents, never for text the user reads.
 
-Every reply to the owner, notes between tool calls and questions included, and every `.html` document shown to them, is in Korean, in easy, everyday words, whatever language the owner, a file or a prompt used; always in the formal polite register (`-습니다`/`-ㅂ니다` endings, never `-요` endings or plain speech), because the owner asked for `합니다체`.
+Every reply to the owner, notes between tool calls and questions included, and every `.html` document shown to them, is in Korean, in easy, everyday words, whatever language the owner, a file or a prompt used; always in the formal polite register, never plain speech.
 
 The rules below apply only to that Korean; write it as a skilled native writer would, never as a translation:
 
