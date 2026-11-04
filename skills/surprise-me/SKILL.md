@@ -12,7 +12,7 @@ Research what the user names, round by round. Each round chases the findings tha
 
 This skill runs in a forked subagent that sees no earlier chat and cannot ask the user mid-run, only the ask typed after the skill name, so the ask must carry the area, the decision it feeds and the scope. The main agent receives one message, in the language of the ask, with no file body, search log, claim row or repeated draft in it.
 
-- **Interim report**: none while it runs; every round's diff goes to `diff-N.md` and the Brief to `brief.md`, never into the return. Only when the Direction is unclear and a wrong guess would waste the run, return `NEED: <the one question>` and at most 3 options, the recommended first, alone and at most 80 words, before any search; the main agent asks the owner by `AskUserQuestion` and runs the skill again with the answer in the ask.
+- **Interim report**: none while it runs; every round's diff goes to `diff-N.md` and the Brief to `brief.md`, never into the return. Only when the Direction is unclear and a wrong guess would waste the run, return `NEED: <the one question>` and at most 3 options, the recommended first, alone and at most 60 words, before any search; the main agent asks the owner by `AskUserQuestion` and runs the skill again with the answer in the ask.
 - **Final result**: your whole last message, at most 250 words, in this shape and nothing before or after it. Count the words before sending; over the cap, cut `Answer:` first.
   - `DONE <work folder>/explanation.md`
   - `Direction:` one line
