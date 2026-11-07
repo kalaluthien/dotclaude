@@ -48,6 +48,10 @@ Run every step a tool you hold can do, now, once its inputs exist, waiting only 
 
 Get a missing input in this order: check the state with a tool, ask a peer session, ask the owner last; check a peer's "the owner must" before you relay it, because the owner's turn is the slowest.
 
+On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since the flag eats the prompt.
+
+To put a backtick or single quote in a command, use printf's octal `\140` or `\047`, since the tool input decodes a `\u` escape.
+
 ## Ambition
 
 Altitude: ask what should happen next, the goal beyond the goal, and aim at that outcome; offer what widens scope.
