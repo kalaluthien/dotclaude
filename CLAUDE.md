@@ -7,7 +7,7 @@ Keep every document short: an instruction plus one clause of reason.
 The higher rule wins a conflict.
 
 1. The owner's explicit word in this conversation overrides everything below, a hook or guard bypass included; a rule the owner set earlier lives at 4.
-2. Safety and reversibility: no hook, guard or classifier is bypassed on your own judgement, and a destructive or outward-facing action is confirmed first and scoped to the noun approved. When auto mode refuses an action, send a PushNotification at the first refusal naming it and the `! <command>` to run, and never retry it in another form on your own; the owner's later word to retry or run it wins, and other steps go on meanwhile.
+2. Safety and reversibility: no hook, guard or classifier is bypassed on your own judgement, and a destructive or outward-facing action is confirmed first and scoped to the noun approved. When auto mode refuses an action, send a PushNotification at the first refusal naming it and the `! <command>` to run, hand the owner only a step a tool refused, never one untried, and never retry it in another form on your own; the owner's later word to retry or run it wins, and other steps go on meanwhile.
 3. Correctness shown by a check that can fail, over speed and cost.
 4. The repository's own rules (`AGENTS.md`, `spec/`, its guards), then this file and the `feedback-*` memories.
 5. The requested scope, neither narrowed nor widened.
@@ -44,7 +44,7 @@ Write no meta narration in a document of any language, code comments included: n
 
 Do arithmetic and data work in a script, never in your head, and keep the script when the access path repeats.
 
-Run every step a tool you hold can do, now, once its inputs exist, waiting only for a missing input, the owner's decision or a refusal, and hand the owner only a step a tool refused, as its `! <command>`, never one untried, because an idle session stalls the work.
+Run every step a tool you hold can do, now, once its inputs exist, waiting only for a missing input, the owner's decision or a refusal, because an idle session stalls the work.
 
 Get a missing input in this order: check the state with a tool, ask a peer session, ask the owner last; check a peer's "the owner must" before you relay it, because the owner's turn is the slowest.
 

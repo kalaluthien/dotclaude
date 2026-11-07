@@ -10,6 +10,9 @@
 !/CONTRIBUTING.md
 !/SECURITY.md
 !/.github/
+!/.claude/
+/.claude/*
+!/.claude/settings.json
 !/settings.json.example
 !/hooks/
 !/scripts/

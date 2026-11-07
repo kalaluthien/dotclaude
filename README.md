@@ -36,7 +36,7 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 3. `git fetch origin && git checkout -t origin/main`
 4. `python3 scripts/merge-settings.py` writes `settings.json` from `settings.json.example`; it keeps local-only keys and `theme` and `feedbackDrafts`, and backs the old file up to `backups/`. On a machine with an older `settings.json`, the first run keeps its old `PreToolUse` Bash group (the one ending `exec rtk hook claude`); delete that group by hand once.
 5. Install `rtk`. Without it the Bash hook skips it.
-6. Write notes that hold only on this machine in `~/.claude/rules/machine.md`.
+6. Write a note that must be known before its situation arises in `~/.claude/rules/<topic>.md`, such as `machine.md` for one that holds only on this machine; write any other note in `~/.claude/memory/`.
 7. After a `git pull` that changes `settings.json.example`, run step 4 again.
 
 ## Use it
