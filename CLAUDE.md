@@ -48,10 +48,6 @@ Run every step a tool you hold can do, now, once its inputs exist, waiting only 
 
 Get a missing input in this order: check the state with a tool, ask a peer session, ask the owner last; check a peer's "the owner must" before you relay it, because the owner's turn is the slowest.
 
-On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since the flag eats the prompt.
-
-To put a backtick or single quote in a command, use printf's octal `\140` or `\047`, since the tool input decodes a `\u` escape.
-
 ## Ambition
 
 Altitude: ask what should happen next, the goal beyond the goal, and aim at that outcome; offer what widens scope.
@@ -101,11 +97,3 @@ Never cite a predicted id or path; read it back from its tool.
 ## Testing
 
 Add no unit test and no mock-based test beyond those that exist; a unit test may be written first as scaffolding to drive a change, then discarded before commit; keep only an end-to-end scenario, a fuzz test or a property test, because a unit or mock test checks a double's picture of the system, while these three check the system and inputs nobody thought of.
-
-# Conventions
-
-Keep each work repository at `~/workspace/projects/<repo>` and the plugin marketplace at `~/workspace/plugins`.
-
-Give a new checkout its plugins by hand in its git-ignored `.claude/settings.local.json`, copied from a sibling.
-
-Put a machine-only note in `~/.claude/memory/`, or in `~/.claude/rules/machine.md` when an agent must know it first.
