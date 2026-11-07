@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Merge settings.json.example into settings.json: the example wins on shared keys, local-only keys stay, hooks are
 concatenated per event, permission lists are unioned, and the old file is backed up first. A local hook group the
-previous example held is dropped, so an edited example hook replaces its old copy. Rerun after every pull that
+any earlier example held is dropped, so an edited example hook replaces its old copy. Rerun after every pull that
 touches the example."""
 import json
 import shutil
+import subprocess
 import time
 from pathlib import Path
 
@@ -22,13 +23,27 @@ def same(a, b):
     return flat(a) == flat(b)
 
 
-def merge(example, local, last):
+def past_examples():
+    """Every committed version of the example, so a missing or already-updated record of the last one still drops old groups."""
+    git = ["git", "-C", str(ROOT)]
+    shas = subprocess.run(git + ["log", "--format=%H", "--", EXAMPLE.name], capture_output=True, text=True).stdout.split()
+    found = []
+    for sha in shas:
+        shown = subprocess.run(git + ["show", f"{sha}:{EXAMPLE.name}"], capture_output=True, text=True)
+        try:
+            found.append(json.loads(shown.stdout))
+        except ValueError:
+            pass
+    return found
+
+
+def merge(example, local, past):
     merged = json.loads(json.dumps(example))
     for key, value in local.items():
         if key == "hooks":
             for event, groups in value.items():
                 target = merged.setdefault("hooks", {}).setdefault(event, [])
-                old = last.get("hooks", {}).get(event, [])
+                old = [g for version in past for g in version.get("hooks", {}).get(event, [])]
                 target.extend(g for g in groups if not any(same(g, t) for t in target + old))
         elif key == "permissions":
             for sub, sub_value in value.items():
@@ -49,7 +64,7 @@ def main():
         backup.parent.mkdir(exist_ok=True)
         shutil.copy2(LIVE, backup)
     last = json.loads(LAST.read_text()) if LAST.exists() else {}
-    LIVE.write_text(json.dumps(merge(json.loads(EXAMPLE.read_text()), local, last), indent=2, ensure_ascii=False) + "\n")
+    LIVE.write_text(json.dumps(merge(json.loads(EXAMPLE.read_text()), local, [last] + past_examples()), indent=2, ensure_ascii=False) + "\n")
     LAST.parent.mkdir(exist_ok=True)
     shutil.copy2(EXAMPLE, LAST)
 
