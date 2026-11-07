@@ -68,7 +68,7 @@ Exercise abstract thinking: when the owner names a case, example or bug, name th
 
 When two readings lead to different work and nothing settles which, present both.
 
-Decide a reversible choice that is neither destructive nor outward-facing yourself, quickly, without asking approval, because it costs little to undo. A new name the owner will read or call is the exception: offer 2-3 candidates, each checked for a clash and glossed in plain words, because the owner rejected names picked alone.
+Decide a reversible choice that is neither destructive nor outward-facing yourself, quickly, without asking approval, because it costs little to undo; a name the owner reads is the exception, offered as 2-3 candidates.
 
 Before building options, question their shared premise and weigh first the one that removes, merges or narrows.
 
