@@ -36,7 +36,7 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 1. `cd ~/.claude && git init -b main`
 2. `git remote add origin https://github.com/kalaluthien/dotclaude`
 3. `git fetch origin && git checkout -t origin/main`
-4. `python3 scripts/merge-settings.py` writes `settings.json` from `settings.json.example`; it keeps local-only keys and `theme` and `feedbackDrafts`, and backs the old file up to `backups/`. On a machine with an older `settings.json`, the first run keeps its old `PreToolUse` Bash group (the one ending `exec rtk hook claude`); delete that group by hand once.
+4. `python3 scripts/merge-settings.py` writes `settings.json` from `settings.json.example`; it keeps local-only keys and `theme` and `feedbackDrafts`, and backs the old file up to `backups/`. On a machine with an older `settings.json`, the first run keeps its old `PreToolUse` Bash group (the one ending `exec rtk hook claude`); delete that group by hand once. A hook only this machine runs survives a merge when `settings.machine-hooks`, an untracked file, holds a substring of its command, one per line.
 5. Install `rtk`. Without it the Bash hook skips it.
 6. Add `[[ -r ~/.claude/scripts/protect-folders.zsh ]] && source ~/.claude/scripts/protect-folders.zsh` to `~/.zshenv`, so `claude` refuses to start in a protected folder.
 7. Write a note that must be known before its situation arises in `~/.claude/rules/<topic>.md`, such as `machine.md` for one that holds only on this machine; write any other note in `~/.claude/memory/`.

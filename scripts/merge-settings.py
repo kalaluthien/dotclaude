@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Merge settings.json.example into settings.json: the example wins on shared keys, local-only keys stay, hooks are
-concatenated per event, permission lists are unioned, and the old file is backed up first. A local hook group the
-any earlier example held is dropped, so an edited example hook replaces its old copy. Rerun after every pull that
-touches the example."""
+concatenated per event, permission lists are unioned, and the old file is backed up first. A local hook group any
+earlier example held is dropped, so an edited example hook replaces its old copy, unless one of its commands holds a
+line of `settings.machine-hooks`, an untracked file of substrings, one per line, for a hook only this machine runs.
+Rerun after every pull that touches the example."""
 import json
 import shutil
 import subprocess
@@ -12,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LIVE, EXAMPLE = ROOT / "settings.json", ROOT / "settings.json.example"
 LAST = ROOT / "backups" / "settings.json.example.last"
+MACHINE_HOOKS = ROOT / "settings.machine-hooks"
 PER_MACHINE = ("theme", "feedbackDrafts")
 
 
@@ -37,14 +39,19 @@ def past_examples():
     return found
 
 
-def merge(example, local, past):
+def machine_only(group, marks):
+    return any(m in h.get("command", "") for h in group.get("hooks", []) for m in marks)
+
+
+def merge(example, local, past, marks=()):
     merged = json.loads(json.dumps(example))
     for key, value in local.items():
         if key == "hooks":
             for event, groups in value.items():
                 target = merged.setdefault("hooks", {}).setdefault(event, [])
                 old = [g for version in past for g in version.get("hooks", {}).get(event, [])]
-                target.extend(g for g in groups if not any(same(g, t) for t in target + old))
+                target.extend(g for g in groups if not any(same(g, t) for t in target)
+                              and (machine_only(g, marks) or not any(same(g, o) for o in old)))
         elif key == "permissions":
             for sub, sub_value in value.items():
                 have = merged.setdefault("permissions", {}).setdefault(sub, sub_value)
@@ -64,7 +71,8 @@ def main():
         backup.parent.mkdir(exist_ok=True)
         shutil.copy2(LIVE, backup)
     last = json.loads(LAST.read_text()) if LAST.exists() else {}
-    LIVE.write_text(json.dumps(merge(json.loads(EXAMPLE.read_text()), local, [last] + past_examples()), indent=2, ensure_ascii=False) + "\n")
+    marks = [m for m in MACHINE_HOOKS.read_text().splitlines() if m.strip()] if MACHINE_HOOKS.exists() else []
+    LIVE.write_text(json.dumps(merge(json.loads(EXAMPLE.read_text()), local, [last] + past_examples(), marks), indent=2, ensure_ascii=False) + "\n")
     LAST.parent.mkdir(exist_ok=True)
     shutil.copy2(EXAMPLE, LAST)
 
