@@ -14,6 +14,7 @@ Shared Claude Code setup for `~/.claude`: three skills, five hooks, a settings t
 | `hooks/reply-language.py` | Asks for a rewrite when a reply to a Korean message has no Korean or uses a banned word. |
 | `hooks/protect-folders.py` | Keeps sessions out of each folder a `Read(~/<dir>/**)` deny rule names (`~/Downloads`, `~/Documents`): refuses a session working there and a tool call naming a path inside, by any spelling, or scanning a folder above. |
 | `hooks/herdr-agent-state.sh` | Reports session state to herdr; does nothing outside herdr. |
+| `scripts/protect-folders.zsh` | Refuses to start `claude` in a protected folder or with one added, before its project files load. |
 | `scripts/merge-settings.py` | Merges `settings.json.example` into your `settings.json`. |
 | `CLAUDE.md` | The author's global preferences; replace them with yours. |
 
@@ -37,8 +38,9 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 3. `git fetch origin && git checkout -t origin/main`
 4. `python3 scripts/merge-settings.py` writes `settings.json` from `settings.json.example`; it keeps local-only keys and `theme` and `feedbackDrafts`, and backs the old file up to `backups/`. On a machine with an older `settings.json`, the first run keeps its old `PreToolUse` Bash group (the one ending `exec rtk hook claude`); delete that group by hand once.
 5. Install `rtk`. Without it the Bash hook skips it.
-6. Write a note that must be known before its situation arises in `~/.claude/rules/<topic>.md`, such as `machine.md` for one that holds only on this machine; write any other note in `~/.claude/memory/`.
-7. After a `git pull` that changes `settings.json.example`, run step 4 again.
+6. Add `[[ -r ~/.claude/scripts/protect-folders.zsh ]] && source ~/.claude/scripts/protect-folders.zsh` to `~/.zshenv`, so `claude` refuses to start in a protected folder.
+7. Write a note that must be known before its situation arises in `~/.claude/rules/<topic>.md`, such as `machine.md` for one that holds only on this machine; write any other note in `~/.claude/memory/`.
+8. After a `git pull` that changes `settings.json.example`, run step 4 again.
 
 ## Use it
 
@@ -46,6 +48,18 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 2. Read `settings.json.example` once: `permissions`, `hooks`, `outputStyle` and `autoMemoryDirectory` are the keys most worth changing.
 3. Hooks need no action; they run on each Bash call, reply or session start.
 4. To change a part, edit it under `~/.claude`, then open a pull request against your own fork.
+
+## Protected folders
+
+Sessions stay out of `~/Downloads` and `~/Documents`, since downloaded instruction files can inject a prompt and both hold personal and payment records. Each folder is one `Read(~/<dir>/**)` deny rule, with its `Edit` twin, in `settings.json.example`; add a pair to protect another.
+
+| layer | stops |
+| --- | --- |
+| deny rules | Claude Code's file tools, `cat`-like commands and redirections, and the folder's `CLAUDE.md`, `AGENTS.md` and rules loading |
+| `hooks/protect-folders.py` | the spellings deny rules miss: `$HOME`, `cd`, relative paths, `..`, symlinks, globs, inline code, scans of a folder above (`find ~`) |
+| `scripts/protect-folders.zsh` | a start in the folder or with it added, which would load its project skills, agents, hooks and MCP servers |
+
+Not covered: a script that opens a protected file without naming it, and a launcher that runs the `claude` binary without zsh. The sandbox (`sandbox.filesystem.denyRead`) closes the first at the OS level; it is off here, since it also cut SSH in a probe.
 
 ## Contributions
 

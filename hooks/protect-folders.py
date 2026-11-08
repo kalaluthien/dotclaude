@@ -7,6 +7,10 @@ protects a folder in both layers: Claude Code's own permission check and this ho
 misses (`$HOME`, `cd`, relative paths, `..`, globs, inline code, recursive scans).
 
 usage: protect-folders.py < hook-input.json
+       protect-folders.py start [<claude argument>...]
+         exits 2 when the current folder, or an argument naming an existing folder (`--add-dir <dir>`), lies in a
+         protected folder; `scripts/protect-folders.zsh` runs it before Claude Code starts, since a session started
+         there loads that folder's project skills, agents, hooks and MCP servers before any hook can refuse
 """
 import fnmatch
 import json
@@ -195,7 +199,22 @@ def strings(value):
             yield from strings(item)
 
 
+def start(args):
+    protected = folders()
+    cwd = os.getcwd()
+    named = [part for arg in args for part in arg.split("=", 1)[-1:]]
+    for path in [cwd] + [os.path.join(cwd, os.path.expanduser(a)) for a in named if a and not a.startswith("-")]:
+        hit = (path == cwd or os.path.isdir(path)) and inside(path, protected)
+        if hit:
+            print(f"protect-folders: Claude Code does not start with {hit}, a protected folder, as its folder or an "
+                  f"added one: start it elsewhere. A protected folder is a Read deny rule in {SETTINGS}.", file=sys.stderr)
+            return 2
+    return 0
+
+
 def main():
+    if sys.argv[1:2] == ["start"]:
+        return start(sys.argv[2:])
     event = json.load(sys.stdin)
     protected = folders()
     cwd = event.get("cwd") or os.getcwd()
