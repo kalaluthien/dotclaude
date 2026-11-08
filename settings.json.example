@@ -30,7 +30,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus",
   "skillOverrides": {
     "dataviz": "off",
     "run": "off",
@@ -47,7 +46,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -x \"$HOME/workspace/projects/homeops/subjects/gate/hook.sh\" ] && exec \"$HOME/workspace/projects/homeops/subjects/gate/hook.sh\" --rtk; command -v rtk >/dev/null && exec rtk hook claude; exit 0"
+            "command": "command -v rtk >/dev/null && exec rtk hook claude; exit 0"
           },
           {
             "type": "command",
@@ -126,33 +125,17 @@
   "workflowKeywordTriggerEnabled": false,
   "outputStyle": "Concise",
   "feedbackDrafts": "quiet",
-  "effortLevel": "medium",
-  "modelSettings": {
-    "claude-fable-5-1": {
-      "effortLevel": "medium"
-    },
-    "claude-opus-5": {
-      "effortLevel": "medium"
-    },
-    "claude-sonnet-5": {
-      "effortLevel": "medium"
-    },
-    "claude-opus-5-5": {
-      "effortLevel": "medium"
-    }
-  },
   "autoCompactWindow": 250000,
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
   "askUserQuestionTimeout": "never",
   "skipWorkflowUsageWarning": true,
-  "theme": "auto",
   "editorMode": "vim",
   "verbose": false,
-  "switchModelsOnFlag": true,
   "autoContinueAtUsageLimit": true,
   "autoScrollEnabled": true,
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "autoMemoryDirectory": "~/.claude/memory"
 }

@@ -43,7 +43,7 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 ## Use it
 
 1. Type `/grill-me`, `/show-me` or `/surprise-me` in a session, then your topic; the three skills run only when you type them. `/show-me` and `/surprise-me` run in a forked subagent that sees no earlier chat, so give the full ask up front, as their argument hint shows.
-2. Read `settings.json.example` once: `permissions`, `hooks` and `outputStyle` are the keys most worth changing.
+2. Read `settings.json.example` once: `permissions`, `hooks`, `outputStyle` and `autoMemoryDirectory` are the keys most worth changing.
 3. Hooks need no action; they run on each Bash call, reply or session start.
 4. To change a part, edit it under `~/.claude`, then open a pull request against your own fork.
 
