@@ -24,6 +24,10 @@
       "Bash(rm */.git/hooks/pre-push)"
     ],
     "deny": [
+      "Read(~/Downloads/**)",
+      "Edit(~/Downloads/**)",
+      "Read(~/Documents/**)",
+      "Edit(~/Documents/**)",
       "Bash(rm -rf .claude/worktrees/*..*)",
       "SendFeedback",
       "ScheduleWakeup"
@@ -58,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.claude/hooks/refuse-downloads.py\""
+            "command": "python3 \"$HOME/.claude/hooks/protect-folders.py\""
           }
         ]
       }
@@ -112,7 +116,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.claude/hooks/refuse-downloads.py\""
+            "command": "python3 \"$HOME/.claude/hooks/protect-folders.py\""
           }
         ]
       }

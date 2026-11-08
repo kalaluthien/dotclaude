@@ -32,7 +32,7 @@ This skill runs in a forked subagent that sees no earlier chat, only the ask typ
 - **Style it for the field**: draw it the way an expert of the subject's field expects to see it, such as a circuit as a schematic or a proof as numbered steps, and arrange it by UX/UI principles: a clear hierarchy, related things grouped, one thing to look at first.
 - **Make it responsive**: the reader may open it on a desktop or on a mobile, so the layout adapts to the width; a wide diagram or table reflows or scrolls inside its own box.
 - **One file**: inline CSS and SVG, no external fetch, no build step, a few lines of script only for a live control. Draw each diagram as inline SVG, never Mermaid or an image.
-- **Write it** to a new file under the scratchpad, or `~/Documents/show-me/` when no scratchpad exists, named for its subject (`retry-rule.html`). Put its full path in the return, since a terminal tab shows no `SendUserFile` file, and never run `open`; where `SendUserFile` is available, send it too for a remote viewer (phone, Remote Control, desktop app).
+- **Write it** to a new file under the scratchpad, or `~/.claude/show-me/` when no scratchpad exists, named for its subject (`retry-rule.html`). Put its full path in the return, since a terminal tab shows no `SendUserFile` file, and never run `open`; where `SendUserFile` is available, send it too for a remote viewer (phone, Remote Control, desktop app).
 - **Check it**: read the file back and confirm it holds each quoted `path:line`; where a headless browser of your own runs (never the owner's Chrome), screenshot it at a desktop and a mobile width and look for overflow or a broken layout, and fix what you see before you report it.
 
 ## Question types and data shapes
