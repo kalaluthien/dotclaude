@@ -2,7 +2,7 @@
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow)](https://buymeacoffee.com/kalaluthien)
 
-Shared Claude Code setup for `~/.claude`: three skills, four hooks, a settings template and a global `CLAUDE.md` of preferences.
+Shared Claude Code setup for `~/.claude`: three skills, five hooks, a settings template and a global `CLAUDE.md` of preferences.
 
 | Part | What it does |
 | --- | --- |
@@ -12,6 +12,7 @@ Shared Claude Code setup for `~/.claude`: three skills, four hooks, a settings t
 | `hooks/kill-guard.py` | Refuses a broad process kill such as `pkill -f cat`. |
 | `hooks/failure-hint.py` | After a failed Bash call, adds the known fix for that failure. |
 | `hooks/reply-language.py` | Asks for a rewrite when a reply to a Korean message has no Korean or uses a banned word. |
+| `hooks/refuse-downloads.py` | Refuses a prompt or tool call of a session that works in `~/Downloads` or moves there. |
 | `hooks/herdr-agent-state.sh` | Reports session state to herdr; does nothing outside herdr. |
 | `scripts/merge-settings.py` | Merges `settings.json.example` into your `settings.json`. |
 | `CLAUDE.md` | The author's global preferences; replace them with yours. |

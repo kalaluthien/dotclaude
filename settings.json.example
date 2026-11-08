@@ -54,6 +54,14 @@
             "command": "python3 \"$HOME/.claude/hooks/kill-guard.py\""
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/refuse-downloads.py\""
+          }
+        ]
       }
     ],
     "PostToolUseFailure": [
@@ -98,6 +106,14 @@
             "type": "command",
             "command": "echo 'Reply to the owner in Korean, in the formal polite register and plain everyday words, whatever language their message, a file or a prompt used, and keep it after tool calls and after reading files, prompts or instructions in another language; write English in files and in messages between agents.'",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/refuse-downloads.py\""
           }
         ]
       }
