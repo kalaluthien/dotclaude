@@ -33,9 +33,11 @@ SPLIT = re.compile(r"[\s'\"`(){},;|&<>=:]+")
 ASSIGNMENT = re.compile(r"(?:^|[\s;&|(])([A-Za-z_]\w*)=([^\s;&|)]*)")
 BARE_CD = re.compile(r"(?:^|[\s;&|(])cd\s*(?=$|[;&|)])")
 GLOB = re.compile(r"[*?\[]")
+BRACE = re.compile(r"(?<!\$)\{([^{}]*)\}")
 SEPARATORS = re.compile(r"\|\||&&|[;|&\n]|\$\(|`")
 WRAPPERS = {"sudo", "env", "nice", "nohup", "time", "exec", "command", "xargs", "timeout", "caffeinate"}
 ALWAYS_RECURSIVE = {"find", "fd", "rg", "ag", "du", "tree", "mdfind", "rsync", "zip", "tar", "ditto"}
+RECURSIVE_WORDS = {"--recursive", "--dereference-recursive", "--directories=recurse", "-drecurse", "recurse"}
 RECURSIVE_FLAG = {"grep": "rR", "egrep": "rR", "fgrep": "rR", "ls": "R", "cp": "rRa", "chmod": "R", "chown": "R",
                   "chflags": "R", "xattr": "r", "rm": "rR", "scp": "r"}
 PATH_KEYS = {"file_path", "notebook_path", "path"}
@@ -105,6 +107,23 @@ def expand(text):
     return text
 
 
+def braces(word, limit=64):
+    """WORD with each `{a,b}` group expanded, as the shell does, up to LIMIT words."""
+    match = BRACE.search(word)
+    if not match:
+        return [word]
+    found = []
+    for option in match.group(1).split(","):
+        found += braces(word[:match.start()] + option + word[match.end():], limit)
+        if len(found) >= limit:
+            break
+    return found[:limit]
+
+
+def unbrace(text):
+    return " ".join(" ".join(braces(word)) for word in text.split(" "))
+
+
 def check_word(word, bases, protected):
     """The protected folder WORD names, read as a path from each base, else None."""
     if not word or word.startswith("-") and "/" not in word:
@@ -120,8 +139,9 @@ def check_word(word, bases, protected):
     return None
 
 
-def scans(command, cwd, protected):
-    """The protected folder a recursive command in COMMAND reaches by scanning a folder above it, else None."""
+def scans(command, bases, protected):
+    """The protected folder a recursive command in COMMAND reaches by scanning a folder above it, read from each base
+    folder the command starts in or moves to, else None."""
     for chunk in SEPARATORS.split(command):
         try:
             words = shlex.split(chunk)
@@ -132,31 +152,33 @@ def scans(command, cwd, protected):
         if not words:
             continue
         program, rest = os.path.basename(words[0]), words[1:]
-        flags = [w for w in rest if w.startswith("-")]
         letters = RECURSIVE_FLAG.get(program, "")
         recursive = program in ALWAYS_RECURSIVE or bool(letters) and any(
-            w == "--recursive" or re.match(r"^-[A-Za-z]*[" + letters + "]", w) for w in flags)
+            w in RECURSIVE_WORDS or re.match(r"^-[A-Za-z]*[" + letters + "]", w) for w in rest)
         if not recursive:
             continue
-        targets = [w for w in rest if not w.startswith("-") and (w.startswith("/") or os.path.exists(os.path.join(cwd, w)))]
-        if program == "mdfind" and "-onlyin" not in rest:
-            targets = ["/"]
-        for target in targets or [cwd]:
-            hit = above(os.path.join(cwd, target), protected)
-            if hit:
-                return hit
+        for base in bases:
+            targets = [w for w in rest if not w.startswith("-") and (w.startswith("/") or os.path.exists(os.path.join(base, w)))]
+            if program == "mdfind" and "-onlyin" not in rest:
+                targets = ["/"]
+            for target in targets or [base]:
+                hit = above(os.path.join(base, target), protected)
+                if hit:
+                    return hit
     return None
 
 
 def variants(command):
     """COMMAND as written, then with quotes and backslashes dropped and simple `name=value` variables put in, so a
     path split by quotes or built from variables reads whole."""
-    joined = re.sub(r"[\\'\"]", "", command)
+    joined = re.sub(r"\$([A-Za-z_]\w*)(?=['\"])", r"${\1}", command)
+    joined = re.sub(r"[\\'\"]", "", joined)
     values = {name: value for name, value in ASSIGNMENT.findall(joined)}
     for _ in range(3):
         for name, value in values.items():
             joined = re.sub(r"\$\{" + name + r"\}|\$" + name + r"\b", lambda _: value, joined)
-    return [expand(command), expand(joined)]
+    texts = [re.sub(r"file://localhost(?=/)", "file://", t) for t in (command, joined)]
+    return [expand(t) for t in texts] + [expand(unbrace(t)) for t in texts]
 
 
 def check_command(command, cwd, protected):
@@ -168,20 +190,19 @@ def check_command(command, cwd, protected):
 
 
 def check_text(text, command, cwd, protected):
-    bases = [cwd] + ([HOME] if BARE_CD.search(text) else [])
+    moves = [cwd] + ([HOME] if BARE_CD.search(text) else [])
     for match in re.finditer(r"(?:^|[\s;&|(])(?:cd|pushd)\s+(?:-[LPe@]+\s+)*([^\s;&|)]+)", text):
         try:
             target = shlex.split(match.group(1))[0]
         except (ValueError, IndexError):
             target = match.group(1)
-        bases.append(os.path.join(cwd, target))
-    if HOME_HINT.search(command):
-        bases.append(HOME)
+        moves.append(os.path.join(cwd, target))
+    bases = moves + ([HOME] if HOME_HINT.search(command) else [])
     for word in SPLIT.split(text):
         hit = check_word(word, bases, protected)
         if hit:
             return hit
-    return scans(text, cwd, protected)
+    return scans(text, moves, protected)
 
 
 def check_tool(name, tool_input, cwd, protected):
@@ -191,9 +212,12 @@ def check_tool(name, tool_input, cwd, protected):
         return check_command(tool_input["command"], cwd, protected)
     if name == "Glob":
         base = os.path.join(cwd, expand(tool_input.get("path") or "."))
-        pattern = os.path.join(base, expand(tool_input.get("pattern") or ""))
-        return inside(base, protected) or glob_reaches(pattern, protected) or (
-            "**" in pattern and above(base, protected))
+        for pattern in braces(expand(tool_input.get("pattern") or "")):
+            pattern = os.path.join(base, pattern)
+            hit = glob_reaches(pattern, protected) or ("**" in pattern and above(base, protected))
+            if hit:
+                return hit
+        return inside(base, protected)
     if name == "Grep":
         base = os.path.join(cwd, expand(tool_input.get("path") or "."))
         return inside(base, protected) or above(base, protected)
@@ -205,7 +229,7 @@ def check_tool(name, tool_input, cwd, protected):
     if name.startswith("mcp__"):
         for value in strings(tool_input):
             for word in SPLIT.split(expand(value)):
-                hit = word.startswith("/") and check_word(word, [], protected)
+                hit = "/" in word and check_word(word, [cwd], protected)
                 if hit:
                     return hit
     return None
