@@ -21,15 +21,17 @@ import sys
 
 HOME = os.path.expanduser("~")
 SETTINGS = os.path.join(os.environ.get("CLAUDE_CONFIG_DIR") or os.path.join(HOME, ".claude"), "settings.json")
-ALWAYS = ["~/Downloads"]  # protected even with no deny rule
+ALWAYS = ["~/Downloads", "~/Documents"]  # protected even with no deny rule
 RULE = re.compile(r"^Read\((~/|//)(.+?)/\*\*\)$")
 VARIABLES = [
-    (re.compile(r"\$\{HOME\}|\$HOME\b"), HOME),
+    (re.compile(r"\$\{HOME(?::?[-=+?][^}]*)?\}|\$HOME\b"), HOME),
     (re.compile(r"\$\{USER\}|\$USER\b"), os.path.basename(HOME)),
     (re.compile(r"(?<![\w/.~-])~(?=/|$|[\s'\"`:;,)\]}])"), HOME),
 ]
 HOME_HINT = re.compile(r"~|\bHOME\b|home\(|homedir|expanduser|Path\.home")
-SPLIT = re.compile(r"[\s'\"`()\[\]{},;|&<>=:]+")
+SPLIT = re.compile(r"[\s'\"`(){},;|&<>=:]+")
+ASSIGNMENT = re.compile(r"(?:^|[\s;&|(])([A-Za-z_]\w*)=([^\s;&|)]*)")
+BARE_CD = re.compile(r"(?:^|[\s;&|(])cd\s*(?=$|[;&|)])")
 GLOB = re.compile(r"[*?\[]")
 SEPARATORS = re.compile(r"\|\||&&|[;|&\n]|\$\(|`")
 WRAPPERS = {"sudo", "env", "nice", "nohup", "time", "exec", "command", "xargs", "timeout", "caffeinate"}
@@ -107,7 +109,10 @@ def check_word(word, bases, protected):
     """The protected folder WORD names, read as a path from each base, else None."""
     if not word or word.startswith("-") and "/" not in word:
         return None
-    candidates = [word] if word.startswith("/") else [os.path.join(base, word) for base in bases]
+    if word.startswith("/"):
+        candidates = [word] + ([os.path.join(HOME, word.lstrip("/"))] if HOME in bases else [])
+    else:
+        candidates = [os.path.join(base, word) for base in bases]
     for candidate in candidates:
         hit = glob_reaches(candidate, protected) if GLOB.search(candidate) else inside(candidate, protected)
         if hit:
@@ -143,9 +148,27 @@ def scans(command, cwd, protected):
     return None
 
 
+def variants(command):
+    """COMMAND as written, then with quotes and backslashes dropped and simple `name=value` variables put in, so a
+    path split by quotes or built from variables reads whole."""
+    joined = re.sub(r"[\\'\"]", "", command)
+    values = {name: value for name, value in ASSIGNMENT.findall(joined)}
+    for _ in range(3):
+        for name, value in values.items():
+            joined = re.sub(r"\$\{" + name + r"\}|\$" + name + r"\b", lambda _: value, joined)
+    return [expand(command), expand(joined)]
+
+
 def check_command(command, cwd, protected):
-    text = expand(command)
-    bases = [cwd]
+    for text in variants(command):
+        hit = check_text(text, command, cwd, protected)
+        if hit:
+            return hit
+    return None
+
+
+def check_text(text, command, cwd, protected):
+    bases = [cwd] + ([HOME] if BARE_CD.search(text) else [])
     for match in re.finditer(r"(?:^|[\s;&|(])(?:cd|pushd)\s+(?:-[LPe@]+\s+)*([^\s;&|)]+)", text):
         try:
             target = shlex.split(match.group(1))[0]

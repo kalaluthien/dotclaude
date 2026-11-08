@@ -59,7 +59,7 @@ Sessions stay out of `~/Downloads` and `~/Documents`, since downloaded instructi
 | `hooks/refuse-downloads.py` | the spellings deny rules miss: `$HOME`, `cd`, relative paths, `..`, symlinks, globs, inline code, scans of a folder above (`find ~`) |
 | `scripts/protect-folders.zsh` | a start in the folder or with it added, which would load its project skills, agents, hooks and MCP servers |
 
-Not covered: a script that opens a protected file without naming it, and a launcher that runs the `claude` binary without zsh. The sandbox (`sandbox.filesystem.denyRead`) closes the first at the OS level; it is off here, since it also cut SSH in a probe.
+Not covered: a script that opens a protected file without naming it, a path the shell computes at run time (`eval` of a built string, an encoded path), and a launcher that runs the `claude` binary without zsh. The sandbox (`sandbox.filesystem.denyRead`) closes the first at the OS level; it is off here, since it also cut SSH in a probe.
 
 ## Contributions
 
