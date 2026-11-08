@@ -30,6 +30,15 @@
     ],
     "defaultMode": "auto"
   },
+  "skillOverrides": {
+    "dataviz": "off",
+    "run": "off",
+    "claude-api": "name-only",
+    "keybindings-help": "user-invocable-only",
+    "init": "user-invocable-only",
+    "security-review": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only"
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -116,10 +125,12 @@
   "workflowKeywordTriggerEnabled": false,
   "outputStyle": "Concise",
   "feedbackDrafts": "quiet",
+  "autoCompactWindow": 250000,
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
   "askUserQuestionTimeout": "never",
   "skipWorkflowUsageWarning": true,
+  "editorMode": "vim",
   "verbose": false,
   "autoContinueAtUsageLimit": true,
   "autoScrollEnabled": true,
