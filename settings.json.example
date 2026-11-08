@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.claude/hooks/protect-folders.py\""
+            "command": "python3 \"$HOME/.claude/hooks/refuse-downloads.py\""
           }
         ]
       }
@@ -116,7 +116,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.claude/hooks/protect-folders.py\""
+            "command": "python3 \"$HOME/.claude/hooks/refuse-downloads.py\""
           }
         ]
       }

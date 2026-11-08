@@ -3,7 +3,7 @@
 # Install: add to ~/.zshenv
 #   [[ -r ~/.claude/scripts/protect-folders.zsh ]] && source ~/.claude/scripts/protect-folders.zsh
 claude() {
-  local hook="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/protect-folders.py"
+  local hook="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/refuse-downloads.py"
   if [[ -r $hook ]]; then
     python3 "$hook" start "$@" || return
   fi

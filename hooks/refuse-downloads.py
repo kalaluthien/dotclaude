@@ -2,12 +2,12 @@
 """Claude Code hook (PreToolUse on every tool, UserPromptSubmit): refuse a session that works in a protected folder, and
 a tool call that names a path inside one, by any spelling, or scans a folder above one.
 
-A protected folder is each `Read(~/<dir>/**)` or `Read(//<dir>/**)` deny rule of the user settings, so one deny rule
+A protected folder is `~/Downloads` and each `Read(~/<dir>/**)` or `Read(//<dir>/**)` deny rule of the user settings, so one deny rule
 protects a folder in both layers: Claude Code's own permission check and this hook, which catches the forms that check
 misses (`$HOME`, `cd`, relative paths, `..`, globs, inline code, recursive scans).
 
-usage: protect-folders.py < hook-input.json
-       protect-folders.py start [<claude argument>...]
+usage: refuse-downloads.py < hook-input.json
+       refuse-downloads.py start [<claude argument>...]
          exits 2 when the current folder, or an argument naming an existing folder (`--add-dir <dir>`), lies in a
          protected folder; `scripts/protect-folders.zsh` runs it before Claude Code starts, since a session started
          there loads that folder's project skills, agents, hooks and MCP servers before any hook can refuse
@@ -21,7 +21,7 @@ import sys
 
 HOME = os.path.expanduser("~")
 SETTINGS = os.path.join(os.environ.get("CLAUDE_CONFIG_DIR") or os.path.join(HOME, ".claude"), "settings.json")
-FALLBACK = ["~/Downloads"]  # when the settings cannot be read
+ALWAYS = ["~/Downloads"]  # protected even with no deny rule
 RULE = re.compile(r"^Read\((~/|//)(.+?)/\*\*\)$")
 VARIABLES = [
     (re.compile(r"\$\{HOME\}|\$HOME\b"), HOME),
@@ -45,8 +45,8 @@ def folders():
         with open(SETTINGS) as handle:
             deny = (json.load(handle).get("permissions") or {}).get("deny") or []
     except (OSError, ValueError):
-        return [os.path.expanduser(f) for f in FALLBACK]
-    found = []
+        deny = []
+    found = [os.path.expanduser(f) for f in ALWAYS]
     for rule in deny:
         match = RULE.match(rule) if isinstance(rule, str) else None
         if match:
@@ -206,8 +206,8 @@ def start(args):
     for path in [cwd] + [os.path.join(cwd, os.path.expanduser(a)) for a in named if a and not a.startswith("-")]:
         hit = (path == cwd or os.path.isdir(path)) and inside(path, protected)
         if hit:
-            print(f"protect-folders: Claude Code does not start with {hit}, a protected folder, as its folder or an "
-                  f"added one: start it elsewhere. A protected folder is a Read deny rule in {SETTINGS}.", file=sys.stderr)
+            print(f"refuse-downloads: Claude Code does not start with {hit}, a protected folder, as its folder or an "
+                  f"added one: start it elsewhere. A protected folder is ~/Downloads or a Read deny rule in {SETTINGS}.", file=sys.stderr)
             return 2
     return 0
 
@@ -226,7 +226,7 @@ def main():
         reason = f"this call reaches {hit}, a protected folder: name a path outside it, and scan no folder above it"
     if not hit:
         return 0
-    print(f"protect-folders: {reason}. A protected folder is a Read deny rule in {SETTINGS}; "
+    print(f"refuse-downloads: {reason}. A protected folder is ~/Downloads or a Read deny rule in {SETTINGS}; "
           "Claude never reads, lists, changes or works in it.", file=sys.stderr)
     return 2
 
