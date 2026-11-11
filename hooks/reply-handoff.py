@@ -7,14 +7,14 @@ import re
 import sys
 
 CODE = r"```.*?```|`[^`\n]+`"
-BANG = re.compile(r"^[ \t]*(?:`+[ \t]*)?!\s+\S", re.M)
+BANG = re.compile(r"^[ \t]*(?:`+[ \t]*)?!\s+[\w./~$-]", re.M)
 ASK = re.compile(
-    r"(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하)\s*(?:주|보|시|세|십|줄|달)|직접\s*(?:실행|입력)"
+    r"(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하)\s*(?:주|보|시|세|십|줄|달)|직접\s*(?:실행|입력)|돌려\s*보|실행하면\s*됩"
     r"|\b(?:please\s+run|you\s+(?:can|could|need\s+to|must|should)\s+run|run\s+(?:this|the\s+following|it)\s+(?:yourself|command))\b"
-    r"|\brun\s+`|\btype\s+`",
-    re.I,
+    r"|\b(?:run|execute)\s+(?:this|that|these|the\s+following)\b|^[ \t]*run:[ \t]*$|\b(?:run|execute|paste|type)\s+`",
+    re.I | re.M,
 )
-REFUSED = re.compile(r"denied|blocked|refused|not allowed|hook error|disabled|no such tool", re.I)
+REFUSED = re.compile(r"denied|blocked|refused|not allowed|hook error|disabled|no such tool|requires approval|rejected|doesn't want to proceed|not permitted", re.I)
 INJECTED = re.compile(r"<(system-reminder|command-[\w-]+|task-notification|local-command-[\w-]+)>.*?</\1>", re.S)
 REASON = (
     "Your reply hands the owner a command to run, but no tool call this turn was refused: {shown}. "
