@@ -209,6 +209,8 @@ def copies_file_out(command, cwd, protected):
         written = [destination]
     else:
         return False  # a device such as /dev/stdout would print the file into the session
+    if any(os.path.lexists(path) and (os.path.islink(path) or not os.path.isfile(path)) for path in written):
+        return False  # an existing link or device at the target could print the file into the session
     return not any(inside(path, protected) for path in written) and all(
         inside(source, protected) and os.path.isfile(source) and not os.path.islink(source) for source in sources)
 
