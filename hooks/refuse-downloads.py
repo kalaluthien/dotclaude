@@ -40,6 +40,7 @@ ALWAYS_RECURSIVE = {"find", "fd", "rg", "ag", "du", "tree", "mdfind", "rsync", "
 RECURSIVE_WORDS = {"--recursive", "--dereference-recursive", "--directories=recurse", "-drecurse", "recurse"}
 RECURSIVE_FLAG = {"grep": "rR", "egrep": "rR", "fgrep": "rR", "ls": "R", "cp": "rRa", "chmod": "R", "chown": "R",
                   "chflags": "R", "xattr": "r", "rm": "rR", "scp": "r"}
+SAFE_COPY = re.compile(r"^\s*cp(?: +[\w@%+,./~-]+)+\s*$")
 PATH_KEYS = {"file_path", "notebook_path", "path"}
 
 
@@ -181,7 +182,42 @@ def variants(command):
     return [expand(t) for t in texts] + [expand(unbrace(t)) for t in texts]
 
 
+def copies_file_out(command, cwd, protected):
+    """True when COMMAND is one plain `cp` (flags `-p`, `-X` only) of named regular files, all inside a protected folder,
+    to a destination outside every protected folder: copying a file out reads nothing else of the folder."""
+    if not SAFE_COPY.match(command):
+        return False
+    try:
+        words = shlex.split(command)
+    except ValueError:
+        return False
+    words = words[1:]
+    while words and re.match(r"^-[pX]+$", words[0]):
+        words = words[1:]
+    if len(words) < 2:
+        return False
+    paths = []
+    for word in words:
+        if word.startswith("-") or (word.startswith("~") and not word.startswith("~/")):
+            return False
+        paths.append(os.path.join(cwd, os.path.expanduser(word)))
+    *sources, destination = paths
+    if os.path.isdir(destination):
+        written = [os.path.join(destination, os.path.basename(source)) for source in sources]
+    elif len(sources) == 1 and (os.path.isfile(destination) or not os.path.lexists(destination)
+                                and os.path.isdir(os.path.dirname(destination))):
+        written = [destination]
+    else:
+        return False  # a device such as /dev/stdout would print the file into the session
+    if any(os.path.lexists(path) and (os.path.islink(path) or not os.path.isfile(path)) for path in written):
+        return False  # an existing link or device at the target could print the file into the session
+    return not any(inside(path, protected) for path in written) and all(
+        inside(source, protected) and os.path.isfile(source) and not os.path.islink(source) for source in sources)
+
+
 def check_command(command, cwd, protected):
+    if copies_file_out(command, cwd, protected):
+        return None
     for text in variants(command):
         hit = check_text(text, command, cwd, protected)
         if hit:
