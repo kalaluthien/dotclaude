@@ -40,6 +40,7 @@ ALWAYS_RECURSIVE = {"find", "fd", "rg", "ag", "du", "tree", "mdfind", "rsync", "
 RECURSIVE_WORDS = {"--recursive", "--dereference-recursive", "--directories=recurse", "-drecurse", "recurse"}
 RECURSIVE_FLAG = {"grep": "rR", "egrep": "rR", "fgrep": "rR", "ls": "R", "cp": "rRa", "chmod": "R", "chown": "R",
                   "chflags": "R", "xattr": "r", "rm": "rR", "scp": "r"}
+SAFE_COPY = re.compile(r"^\s*cp(?: +[\w@%+=:,./~'\"-]+)+\s*$")
 PATH_KEYS = {"file_path", "notebook_path", "path"}
 
 
@@ -181,7 +182,33 @@ def variants(command):
     return [expand(t) for t in texts] + [expand(unbrace(t)) for t in texts]
 
 
+def copies_file_out(command, cwd, protected):
+    """True when COMMAND is one plain `cp` (flags `-p`, `-X` only) of named regular files, all inside a protected folder,
+    to a destination outside every protected folder: copying a file out reads nothing else of the folder."""
+    if not SAFE_COPY.match(command):
+        return False
+    try:
+        words = shlex.split(command)
+    except ValueError:
+        return False
+    words = words[1:]
+    while words and re.match(r"^-[pX]+$", words[0]):
+        words = words[1:]
+    if len(words) < 2:
+        return False
+    paths = []
+    for word in words:
+        if word.startswith("-") or word.startswith("~") and not word.startswith("~/"):
+            return False
+        paths.append(os.path.join(cwd, os.path.expanduser(word)))
+    *sources, destination = paths
+    return not inside(destination, protected) and all(
+        inside(source, protected) and os.path.isfile(source) and not os.path.islink(source) for source in sources)
+
+
 def check_command(command, cwd, protected):
+    if copies_file_out(command, cwd, protected):
+        return None
     for text in variants(command):
         hit = check_text(text, command, cwd, protected)
         if hit:
