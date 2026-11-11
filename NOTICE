@@ -5,4 +5,6 @@ Licensed under the Apache License, Version 2.0 (Apache-2.0); see LICENSE.
 This repository took from these works:
 
 - mattpocock/skills (https://github.com/mattpocock/skills), MIT: `skills/grill-me` follows its grilling skill.
+- janestreet/agent_skills (https://github.com/janestreet/agent_skills), MIT: `skills/teach-me` follows the tutoring loop of its socratic-tutor skill.
+- amosblomqvist/learnharness (https://github.com/amosblomqvist/learnharness), AGPL-3.0: `skills/teach-me` takes teaching ideas only, with no text or code copied.
 - herdr: `hooks/herdr-agent-state.sh` is the hook herdr installs and manages; its license is not reviewed here.
