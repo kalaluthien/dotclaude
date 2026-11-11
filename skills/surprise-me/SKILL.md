@@ -3,7 +3,7 @@ name: surprise-me
 description: Use when the user names an area or question to research in depth and wants a structured explanation back. Not for a single fact, a document, deck or textbook, or a plan to stress-test.
 disable-model-invocation: true
 context: fork
-argument-hint: "<area or question to research> [decision it feeds] [scope: depth, source types, time window, language] [folder for work files]"
+argument-hint: "<area or question to research>"
 ---
 
 **Your last message must be the message `## Return` defines and nothing else, since a program checks its shape and any longer or different message is a failure.**

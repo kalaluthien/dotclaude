@@ -2,13 +2,14 @@
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow)](https://buymeacoffee.com/kalaluthien)
 
-Shared Claude Code setup for `~/.claude`: three skills, five hooks, a settings template and a global `CLAUDE.md` of preferences.
+Shared Claude Code setup for `~/.claude`: four skills, five hooks, a settings template and a global `CLAUDE.md` of preferences.
 
 | Part | What it does |
 | --- | --- |
 | `skills/grill-me` | Interviews you on a plan until every open choice is settled. |
 | `skills/show-me` | Shows a system, change or choice as a diagram, table or HTML page, made in a forked subagent. |
 | `skills/surprise-me` | Researches an area in depth and explains it in a structure, in a forked subagent. |
+| `skills/teach-me` | Tutors you on a topic by questions, measuring first and checking each step, until you can use it unaided. |
 | `hooks/kill-guard.py` | Refuses a broad process kill such as `pkill -f cat`. |
 | `hooks/failure-hint.py` | After a failed Bash call, adds the known fix for that failure. |
 | `hooks/reply-language.py` | Asks for a rewrite when a reply to a Korean message has no Korean or uses a banned word. |
@@ -44,7 +45,7 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 
 ## Use it
 
-1. Type `/grill-me`, `/show-me` or `/surprise-me` in a session, then your topic; the three skills run only when you type them. `/show-me` and `/surprise-me` run in a forked subagent that sees no earlier chat, so give the full ask up front, as their argument hint shows.
+1. Type `/grill-me`, `/show-me`, `/surprise-me` or `/teach-me` in a session, then your topic; the four skills run only when you type them. `/show-me` and `/surprise-me` run in a forked subagent that sees no earlier chat, so give the full ask up front.
 2. Read `settings.json.example` once: `permissions`, `hooks`, `outputStyle` and `autoMemoryDirectory` are the keys most worth changing.
 3. Hooks need no action; they run on each Bash call, reply or session start.
 4. To change a part, edit it under `~/.claude`, then open a pull request against your own fork.

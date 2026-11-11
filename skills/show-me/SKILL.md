@@ -3,7 +3,7 @@ name: show-me
 description: Use when the user asks to see, show, explain, map, brief, compare or draw something - a system, structure, change, status, data, process or choice - as a diagram, table, chart, map, mockup, page, html or artifact. Not for a single fact, a yes/no or capability question, or a command to run.
 disable-model-invocation: true
 context: fork
-argument-hint: "<what to show: a system, change, data or choice> [aim: understand | review | decide] [source: file path, URL or diff]"
+argument-hint: "<what to show>"
 ---
 
 **Your last message must be the message `## Return` defines and nothing else, since a program checks its shape and any longer or different message is a failure.**

@@ -2,6 +2,7 @@
 name: grill-me
 description: Use when the user wants to stress-test a plan, decision, or idea by being grilled on its open choices. Not when the facts settle it or code is under review.
 disable-model-invocation: true
+argument-hint: "<plan, decision or idea to stress-test>"
 ---
 
 Interview the user relentlessly until you reach a shared understanding. The whole interview is a **grilling session**, a session is made of **phases**, and a phase of **rounds**. Map this as a **design tree**: every decision branches into the decisions that hang off it.
