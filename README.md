@@ -2,7 +2,7 @@
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow)](https://buymeacoffee.com/kalaluthien)
 
-Shared Claude Code setup for `~/.claude`: four skills, five hooks, a settings template and a global `CLAUDE.md` of preferences.
+Shared Claude Code setup for `~/.claude`: four skills, six hooks, a settings template and a global `CLAUDE.md` of preferences.
 
 | Part | What it does |
 | --- | --- |
@@ -13,6 +13,7 @@ Shared Claude Code setup for `~/.claude`: four skills, five hooks, a settings te
 | `hooks/kill-guard.py` | Refuses a broad process kill such as `pkill -f cat`. |
 | `hooks/failure-hint.py` | After a failed Bash call, adds the known fix for that failure. |
 | `hooks/reply-language.py` | Asks for a rewrite when a reply to a Korean message has no Korean or uses a banned word. |
+| `hooks/reply-handoff.py` | Asks for a rerun when a final reply hands you a command to run and no tool call of the turn was refused. |
 | `hooks/refuse-downloads.py` | Keeps sessions out of each folder a `Read(~/<dir>/**)` deny rule names (`~/Downloads`, `~/Documents`): refuses a session working there and a tool call naming a path inside, by any spelling, or scanning a folder above; passes only a plain `cp` of named regular files out of a folder. |
 | `hooks/herdr-agent-state.sh` | Reports session state to herdr; does nothing outside herdr. |
 | `scripts/protect-folders.zsh` | Refuses to start `claude` in a protected folder or with one added, before its project files load. |
