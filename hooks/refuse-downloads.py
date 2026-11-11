@@ -40,7 +40,7 @@ ALWAYS_RECURSIVE = {"find", "fd", "rg", "ag", "du", "tree", "mdfind", "rsync", "
 RECURSIVE_WORDS = {"--recursive", "--dereference-recursive", "--directories=recurse", "-drecurse", "recurse"}
 RECURSIVE_FLAG = {"grep": "rR", "egrep": "rR", "fgrep": "rR", "ls": "R", "cp": "rRa", "chmod": "R", "chown": "R",
                   "chflags": "R", "xattr": "r", "rm": "rR", "scp": "r"}
-SAFE_COPY = re.compile(r"^\s*cp(?: +[\w@%+=:,./~'\"-]+)+\s*$")
+SAFE_COPY = re.compile(r"^\s*cp(?: +[\w@%+,./~-]+)+\s*$")
 PATH_KEYS = {"file_path", "notebook_path", "path"}
 
 
@@ -198,11 +198,18 @@ def copies_file_out(command, cwd, protected):
         return False
     paths = []
     for word in words:
-        if word.startswith("-") or word.startswith("~") and not word.startswith("~/"):
+        if word.startswith("-") or (word.startswith("~") and not word.startswith("~/")):
             return False
         paths.append(os.path.join(cwd, os.path.expanduser(word)))
     *sources, destination = paths
-    return not inside(destination, protected) and all(
+    if os.path.isdir(destination):
+        written = [os.path.join(destination, os.path.basename(source)) for source in sources]
+    elif len(sources) == 1 and (os.path.isfile(destination) or not os.path.lexists(destination)
+                                and os.path.isdir(os.path.dirname(destination))):
+        written = [destination]
+    else:
+        return False  # a device such as /dev/stdout would print the file into the session
+    return not any(inside(path, protected) for path in written) and all(
         inside(source, protected) and os.path.isfile(source) and not os.path.islink(source) for source in sources)
 
 
