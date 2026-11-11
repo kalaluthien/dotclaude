@@ -2,7 +2,7 @@
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow)](https://buymeacoffee.com/kalaluthien)
 
-Shared Claude Code setup for `~/.claude`: three skills, five hooks, a settings template and a global `CLAUDE.md` of preferences.
+Shared Claude Code setup for `~/.claude`: three skills, six hooks, a settings template and a global `CLAUDE.md` of preferences.
 
 | Part | What it does |
 | --- | --- |
