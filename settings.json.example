@@ -13,12 +13,6 @@
       "Bash(tail *)",
       "Bash(ls *)",
       "Bash(wc *)",
-      "Bash(rtk grep *)",
-      "Bash(rtk rg *)",
-      "Bash(rtk ls *)",
-      "Bash(rtk tree *)",
-      "Bash(rtk read *)",
-      "Bash(rtk wc *)",
       "Bash(git status *)",
       "Bash(git branch --show-current)",
       "Bash(rm */.git/hooks/pre-push)"
@@ -48,10 +42,6 @@
       {
         "matcher": "Bash",
         "hooks": [
-          {
-            "type": "command",
-            "command": "command -v rtk >/dev/null && exec rtk hook claude; exit 0"
-          },
           {
             "type": "command",
             "command": "python3 \"$HOME/.claude/hooks/kill-guard.py\""
