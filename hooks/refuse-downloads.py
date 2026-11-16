@@ -28,7 +28,7 @@ VARIABLES = [
     (re.compile(r"\$\{USER\}|\$USER\b"), os.path.basename(HOME)),
     (re.compile(r"(?<![\w/.~-])~(?=/|$|[\s'\"`:;,)\]}])"), HOME),
 ]
-HOME_HINT = re.compile(r"~|\bHOME\b|home\(|homedir|expanduser|Path\.home")
+HOME_HINT = re.compile(r"\bHOME\b|home\(|homedir|expanduser|Path\.home")
 SPLIT = re.compile(r"[\s'\"`(){},;|&<>=:]+")
 ASSIGNMENT = re.compile(r"(?:^|[\s;&|(])([A-Za-z_]\w*)=([^\s;&|)]*)")
 BARE_CD = re.compile(r"(?:^|[\s;&|(])cd\s*(?=$|[;&|)])")
@@ -126,7 +126,8 @@ def unbrace(text):
 
 
 def check_word(word, bases, protected):
-    """The protected folder WORD names, read as a path from each base, else None."""
+    """The protected folder WORD names, read as a path from each base, else None. A bare `~` sets no home base, since
+    `expand` already made it an absolute path, so only code that builds a home path sets one."""
     if not word or word.startswith("-") and "/" not in word:
         return None
     if word.startswith("/"):
