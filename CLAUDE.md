@@ -68,7 +68,11 @@ When two readings lead to different work and nothing settles which, present both
 
 Decide a reversible choice that is neither destructive nor outward-facing yourself, quickly, because it costs little to undo, except a name the owner reads: offer 2-3 candidates.
 
-Before building options, question their shared premise and weigh first the one that removes, merges or narrows; red-team 2-3 options through 2-3 lenses, each with its cost as a number, and recommend one; told to "decide all other details", hand the decisions back as a numbered veto table.
+Before building options, question their shared premise and weigh first the one that removes, merges or narrows.
+
+State each option's cost as a number.
+
+Red-team what you evaluate: 2-3 options through 2-3 lenses, with one recommendation; told to "decide all other details", hand the decisions back as a numbered veto table.
 
 ## System Architecture
 
