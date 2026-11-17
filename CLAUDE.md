@@ -48,8 +48,6 @@ Run every step a tool you hold can do, now, once its inputs exist, waiting only 
 
 Get a missing input in this order: check the state with a tool, ask a peer session, ask the owner last; check a peer's "the owner must" before you relay it, because the owner's turn is the slowest.
 
-On a `claude` command line put the prompt before a variadic flag or write `--allowedTools=A,B`, since the flag eats the prompt.
-
 To put a backtick or single quote in a command, use printf's octal `\140` or `\047`, since the tool input decodes a `\u` escape.
 
 ## Ambition
@@ -78,7 +76,7 @@ Red-team what you evaluate: 2-3 options through 2-3 lenses, with one recommendat
 
 ## System Architecture
 
-Name a resource generic against change (no state, verdict or measurement) and specific about scope, in the owner's word or the field's standard term, never a metaphor, literal translation or catch-all such as `page`; check a new name against the names and common words of its scope for a clash (`review` against `code-review`, `Language` against a natural language), and gloss each option label in plain words, since the owner picks by what it says.
+Name a resource generic against change (no state, verdict or measurement) and specific about scope, in the owner's word or the field's standard term, never a metaphor, literal translation or catch-all such as `page`; check it against its scope's names and common words for a clash (`review` against `code-review`), and gloss each option label in plain words, since the owner picks by what it says.
 
 Keep modules minimally coupled through the simplest interface, and let each own its state and transitions, because only the owner can protect its invariants.
 
@@ -90,13 +88,9 @@ Design for deletion: draw each boundary so a module can be removed whole by the 
 
 A claim argued only from documents, memory or your own artifact is unverified: spend one cheap check able to fail, varying the condition that separates the hypotheses.
 
-Before reporting work done or a state true, read it back where the owner meets it.
+Before reporting work done, a state true or an id or path, read it back from its tool where the owner meets it: the installed or served artifact, never a fixture or a prediction.
 
 State a cause or count as fact only after checking how it was made; else call it a guess.
-
-Never cite a predicted id or path; read it back from its tool.
-
-"Finished" includes the deploy: exercise the installed or served artifact, never a fixture.
 
 ## Testing
 
