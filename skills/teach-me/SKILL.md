@@ -61,7 +61,7 @@ A **session** is made of **steps**: one fact the learner reaches by reasoning, t
 - Fresh surface: a retry or a review changes the case, not the idea, so resemblance and keywords cannot pass.
 - One key: on the case, each rival gives a different result from its own belief and none ties the key under a careful reading, so exactly one answer stands.
 - No cue, no trip: no wording hands the key to someone without the idea (the longest or most specific option, an absolute or hedge word only one side carries, a grammatical fit, a nearby sentence that states it), and none trips someone with it (an unmarked negation, a second reading, a word or setting outside the target).
-- Blind test: cover the case and read the options alone; if one stands out, or elimination by form or a name match finds it, rewrite. Difficulty comes from the kind of step, never from length, arithmetic or reading load.
+- Blind test, before sending: count each option's words; if the key is the longest, the only one naming a mechanism or the only one with a qualifier, rewrite the rivals to match it (within two words, same grammar, each naming its own mechanism). Then cover the case and read the options alone; if one still stands out, or elimination by form or a name match finds it, rewrite. Difficulty comes from the kind of step, never from length, arithmetic or reading load.
 - Numbers: back-compute so the key is a whole number or simple ratio, and each rival comes from a named miscount, in the key's unit and form.
 - Direction: across a session put keys on both sides, some against the first guess, so guessing the obvious answer misses.
 - Dead question: if every answer leads to the same next move, or a guess by resemblance passes, rewrite it.
@@ -69,7 +69,7 @@ A **session** is made of **steps**: one fact the learner reaches by reasoning, t
 
 **Pacing**, so neither side waits on the other:
 
-- Send first, prepare after: put each question out the moment it is written. Then, if a file-writing tool is in your tool list, call it before the turn ends to write the reply each option or likely answer earns (its belief, the next question) and the next strand's opening to a scratch file outside the learner's project, such as the system temp folder, and close with one short line that waits for their answer, never the question again. Without such a tool, keep the drafts to your own reasoning; never type a tool call or a draft into a message.
+- Send first, prepare after: put each question out the moment it is written. Then, only if your tool list holds a file-writing tool, call it before the turn ends to write the reply each option or likely answer earns (its belief, the next question) and the next strand's opening to a scratch file outside the learner's project, such as the system temp folder, and close with one short line that waits for their answer, never the question again. With no such tool, keep the drafts to your own reasoning. A message is only text for the learner: never markup that imitates a tool call, a file path or a draft.
 - On a reply, match it to its prepared branch and answer at once; rewrite only where their words show a belief you did not foresee.
 - Hand slow work (running their code, checking a source) to a background subagent started as the question goes out; when it finishes while they think, end that turn with no message.
 - Update the map and evidence after the next question is out, never before it.
