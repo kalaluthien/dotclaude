@@ -1,6 +1,6 @@
 ---
 name: grill-me
-description: Use when the user wants to stress-test a plan, decision, or idea by being grilled on its open choices. Not when the facts settle it or code is under review.
+description: Questions you on a plan, decision or idea, one open choice at a time, until every choice is settled.
 disable-model-invocation: true
 argument-hint: "<plan, decision or idea to stress-test>"
 ---

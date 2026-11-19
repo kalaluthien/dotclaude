@@ -9,7 +9,7 @@ Shared Claude Code setup for `~/.claude`: four skills, six hooks, a settings tem
 | `skills/grill-me` | Interviews you on a plan until every open choice is settled. |
 | `skills/show-me` | Shows a system, change or choice as a diagram, table or HTML page, made in a forked subagent. |
 | `skills/surprise-me` | Researches an area in depth and explains it in a structure, in a forked subagent. |
-| `skills/teach-me` | Tutors you on a topic by questions, measuring first and checking each step, until you can use it unaided. |
+| `skills/teach-me` | Teaches a topic by questions, or walks you through a paper, document or book quote by quote, until you can use it unaided. |
 | `hooks/kill-guard.py` | Refuses a broad process kill such as `pkill -f cat`. |
 | `hooks/failure-hint.py` | After a failed Bash call, adds the known fix for that failure. |
 | `hooks/reply-language.py` | Asks for a rewrite when a reply to a Korean message has no Korean or uses a banned word. |

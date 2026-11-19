@@ -1,6 +1,6 @@
 ---
 name: surprise-me
-description: Use when the user names an area or question to research in depth and wants a structured explanation back. Not for a single fact, a document, deck or textbook, or a plan to stress-test.
+description: Researches an area or question in depth and brings back an explanation with a clear structure.
 disable-model-invocation: true
 context: fork
 argument-hint: "<area or question to research>"

@@ -1,6 +1,6 @@
 ---
 name: show-me
-description: Use when the user asks to see, show, explain, map, brief, compare or draw something - a system, structure, change, status, data, process or choice - as a diagram, table, chart, map, mockup, page, html or artifact. Not for a single fact, a yes/no or capability question, or a command to run.
+description: Shows a system, change, status, data or choice as a diagram, table, chart or page instead of a wall of text.
 disable-model-invocation: true
 context: fork
 argument-hint: "<what to show>"
