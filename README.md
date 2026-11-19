@@ -50,10 +50,9 @@ Use it when a plan, a design or a wish still has open choices; it settles them a
 | Request |
 | --- |
 | `/grill-me` and nothing else but a link to a page in a shared notes app. |
-| `/grill-me`: split a backlog item into a goal and tasks. The item: the author wants a separate lead for each of four plugins, but a lead today covers one repository, so a monorepo gets only one lead; find a way. |
 | `/grill-me` with the author's further plan for a `/tree` skill, asking to make it stronger and more concrete: a decision-tree view that gives each decision the information it needs, shows how each decision affects the whole plan, and keeps the big picture easy to read. |
 
-One run: on the plan page, three rounds of questions settled how to split and order the work, then a table of every decision came back for a final yes.
+One run: on the notes page, three rounds of questions settled how to split and order the work, then a table of every decision came back for a final yes.
 
 ### How the author uses `/show-me`
 
@@ -63,8 +62,6 @@ Use it when you want a picture or a table instead of prose; it reads the source 
 | --- |
 | `/show-me`: when I call a certain skill and pick one of its items, what ends up in the final prompt, and how? Answer in chat. |
 | `/show-me`: analyse each plugin system and show it as a zoom diagram. |
-| `/show-me` what each frontmatter key at the top of `skills/show-me/SKILL.md` does. |
-| `/show-me` what each key in a `config.json` does. |
 
 ### How the author uses `/surprise-me`
 
