@@ -41,48 +41,56 @@ A hook is a script Claude Code runs at a set moment; you never call it. Each one
 
 ## How the author uses each skill
 
-Each row is a request the author typed, restated in plain words, and what they wanted from it.
+Each row is a request the author typed, restated in plain English.
 
 ### How the author uses `/grill-me`
 
-| The author typed | What they wanted |
-| --- | --- |
-| `/grill-me` and the link to a plan written up in a shared document | Every open choice in a long plan settled, one at a time. |
-| `/grill-me` and a one-line backlog wish: one lead per plugin, where today one lead covers a whole repository | A goal and tasks out of a wish that named a problem but no design. |
-| `/grill-me` and their own proposal for a decision-tree diagram skill, asking to push it further and make it concrete | A sharper proposal, each loose part questioned. |
-| `/grill-me` a new command-line tool that searches markdown notes; language, index or not, where notes live and output form are open | Decisions that hang on each other settled in the right order. |
-| `/grill-me` a household budget command-line tool, with nothing decided yet: language, storage, commands, categories, currencies, backup, reports | A whole design from a blank page. |
+Use it when a plan, a design or a wish still has open choices; it settles them one at a time.
 
-One run: on the shared-document plan, three rounds of questions settled how to split and order the work, then a table of every decision came back for a final yes.
+| Request |
+| --- |
+| `/grill-me` and nothing else but the link to a plan page in a shared notes app. |
+| `/grill-me`: split a backlog item into a goal and tasks. The item: the author wants a separate lead for each of four plugins, but a lead today covers one repository, so a repository holding several plugins gets only one; find a way. |
+| `/grill-me` with the author's further plan for a `/tree` skill, asking to make it stronger and more concrete: a decision-tree view that gives each decision the information it needs, shows how each decision affects the whole plan, and keeps the big picture easy to read. |
+| `/grill-me`: settle the plan for a new command-line tool that searches my markdown notes; open decisions: language, index or not, where notes live, output format, config format, distribution, fuzzy matching. |
+| `/grill-me`: I want to build a household budget command-line tool in this folder and have decided nothing yet: language, storage, commands, categories, several currencies, backup and sync, report format. Decide them with me. |
+
+One run: on the plan page, three rounds of questions settled how to split and order the work, then a table of every decision came back for a final yes.
 
 ### How the author uses `/show-me`
 
-| The author typed | What they wanted |
-| --- | --- |
-| `/show-me` every task still open, briefed as one table | Each task's state at a glance. |
-| `/show-me` how each subsystem is built, as a zoom diagram | One level at a time, opened on demand. |
-| `/show-me` a tutorial page of what users see change in a new version, with mock screens and technical notes behind toggles | A change shown as screens, not as a list of commits. |
-| `/show-me` a full report of the models a service runs: quoted preprocessing and call code, and a catalog of each model's inputs and outputs, as a temporary page | Code quotes and a catalog side by side on one page. |
+Use it when you want a picture or a table instead of prose; it reads the source itself, so name it in the ask.
+
+| Request |
+| --- |
+| `/show-me`: when I call a certain skill and pick one of its items, what ends up in the final prompt, and how? Answer in chat. |
+| `/show-me`: analyse each plugin system and show it as a zoom diagram. |
+| `/show-me` what each frontmatter key at the top of `skills/show-me/SKILL.md` does. |
+| `/show-me` what each key in a `config.json` does. |
 
 ### How the author uses `/surprise-me`
 
-| The author typed | What they wanted |
-| --- | --- |
-| `/surprise-me` take a grading feature further: how it sets metrics, how it scores, and how it shows results to people | The strongest options for an open question, found by research. |
-| `/surprise-me` how HTTP caching headers decide when a browser reuses a stored response | A structure for a broad topic before its details. |
-| `/surprise-me` one narrow question: ETag or Last-Modified, which makes a browser check a cached response again, and which to set | A short answer on one axis, tied to a decision. |
+Use it for a question worth real research; say how deep to go and what you will decide with the answer.
+
+| Request |
+| --- |
+| `/surprise-me`: push further a grading feature's strategy for setting metrics, for scoring, and for showing results to people. |
+| `/surprise-me` how HTTP caching headers decide when a browser reuses a stored response. |
+| `/surprise-me` one narrow question: which HTTP header makes a browser revalidate a cached response, ETag or Last-Modified? Decision: which to set. Depth: one axis, short. |
 
 One run: on the ETag question, the answer opened with the verdict in bold, then a table, the reasons in order, a recommendation, its caveats and the sources.
 
 ### How the author uses `/teach-me`
 
-| The author typed | What they wanted |
-| --- | --- |
-| `/teach-me` compound interest, to compare two loan offers alone | To do the sums without help. |
-| `/teach-me` a paper abstract, pasted in, before presenting it at a journal club the next day | To present it with confidence. |
-| `/teach-me` why the seasons happen, to explain it to a child | An explanation simple enough to pass on. |
-| `/teach-me` Bayes' rule, to tell a patient what a positive test result really means | To read a test result right, base rates included. |
-| `/teach-me` the first chapter of a book on fast and slow thinking | The chapter's ideas, with the book's own words beside them. |
+Use it to learn something you will use yourself; say what you want to do with it once you know it.
+
+| Request |
+| --- |
+| `/teach-me` compound interest; I want to compare two loan offers on my own. |
+| `/teach-me` this abstract, pasted in after the words: I present it at my lab's journal club tomorrow. |
+| `/teach-me` why the seasons happen; I want to explain it to a child. |
+| `/teach-me` Bayes' rule with medical tests; my goal: read a screening result and tell a patient what a positive test actually means, unaided. |
+| `/teach-me` walk me through chapter 1 of Kahneman's *Thinking, Fast and Slow*. |
 
 One run: on the book chapter, the first message asked what the learner wanted from it, with lettered options, and asked for the text to quote.
 
