@@ -50,7 +50,7 @@ Use it when a plan, a design or a wish still has open choices; it settles them a
 | Request |
 | --- |
 | `/grill-me` and nothing else but a link to a page in a shared notes app. |
-| `/grill-me`: split a backlog item into a goal and tasks. The item: the author wants a separate lead for each of four plugins, but a lead today covers one repository, so a repository holding several plugins gets only one; find a way. |
+| `/grill-me`: split a backlog item into a goal and tasks. The item: the author wants a separate lead for each of four plugins, but a lead today covers one repository, so a monorepo gets only one lead; find a way. |
 | `/grill-me` with the author's further plan for a `/tree` skill, asking to make it stronger and more concrete: a decision-tree view that gives each decision the information it needs, shows how each decision affects the whole plan, and keeps the big picture easy to read. |
 
 One run: on the plan page, three rounds of questions settled how to split and order the work, then a table of every decision came back for a final yes.
@@ -72,7 +72,7 @@ Use it for a question worth real research; say how deep to go and what you will 
 
 | Request |
 | --- |
-| `/surprise-me`: for a task's grade, push further the strategy for setting its measures, the strategy for scoring, and the strategy for showing it visually to people. |
+| `/surprise-me`: for the grade of item #1050, push further the strategy for setting its measures, the strategy for scoring, and the strategy for showing it visually to people. |
 | `/surprise-me` how HTTP caching headers decide when a browser reuses a stored response. |
 | `/surprise-me` one narrow question: which HTTP header makes a browser revalidate a cached response, ETag or Last-Modified? Decision: which to set. Depth: one axis, short. |
 
