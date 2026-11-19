@@ -41,7 +41,7 @@ A hook is a script Claude Code runs at a set moment; you never call it. Each one
 
 ## How the author uses each skill
 
-Each row is a request the author typed, restated in plain English.
+Each row is a request the author typed, restated in plain English, without the plugin prefix (such as `paperwork:`) a skill had where it was installed.
 
 ### How the author uses `/grill-me`
 
@@ -49,11 +49,9 @@ Use it when a plan, a design or a wish still has open choices; it settles them o
 
 | Request |
 | --- |
-| `/grill-me` and nothing else but the link to a plan page in a shared notes app. |
+| `/grill-me` and nothing else but a link to a page in a shared notes app. |
 | `/grill-me`: split a backlog item into a goal and tasks. The item: the author wants a separate lead for each of four plugins, but a lead today covers one repository, so a repository holding several plugins gets only one; find a way. |
 | `/grill-me` with the author's further plan for a `/tree` skill, asking to make it stronger and more concrete: a decision-tree view that gives each decision the information it needs, shows how each decision affects the whole plan, and keeps the big picture easy to read. |
-| `/grill-me`: settle the plan for a new command-line tool that searches my markdown notes; open decisions: language, index or not, where notes live, output format, config format, distribution, fuzzy matching. |
-| `/grill-me`: I want to build a household budget command-line tool in this folder and have decided nothing yet: language, storage, commands, categories, several currencies, backup and sync, report format. Decide them with me. |
 
 One run: on the plan page, three rounds of questions settled how to split and order the work, then a table of every decision came back for a final yes.
 
@@ -89,7 +87,6 @@ Use it to learn something you will use yourself; say what you want to do with it
 | `/teach-me` compound interest; I want to compare two loan offers on my own. |
 | `/teach-me` this abstract, pasted in after the words: I present it at my lab's journal club tomorrow. |
 | `/teach-me` why the seasons happen; I want to explain it to a child. |
-| `/teach-me` Bayes' rule with medical tests; my goal: read a screening result and tell a patient what a positive test actually means, unaided. |
 | `/teach-me` walk me through chapter 1 of Kahneman's *Thinking, Fast and Slow*. |
 
 One run: on the book chapter, the first message asked what the learner wanted from it, with lettered options, and asked for the text to quote.
