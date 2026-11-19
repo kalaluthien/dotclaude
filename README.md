@@ -24,11 +24,11 @@ A hook is a script Claude Code runs at a set moment; you never call it. Each one
 | Hook | Runs when | What it does |
 | --- | --- | --- |
 | `kill-guard.py` | Before each shell command | Refuses a process kill by a broad name, such as `pkill -f cat`, which could stop every app; a kill by process number or exact name runs. |
-| `refuse-downloads.py` | Before every tool call, and when you send a message | Keeps the session out of `~/Downloads`, `~/Documents` and any other protected folder, by any spelling of the path; [Protected folders](#protected-folders) lists what it misses. |
+| `refuse-downloads.py` | Before Claude uses any tool (reads a file, runs a command), and when you send a message | Keeps the session out of `~/Downloads`, `~/Documents` and any other protected folder, by any spelling of the path; [Protected folders](#protected-folders) lists what it misses. |
 | `failure-hint.py` | After a shell command fails | Adds the known fix for that error, so the next try is not a guess. |
 | `reply-language.py` | When a reply ends | Asks for a rewrite when a reply to a Korean message has no Korean or uses a banned word; the author's habit, so drop it if you do not write Korean. |
-| `reply-handoff.py` | When a reply ends | Asks for a rerun when the reply hands you a command to run, though no tool call was refused. |
-| `herdr-agent-state.sh` | When a session starts, resumes, clears, compacts or forks | Tells the herdr terminal app which session runs in its pane; does nothing outside herdr. |
+| `reply-handoff.py` | When a reply ends | Sends the reply back when it asks you to run a command yourself that Claude could have run, so Claude runs it instead. |
+| `herdr-agent-state.sh` | When a session starts, and again after `/resume`, `/clear`, `/compact` or a fork | Tells herdr, a terminal workspace app that runs several sessions side by side, which session runs in which of its panels; does nothing outside herdr. |
 
 ## Other parts
 
@@ -113,7 +113,7 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 
 1. Type a skill's name in a session, then your topic, as the [Skills](#skills) table shows.
 2. Read `settings.json.example` once: `permissions`, `hooks`, `outputStyle` and `autoMemoryDirectory` are the keys most worth changing.
-3. Hooks need no action; they run on each tool call, message, reply or session start.
+3. Hooks need no action; they run each time Claude uses a tool, you send a message, a reply ends or a session starts.
 4. To change a part, edit it under `~/.claude`, then open a pull request against your own fork, not this repository.
 
 ## Protected folders
