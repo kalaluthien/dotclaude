@@ -24,7 +24,7 @@ A hook is a script Claude Code runs at a set moment; you never call it. Each one
 | Hook | Runs when | What it does |
 | --- | --- | --- |
 | `kill-guard.py` | Before each shell command | Refuses a process kill by a broad name, such as `pkill -f cat`, which could stop every app; a kill by process number or exact name runs. |
-| `refuse-downloads.py` | Before Claude uses any tool (reads a file, runs a command), and when you send a message | Keeps the session out of `~/Downloads`, `~/Documents` and any other protected folder, by any spelling of the path; [Protected folders](#protected-folders) lists what it misses. |
+| `refuse-downloads.py` | Before Claude uses any tool (reads a file, runs a command), and when you send a message | Keeps the session out of your downloads and documents folders and any other protected folder, by any spelling of the path; [Protected folders](#protected-folders) lists what it misses. |
 | `failure-hint.py` | After a shell command fails | Adds the known fix for that error, so the next try is not a guess. |
 | `reply-language.py` | When a reply ends | Asks for a rewrite when a reply to a Korean message has no Korean or uses a banned word; the author's habit, so drop it if you do not write Korean. |
 | `reply-handoff.py` | When a reply ends | Sends the reply back when it asks you to run a command yourself that Claude could have run, so Claude runs it instead. |
@@ -36,7 +36,7 @@ A hook is a script Claude Code runs at a set moment; you never call it. Each one
 | --- | --- | --- |
 | `settings.json.example` | The settings template: permissions, hooks, output style and memory folder. | Once, merged into your `settings.json` by the script below. |
 | `scripts/merge-settings.py` | Merges `settings.json.example` into your `settings.json`, keeping your local-only keys. | When you install, and after a pull that changes the template. |
-| `scripts/protect-folders.zsh` | Refuses to start `claude` in a protected folder, or with one added, before its project files load. | Each time you type `claude` in zsh, once sourced from `~/.zshenv`. |
+| `scripts/protect-folders.zsh` | Refuses to start `claude` in a protected folder, or with one added, before its project files load. | Each time you type `claude` in zsh, once your zsh startup file sources it. |
 | `CLAUDE.md` | The author's global preferences, which every session reads. | At every session start; replace it with yours. |
 
 ## How the author uses each skill
@@ -98,11 +98,11 @@ One run: on the book chapter, the first message asked what the learner wanted fr
 
 ### One part
 
-Clone to a scratch folder, so nothing in `~/.claude` changes until you copy.
+Clone into any folder outside `~/.claude`, so nothing there changes until you copy; the steps run from the folder that holds the clone.
 
-1. `git clone --depth 1 https://github.com/kalaluthien/dotclaude /tmp/dotclaude`
-2. A skill: `mkdir -p ~/.claude/skills && cp -r /tmp/dotclaude/skills/grill-me ~/.claude/skills/`
-3. A hook: `mkdir -p ~/.claude/hooks && cp /tmp/dotclaude/hooks/kill-guard.py ~/.claude/hooks/`, then copy its entry from `settings.json.example` (the command that names it, under its event) into your `settings.json`.
+1. `git clone --depth 1 https://github.com/kalaluthien/dotclaude`
+2. A skill: `mkdir -p ~/.claude/skills && cp -r dotclaude/skills/grill-me ~/.claude/skills/`
+3. A hook: `mkdir -p ~/.claude/hooks && cp dotclaude/hooks/kill-guard.py ~/.claude/hooks/`, then copy its entry from `settings.json.example` (the command that names it, under its event) into your `settings.json`.
 4. Edit what you copied; the skills and hooks hold the author's habits, such as Korean replies.
 
 ### Everything
@@ -113,7 +113,7 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 2. `git remote add origin https://github.com/kalaluthien/dotclaude`
 3. `git fetch origin && git checkout -t origin/main`
 4. `python3 scripts/merge-settings.py` writes `settings.json` from `settings.json.example`; it keeps local-only keys and `theme` and `feedbackDrafts`, and backs the old file up to `backups/`. A hook only this machine runs survives a merge when `settings.machine-hooks`, an untracked file, holds a substring of its command, one per line.
-5. Add `[[ -r ~/.claude/scripts/protect-folders.zsh ]] && source ~/.claude/scripts/protect-folders.zsh` to `~/.zshenv`, so `claude` refuses to start in a protected folder.
+5. Add `[[ -r ~/.claude/scripts/protect-folders.zsh ]] && source ~/.claude/scripts/protect-folders.zsh` to the zsh startup file every zsh reads, so `claude` refuses to start in a protected folder.
 6. Write a note that must be known before its situation arises in `~/.claude/rules/<topic>.md`, such as `machine.md` for one that holds only on this machine; write any other note in `~/.claude/memory/`.
 7. After a `git pull` that changes `settings.json.example`, run step 4 again.
 
@@ -126,7 +126,7 @@ Claude Code creates files in `~/.claude` first, so a plain `git clone` fails; in
 
 ## Protected folders
 
-Sessions stay out of `~/Downloads` and `~/Documents`, since downloaded instruction files can inject a prompt and both hold personal and payment records. Each folder is one `Read(~/<dir>/**)` deny rule, with its `Edit` twin, in `settings.json.example`; add a pair to protect another.
+Sessions stay out of your downloads and documents folders, since downloaded instruction files can inject a prompt and both hold personal and payment records. Each folder is one `Read(~/<dir>/**)` deny rule, with its `Edit` twin, in `settings.json.example`; add a pair to protect another.
 
 | Layer | Stops |
 | --- | --- |
