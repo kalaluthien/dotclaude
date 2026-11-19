@@ -72,7 +72,7 @@ Use it for a question worth real research; say how deep to go and what you will 
 
 | Request |
 | --- |
-| `/surprise-me`: push further a grading feature's strategy for setting metrics, for scoring, and for showing results to people. |
+| `/surprise-me`: for a task's grade, push further the strategy for setting its measures, the strategy for scoring, and the strategy for showing it visually to people. |
 | `/surprise-me` how HTTP caching headers decide when a browser reuses a stored response. |
 | `/surprise-me` one narrow question: which HTTP header makes a browser revalidate a cached response, ETag or Last-Modified? Decision: which to set. Depth: one axis, short. |
 
