@@ -10,7 +10,7 @@ A skill is a command you type in a session, such as `/grill-me`, followed by you
 
 | Skill | What it does | Use it when |
 | --- | --- | --- |
-| `/grill-me` | Asks you about a plan, one open choice at a time, each with options, their cost and a recommended pick, until every choice is settled. | You have a plan or an idea and decisions are still open. |
+| `/grill-me` | Asks you about a plan in rounds of up to four questions, each with options, their cost and a recommended pick, until every choice is settled. | You have a plan or an idea and decisions are still open. |
 | `/show-me` | Draws a system, change, status, data or choice as a diagram, table, chart or HTML page. | A wall of text would hide the shape of the answer. |
 | `/surprise-me` | Researches an area or question in depth and brings back an explanation with a clear structure. | You want an answer deeper than your own question reaches. |
 | `/teach-me` | Teaches a topic by questions, or walks you through a paper, document or book quote by quote. | You want to explain or use an idea on your own, not just hear it once. |
@@ -41,11 +41,11 @@ A hook is a script Claude Code runs at a set moment; you never call it. Each one
 
 ## How the author uses each skill
 
-Each row is a request the author typed, restated in plain English, without the plugin prefix (such as `paperwork:`) a skill had where it was installed.
+Each row is a request the author typed, restated in plain English, without the plugin prefix a skill had where it was installed.
 
 ### How the author uses `/grill-me`
 
-Use it when a plan, a design or a wish still has open choices; it settles them one at a time.
+Use it when a plan, a design or a wish still has open choices; it settles them a few per round.
 
 | Request |
 | --- |
@@ -87,7 +87,7 @@ Use it to learn something you will use yourself; say what you want to do with it
 | `/teach-me` compound interest; I want to compare two loan offers on my own. |
 | `/teach-me` this abstract, pasted in after the words: I present it at my lab's journal club tomorrow. |
 | `/teach-me` why the seasons happen; I want to explain it to a child. |
-| `/teach-me` walk me through chapter 1 of Kahneman's *Thinking, Fast and Slow*. |
+| `/teach-me` walk me through chapter 1 of a well-known book on fast and slow thinking. |
 
 One run: on the book chapter, the first message asked what the learner wanted from it, with lettered options, and asked for the text to quote.
 
