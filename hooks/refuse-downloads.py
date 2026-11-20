@@ -34,7 +34,11 @@ ASSIGNMENT = re.compile(r"(?:^|[\s;&|(])([A-Za-z_]\w*)=([^\s;&|)]*)")
 BARE_CD = re.compile(r"(?:^|[\s;&|(])cd\s*(?=$|[;&|)])")
 GLOB = re.compile(r"[*?\[]")
 BRACE = re.compile(r"(?<!\$)\{([^{}]*)\}")
-SEPARATORS = re.compile(r"\|\||&&|[;|&\n]|\$\(|`")
+HEREDOC = re.compile(r"<<(-?)[ \t]*(\\?)([\"']?)([\w.-]+)\3")
+SHELLS = {"sh", "bash", "zsh", "dash", "ksh"}
+SUBSTITUTED = "\x01"
+ANSI_QUOTED = re.compile(r"\$'((?:\\.|[^'\\])*)'")
+SHELL_INPUT = SHELLS | {"eval", "source", "."}
 WRAPPERS = {"sudo", "env", "nice", "nohup", "time", "exec", "command", "xargs", "timeout", "caffeinate"}
 ALWAYS_RECURSIVE = {"find", "fd", "rg", "ag", "du", "tree", "mdfind", "rsync", "zip", "tar", "ditto"}
 RECURSIVE_WORDS = {"--recursive", "--dereference-recursive", "--directories=recurse", "-drecurse", "recurse"}
@@ -141,12 +145,109 @@ def check_word(word, bases, protected):
     return None
 
 
+class Body(str):
+    """A line of a heredoc body, which is data unless a shell reads it."""
+
+
+def heredoc_body(text, i, delimiter, tabbed, literal):
+    """The commands of the heredoc body that starts at I, up to its DELIMITER line, read as the shell reads a body (quotes
+    are plain text, a substitution still runs unless LITERAL), and the index after it."""
+    lines = []
+    while i < len(text):
+        end = text.find("\n", i)
+        end = len(text) if end < 0 else end
+        line, i = text[i:end], end + 1
+        if (line.lstrip("\t") if tabbed else line) == delimiter:
+            break
+        lines.append(line)
+    return parse("\n".join(lines), literal=literal, data=True, plain=True)[0], i
+
+
+def parse(text, i=0, end="", literal=False, data=False, plain=False):
+    """The simple commands of TEXT read from I as the shell reads them, up to the unquoted END character (the `)` of a
+    `$(...)`, a closing backtick), and the index after it. A `;`, `|`, `&` or newline splits only outside quotes; a
+    substitution is read as a command of its own and leaves one word in its outer command; a heredoc body is read line
+    by line, and holds no substitution when LITERAL, its delimiter being quoted; DATA marks the commands outside a
+    substitution as `Body`; PLAIN reads a heredoc body, where a quote, a `#` and a heredoc are plain text."""
+    found, current, quote, heredocs = [], "", None, []
+    kind = Body if data else str
+    while i < len(text):
+        c, heredoc = text[i], HEREDOC.match(text, i) if text.startswith("<<", i) else None
+        step = 1
+        if quote == "'":
+            quote = None if c == "'" else quote
+        elif c == "\\":
+            step = 2
+        elif c == end and quote is None:
+            i += 1
+            break
+        elif not literal and c == "`":
+            stop = i + 1
+            while stop < len(text) and text[stop] != "`":
+                stop += 2 if text[stop] == "\\" else 1
+            inner = parse(re.sub(r"\\([`\\])", r"\1", text[i + 1:stop]))[0]
+            i = stop + 1
+            found += [kind(current)] + inner if quote is None else inner
+            current = "" if quote is None else current + SUBSTITUTED
+            continue
+        elif not literal and text.startswith("$(", i):
+            inner, i = parse(text, i + 2, ")")
+            found += [kind(current)] + inner if quote is None else inner
+            current = "" if quote is None else current + SUBSTITUTED
+            continue
+        elif quote is None and not plain and c == "#" and not current[-1:].strip():
+            i = text.find("\n", i) if "\n" in text[i:] else len(text)
+            continue
+        elif quote is None and not plain and text.startswith("$'", i):
+            j = i + 2
+            while j < len(text) and text[j] != "'":
+                j += 2 if text[j] == "\\" else 1
+            current += text[i:j + 1]
+            i = j + 1
+            continue
+        elif not plain and c in "'\"" and quote in (None, c):
+            quote = None if quote else c
+        elif quote is None and not plain and heredoc and text[i - 1:i] != "<":
+            heredocs.append((heredoc.group(4), bool(heredoc.group(1)), bool(heredoc.group(2) or heredoc.group(3))))
+            current += heredoc.group(0)
+            i = heredoc.end()
+            continue
+        elif quote is None and c in ";|&\n":
+            found.append(kind(current))
+            current, i = "", i + 1
+            while c == "\n" and heredocs:
+                delimiter, tabbed, quoted = heredocs.pop(0)
+                body, i = heredoc_body(text, i, delimiter, tabbed, quoted)
+                found += body
+            continue
+        current += text[i:i + step]
+        i += step
+    return found + [kind(current)], i
+
+
+def ansi(match):
+    """The ANSI-C quoted word `$'...'` as a plain quoted word."""
+    try:
+        return shlex.quote(match.group(1).encode("latin-1", "backslashreplace").decode("unicode_escape"))
+    except (UnicodeError, ValueError):
+        return shlex.quote(match.group(1))
+
+
 def scans(command, bases, protected):
     """The protected folder a recursive command in COMMAND reaches by scanning a folder above it, read from each base
     folder the command starts in or moves to, else None."""
-    for chunk in SEPARATORS.split(command):
+    chunks = parse(command)[0]
+    shell = any(os.path.basename(word) in SHELL_INPUT for chunk in chunks if not isinstance(chunk, Body)
+                for word in re.findall(r"[^\s<>|&;()]+", chunk))
+    commands = []
+    for chunk in chunks:
+        if not isinstance(chunk, Body):
+            commands.append(chunk)
+        elif shell:
+            commands += parse(chunk)[0]
+    for chunk in commands:
         try:
-            words = shlex.split(chunk)
+            words = shlex.split(ANSI_QUOTED.sub(ansi, chunk))
         except ValueError:
             words = chunk.split()
         while words and (re.match(r"^[A-Za-z_]\w*=", words[0]) or os.path.basename(words[0]) in WRAPPERS):
@@ -154,6 +255,18 @@ def scans(command, bases, protected):
         if not words:
             continue
         program, rest = os.path.basename(words[0]), words[1:]
+        code = next((rest[i + 1] for i, w in enumerate(rest[:-1]) if re.match(r"^-\w*c\w*$", w)), None) \
+            if program in SHELLS else " ".join(rest) if program == "eval" else None
+        here = []
+        for k, w in enumerate(rest if program in SHELLS else []):
+            if w == "<<<" and k + 1 < len(rest):
+                here.append(rest[k + 1])
+            elif w.startswith("<<<") and len(w) > 3:
+                here.append(w[3:])
+        for code in [c for c in [code] + here if c]:
+            hit = scans(re.sub(r"\\([$`\"\\])", r"\1", code), bases, protected)
+            if hit:
+                return hit
         letters = RECURSIVE_FLAG.get(program, "")
         recursive = program in ALWAYS_RECURSIVE or bool(letters) and any(
             w in RECURSIVE_WORDS or re.match(r"^-[A-Za-z]*[" + letters + "]", w) for w in rest)
@@ -172,15 +285,21 @@ def scans(command, bases, protected):
 
 def variants(command):
     """COMMAND as written, then with quotes and backslashes dropped and simple `name=value` variables put in, so a
-    path split by quotes or built from variables reads whole."""
-    joined = re.sub(r"\$([A-Za-z_]\w*)(?=['\"])", r"${\1}", command)
-    joined = re.sub(r"[\\'\"]", "", joined)
+    path split by quotes or built from variables reads whole; each text pairs with the same text keeping its quotes,
+    which `parse` needs to tell a separator from a quoted character."""
+    spaced = re.sub(r"\$([A-Za-z_]\w*)(?=['\"])", r"${\1}", command)
+    joined = re.sub(r"[\\'\"]", "", spaced)
     values = {name: value for name, value in ASSIGNMENT.findall(joined)}
-    for _ in range(3):
-        for name, value in values.items():
-            joined = re.sub(r"\$\{" + name + r"\}|\$" + name + r"\b", lambda _: value, joined)
-    texts = [re.sub(r"file://localhost(?=/)", "file://", t) for t in (command, joined)]
-    return [expand(t) for t in texts] + [expand(unbrace(t)) for t in texts]
+
+    def fill(text):
+        for _ in range(3):
+            for name, value in values.items():
+                text = re.sub(r"\$\{" + name + r"\}|\$" + name + r"\b", lambda _: value, text)
+        return text
+
+    pairs = [(command, command), (fill(joined), fill(spaced))]
+    pairs = [tuple(re.sub(r"file://localhost(?=/)", "file://", t) for t in pair) for pair in pairs]
+    return [tuple(expand(t) for t in pair) for pair in pairs] + [tuple(expand(unbrace(t)) for t in pair) for pair in pairs]
 
 
 def copies_file_out(command, cwd, protected):
@@ -219,14 +338,14 @@ def copies_file_out(command, cwd, protected):
 def check_command(command, cwd, protected):
     if copies_file_out(command, cwd, protected):
         return None
-    for text in variants(command):
-        hit = check_text(text, command, cwd, protected)
+    for text, kept in variants(command):
+        hit = check_text(text, kept, command, cwd, protected)
         if hit:
             return hit
     return None
 
 
-def check_text(text, command, cwd, protected):
+def check_text(text, kept, command, cwd, protected):
     moves = [cwd] + ([HOME] if BARE_CD.search(text) else [])
     for match in re.finditer(r"(?:^|[\s;&|(])(?:cd|pushd)\s+(?:-[LPe@]+\s+)*([^\s;&|)]+)", text):
         try:
@@ -239,7 +358,7 @@ def check_text(text, command, cwd, protected):
         hit = check_word(word, bases, protected)
         if hit:
             return hit
-    return scans(text, moves, protected)
+    return scans(kept, moves, protected)
 
 
 def check_tool(name, tool_input, cwd, protected):
