@@ -2,8 +2,8 @@
 """Stop hook: block a final reply that hands the owner a command to run (a `! <command>` line, or "run `x`" beside a
 code span) when no tool call of the turn was refused, since a tool the session holds can run it. The block repeats once
 at most: a second stop (`stop_hook_active`), a refusal earlier in the turn, or any error passes. A reply whose `돌려 보`
-match only reports a run already done passes: every prose line ends in a past tense or a copula, and none holds a
-request or question word."""
+match only reports a run already done passes: every prose line ends in a past tense or a copula, none holds a
+request or question word, and a code span sits only in a line that reports the run or in a line of code alone."""
 import json
 import re
 import sys
@@ -19,12 +19,12 @@ ASK = re.compile(
 REPORT = re.compile(r"돌려\s*보(?:니|았(?:습|더니|는데))")
 REQUEST = re.compile(
     r"주세|주시|주십|주셔|주실|줄래|줄\s*수|달라|드립|드려|부탁|바랍|바라|원합|원하|알려|세요|셔요|십시|시겠|실래|셔야|셔도|해야|어야|아야"
-    r"|바란|권하|권합|권한|하실|하셔|하라|해라|할\s*일|할\s*것|다음|이제|단계|좋|추천|권장|낫|나을|수\s*있|남아|기대|몫|맡|요청|요구|원한|두면"
+    r"|바란|권하|권합|권한|하실|하셔|하라|해라|할\s*일|할\s*것|다음|이제|단계|좋|추천|권장|낫|나을|수\s*있|남아|기대|몫|맡|요청|요구|원한|두면|일(?:입|이)|라고|명령|사용자|소유자|터미널|owner|user"
     r"|면(?![가-힣])|게\s*좋|당신|직접|남았|남은|남는|하자|보자|합시|봅시|차례|필요|나요|까요|가요|던가|습니까|니까|겠어|래요|[?？]"
     r"|\b(?:please|try|you|your|should|need)\b",
     re.I,
 )
-CLOSED = re.compile(r"(?:(.)(?:습니|)|입니|이|없(?:습니)?)다[\s.!:;,)]*$")
+CLOSED = re.compile(r"([가-힣])(습니|니)?다[\s.!:;,)]*$")
 REFUSED = re.compile(r"denied|blocked|refused|not allowed|hook error|disabled|no such tool|requires approval|rejected|doesn't want to proceed|not permitted", re.I)
 INJECTED = re.compile(r"<(system-reminder|command-[\w-]+|task-notification|local-command-[\w-]+)>.*?</\1>", re.S)
 REASON = (
@@ -64,7 +64,12 @@ def refused_this_turn(lines):
 def closed(line):
     """True when the line ends as a statement of something done: a past tense or a copula."""
     end = CLOSED.search(line)
-    return bool(end) and (end.group(1) is None or (ord(end.group(1)) - 0xAC00) % 28 == 20)
+    if not end:
+        return False
+    last, polite = end.groups()
+    if polite == "니":
+        return last == "입"
+    return last in "이없" or (ord(last) - 0xAC00) % 28 == 20
 
 
 def handoff(reply):
@@ -73,9 +78,10 @@ def handoff(reply):
     found = BANG.search(reply)
     if found:
         return reply[found.start():].strip().splitlines()[0][:80]
-    prose = code.sub("", reply)
-    quiet = not REQUEST.search(prose) and all(
-        closed(line) for line in re.split(r"(?<=[.!?？])|\n", prose) if line.strip(" \t-*>:;,()")
+    marked = code.sub("\0", reply)
+    lines = [line for line in re.split(r"(?<=[.!?？])|\n", marked) if line.strip(" \t-*>:;,()\0")]
+    quiet = not REQUEST.search(marked) and all(
+        closed(line.replace("\0", "")) and ("\0" not in line or REPORT.search(line)) for line in lines
     )
     for m in ASK.finditer(reply):
         if quiet and REPORT.match(reply, m.start()):
