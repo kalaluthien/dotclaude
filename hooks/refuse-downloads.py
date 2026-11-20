@@ -165,7 +165,7 @@ def parse(text, i=0, end="", literal=False, data=False):
     """The simple commands of TEXT read from I as the shell reads them, up to the unquoted END character (the `)` of a
     `$(...)`, a closing backtick), and the index after it. A `;`, `|`, `&` or newline splits only outside quotes; a
     substitution is read as a command of its own and leaves one word in its outer command; a heredoc body is read line
-    by line, and holds no backtick substitution when LITERAL, its delimiter being quoted; DATA marks the commands outside a
+    by line, and holds no substitution when LITERAL, its delimiter being quoted; DATA marks the commands outside a
     substitution as `Body`."""
     found, current, quote, heredocs = [], "", None, []
     kind = Body if data else str
@@ -179,10 +179,20 @@ def parse(text, i=0, end="", literal=False, data=False):
         elif c == end and quote is None:
             i += 1
             break
-        elif (c == "`" and not literal) or text.startswith("$(", i):
+        elif not literal and (c == "`" or text.startswith("$(", i)):
             inner, i = parse(text, i + (1 if c == "`" else 2), "`" if c == "`" else ")")
             found += [kind(current)] + inner if quote is None else inner
             current = "" if quote is None else current + SUBSTITUTED
+            continue
+        elif quote is None and c == "#" and not current[-1:].strip():
+            i = text.find("\n", i) if "\n" in text[i:] else len(text)
+            continue
+        elif quote is None and text.startswith("$'", i):
+            j = i + 2
+            while j < len(text) and text[j] != "'":
+                j += 2 if text[j] == "\\" else 1
+            current += text[i:j + 1]
+            i = j + 1
             continue
         elif c in "'\"" and quote in (None, c):
             quote = None if quote else c
@@ -208,10 +218,15 @@ def scans(command, bases, protected):
     """The protected folder a recursive command in COMMAND reaches by scanning a folder above it, read from each base
     folder the command starts in or moves to, else None."""
     chunks = parse(command)[0]
-    shell = any(word in SHELL_INPUT for chunk in chunks if not isinstance(chunk, Body) for word in chunk.split())
+    shell = any(os.path.basename(word) in SHELL_INPUT for chunk in chunks if not isinstance(chunk, Body)
+                for word in re.findall(r"[^\s<>|&;()]+", chunk))
+    commands = []
     for chunk in chunks:
-        if isinstance(chunk, Body) and not shell:
-            continue
+        if not isinstance(chunk, Body):
+            commands.append(chunk)
+        elif shell:
+            commands += parse(chunk)[0]
+    for chunk in commands:
         try:
             words = shlex.split(chunk)
         except ValueError:
@@ -223,6 +238,7 @@ def scans(command, bases, protected):
         program, rest = os.path.basename(words[0]), words[1:]
         code = next((rest[i + 1] for i, w in enumerate(rest[:-1]) if re.match(r"^-\w*c\w*$", w)), None) \
             if program in SHELLS else " ".join(rest) if program == "eval" else None
+        code = code and re.sub(r"\\([$`\"\\])", r"\1", code)
         hit = code and scans(code, bases, protected)
         if hit:
             return hit
