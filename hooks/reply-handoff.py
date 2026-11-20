@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Stop hook: block a final reply that hands the owner a command to run (a `! <command>` line, or "run `x`" beside a
 code span) when no tool call of the turn was refused, since a tool the session holds can run it. The block repeats once
-at most: a second stop (`stop_hook_active`), a refusal earlier in the turn, or any error passes. A reply whose `돌려 보` match only reports a run already done passes: every prose line ends in a past
-tense or a copula, and none holds a request or question word."""
+at most: a second stop (`stop_hook_active`), a refusal earlier in the turn, or any error passes. A reply whose `돌려 보`
+match only reports a run already done passes: every prose line ends in a past tense or a copula, and none holds a
+request or question word."""
 import json
 import re
 import sys
