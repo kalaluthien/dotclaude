@@ -9,17 +9,11 @@ import sys
 CODE = r"```.*?```|`[^`\n]+`"
 BANG = re.compile(r"^[ \t]*(?:`+[ \t]*)?!\s+[\w./~$-]", re.M)
 ASK = re.compile(
-    r"(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하)\s*(?:주|보|봐\s*주|시|세|십|줄|달)|직접\s*(?:실행|입력)|돌려\s*보|돌려\s*봐\s*주|실행하면\s*됩"
+    r"(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하)\s*(?:주|보|시|세|십|줄|달)|직접\s*(?:실행|입력)|돌려\s*보(?:세|시|십|아\s*주)|실행하면\s*됩"
     r"|\b(?:please\s+run|you\s+(?:can|could|need\s+to|must|should)\s+run|run\s+(?:this|the\s+following|it)\s+(?:yourself|command))\b"
     r"|\b(?:run|execute)\s+(?:this|that|these|the\s+following)\b|^[ \t]*run:[ \t]*$|\b(?:run|execute|paste|type)\s+`",
     re.I | re.M,
 )
-TRIED = re.compile(
-    r"(?:직접\s*)?(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하|어)?\s*(?:보니|보았|봤|본\s*결과|보겠|했)"
-    r"(?!\s*(?:으|어야|어도|다가|다면|다\s*치|던|을|는지|는데도))"
-)
-REQUEST = re.compile(r"주세|주시|주십|주실|줄래|달라|세요|십시|바랍|부탁|알려|하시|해야|합시|봅시|하자|보자|차례|면\s*(?:합|좋|됩)|어야|[?？]")
-SENTENCE = re.compile(r"[^.!?？\n]*[.!?？]?")
 REFUSED = re.compile(r"denied|blocked|refused|not allowed|hook error|disabled|no such tool|requires approval|rejected|doesn't want to proceed|not permitted", re.I)
 INJECTED = re.compile(r"<(system-reminder|command-[\w-]+|task-notification|local-command-[\w-]+)>.*?</\1>", re.S)
 REASON = (
@@ -56,13 +50,6 @@ def refused_this_turn(lines):
     return refused
 
 
-def reported(text):
-    """True when the text opens with a sentence that reports a run already tried and closes as a statement, and asks
-    nothing of the owner."""
-    sentence = SENTENCE.match(text).group().strip()
-    return bool(TRIED.match(sentence)) and not REQUEST.search(text) and re.search(r"다[.!]?$", sentence) is not None
-
-
 def handoff(reply):
     """The first span of the reply that hands over a command, else None."""
     code = re.compile(CODE, re.S)
@@ -70,8 +57,6 @@ def handoff(reply):
     if found:
         return reply[found.start():].strip().splitlines()[0][:80]
     for m in ASK.finditer(reply):
-        if reported(code.sub("X", reply[m.start():m.end() + 200])):
-            continue
         if code.search(reply[max(0, m.start() - 200):m.end() + 200]):
             return reply[max(0, m.start() - 20):m.end() + 40].strip().replace("\n", " ")
     return None
