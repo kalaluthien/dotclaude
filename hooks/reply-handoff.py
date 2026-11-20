@@ -9,10 +9,17 @@ import sys
 CODE = r"```.*?```|`[^`\n]+`"
 BANG = re.compile(r"^[ \t]*(?:`+[ \t]*)?!\s+[\w./~$-]", re.M)
 ASK = re.compile(
-    r"(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하)\s*(?:주|보|시|세|십|줄|달)|직접\s*(?:실행|입력)|돌려\s*보(?:세|시|십|아\s*주)|실행하면\s*됩"
+    r"(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하)\s*(?:주|보|시|세|십|줄|달)|직접\s*(?:실행|입력)|돌려\s*보|실행하면\s*됩"
     r"|\b(?:please\s+run|you\s+(?:can|could|need\s+to|must|should)\s+run|run\s+(?:this|the\s+following|it)\s+(?:yourself|command))\b"
     r"|\b(?:run|execute)\s+(?:this|that|these|the\s+following)\b|^[ \t]*run:[ \t]*$|\b(?:run|execute|paste|type)\s+`",
     re.I | re.M,
+)
+REPORT = re.compile(r"돌려\s*보(?:니|았(?:습|더니|는데))")
+REQUEST = re.compile(
+    r"주세|주시|주십|주셔|주실|줄래|줄\s*수|달라|드립|드려|부탁|바랍|바라|원합|원하|알려|세요|셔요|십시|시겠|실래|셔야|셔도|해야|어야|아야"
+    r"|면(?![가-힣])|게\s*좋|당신|직접|남았|남은|하자|보자|합시|봅시|차례|필요|나요|까요|가요|던가|습니까|니까|겠어|래요|[?？]"
+    r"|\b(?:please|try|you|your|should|need)\b",
+    re.I,
 )
 REFUSED = re.compile(r"denied|blocked|refused|not allowed|hook error|disabled|no such tool|requires approval|rejected|doesn't want to proceed|not permitted", re.I)
 INJECTED = re.compile(r"<(system-reminder|command-[\w-]+|task-notification|local-command-[\w-]+)>.*?</\1>", re.S)
@@ -56,7 +63,10 @@ def handoff(reply):
     found = BANG.search(reply)
     if found:
         return reply[found.start():].strip().splitlines()[0][:80]
+    quiet = not REQUEST.search(code.sub(" ", reply))
     for m in ASK.finditer(reply):
+        if quiet and REPORT.match(reply, m.start()):
+            continue
         if code.search(reply[max(0, m.start() - 200):m.end() + 200]):
             return reply[max(0, m.start() - 20):m.end() + 40].strip().replace("\n", " ")
     return None
