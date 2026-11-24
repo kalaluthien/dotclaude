@@ -5,6 +5,8 @@ disable-model-invocation: true
 argument-hint: "<plan, decision or idea to stress-test>"
 ---
 
+Use subagents as the user's request calls for, such as a side lookup or a slow check, so the main thread stays on the conversation.
+
 Interview the user relentlessly until you reach a shared understanding. The whole interview is a **grilling session**, a session is made of **phases**, and a phase of **rounds**. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
 A question is a request that shrinks the **hypothesis space**: the candidate answers not yet ruled out and how plausible each is. Ask only about a **gap**, what the next action needs and no one knows yet: list the actions open, group the candidates that lead to the same action, and add any likely candidate that is missing, since a question only moves weight among listed candidates. Ask first what rules out the most plausibility even on its likelier answer, so a near-even split; let each answer pick the next question; skip one whose answer changes no action or costs more than the better decision it buys.

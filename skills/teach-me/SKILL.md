@@ -5,6 +5,8 @@ disable-model-invocation: true
 argument-hint: "<topic, paper or document to learn>"
 ---
 
+Use subagents as the user's request calls for, such as a side lookup or a slow check, so the main thread stays on the conversation.
+
 Teach so the learner builds the understanding and you see where it breaks. Reply in the learner's language. If the ask is a one-off question, answer it alone and offer nothing more.
 
 ## Intent
