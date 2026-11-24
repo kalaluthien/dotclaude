@@ -2,18 +2,21 @@
 name: show-me
 description: Shows a system, change, status, data or choice as a diagram, table, chart or page instead of a wall of text.
 disable-model-invocation: true
-context: fork
 argument-hint: "<what to show>"
 ---
 
-**Your last message must be the message `## Return` defines and nothing else, since a program checks its shape and any longer or different message is a failure.**
+Use subagents as the user's request calls for, such as a side lookup or a slow check, so the main thread stays on the conversation.
+
+## Where to draw
+
+- **In the chat**, when the session holds a tool that renders a drawing inline in the conversation, such as `mcp__easel__chart` in Claude Code or claude.ai's inline visual tool: tell it from the tools listed in your session, by a name or description that says it draws a chart, diagram or visual in the chat.
+- **In a temporary HTML file** when no such tool is listed, as `## The page` says.
 
 ## Return
 
-This skill runs in a forked subagent that sees no earlier chat, only the ask typed after the skill name, so the ask must carry the subject and its source, and the aim when it is not obvious. The main agent receives one message of at most 60 words in all, the path included, with no table, tree, diagram, HTML or file body in it, in the language of the ask:
+The ask typed after the skill name, with the chat so far, names the subject and its source, and the aim when it is not obvious. When neither names the subject or a source it needs, read nothing and ask the owner for the one thing missing, with its choices if any, in at most 60 words, then go on with the answer.
 
-- **Interim report**: none; a fork shows nothing before it ends. When the ask names no subject or no source it needs, or points at what a fork cannot see ("this", "the above"), read nothing and return `NEED: <the one thing missing, with its choices if any>` alone, at most 60 words; the main agent asks the owner and runs the skill again with the answer in the ask.
-- **Final result**: `DONE <full path of the HTML file>`, a second line with the answer in one sentence of at most 25 words that names the finding and restates no values, a third `Next: <what the reader can do next>` of at most 12 words.
+Reply in the language of the ask, in at most 60 words besides the drawing: a drawing in the chat is followed by the answer in one sentence of at most 25 words that names the finding and restates no values, and `Next: <what the reader can do next>` of at most 12 words. A drawing in a file is followed by `DONE <full path of the HTML file>` first, then the same two lines, and no table, tree, diagram, HTML or file body.
 
 ## Steps
 
@@ -22,9 +25,8 @@ This skill runs in a forked subagent that sees no earlier chat, only the ask typ
 3. **Assume a reader new to the subject.** That the user asked at all means they may lack deep expertise here, may not remember the specifics, and may not know its terms. Say what each term means where it first appears, and spell out what an expert would skip.
 4. **Read the original.** Open the source itself: the file, log, diff, data, page or transcript. Never a summary of it, a memory, or an earlier answer. Quote what you show with its `path:line` or URL.
 5. **Pick by matching.** Find the case below whose question and data shape match, and use its representation; the smallest that answers wins. One representation per question.
-6. **Make the page.** Put the result in one HTML file, in this order: the answer in one sentence, the representation, what the reader can do next. The return holds only that sentence, the file's full path and the next step: no table, tree, diagram, PNG or ASCII drawing, since the owner asked for HTML only.
-
-7. **Return.** Your last message is the only thing the main agent receives, so send exactly the message `## Return` defines, starting with `DONE `, and nothing else: no summary of the work, no note on what you could not check, no permission remark.
+6. **Draw it** where `## Where to draw` says, in this order: the answer in one sentence, the representation, what the reader can do next. Without a chat tool, put it in one HTML file, and the reply holds no table, tree, diagram, PNG or ASCII drawing.
+7. **Reply** as `## Return` defines, with no summary of the work, no note on what you could not check, no permission remark.
 
 ## The page
 

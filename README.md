@@ -11,11 +11,11 @@ A skill is a command you type in a session, such as `/grill-me`, followed by you
 | Skill | What it does | Use it when |
 | --- | --- | --- |
 | `/grill-me` | Asks you about a plan in rounds of up to four questions, each with options, their cost and a recommended pick, until every choice is settled. | You have a plan or an idea and decisions are still open. |
-| `/show-me` | Draws a system, change, status, data or choice as a diagram, table, chart or HTML page. | A wall of text would hide the shape of the answer. |
+| `/show-me` | Draws a system, change, status, data or choice as a diagram, table or chart in the chat when a drawing tool exists, else as a temporary HTML page. | A wall of text would hide the shape of the answer. |
 | `/surprise-me` | Researches an area or question in depth and brings back an explanation with a clear structure. | You want an answer deeper than your own question reaches. |
 | `/teach-me` | Teaches a topic by questions, or walks you through a paper, document or book quote by quote. | You want to explain or use an idea on your own, not just hear it once. |
 
-`/show-me` and `/surprise-me` run in a separate subagent that sees none of your earlier chat, so put the whole ask, with its subject and source, after the command.
+Every `-me` skill runs in your main session, keeps your earlier chat and hands side work to subagents when your request calls for it.
 
 ## Hooks
 

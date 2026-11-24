@@ -2,7 +2,6 @@
 name: surprise-me
 description: Researches an area or question in depth and brings back an explanation with a clear structure.
 disable-model-invocation: true
-context: fork
 argument-hint: "<area or question to research>"
 ---
 
@@ -10,11 +9,13 @@ argument-hint: "<area or question to research>"
 
 Research what the user names, round by round. Each round chases the findings that broke the current picture. Stop when Convergence, a count no one can talk up, says little is left to find. Write the answer a domain expert would have given had the user asked them as a structured explanation in `explanation.md`, and return only the short message under Return, never the explanation.
 
+Use subagents as the user's request calls for, such as a side lookup or a slow check, so the main thread stays on the conversation.
+
 ## Return
 
-This skill runs in a forked subagent that sees no earlier chat and cannot ask the user mid-run, only the ask typed after the skill name, so the ask must carry the area, the decision it feeds and the scope. The main agent receives one message, in the language of the ask, with no file body, search log, claim row or repeated draft in it.
+The ask typed after the skill name, with the chat so far, must carry the area, the decision it feeds and the scope. Your last message is one message, in the language of the ask, with no file body, search log, claim row or repeated draft in it.
 
-- **Interim report**: none while it runs; every round's diff goes to `diff-N.md` and the Brief to `brief.md`, never into the return. Only when the Direction is unclear and a wrong guess would waste the run, return `NEED: <the one question>` and at most 3 options, the recommended first, alone and at most 60 words, before any search; the main agent asks the owner by `AskUserQuestion` and runs the skill again with the answer in the ask.
+- **Interim report**: none while it runs; every round's diff goes to `diff-N.md` and the Brief to `brief.md`, never into the return. Only when the Direction is unclear and a wrong guess would waste the run, return `NEED: <the one question>` and at most 3 options, the recommended first, alone and at most 60 words, before any search; ask the owner by `AskUserQuestion`, then go on with the answer.
 - **Final result**: your whole last message, at most 250 words, in this shape and nothing before or after it. Count the words before sending; over the cap, cut `Answer:` first.
   - `DONE <work folder>/explanation.md`
   - `Direction:` one line
@@ -140,4 +141,4 @@ Explain the subject, never the search. The user's language and style rules overr
 
 ## 5. Return
 
-Your last message is the only thing the main agent receives: send exactly the message `## Return` defines, starting with `DONE `, at most 250 words, with no diff block, explanation, table or source list in it.
+Send exactly the message `## Return` defines, starting with `DONE `, at most 250 words, with no diff block, explanation, table or source list in it.
