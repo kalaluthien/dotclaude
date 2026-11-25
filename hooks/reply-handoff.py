@@ -16,7 +16,7 @@ ASK = re.compile(
     r"|\b(?:run|execute)\s+(?:this|that|these|the\s+following)\b|^[ \t]*run:[ \t]*$|\b(?:run|execute|paste|type)\s+`",
     re.I | re.M,
 )
-REPORT = re.compile(r"돌려\s*보(?:니|았(?:습|더니|는데))")
+REPORT = re.compile(r"돌려\s*보(?:니|았(?:습|더니|는데)|지\s*(?:는|도)?\s*(?:못|않))")
 REQUEST = re.compile(
     r"주세|주시|주십|주셔|주실|줄래|줄\s*수|달라|드립|드려|부탁|바랍|바라|원합|원하|알려|세요|셔요|십시|시겠|실래|셔야|셔도|해야|어야|아야"
     r"|바란|권하|권합|권한|하실|하셔|하라|해라|할\s*일|할\s*것|다음|이제|단계|좋|추천|권장|낫|나을|수\s*있|남아|기대|몫|맡|요청|요구|원한|두면|일(?:입|이)|라고|명령|사용자|소유자|터미널|owner|user"
