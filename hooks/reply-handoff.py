@@ -80,7 +80,7 @@ def handoff(reply):
         return reply[found.start():].strip().splitlines()[0][:80]
     marked = code.sub("\0", reply)
     lines = [line for line in re.split(r"(?<=[.!?？])|\n", marked) if line.strip(" \t-*>:;,()\0")]
-    quiet = not REQUEST.search(marked) and all(
+    quiet = not any(REQUEST.search(line) and not REPORT.search(line) for line in lines) and all(
         closed(line.replace("\0", "")) and ("\0" not in line or REPORT.search(line)) for line in lines
     )
     for m in ASK.finditer(reply):
