@@ -11,7 +11,7 @@ import sys
 CODE = r"```.*?```|`[^`\n]+`"
 BANG = re.compile(r"^[ \t]*(?:`+[ \t]*)?!\s+[\w./~$-]", re.M)
 ASK = re.compile(
-    r"(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하)\s*(?:주|보|시|세|십|줄|달)|직접\s*(?:실행|입력)|돌려\s*보|실행하면\s*됩"
+    r"(?:실행|입력|붙여\s*넣|돌려)\s*(?:해|하)\s*(?:주|보|시|세|십|줄|달)|붙여\s*넣(?:으|어)?\s*(?:세|시|십|주)|직접\s*(?:실행|입력)|돌려\s*(?:보|봐)|실행하면\s*됩"
     r"|\b(?:please\s+run|you\s+(?:can|could|need\s+to|must|should)\s+run|run\s+(?:this|the\s+following|it)\s+(?:yourself|command))\b"
     r"|\b(?:run|execute)\s+(?:this|that|these|the\s+following)\b|^[ \t]*run:[ \t]*$|\b(?:run|execute|paste|type)\s+`",
     re.I | re.M,
@@ -72,11 +72,14 @@ def closed(line):
     return last in "이없" or (ord(last) - 0xAC00) % 28 == 20
 
 
-def sentence(reply, at):
-    """The sentence of the reply holding position `at`."""
-    start = max(reply.rfind(stop, 0, at) for stop in (".", "!", "?", "？", "\n")) + 1
-    ends = [end for end in (reply.find(stop, at) for stop in (".", "!", "?", "？", "\n")) if end != -1]
-    return reply[start:min(ends) + 1 if ends else len(reply)]
+def sentence(reply, at, code):
+    """The sentence of the reply holding position `at`: a stop counts only outside a code span and before a space or
+    the end, so `a.py` or v0.20.1 splits nothing."""
+    masked = code.sub(lambda span: "x" * len(span.group()), reply)
+    stops = [stop.end() for stop in re.finditer(r"[.!?？](?=\s|$)|\n", masked)]
+    start = max([end for end in stops if end <= at], default=0)
+    end = min([end for end in stops if end > at], default=len(reply))
+    return reply[start:end]
 
 
 def reports(text, code):
@@ -93,7 +96,7 @@ def handoff(reply):
     if found:
         return reply[found.start():].strip().splitlines()[0][:80]
     for m in ASK.finditer(reply):
-        if REPORT.match(reply, m.start()) and reports(sentence(reply, m.start()), code):
+        if REPORT.match(reply, m.start()) and reports(sentence(reply, m.start(), code), code):
             continue
         if code.search(reply[max(0, m.start() - 200):m.end() + 200]):
             return reply[max(0, m.start() - 20):m.end() + 40].strip().replace("\n", " ")
