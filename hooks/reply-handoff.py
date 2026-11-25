@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Stop hook: block a final reply that hands the owner a command to run (a `! <command>` line, or "run `x`" beside a
 code span) when no tool call of the turn was refused, since a tool the session holds can run it. The block repeats once
-at most: a second stop (`stop_hook_active`), a refusal earlier in the turn, or any error passes. A reply whose `돌려 보`
-match only reports a run, done or not done, passes: that match's own sentence ends in a past tense or a copula and
-holds no request or question word, since another sentence that hands a command over has its own match."""
+at most: a second stop (`stop_hook_active`), a refusal earlier in the turn, or any error passes. A match passes when its own
+sentence only reports a run, done or not done: it ends in a past tense or a copula and
+holds no request or question word, since another sentence that hands a command over has its own match. A sentence
+naming a code span beside a run, type or paste verb is a hand-off when it is no such report and holds a request word
+or ends in an imperative."""
 import json
 import re
 import sys
@@ -16,10 +18,11 @@ ASK = re.compile(
     r"|\b(?:run|execute)\s+(?:this|that|these|the\s+following)\b|^[ \t]*run:[ \t]*$|\b(?:run|execute|paste|type)\s+`",
     re.I | re.M,
 )
-REPORT = re.compile(r"돌려\s*보(?:니|고|았(?:습|더니|는데|고|던)|지\s*(?:는|도)?\s*(?:못|않))")
+VERB = re.compile(r"실행|입력|붙여\s*넣|돌려|돌리|타이핑")
+IMPERATIVE = re.compile(r"(?:어|아|려|라|줘|봐|해|요|시다|바람)[\s.!]*$")
 REQUEST = re.compile(
     r"주세|주시|주십|주셔|주실|줄래|줄\s*수|달라|드립|드려|부탁|바랍|바라|원합|원하|알려|세요|셔요|십시|시겠|실래|셔야|셔도|해야|어야|아야"
-    r"|바란|권하|권합|권한|하실|하셔|하라|해라|할\s*일|할\s*것|다음|이제|단계|좋|추천|권장|낫|나을|수\s*있|남아|기대|몫|맡|요청|요구|원한|두면|일(?:입|이)|라고|명령|사용자|소유자|터미널|owner|user"
+    r"|바란|권하|권합|권한|권했|시기|하실|하셔|하라|해라|할\s*일|할\s*것|다음|이제|단계|좋|추천|권장|낫|나을|수\s*있|남아|기대|몫|맡|요청|요구|원한|두면|일(?:입|이)|라고|명령|사용자|소유자|터미널|owner|user"
     r"|면(?![가-힣])|게\s*좋|당신|직접|남았|남은|남는|하자|보자|합시|봅시|차례|필요|나요|까요|가요|던가|습니까|니까|겠어|래요|[?？]"
     r"|\b(?:please|try|you|your|should|need)\b",
     re.I,
@@ -96,10 +99,17 @@ def handoff(reply):
     if found:
         return reply[found.start():].strip().splitlines()[0][:80]
     for m in ASK.finditer(reply):
-        if REPORT.match(reply, m.start()) and reports(sentence(reply, m.start(), code), code):
+        if reports(sentence(reply, m.start(), code), code):
             continue
         if code.search(reply[max(0, m.start() - 200):m.end() + 200]):
             return reply[max(0, m.start() - 20):m.end() + 40].strip().replace("\n", " ")
+    for m in VERB.finditer(reply):
+        text = sentence(reply, m.start(), code)
+        if not code.search(text) or reports(text, code):
+            continue
+        prose = code.sub("", text).strip(" \t-*>:;,()")
+        if REQUEST.search(prose) or IMPERATIVE.search(prose):
+            return text.strip().replace("\n", " ")[:120]
     return None
 
 
