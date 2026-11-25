@@ -2,8 +2,8 @@
 """Stop hook: block a final reply that hands the owner a command to run (a `! <command>` line, or "run `x`" beside a
 code span) when no tool call of the turn was refused, since a tool the session holds can run it. The block repeats once
 at most: a second stop (`stop_hook_active`), a refusal earlier in the turn, or any error passes. A reply whose `돌려 보`
-match only reports a run already done passes: every prose line ends in a past tense or a copula, none holds a
-request or question word, and a code span sits only in a line that reports the run or in a line of code alone."""
+match only reports a run, done or not done, passes: that match's own sentence ends in a past tense or a copula and
+holds no request or question word, since another sentence that hands a command over has its own match."""
 import json
 import re
 import sys
@@ -16,7 +16,7 @@ ASK = re.compile(
     r"|\b(?:run|execute)\s+(?:this|that|these|the\s+following)\b|^[ \t]*run:[ \t]*$|\b(?:run|execute|paste|type)\s+`",
     re.I | re.M,
 )
-REPORT = re.compile(r"돌려\s*보(?:니|았(?:습|더니|는데)|지\s*(?:는|도)?\s*(?:못|않))")
+REPORT = re.compile(r"돌려\s*보(?:니|고|았(?:습|더니|는데|고|던)|지\s*(?:는|도)?\s*(?:못|않))")
 REQUEST = re.compile(
     r"주세|주시|주십|주셔|주실|줄래|줄\s*수|달라|드립|드려|부탁|바랍|바라|원합|원하|알려|세요|셔요|십시|시겠|실래|셔야|셔도|해야|어야|아야"
     r"|바란|권하|권합|권한|하실|하셔|하라|해라|할\s*일|할\s*것|다음|이제|단계|좋|추천|권장|낫|나을|수\s*있|남아|기대|몫|맡|요청|요구|원한|두면|일(?:입|이)|라고|명령|사용자|소유자|터미널|owner|user"
@@ -72,19 +72,28 @@ def closed(line):
     return last in "이없" or (ord(last) - 0xAC00) % 28 == 20
 
 
+def sentence(reply, at):
+    """The sentence of the reply holding position `at`."""
+    start = max(reply.rfind(stop, 0, at) for stop in (".", "!", "?", "？", "\n")) + 1
+    ends = [end for end in (reply.find(stop, at) for stop in (".", "!", "?", "？", "\n")) if end != -1]
+    return reply[start:min(ends) + 1 if ends else len(reply)]
+
+
+def reports(text, code):
+    """Whether a sentence only reports: closed in a past tense or a copula, with no request or question word; 직접
+    there says who ran it, since the closed ending already rules out a request."""
+    prose = re.sub(r"직접", "", code.sub("", text))
+    return closed(prose.strip(" \t-*>:;,()")) and not REQUEST.search(prose)
+
+
 def handoff(reply):
     """The first span of the reply that hands over a command, else None."""
     code = re.compile(CODE, re.S)
     found = BANG.search(reply)
     if found:
         return reply[found.start():].strip().splitlines()[0][:80]
-    marked = code.sub("\0", reply)
-    lines = [line for line in re.split(r"(?<=[.!?？])|\n", marked) if line.strip(" \t-*>:;,()\0")]
-    quiet = not any(REQUEST.search(line) and not REPORT.search(line) for line in lines) and all(
-        closed(line.replace("\0", "")) and ("\0" not in line or REPORT.search(line)) for line in lines
-    )
     for m in ASK.finditer(reply):
-        if quiet and REPORT.match(reply, m.start()):
+        if REPORT.match(reply, m.start()) and reports(sentence(reply, m.start()), code):
             continue
         if code.search(reply[max(0, m.start() - 200):m.end() + 200]):
             return reply[max(0, m.start() - 20):m.end() + 40].strip().replace("\n", " ")
