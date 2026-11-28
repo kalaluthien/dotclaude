@@ -237,8 +237,10 @@ def scans(command, bases, protected):
     """The protected folder a recursive command in COMMAND reaches by scanning a folder above it, read from each base
     folder the command starts in or moves to, else None."""
     chunks = parse(command)[0]
-    shell = any(os.path.basename(word) in SHELL_INPUT for chunk in chunks if not isinstance(chunk, Body)
-                for word in re.findall(r"[^\s<>|&;()]+", chunk))
+    shell = any(os.path.basename(w) in SHELL_INPUT - {"."} or w == "." and all(  # a `.` argument is a folder
+        re.match(r"^[A-Za-z_]\w*=", v) or os.path.basename(v) in WRAPPERS for v in words[:i])
+        for words in (re.findall(r"[^\s<>|&;()]+", c) for c in chunks if not isinstance(c, Body))
+        for i, w in enumerate(words))
     commands = []
     for chunk in chunks:
         if not isinstance(chunk, Body):
