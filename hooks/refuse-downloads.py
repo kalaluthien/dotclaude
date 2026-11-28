@@ -29,6 +29,7 @@ VARIABLES = [
     (re.compile(r"(?<![\w/.~-])~(?=/|$|[\s'\"`:;,)\]}])"), HOME),
 ]
 HOME_HINT = re.compile(r"\bHOME\b|home\(|homedir|expanduser|Path\.home")
+SHELL_RUN = re.compile(r"\bshell\s*=\s*True|\b(?:system|popen|spawn\w*|exec\w*|getoutput|getstatusoutput)\s*\(|\b(?:sh|bash|zsh|eval)\b")
 ARITHMETIC = re.compile(r"[\d)\]]\s+\*{1,2}\s+[\w(\[]|\w\s+\*{1,2}\s+[\d(\[]")
 SPLIT = re.compile(r"[\s'\"`(){},;|&<>=:]+")
 ASSIGNMENT = re.compile(r"(?:^|[\s;&|(])([A-Za-z_]\w*)=([^\s;&|)]*)")
@@ -358,8 +359,8 @@ def check_text(text, kept, command, cwd, protected):
     bases = moves + ([HOME] if HOME_HINT.search(command) else [])
     words = SPLIT.split(text)
     stars = sum(1 for word in words if re.fullmatch(r"\*+", word))
-    # a lone `*` or `**` is arithmetic, not a glob of the home folder, only when every one sits between two operands, one a number or a bracket
-    arithmetic = stars == len(ARITHMETIC.findall(text))
+    # a lone `*` or `**` is arithmetic, not a glob of the home folder, only when every one sits between two operands, one a number or a bracket, and the call runs no shell string
+    arithmetic = stars == len(ARITHMETIC.findall(text)) and not SHELL_RUN.search(command)
     for word in words:
         hit = check_word(word, moves if arithmetic and re.fullmatch(r"\*+", word) else bases, protected)
         if hit:
