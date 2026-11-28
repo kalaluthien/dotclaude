@@ -359,7 +359,7 @@ def check_text(text, kept, command, cwd, protected):
     words = SPLIT.split(text)
     stars = sum(1 for word in words if re.fullmatch(r"\*+", word))
     # a lone `*` or `**` is arithmetic, not a glob of the home folder, only when every one sits between two operands
-    arithmetic = stars and stars == len(ARITHMETIC.findall(text))
+    arithmetic = stars == len(ARITHMETIC.findall(text))
     for word in words:
         hit = check_word(word, moves if arithmetic and re.fullmatch(r"\*+", word) else bases, protected)
         if hit:
