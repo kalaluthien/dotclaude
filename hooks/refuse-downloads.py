@@ -39,6 +39,7 @@ SHELLS = {"sh", "bash", "zsh", "dash", "ksh"}
 SUBSTITUTED = "\x01"
 ANSI_QUOTED = re.compile(r"\$'((?:\\.|[^'\\])*)'")
 SHELL_INPUT = SHELLS | {"eval", "source", "."}
+KEYWORDS = {"{", "}", "!", "if", "then", "else", "elif", "do", "while", "until", "time"}
 WRAPPERS = {"sudo", "env", "nice", "nohup", "time", "exec", "command", "xargs", "timeout", "caffeinate"}
 ALWAYS_RECURSIVE = {"find", "fd", "rg", "ag", "du", "tree", "mdfind", "rsync", "zip", "tar", "ditto"}
 RECURSIVE_WORDS = {"--recursive", "--dereference-recursive", "--directories=recurse", "-drecurse", "recurse"}
@@ -238,7 +239,7 @@ def scans(command, bases, protected):
     folder the command starts in or moves to, else None."""
     chunks = parse(command)[0]
     shell = any(os.path.basename(w) in SHELL_INPUT - {"."} or w == "." and all(  # a `.` argument is a folder
-        re.match(r"^[A-Za-z_]\w*=", v) or os.path.basename(v) in WRAPPERS for v in words[:i])
+        re.match(r"^[A-Za-z_]\w*=", v) or os.path.basename(v) in WRAPPERS | KEYWORDS for v in words[:i])
         for words in (re.findall(r"[^\s<>|&;()]+", c) for c in chunks if not isinstance(c, Body))
         for i, w in enumerate(words))
     commands = []
