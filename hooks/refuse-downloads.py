@@ -356,7 +356,8 @@ def check_text(text, kept, command, cwd, protected):
         moves.append(os.path.join(cwd, target))
     bases = moves + ([HOME] if HOME_HINT.search(command) else [])
     for word in SPLIT.split(text):
-        hit = check_word(word, bases, protected)
+        # a lone `*` or `**` beside code that builds a home path is arithmetic, not a glob of the home folder
+        hit = check_word(word, moves if re.fullmatch(r"\*+", word) else bases, protected)
         if hit:
             return hit
     return scans(kept, moves, protected)
