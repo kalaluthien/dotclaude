@@ -29,6 +29,7 @@ VARIABLES = [
     (re.compile(r"(?<![\w/.~-])~(?=/|$|[\s'\"`:;,)\]}])"), HOME),
 ]
 HOME_HINT = re.compile(r"\bHOME\b|home\(|homedir|expanduser|Path\.home")
+ARITHMETIC = re.compile(r"[\w)\]]\s+\*{1,2}\s+[\w(\[]")
 SPLIT = re.compile(r"[\s'\"`(){},;|&<>=:]+")
 ASSIGNMENT = re.compile(r"(?:^|[\s;&|(])([A-Za-z_]\w*)=([^\s;&|)]*)")
 BARE_CD = re.compile(r"(?:^|[\s;&|(])cd\s*(?=$|[;&|)])")
@@ -355,9 +356,12 @@ def check_text(text, kept, command, cwd, protected):
             target = match.group(1)
         moves.append(os.path.join(cwd, target))
     bases = moves + ([HOME] if HOME_HINT.search(command) else [])
-    for word in SPLIT.split(text):
-        # a lone `*` or `**` beside code that builds a home path is arithmetic, not a glob of the home folder
-        hit = check_word(word, moves if re.fullmatch(r"\*+", word) else bases, protected)
+    words = SPLIT.split(text)
+    stars = sum(1 for word in words if re.fullmatch(r"\*+", word))
+    # a lone `*` or `**` is arithmetic, not a glob of the home folder, only when every one sits between two operands
+    arithmetic = stars and stars == len(ARITHMETIC.findall(text))
+    for word in words:
+        hit = check_word(word, moves if arithmetic and re.fullmatch(r"\*+", word) else bases, protected)
         if hit:
             return hit
     return scans(kept, moves, protected)
